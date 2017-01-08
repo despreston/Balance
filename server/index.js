@@ -2,12 +2,26 @@
  *  Main starting point for Balance server
  */
 'use strict';
-const port = process.env.PORT || 9000;
+const port = 9000;
 const restify = require('restify');
 const server = restify.createServer();
+const mongoose = require('mongoose');
+const recursive = require('recursive-readdir');
+const dbUrl = 'mongodb://127.0.0.1:27017/balance';
 
-require("./routes")(server);
+mongoose.connect(dbUrl);
+server.pre(restify.pre.sanitizePath());
 
-server.listen(port, () => {
-  console.log(`Listening as ${server.name} at ${server.url}`);
+recursive('./routes', function (err, files) {
+  files.forEach(file => {
+    require('./'+file)(server);
+  });
 });
+
+recursive('./models', function (err, files) {
+  files.forEach(file => {
+    require('./'+file);
+  });
+});
+
+server.listen(port);

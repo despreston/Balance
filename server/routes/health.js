@@ -7,5 +7,5 @@ module.exports = server => {
     res.status(200);
     res.send('Server seems to be working.');
     next();
-  })
+  });
 };
