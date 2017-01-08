@@ -2,15 +2,6 @@
 const User = require('../../models/User');
 
 function createUser(req, res) {
-  const requiredParams = ['firstName', 'lastName', 'email'];
-  for (const param of requiredParams) {
-    if (!req.params[param]) {
-      res.send(409, {
-        title: "Missing parameter: " + param
-      });
-    }
-  }
-
   User.create(req.params).then((err, newUser) => {
     if (err) {
       res.send(500);  
@@ -26,7 +17,7 @@ function findUser(req, res) {
   });
 }
 
-module.exports = server => {
+module.exports = (server) => {
   server.get("users/:_id", findUser);
   server.post('users', createUser);
 };

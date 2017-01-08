@@ -8,13 +8,14 @@ const server = restify.createServer();
 const mongoose = require('mongoose');
 const recursive = require('recursive-readdir');
 const dbUrl = 'mongodb://127.0.0.1:27017/balance';
+const routeHelper = require('./middleware/route_helpers');
 
 mongoose.connect(dbUrl);
 server.pre(restify.pre.sanitizePath());
 
 recursive('./routes', function (err, files) {
   files.forEach(file => {
-    require('./'+file)(server);
+    require('./'+file)(server, routeHelper);
   });
 });
 

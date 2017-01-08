@@ -11,6 +11,7 @@ module.exports = mongoose.model("user", new mongoose.Schema({
     type: String
   },
   email: {
+    index: true,
     required: true,
     type: String
   }
