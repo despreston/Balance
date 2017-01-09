@@ -1,53 +1,42 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * Balance iOS
  */
 
 import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { AppRegistry, Text } from 'react-native';
+import config from './config/development';
 
-export default class BalanceApp extends Component {
+global.CONFIG = config;
+
+class BalanceApp extends Component {
+  constructor() {
+    super();
+    this.state = { user: '', test: 'hello' };
+  }
+
+  getUser() {
+    return fetch(CONFIG.apiUrl + 'users/5871bc0a55a740d63cafd9a5')
+      .then(response => {
+        return response.json(); 
+      })
+      .then(json => {
+        this.setState({ user: json.firstName });
+        return json;
+      })
+      .catch(err => {
+        // console.log(err);
+      }).done();
+  }
+
+  componentWillMount() {
+    this.getUser();
+  }
+  
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <Text>Hello, { this.state.user }</Text>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
 
 AppRegistry.registerComponent('BalanceApp', () => BalanceApp);
