@@ -10,8 +10,15 @@ const recursive = require('recursive-readdir');
 const dbUrl = 'mongodb://127.0.0.1:27017/balance';
 const routeHelper = require('./middleware/route_helpers');
 
+// mongoose promise library is deprecated. Use standard es6 lib instead
+mongoose.Promise = global.Promise;
 mongoose.connect(dbUrl);
 server.pre(restify.pre.sanitizePath());
+
+server.use((req, res, next) => {
+  // console.log('LOADING ENDPOINT', req.url);
+  next();
+});
 
 recursive('./routes', function (err, files) {
   files.forEach(file => {
