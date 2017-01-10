@@ -1,5 +1,6 @@
 'use strict';
 const User = require('../../models/User');
+const Project = require('../../models/Project');
 
 function createUser(req, res) {
   User.create(req.params).then((err, newUser) => {
@@ -17,7 +18,14 @@ function findUser(req, res) {
   });
 }
 
+function getProjectsForUser(req, res) {
+  Project.find({user: req.params._id}).then(projects => {
+    res.send(200, projects);
+  });
+}
+
 module.exports = (server) => {
   server.get("users/:_id", findUser);
+  server.get("users/:_id/projects", getProjectsForUser);
   server.post('users', createUser);
 };
