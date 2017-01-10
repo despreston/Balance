@@ -1,20 +1,27 @@
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import React, { Component} from 'react';
+import ProjectList from '../project-list/project-list';
 
 export default class MainScene extends Component {
+  constructor() {
+    super();
+    this.projects = [{
+      _id: 123,
+      title: 'Big Fuckin Project',
+      previousNote: 'Got shit done',
+      futureNote: "Gonna get shit done",
+      lastUpdated: new Date()
+    }];
+  }
+
+  onClick() {
+    console.log("TESTING THIS SHIT");
+  }
+
   render() {
     return (
-      <View>
-        <Text>Current Scene: {this.props.title}</Text>
-      </View>
-      )
+      <ProjectList projects={this.projects} onProjectTap={this.onClick}/>
+    );
   }
 }
-
-MainScene.propTypes = {
-  title: PropTypes.string.isRequired,
-  onForward: PropTypes.func.isRequired,
-  onBack: PropTypes.func.isRequired
-};

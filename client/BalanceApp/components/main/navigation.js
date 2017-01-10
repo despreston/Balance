@@ -36,26 +36,8 @@ export default class MainNavigation extends Component {
             style={styles.view}
           />
         }
-        renderScene={(route, navigator) =>
-          <MainScene
-            title={route.title}
-
-            onForward={() => {
-              const nextIndex = route.index += 1;
-              navigator.push({
-                title: 'Scene' + nextIndex,
-                index: nextIndex
-              });
-            }}
-
-            onBack={() => {
-              console.log(route.index);
-              if (route.index > 0) {
-                navigator.pop();
-              }
-            }}
-          />
-        }
+        sceneStyle={{paddingTop: 64}}
+        renderScene={(route, navigator) => <MainScene/>}
       />
     )
   }
@@ -75,6 +57,6 @@ const styles = {
   text: {
     paddingTop: 10,
     fontSize: 18,
-    color: "#EEEEEE"
+    color: "#FFFFFF"
   }
 };
