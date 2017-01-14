@@ -12,14 +12,17 @@ function createProject(req, res) {
 }
 
 function findProject(req, res) {
-  Project.findOne(req.params).then(project => {
-    res.send(200, project);
-  });
+  Project.findOne(req.params).then(project => res.send(200, project));
+}
+
+function findProjects(req, res) {
+  Project.find(req.params).then(projects => res.send(200, projects));
 }
 
 module.exports = (server, routeHelper) => {
   server.get("projects/:_id", findProject);
-  server.post('projects', (req, res) => {
+  server.get("projects", findProjects);
+  server.post('projects', (req, res) => { 
     routeHelper.requiredParams(req, res, ['title']);
   }, createProject);
 };

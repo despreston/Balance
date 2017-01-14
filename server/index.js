@@ -16,7 +16,6 @@ mongoose.connect(dbUrl);
 server.pre(restify.pre.sanitizePath());
 
 server.use((req, res, next) => {
-  // console.log('LOADING ENDPOINT', req.url);
   next();
 });
 

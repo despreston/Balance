@@ -1,33 +1,36 @@
 /**
  * Balance iOS
  */
-
+// Vendors
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+
+// Components
 import config from './config/development';
 import MainNavigation from './components/main/navigation';
-import { addUser } from './actions';
+import { receiveUser, requestUserFailed } from './actions';
 import balance from './reducers';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 
 global.CONFIG = config;
-let store = createStore(balance);
+const store = createStore(balance, applyMiddleware(thunkMiddleware));
 
 class BalanceApp extends Component {
   getUser() {
     return fetch(CONFIG.apiUrl + 'users/5871bc0a55a740d63cafd9a5')
       .then(response => response.json())
-      .then(json => store.dispatch(addUser(json)))
-      .catch(err => console.log(err))
+      .then(json => store.dispatch(receiveUser(json)))
+      .catch(err => store.dispatch(requestUserFailed(err)))
       .done();
   }
 
-  componentWillMount() {
+  componentWillMount () {
     this.getUser();
   }
   
-  render() {
+  render () {
     return (
       <Provider store={store}>
         <MainNavigation/>
