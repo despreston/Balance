@@ -19,7 +19,7 @@ export const Style = StyleSheet.create({
     height: 40
   },
   title: {
-    color: '#0267BA',
+    color: '#487CC3',
     fontSize: 18,
     fontWeight: 'bold',
     paddingLeft: 5,
