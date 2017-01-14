@@ -24,6 +24,13 @@ export function requestProjects() {
 };
 
 export function receiveProjects(json) {
+  // Convert to date object
+  json.forEach(project => {
+    if (project.lastUpdated) {
+      project.lastUpdated = new Date(project.lastUpdated);
+    }
+  });
+  
   return {
     type: RECEIVE_PROJECTS,
     projects: json,

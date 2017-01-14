@@ -6,14 +6,18 @@ import { View, ListView } from 'react-native';
 
 // Components
 import ProjectListItem from '../project-list-item/project-list-item';
+import { Style } from './project-list-style';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
 
 function ProjectList (props) {
-  return (<ListView
-    dataSource={ds.cloneWithRows(props.projects)}
-    renderRow={(rowData) => <ProjectListItem data={rowData}/>}
-  />);
+  return (
+    <ListView
+      style={Style.projectList}
+      dataSource={ds.cloneWithRows(props.projects)}
+      renderRow={(rowData) => <ProjectListItem project={rowData}/>}
+    />
+  );
 }
 
 ProjectList.propTypes = {

@@ -1,19 +1,29 @@
 'use strict';
 
+// Vendors
 import React, { PropTypes } from 'react';
 import { View, Text } from 'react-native';
 
-function ProjectListItem ({ onClick, data }) {
-  return (<View>
-    <Text>{data.title}</Text>
-    <Text>{data.previousNote}</Text>
-    <Text>{data.futureNote}</Text>
-    <Text>{data.lastUpdated.toString()}</Text>
-  </View>);
+// Components
+import { Style } from './project-list-item-style';
+
+function ProjectListItem ({ onClick, project }) {
+  return (
+    <View style={Style.projectListItem}>
+      <View style={Style.header}>
+        <Text style={Style.title}>{project.title}</Text>
+      </View>
+      <View style={Style.notes}>
+        <Text style={Style.noteContent}><Text style={Style.noteType}>Last:</Text> {project.previousNote}</Text>
+        <Text style={Style.noteContent}><Text style={Style.noteType}>Next:</Text> {project.futureNote}</Text>
+      </View>
+      <Text style={Style.lastUpdated}>Last Updated: {project.lastUpdated.toLocaleString()}</Text>
+    </View>
+  );
 }
 
 ProjectListItem.propTypes = {
-  data: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired
 };
 
 export default ProjectListItem;
