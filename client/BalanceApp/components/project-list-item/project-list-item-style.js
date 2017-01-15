@@ -14,23 +14,21 @@ export const Style = StyleSheet.create({
   header: {
     borderBottomWidth: 1,
     borderBottomColor: '#EEF0EF',
-    flex: 1,
-    justifyContent: 'center',
-    height: 40
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 40,
+    paddingHorizontal: 5
   },
   title: {
     color: '#487CC3',
     fontSize: 18,
-    fontWeight: 'bold',
-    paddingLeft: 5,
-    paddingRight: 5
+    fontWeight: 'bold'
   },
   notes: {
     height: 100,
-    paddingBottom: 10,
-    paddingLeft: 5,
-    paddingTop: 10,
-    paddingRight: 5
+    paddingVertical: 10,
+    paddingHorizontal: 5
   },
   noteType: {
     color: '#3D3F3E',
@@ -38,13 +36,13 @@ export const Style = StyleSheet.create({
   },
   noteContent: {
     color: '#77778A',
-    marginBottom: 10
+    height: 40,
+    fontSize: 14
   },
   lastUpdated: {
     color: '#CFD0D4',
     fontSize: 12,
     paddingBottom: 8,
-    paddingLeft: 5,
-    paddingRight: 5
+    paddingHorizontal: 5
   }
 });

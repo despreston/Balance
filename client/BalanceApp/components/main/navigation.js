@@ -1,11 +1,14 @@
 'use strict';
 
+// Vendors
 import React, { Component } from 'react';
 import {
   Navigator,
   TouchableHighlight,
   Text
 } from 'react-native';
+
+// Components
 import MainScene from './main';
 
 export default class MainNavigation extends Component {
@@ -23,20 +26,20 @@ export default class MainNavigation extends Component {
                   </TouchableHighlight>
                 );
               },
-              RightButton: (route, navigator, index, navState) => { 
+              RightButton: (route, navigator, index, navState) => {
                 return (
                   <TouchableHighlight>
-                    <Text style={[styles.button, styles.text]}>New</Text>
+                    <Text style={ [styles.button, styles.text] }>+</Text>
                   </TouchableHighlight>
                 ); 
               },
               Title: (route, navigator, index, navState) =>
-              { return (<Text style={[styles.title, styles.text]}>BALANCE</Text>); }
+              { return (<Text style={ [styles.title, styles.text] }>BALANCE</Text>); }
             }}
-            style={styles.view}
+            style={ styles.view }
           />
         }
-        sceneStyle={{paddingTop: 64}}
+        sceneStyle={{ paddingTop: 64 }}
         renderScene={(route, navigator) => <MainScene/>}
       />
     )
@@ -52,11 +55,12 @@ const styles = {
     letterSpacing: 5
   },
   button: {
-    paddingHorizontal: 10
+    paddingHorizontal: 20
   },
   text: {
     paddingTop: 10,
     fontSize: 18,
+    fontWeight: 'bold',
     color: "#FFFFFF"
   }
 };
