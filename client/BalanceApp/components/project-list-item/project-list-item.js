@@ -1,5 +1,3 @@
-'use strict';
-
 // Vendors
 import React, { PropTypes } from 'react';
 import { View, Text } from 'react-native';
@@ -8,7 +6,7 @@ import { View, Text } from 'react-native';
 import StatusIcon from '../status-icon/StatusIcon';
 import { Style } from './project-list-item-style';
 
-function ProjectListItem ({ onClick, project }) {
+function ProjectListItem ({ project }) {
   return (
     <View style={Style.projectListItem}>
       <View style={Style.header}>

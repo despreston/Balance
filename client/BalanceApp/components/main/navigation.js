@@ -1,5 +1,3 @@
-'use strict';
-
 // Vendors
 import React, { Component } from 'react';
 import {
@@ -10,57 +8,68 @@ import {
 
 // Components
 import MainScene from './main';
+import ProjectDetail from '../project-detail/project-detail';
+import { styles } from './navigation-styles';
 
 export default class MainNavigation extends Component {
+  renderScene (route, nav) {
+    switch (route.scene) {
+      case 'main':
+        return <MainScene navigator={nav}/>;
+      case 'project-detail':
+        return <ProjectDetail navigator={nav} {...route.passProps}/>
+    }
+  }
+
+  renderLeftButton (route, navigator, index, navState) {
+    if (route.leftButton) {
+      return route.leftButton;
+    }
+
+    return (
+      <TouchableHighlight>
+        <Text style={[styles.button, styles.text]}>?!</Text>
+      </TouchableHighlight>
+    );
+  }
+
+  renderRightButton (route, navigator, index, navState) {
+    if (route.rightButton) {
+      return route.rightButton;
+    }
+
+    return (
+      <TouchableHighlight>
+        <Text style={ [styles.button, styles.text] }>+</Text>
+      </TouchableHighlight>
+    );
+  }
+
+  renderTitle (route, navigator, index, navState) {
+    if (route.renderTitle) {
+      return route.renderTitle;
+    }
+
+    return (<Text style={ [styles.title, styles.text] }>{route.title}</Text>);
+  }
+
 	render() {
     return (
       <Navigator
-        initialRoute={{ title: "BALANCE", index: 0 }}
+        initialRoute={{ title: "BALANCE", index: 0, scene: "main" }}
         navigationBar={
           <Navigator.NavigationBar
             routeMapper={{
-              LeftButton: (route, navigator, index, navState) => {
-                return (
-                  <TouchableHighlight>
-                    <Text style={[styles.button, styles.text]}>?!</Text>
-                  </TouchableHighlight>
-                );
-              },
-              RightButton: (route, navigator, index, navState) => {
-                return (
-                  <TouchableHighlight>
-                    <Text style={ [styles.button, styles.text] }>+</Text>
-                  </TouchableHighlight>
-                ); 
-              },
-              Title: (route, navigator, index, navState) =>
-              { return (<Text style={ [styles.title, styles.text] }>BALANCE</Text>); }
+              LeftButton: this.renderLeftButton,
+              RightButton: this.renderRightButton,
+              Title: this.renderTitle
             }}
             style={ styles.view }
           />
         }
         sceneStyle={{ paddingTop: 64 }}
-        renderScene={(route, navigator) => <MainScene/>}
+        renderScene={(route, navigator) => this.renderScene(route, navigator)}
       />
     )
   }
 }
-
-const styles = {
-  view: {
-    backgroundColor: "#333333"
-  },
-  title: {
-    fontFamily: "Helvetica Neue",
-    letterSpacing: 5
-  },
-  button: {
-    paddingHorizontal: 20
-  },
-  text: {
-    paddingTop: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: "#FFFFFF"
-  }
-};

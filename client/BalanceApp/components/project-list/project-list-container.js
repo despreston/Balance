@@ -1,5 +1,3 @@
-'use strict';
-
 // Vendors
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -18,7 +16,7 @@ class ProjectListContainer extends Component {
   }
 
   render () {
-    return (<ProjectList projects={ this.props.projects } />);
+    return (<ProjectList onProjectTap={this.props.onProjectTap} projects={ this.props.projects } />);
   }
 }
 

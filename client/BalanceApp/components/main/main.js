@@ -1,16 +1,46 @@
-'use strict';
+// Vendors
+import React, { Component, PropTypes } from 'react';
+import { TouchableHighlight, Text } from 'react-native';
 
-import React, { Component} from 'react';
+// Components
 import ProjectListContainer from '../project-list/project-list-container';
+import { styles } from './navigation-styles';
 
 export default class MainScene extends Component {
-  constructor(props) {
+  static propTypes = {
+    navigator: PropTypes.object.isRequired
+  }
+
+  constructor (props) {
     super();
   }
 
-  render() {
+  projectDetailLeftButton (pop) {
     return (
-      <ProjectListContainer />
+      <TouchableHighlight onPress={pop}>
+        <Text style={[styles.button, styles.text, { fontWeight: 'normal' } ]}>Back</Text>
+      </TouchableHighlight>
+    );
+  }
+
+  projectDetailTitle () {
+    return (<Text style={ [styles.title, styles.text, { letterSpacing: 1 }] }>Details</Text>)
+  }
+
+  onProjectTap (project) {
+    this.props.navigator.push({
+      title: project.title,
+      scene: 'project-detail',
+      leftButton: this.projectDetailLeftButton(this.props.navigator.pop),
+      rightButton: () => null,
+      renderTitle: this.projectDetailTitle(),
+      passProps: { project: project }
+    });
+  }
+
+  render () {
+    return (
+      <ProjectListContainer onProjectTap={this.onProjectTap.bind(this)}/>
     );
   }
 }
