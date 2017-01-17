@@ -11,11 +11,11 @@ export const Styles = StyleSheet.create  ({
     borderTopWidth: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    opacity: 0.6,
     paddingHorizontal: 10,
     paddingVertical: 10
   },
   headerTitle: {
-    color: "#525252",
     fontSize: 16,
     fontWeight: 'bold'
   },
@@ -26,6 +26,7 @@ export const Styles = StyleSheet.create  ({
   },
   noteButton: {
     height: 20,
+    marginRight: 5,
     width: 20
   }
 });
