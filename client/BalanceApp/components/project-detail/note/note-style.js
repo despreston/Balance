@@ -8,7 +8,9 @@ export const Styles = StyleSheet.create  ({
     backgroundColor: "#F9F9F9",
     borderTopColor: "#F6F6F6",
     borderStyle: "solid",
-    borderTopWidth: 2, 
+    borderTopWidth: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: 10,
     paddingVertical: 10
   },
@@ -21,5 +23,9 @@ export const Styles = StyleSheet.create  ({
     color: "#525252",
     fontSize: 15,
     padding: 10
+  },
+  noteButton: {
+    height: 20,
+    width: 20
   }
 });

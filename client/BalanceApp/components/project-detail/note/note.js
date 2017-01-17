@@ -1,6 +1,6 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 
 // Components
 import { Styles } from './note-style';
@@ -10,6 +10,7 @@ function Note ({ note, header }) {
     <View style={Styles.note}>
       <View style={Styles.header}>
         <Text style={Styles.headerTitle}>{header}</Text>
+        <Image style={Styles.noteButton} source={require("../../../assets/note-menu.png")}/>
       </View>
       <Text style={Styles.content}>{note}</Text>
     </View>
