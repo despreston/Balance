@@ -39,8 +39,6 @@ export default class MainScene extends Component {
   }
 
   render () {
-    return (
-      <ProjectListContainer onProjectTap={this.onProjectTap.bind(this)}/>
-    );
+    return <ProjectListContainer onProjectTap={this.onProjectTap.bind(this)}/>;
   }
 }
