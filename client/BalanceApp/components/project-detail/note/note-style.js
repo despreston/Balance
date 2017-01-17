@@ -19,7 +19,7 @@ export const Styles = StyleSheet.create  ({
   },
   content: {
     color: "#525252",
-    fontSize: 14,
+    fontSize: 15,
     padding: 10
   }
 });

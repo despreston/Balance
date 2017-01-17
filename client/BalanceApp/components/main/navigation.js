@@ -15,9 +15,9 @@ export default class MainNavigation extends Component {
   renderScene (route, nav) {
     switch (route.scene) {
       case 'main':
-        return <MainScene navigator={nav}/>;
+        return <MainScene navigator={nav} />;
       case 'project-detail':
-        return <ProjectDetail navigator={nav} {...route.passProps}/>
+        return <ProjectDetail navigator={nav} {...route.passProps} />
     }
   }
 
@@ -40,7 +40,7 @@ export default class MainNavigation extends Component {
 
     return (
       <TouchableHighlight>
-        <Text style={ [styles.button, styles.text] }>+</Text>
+        <Text style={ [styles.button, styles.text] }>✚</Text>
       </TouchableHighlight>
     );
   }
