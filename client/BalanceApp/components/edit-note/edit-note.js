@@ -1,6 +1,7 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { Modal, Text, TouchableHighlight, View } from 'react-native';
+import { Modal, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 
 // Components
 import { Styles } from './edit-note-style';
@@ -14,11 +15,19 @@ export default class EditNote extends Component {
 
   constructor (props) {
     super();
-    this.state = { isDirty: false }
+    this.state = { isDirty: false, textValue: '' }
   }
 
   getSaveTextColor () {
     return this.state.isDirty ? {} : { color: '#CFD0D4' };
+  }
+
+  onTextChange (event) {
+    this.setState({ textValue: event.nativeEvent.text || '' });
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({ textValue: nextProps.note.text || '' });
   }
 
   render () {
@@ -44,7 +53,12 @@ export default class EditNote extends Component {
                 </TouchableHighlight>
               </View>
             </View>
-            <Text>{this.props.note.text}</Text>
+            <AutoGrowingTextInput
+              autoFocus
+              value={this.state.textValue}
+              onChange={event => this.onTextChange(event)}
+              style={Styles.input}
+            />
           </View>
         </Modal>
       </View>

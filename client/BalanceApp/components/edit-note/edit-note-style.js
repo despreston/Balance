@@ -25,5 +25,14 @@ export const Styles = StyleSheet.create  ({
   },
   clear: {
     color: '#C65D63'
+  },
+  input: {
+    margin: 10,
+    paddingLeft: 10,
+    fontSize: 17,
+    lineHeight: 35,
+    backgroundColor: 'white',
+    borderWidth: 0,
+    borderRadius: 4
   }
 });
