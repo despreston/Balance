@@ -1,7 +1,13 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { Modal, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
+import {
+  Modal,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  View,
+  Alert } from 'react-native';
 
 // Components
 import { Styles } from './edit-note-style';
@@ -15,7 +21,7 @@ export default class EditNote extends Component {
 
   constructor (props) {
     super();
-    this.state = { isDirty: false, textValue: '' }
+    this.state = { isDirty: false, textValue: '' };
   }
 
   getSaveTextColor () {
@@ -23,11 +29,31 @@ export default class EditNote extends Component {
   }
 
   onTextChange (event) {
-    this.setState({ textValue: event.nativeEvent.text || '' });
+    // dirty check
+    if (event.nativeEvent.text !== this.props.note.text) {
+      this.setState({ isDirty: true, textValue: event.nativeEvent.text || '' });
+    } else {
+      this.setState({ isDirty: false, textValue: event.nativeEvent.text || '' });
+    }
   }
 
   componentWillReceiveProps (nextProps) {
-    this.setState({ textValue: nextProps.note.text || '' });
+    this.setState({ isDirty: false, textValue: nextProps.note.text || '' });
+  }
+
+  onClear () {
+    function clearNote() {
+      this.setState({ isDirty: true, textValue: '' });
+    }
+
+    return Alert.alert('Clear Note?', null, [
+      { text: 'Clear', onPress: clearNote.bind(this) },
+      { text: 'Cancel' }
+    ]);
+  }
+
+  onSave () {
+
   }
 
   render () {
@@ -45,7 +71,7 @@ export default class EditNote extends Component {
               </TouchableHighlight>
               <View style={Styles.actions}>
                 <TouchableHighlight>
-                  <Text style={[Styles.headerText, Styles.clear]}>Clear</Text>
+                  <Text style={[Styles.headerText, Styles.clear]} onPress={() => this.onClear()}>Clear</Text>
                 </TouchableHighlight>
                 <View style={Styles.spacer} />
                 <TouchableHighlight>
