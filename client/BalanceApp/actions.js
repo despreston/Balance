@@ -40,7 +40,6 @@ export function receiveProjects (json) {
 };
 
 export function receiveProject (project) {
-  console.log(project)
   return {
     type: RECEIVE_PROJECT,
     project: project,
