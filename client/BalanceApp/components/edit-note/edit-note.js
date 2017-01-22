@@ -15,6 +15,7 @@ import { Styles } from './edit-note-style';
 export default class EditNote extends Component {
   static propTypes = {
     note: PropTypes.object.isRequired,
+    onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired
   }
@@ -52,8 +53,10 @@ export default class EditNote extends Component {
     ]);
   }
 
-  onSave () {
-
+  save () {
+    this.props.note.text = this.state.textValue;
+    this.props.onSave(this.props.note);
+    this.props.onClose();
   }
 
   render () {
@@ -75,7 +78,7 @@ export default class EditNote extends Component {
                 </TouchableHighlight>
                 <View style={Styles.spacer} />
                 <TouchableHighlight>
-                  <Text style={[Styles.headerText, this.getSaveTextColor() ]}>Save</Text>
+                  <Text style={[Styles.headerText, this.getSaveTextColor() ]} onPress={() => this.save()}>Save</Text>
                 </TouchableHighlight>
               </View>
             </View>

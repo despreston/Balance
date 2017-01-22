@@ -1,7 +1,7 @@
 'use strict';
 const mongoose = require("mongoose");
 
-module.exports = mongoose.model("project", new mongoose.Schema({
+let Project = new mongoose.Schema({
   title: {
     required: true,
     type: String
@@ -17,4 +17,11 @@ module.exports = mongoose.model("project", new mongoose.Schema({
     ref: 'user'
   },
   lastUpdated: Date
-}));
+});
+
+Project.pre('save', function(next) {
+  this.lastUpdated = new Date();
+  next();
+});
+
+module.exports = mongoose.model("project", Project);

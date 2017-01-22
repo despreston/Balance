@@ -26,7 +26,6 @@ export default class ProjectList extends Component {
     if (this.props.onProjectTap) {
       this.props.onProjectTap(project);
     }
-    return;
   }
 
   _renderRow (rowData) {

@@ -34,7 +34,7 @@ export default class MainScene extends Component {
       leftButton: this.projectDetailLeftButton(this.props.navigator.pop),
       rightButton: () => null,
       renderTitle: this.projectDetailTitle(),
-      passProps: { project: project }
+      passProps: { projectId: project._id }
     });
   }
 
