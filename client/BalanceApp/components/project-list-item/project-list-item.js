@@ -14,8 +14,8 @@ function ProjectListItem ({ project }) {
         <StatusIcon lastUpdated={project.lastUpdated} />
       </View>
       <View style={Style.notes}>
-        <Text style={Style.noteContent}><Text style={Style.noteType}>Last:</Text> {project.previousNote}</Text>
-        <Text style={Style.noteContent}><Text style={Style.noteType}>Next:</Text> {project.futureNote}</Text>
+        <Text style={Style.noteContent}><Text style={Style.noteType}>Last:</Text> {project.Past.content}</Text>
+        <Text style={Style.noteContent}><Text style={Style.noteType}>Next:</Text> {project.Future.content}</Text>
       </View>
       <Text style={Style.lastUpdated}>Last Updated: {project.lastUpdated.toLocaleString()}</Text>
     </View>

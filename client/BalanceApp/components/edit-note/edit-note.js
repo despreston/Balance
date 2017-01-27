@@ -31,7 +31,7 @@ export default class EditNote extends Component {
 
   onTextChange (event) {
     // dirty check
-    if (event.nativeEvent.text !== this.props.note.text) {
+    if (event.nativeEvent.text !== this.props.note.content) {
       this.setState({ isDirty: true, textValue: event.nativeEvent.text || '' });
     } else {
       this.setState({ isDirty: false, textValue: event.nativeEvent.text || '' });
@@ -39,7 +39,7 @@ export default class EditNote extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    this.setState({ isDirty: false, textValue: nextProps.note.text || '' });
+    this.setState({ isDirty: false, textValue: nextProps.note.content || '' });
   }
 
   onClear () {
@@ -54,7 +54,7 @@ export default class EditNote extends Component {
   }
 
   save () {
-    this.props.note.text = this.state.textValue;
+    this.props.note.content = this.state.textValue;
     this.props.onSave(this.props.note);
     this.props.onClose();
   }

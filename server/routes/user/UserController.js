@@ -1,8 +1,9 @@
 'use strict';
 const User = require('../../models/User');
 const Project = require('../../models/Project');
+const ObjectId = require('mongoose').Types.ObjectId;
 
-function createUser(req, res) {
+function createUser (req, res) {
   User.create(req.params).then((err, newUser) => {
     if (err) {
       res.send(500);  
@@ -12,14 +13,14 @@ function createUser(req, res) {
   });
 }
 
-function findUser(req, res) {
-  User.findOne(req.params).then(user => {
+function findUser (req, res) {
+  User.findOne(req.params).lean().then(user => {
     res.send(200, user);
   });
 }
 
-function getProjectsForUser(req, res) {
-  Project.find({user: req.params._id}).then(projects => {
+function getProjectsForUser (req, res) {
+  Project.queryWithNotes({user: ObjectId(req.params._id)}).then(projects => {
     res.send(200, projects);
   });
 }
@@ -27,5 +28,6 @@ function getProjectsForUser(req, res) {
 module.exports = (server) => {
   server.get("users/:_id", findUser);
   server.get("users/:_id/projects", getProjectsForUser);
+  
   server.post('users', createUser);
 };

@@ -19,7 +19,7 @@ const store = createStore(balance, applyMiddleware(thunkMiddleware));
 
 class BalanceApp extends Component {
   getUser () {
-    return fetch(CONFIG.apiUrl + 'users/5871bc0a55a740d63cafd9a5')
+    return fetch(`${CONFIG.apiUrl}users/${CONFIG.userId}`)
       .then(response => response.json())
       .then(json => store.dispatch(receiveUser(json)))
       .catch(err => store.dispatch(requestUserFailed(err)))

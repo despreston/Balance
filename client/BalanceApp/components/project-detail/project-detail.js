@@ -7,13 +7,13 @@ import { connect } from 'react-redux';
 import { Styles } from './project-detail-style';
 import Note from './note/note';
 import EditNote from '../edit-note/edit-note';
-import { saveProject } from '../../actions';
+import { saveNote } from '../../actions';
 
 class ProjectDetail extends Component {
   static propTypes = {
     projectId: PropTypes.string.isRequired,
     project: PropTypes.object.isRequired,
-    updateProject: PropTypes.func.isRequired
+    updateNote: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -29,36 +29,55 @@ class ProjectDetail extends Component {
   }
 
   saveNote (note) {
-    this.props.project[note.type] = note.text;
-    this.props.updateProject(this.props.project);
+    this.props.project[note.type] = note;
+    this.props.updateNote(note);
+  }
+
+  emptyNote (type) {
+    return {
+      _new: true,
+      user: this.props.project.user,
+      project: this.props.project._id,
+      content: '',
+      type: type
+    };
+  }
+
+  getNotesFromProject (project) {
+    let notes = { Future: {}, Past: {} };
+
+    notes.Future = project.Future ? project.Future : this.emptyNote('Future');
+    notes.Past = project.Past ? project.Past : this.emptyNote('Past');
+    return notes;
   }
 
   render () {
     const project = this.props.project;
+    const notes = this.getNotesFromProject(project);
     return (
       <View style={Styles.projectDetail}>
         <Text style={Styles.title}>{project.title}</Text>
         <View style={Styles.updateButtonContainer}>
           <TouchableHighlight
-            onPress={this.toggleEditNoteModal.bind(this, { text: null, type: 'previousNote' })}
+            onPress={this.toggleEditNoteModal.bind(this, this.emptyNote('Past'))}
             style={Styles.updateButton}>
             <Text style={Styles.updateButtonText}>I did work</Text>
           </TouchableHighlight>
           <TouchableHighlight
-            onPress={this.toggleEditNoteModal.bind(this, { text: null, type: 'futureNote' })}
+            onPress={this.toggleEditNoteModal.bind(this, this.emptyNote('Future'))}
             style={Styles.updateButton}>
             <Text style={Styles.updateButtonText}>To do next</Text>
           </TouchableHighlight>
         </View>
         <View style={Styles.notesContainer}>
           <Note
-            note={project.previousNote}
+            content={notes.Past.content}
             header="Here's where you left off:"
-            onEdit={this.toggleEditNoteModal.bind(this, { text: project.previousNote, type: 'previousNote' })} />
+            onEdit={this.toggleEditNoteModal.bind(this, notes.Past)} />
           <Note
-            note={project.futureNote}
+            content={notes.Future.content}
             header="To do next:"
-            onEdit={this.toggleEditNoteModal.bind(this, {text: project.futureNote, type: 'futureNote'})}/>
+            onEdit={this.toggleEditNoteModal.bind(this, notes.Future)} />
         </View>
         <EditNote
           style={Styles.editNoteModal}
@@ -79,7 +98,7 @@ function mapStateToProps (state, props) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateProject: project => dispatch(saveProject(project))
+    updateNote: note => dispatch(saveNote(note))
   };
 }
 

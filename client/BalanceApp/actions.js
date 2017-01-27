@@ -8,6 +8,7 @@ export const REQUEST_USER_FAILED = 'REQUEST_USER_FAILED';
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
+export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 
 /*
  * action creators
@@ -25,7 +26,7 @@ export function requestProjects () {
 };
 
 export function receiveProjects (json) {
-  // Convert to date object
+  // Convert to date objecto
   json.forEach(project => {
     if (project.lastUpdated) {
       project.lastUpdated = new Date(project.lastUpdated);
@@ -47,11 +48,35 @@ export function receiveProject (project) {
   };
 };
 
+export function receiveNote (note) {
+  return {
+    type: RECEIVE_NOTE,
+    note: note,
+    receivedAt: Date.now()
+  };
+};
+
 export function saveProject (project) {
   return function (dispatch) {
-    return fetch(CONFIG.apiUrl + 'projects/' + project._id, { method: 'PUT', body: JSON.stringify(project) })
+    return fetch(`${CONFIG.apiUrl}projects/${project._id}`, { method: 'PUT', body: JSON.stringify(project) })
       .then(response => response.json())
       .then(json => dispatch(receiveProject(json)));
+  }
+};
+
+export function saveNote (note) {
+  return function (dispatch) {
+    let method, url = `${CONFIG.apiUrl}notes`;
+    if (note._new) {
+      method = 'POST';
+      delete note._new;
+    } else {
+      method = 'PUT';
+      url += `/${note._id}`;
+    }
+    return fetch(url, { method: method, body: JSON.stringify(note)})
+      .then(response => response.json())
+      .then(json => dispatch(receiveNote(json)));
   }
 };
 
@@ -66,7 +91,7 @@ export function fetchProject (project) {
 export function fetchProjects () {
   return function (dispatch) {
     dispatch(requestProjects());
-    return fetch(CONFIG.apiUrl + 'projects')
+    return fetch(`${CONFIG.apiUrl}users/${CONFIG.userId}/projects`)
       .then(response => response.json())
       .then(json => dispatch(receiveProjects(json)));
   }
