@@ -37,6 +37,7 @@ export default class ProjectList extends Component {
 
     return (
       <ListView
+        enableEmptySections={true}
         style={Style.projectList}
         dataSource={ds.cloneWithRows(this.props.projects)}
         renderRow={this._renderRow.bind(this)}
