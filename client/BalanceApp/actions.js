@@ -26,10 +26,16 @@ export function requestProjects () {
 };
 
 export function receiveProjects (json) {
-  // Convert to date objecto
+  // Convert to date object
   json.forEach(project => {
     if (project.lastUpdated) {
       project.lastUpdated = new Date(project.lastUpdated);
+    }
+    if (project.Future) {
+      project.Future.lastUpdated = new Date(project.Future.lastUpdated);
+    }
+    if (project.Past) {
+      project.Past.lastUpdated = new Date(project.Past.lastUpdated);
     }
   });
   
@@ -49,6 +55,9 @@ export function receiveProject (project) {
 };
 
 export function receiveNote (note) {
+  if (note.lastUpdated) {
+    note.lastUpdated = new Date(note.lastUpdated);
+  }
   return {
     type: RECEIVE_NOTE,
     note: note,

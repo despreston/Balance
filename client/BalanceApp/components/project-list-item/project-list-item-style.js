@@ -18,7 +18,7 @@ export const Style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 40,
-    paddingHorizontal: 5
+    paddingHorizontal: 10
   },
   title: {
     color: '#487CC3',
@@ -28,7 +28,7 @@ export const Style = StyleSheet.create({
   notes: {
     height: 100,
     paddingVertical: 10,
-    paddingHorizontal: 5
+    paddingHorizontal: 10
   },
   noteType: {
     color: '#3D3F3E',
@@ -43,6 +43,6 @@ export const Style = StyleSheet.create({
     color: '#CFD0D4',
     fontSize: 12,
     paddingBottom: 8,
-    paddingHorizontal: 5
+    paddingHorizontal: 10
   }
 });
