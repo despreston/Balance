@@ -31,11 +31,10 @@ export default class EditNote extends Component {
 
   onTextChange (event) {
     // dirty check
-    if (event.nativeEvent.text !== this.props.note.content) {
-      this.setState({ isDirty: true, textValue: event.nativeEvent.text || '' });
-    } else {
-      this.setState({ isDirty: false, textValue: event.nativeEvent.text || '' });
-    }
+    this.setState({
+      isDirty: (event.nativeEvent.text !== this.props.note.content),
+      textValue: event.nativeEvent.text || ''
+    });
   }
 
   componentWillReceiveProps (nextProps) {
