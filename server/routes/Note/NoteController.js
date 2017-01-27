@@ -8,7 +8,7 @@ function createNote (req, res) {
   if (!req.body.createdAt) {
     req.body.createdAt = new Date()
   }
-  
+
   Note.create(req.body).then((newNote, err) => {
     if (err) {
       res.send(500);
@@ -39,7 +39,7 @@ function updateNote(req, res) {
 module.exports = (server, routeHelper) => {
   server.get('notes/:_id', findNote);
   server.get('notes', (req, res) => {
-    routeHelper.requiredParams(req, res, ['project'])
+    routeHelper.requiredParams(req.params, res, ['project'])
   }, findNotes);
 
   server.post('notes', createNote);
