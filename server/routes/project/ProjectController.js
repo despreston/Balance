@@ -45,7 +45,7 @@ function findProject (req, res) {
 
 function updateProject (req, res) {
   req.body = JSON.parse(req.body);
-
+  
   Project.findOne({_id: req.params._id}).then(project => {
       project = _.extend(project, req.body);
       project.save();

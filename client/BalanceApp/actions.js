@@ -1,4 +1,4 @@
-'use strict';
+import { api } from './middleware/api';
 
 /*
  * action types
@@ -66,42 +66,33 @@ export function receiveNote (note) {
 };
 
 export function saveProject (project) {
-  return function (dispatch) {
-    return fetch(`${CONFIG.apiUrl}projects/${project._id}`, { method: 'PUT', body: JSON.stringify(project) })
-      .then(response => response.json())
-      .then(json => dispatch(receiveProject(json)));
+  let method, url = `${CONFIG.apiUrl}projects`;
+  if (project._new) {
+    method = 'POST';
+    delete project._new;
+  } else {
+    method = 'PUT';
+    url += `/${project._id}`;
   }
+  return api(url, receiveProject, { method: method, body: project });
 };
 
 export function saveNote (note) {
-  return function (dispatch) {
-    let method, url = `${CONFIG.apiUrl}notes`;
-    if (note._new) {
-      method = 'POST';
-      delete note._new;
-    } else {
-      method = 'PUT';
-      url += `/${note._id}`;
-    }
-    return fetch(url, { method: method, body: JSON.stringify(note)})
-      .then(response => response.json())
-      .then(json => dispatch(receiveNote(json)));
+  let method, url = `${CONFIG.apiUrl}notes`;
+  if (note._new) {
+    method = 'POST';
+    delete note._new;
+  } else {
+    method = 'PUT';
+    url += `/${note._id}`;
   }
+  return api(url, receiveNote, { method: method, body: note });
 };
 
 export function fetchProject (project) {
-  return function (dispatch) {
-    return fetch(CONFIG.apiUrl + 'projects/' + project._id)
-      .then(response => response.json())
-      .then(json => dispatch(receiveProject(json)));
-  }
+  return api(`${CONFIG.apiUrl}projects/${project._id}`, receiveProject);
 };
 
 export function fetchProjects () {
-  return function (dispatch) {
-    dispatch(requestProjects());
-    return fetch(`${CONFIG.apiUrl}users/${CONFIG.userId}/projects`)
-      .then(response => response.json())
-      .then(json => dispatch(receiveProjects(json)));
-  }
+  return api(`${CONFIG.apiUrl}users/${CONFIG.userId}/projects`, receiveProjects);
 };
