@@ -5,17 +5,21 @@ export const Styles = StyleSheet.create  ({
     flex: 1
   },
   title: {
-    alignSelf: 'center',
-    color: "#2E92E1",
-    fontFamily: "Helvetica Neue",
+    color: '#2E92E1',
+    fontFamily: 'Helvetica Neue',
     fontSize: 22,
-    paddingVertical: 15
+    height: 70,
+    textAlign: 'center',
+    paddingHorizontal: 10
+  },
+  container: {
+    flex: 1
   },
   updateButtonContainer: {
     flexDirection: 'row',
   },
   updateButton: {
-    backgroundColor: "#2E92E1",
+    backgroundColor: '#2E92E1',
     borderRadius: 5,
     flex: 1,
     justifyContent: 'center',
@@ -28,7 +32,7 @@ export const Styles = StyleSheet.create  ({
   },
   updateButtonText: {
     alignSelf: 'center',
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -41,20 +45,20 @@ export const Styles = StyleSheet.create  ({
     flex: 1
   },
   header: {
-    backgroundColor: "#F9F9F9",
-    borderTopColor: "#F6F6F6",
-    borderStyle: "solid",
+    backgroundColor: '#F9F9F9',
+    borderTopColor: '#F6F6F6',
+    borderStyle: 'solid',
     borderTopWidth: 2, 
     paddingHorizontal: 10,
     paddingVertical: 10
   },
   headerTitle: {
-    color: "#525252",
+    color: '#525252',
     fontSize: 16,
     fontWeight: 'bold'
   },
   content: {
-    color: "#525252",
+    color: '#525252',
     fontSize: 14,
     padding: 10
   }
