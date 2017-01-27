@@ -4,9 +4,9 @@
 'use strict';
 
 module.exports = {
-	requiredParams: (req, res, requiredParams) => {
+	requiredParams: (params, res, requiredParams) => {
 		for (const param of requiredParams) {
-      if (!req.params[param]) {
+      if (!params[param]) {
         res.send(409, {
           title: "Missing parameter: " + param
         });
