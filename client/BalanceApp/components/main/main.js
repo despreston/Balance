@@ -1,23 +1,30 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
 import { TouchableHighlight, Text } from 'react-native';
+import { connect } from 'react-redux';
 
 // Components
 import ProjectListContainer from '../project-list/project-list-container';
 import { styles } from './navigation-styles';
+import { fetchProjects } from '../../actions';
 
-export default class MainScene extends Component {
+class MainScene extends Component {
   static propTypes = {
-    navigator: PropTypes.object.isRequired
+    navigator: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired
   }
 
   constructor (props) {
-    super();
+    super(props);
   }
 
   projectDetailLeftButton (pop) {
+    function onPress () {
+      this.props.dispatch(fetchProjects());
+      pop();
+    }
     return (
-      <TouchableHighlight onPress={pop}>
+      <TouchableHighlight onPress={onPress.bind(this)}>
         <Text style={[styles.button, styles.text, { fontWeight: 'normal' } ]}>Back</Text>
       </TouchableHighlight>
     );
@@ -42,3 +49,5 @@ export default class MainScene extends Component {
     return <ProjectListContainer onProjectTap={this.onProjectTap.bind(this)}/>;
   }
 }
+
+export default connect()(MainScene);

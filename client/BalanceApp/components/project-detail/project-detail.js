@@ -45,7 +45,6 @@ class ProjectDetail extends Component {
 
   getNotesFromProject (project) {
     let notes = { Future: {}, Past: {} };
-
     notes.Future = project.Future ? project.Future : this.emptyNote('Future');
     notes.Past = project.Past ? project.Past : this.emptyNote('Past');
     return notes;
