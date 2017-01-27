@@ -8,7 +8,7 @@ import { Style } from './project-list-style';
 
 export default class ProjectList extends Component {
   static propTypes = {
-    onProjectTap: PropTypes.func,
+    onProjectTap: PropTypes.func.isRequired,
     projects: PropTypes.array.isRequired
   }
 
@@ -22,15 +22,9 @@ export default class ProjectList extends Component {
     this._root.setNativeProps(nativeProps);
   }
 
-  onProjectListItemTapped (project) {
-    if (this.props.onProjectTap) {
-      this.props.onProjectTap(project);
-    }
-  }
-
   _renderRow (rowData) {
     return (
-      <TouchableHighlight onPress={this.onProjectListItemTapped.bind(this,rowData)}>
+      <TouchableHighlight onPress={this.props.onProjectTap.bind(this,rowData)}>
         <View ref={component => this._root = component}>
           <ProjectListItem  project={rowData} />
         </View>
