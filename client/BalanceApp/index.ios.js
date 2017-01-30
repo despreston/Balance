@@ -10,7 +10,7 @@ import thunkMiddleware from 'redux-thunk';
 
 // Components
 import config from './config/development';
-import MainNavigation from './components/main/navigation';
+import MainNavigation from './components/navigation/navigation';
 import { receiveUser, requestUserFailed } from './actions';
 import balance from './reducers';
 

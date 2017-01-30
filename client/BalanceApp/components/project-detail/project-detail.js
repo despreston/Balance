@@ -12,16 +12,35 @@ import dismissKeyboard from 'dismissKeyboard';
 
 // Components
 import { Styles } from './project-detail-style';
+import { styles as NavStyles } from '../navigation/navigation-styles';
 import Note from './note/note';
 import EditNote from '../edit-note/edit-note';
-import { saveNote, saveProject } from '../../actions';
+import { fetchProjects, saveNote, saveProject } from '../../actions';
+
+function onBackPress (back, dispatch) {
+  // Reload the projects from the server. They may have changed
+  dispatch(fetchProjects());
+  back();
+}
 
 class ProjectDetail extends Component {
   static propTypes = {
-    projectId: PropTypes.string.isRequired,
     project: PropTypes.object.isRequired,
     updateNote: PropTypes.func.isRequired,
     updateProject: PropTypes.func.isRequired
+  }
+
+  static navigationOptions = {
+    title: <Text style={[NavStyles.text, NavStyles.title]}>Details</Text>,
+    header: ({ goBack, dispatch }) => ({
+      style: { backgroundColor: '#333'},
+      left: (
+        <TouchableHighlight onPress={onBackPress.bind(this, goBack, dispatch)}>
+          <Text style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' } ]}>Back</Text>
+        </TouchableHighlight>
+      ),
+      right: null
+    })
   }
 
   constructor (props) {
@@ -63,10 +82,9 @@ class ProjectDetail extends Component {
   }
 
   onProjectTitleBlur () {
-    const oldTitle = this.props.project.title;
-    this.props.project.title = this.state.projectTitle;
     // dirty check
-    if (this.state.projectTitle !== oldTitle) {
+    if (this.state.projectTitle !== this.props.project.title) {
+      this.props.project.title = this.state.projectTitle;
       this.props.updateProject(this.props.project);
     }
   }
@@ -118,8 +136,9 @@ class ProjectDetail extends Component {
 }
 
 function mapStateToProps (state, props) {
+  const projectId = props.navigation.state.params.projectId;
   return {
-    project: state.projects.find(project => project._id === props.projectId)
+    project: state.projects.find(project => project._id === projectId)
   };
 }
 
