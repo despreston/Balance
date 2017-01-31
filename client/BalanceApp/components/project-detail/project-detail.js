@@ -33,13 +33,12 @@ class ProjectDetail extends Component {
   static navigationOptions = {
     title: <Text style={[NavStyles.text, NavStyles.title]}>Details</Text>,
     header: ({ goBack, dispatch }) => ({
-      style: { backgroundColor: '#333'},
+      style: { backgroundColor: '#333' },
       left: (
         <TouchableHighlight onPress={onBackPress.bind(this, goBack, dispatch)}>
-          <Text style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' } ]}>Back</Text>
+          <Text style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}>Back</Text>
         </TouchableHighlight>
-      ),
-      right: null
+      )
     })
   }
 
