@@ -3,12 +3,14 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
-  TouchableHighlight,
+  Button,
   Modal,
   TextInput,
+  TouchableHighlight,
   TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import dismissKeyboard from 'dismissKeyboard';
+import { get } from 'lodash';
 
 // Components
 import { Styles } from './project-detail-style';
@@ -23,23 +25,54 @@ function onBackPress (back, dispatch) {
   back();
 }
 
+function mapStateToProps (state, props) {
+  const projectId = get(props.navigation.state, 'params.projectId');
+  const emptyProject = {
+    _new: true,
+    title: '',
+    user: CONFIG.userId
+  };
+  return { project: (projectId ? state.projects.find(project => project._id === projectId) : emptyProject) };
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    updateNote: note => dispatch(saveNote(note)),
+    updateProject: project => dispatch(saveProject(project))
+  };
+}
+
 class ProjectDetail extends Component {
   static propTypes = {
-    project: PropTypes.object.isRequired,
     updateNote: PropTypes.func.isRequired,
-    updateProject: PropTypes.func.isRequired
+    updateProject: PropTypes.func.isRequired,
+    project: PropTypes.shape({
+      title: PropTypes.string.isRequired
+    }).isRequired
   }
 
   static navigationOptions = {
-    title: <Text style={[NavStyles.text, NavStyles.title]}>Details</Text>,
-    header: ({ goBack, dispatch }) => ({
-      style: { backgroundColor: '#333' },
-      left: (
-        <TouchableHighlight onPress={onBackPress.bind(this, goBack, dispatch)}>
-          <Text style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}>Back</Text>
-        </TouchableHighlight>
-      )
-    })
+    header: ({ goBack, dispatch, state }) => {
+      const projectId = get(state, 'params.projectId');
+      const title = <Text style={[NavStyles.text, NavStyles.title]}>Details</Text>;
+      const style = { backgroundColor: '#333' };
+      const left = (
+        <Button
+          style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+          title={projectId ? 'Back' : 'Cancel'}
+          onPress={onBackPress.bind(this, goBack, dispatch)}
+        />
+      );
+      const right = projectId
+        ? (<View />)
+        : (<Button
+            style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+            title='Save'
+            onPress={() => null}
+          />);
+
+      return { title, style, left, right };
+    }
   }
 
   constructor (props) {
@@ -49,6 +82,13 @@ class ProjectDetail extends Component {
       note: {},
       projectTitle: props.project.title
     };
+  }
+
+  componentDidMount () {
+    // Set focus to project title when its a new project
+    if (!this.props.project.title) {
+      this.projectTitle.focus();
+    }
   }
 
   toggleEditNoteModal = (note) => {
@@ -81,8 +121,8 @@ class ProjectDetail extends Component {
   }
 
   onProjectTitleBlur () {
-    // dirty check
-    if (this.state.projectTitle !== this.props.project.title) {
+    // dirty check and project is not new
+    if (this.state.projectTitle !== this.props.project.title && !this.props.project._new) {
       this.props.project.title = this.state.projectTitle;
       this.props.updateProject(this.props.project);
     }
@@ -93,10 +133,11 @@ class ProjectDetail extends Component {
     return (
       <View style={Styles.projectDetail}>
         <TextInput
+          ref={input => this.projectTitle = input}
           value={this.state.projectTitle}
           style={Styles.title}
           onBlur={this.onProjectTitleBlur.bind(this)}
-          onChangeText={text => this.setState({ projectTitle: text }) } />
+          onChangeText={text => this.setState({ projectTitle: text })} />
         <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           <View style={Styles.container}>
             <View style={Styles.updateButtonContainer}>
@@ -132,20 +173,6 @@ class ProjectDetail extends Component {
       </View>
     );
   }
-}
-
-function mapStateToProps (state, props) {
-  const projectId = props.navigation.state.params.projectId;
-  return {
-    project: state.projects.find(project => project._id === projectId)
-  };
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    updateNote: note => dispatch(saveNote(note)),
-    updateProject: project => dispatch(saveProject(project))
-  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetail);

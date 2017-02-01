@@ -1,6 +1,6 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { TouchableHighlight, Text, Button } from 'react-native';
+import { Text, Button } from 'react-native';
 import { connect } from 'react-redux';
 
 // Components
@@ -14,18 +14,22 @@ class MainScene extends Component {
   }
 
   static navigationOptions = {
-    title: () => <Text style={[styles.text, styles.title, styles.mainTitle]}>BALANCE</Text>,
-    header: ({ state, setParams }) => ({
+    header: ({ navigate }) => ({
+      title: <Text style={[styles.text, styles.title, styles.mainTitle]}>BALANCE</Text>,
       style: { backgroundColor: '#333' },
       left: (
-        <TouchableHighlight>
-          <Text style={[styles.button, styles.text]}>!?</Text>
-        </TouchableHighlight>
+        <Button
+          style={[styles.button, styles.text]}
+          title="!?"
+          onPress={() => null}
+        />
       ),
       right: (
-        <TouchableHighlight>
-          <Text style={[styles.button, styles.text]}>✚</Text>
-        </TouchableHighlight>
+        <Button
+          style={[styles.button, styles.text]}
+          onPress={() => navigate('Project')}
+          title="✚"
+        />
       )
     })
   }
