@@ -4,10 +4,10 @@ export const Style = StyleSheet.create({
   projectListItem: {
     backgroundColor: '#F5F6FA',
     borderRadius: 5,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#E8E8EA',
     shadowColor: '#000000',
-    shadowOffset: { width: 1, height: 1 },
+    shadowOffset: { width: 0.5, height: 0.5 },
     shadowOpacity: 0.2,
     shadowRadius: 5
   },
@@ -44,5 +44,9 @@ export const Style = StyleSheet.create({
     fontSize: 12,
     paddingBottom: 8,
     paddingHorizontal: 10
+  },
+  empty: {
+    alignSelf: 'center',
+    justifyContent: 'center'
   }
 });

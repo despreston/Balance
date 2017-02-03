@@ -17,6 +17,12 @@ server.pre(restify.pre.sanitizePath());
 
 server.use(restify.bodyParser());
 
+server.use((req, res, next) => {
+  // eslint-disable-next-line
+  console.log(`${req.method} ${req.url} Params: ${JSON.stringify(req.params)} Body: ${JSON.stringify(req.body || {})}`);
+  next();
+});
+
 recursive('./routes', function (err, files) {
   files.forEach(file => {
     require('./'+file)(server, routeHelper);

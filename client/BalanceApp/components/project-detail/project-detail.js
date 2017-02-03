@@ -60,7 +60,7 @@ class ProjectDetail extends Component {
             color='#FFFFFF'
             style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
             title='Save'
-            onPress={() => null}
+            onPress={() => state.params.updateProject()}
           />);
 
       return { title, style, left, right };
@@ -83,7 +83,10 @@ class ProjectDetail extends Component {
     }
 
     // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900
-    setTimeout(() => this.props.navigation.setParams({ onBack: this.onBack.bind(this) }), 500);
+    setTimeout(() => this.props.navigation.setParams({
+      onBack: this.onBack.bind(this),
+      updateProject: () => this.props.updateProject(this.props.project)
+    }), 500);
   }
 
   toggleEditNoteModal = (note) => {
@@ -123,9 +126,11 @@ class ProjectDetail extends Component {
 
   onProjectTitleBlur () {
     // dirty check and project is not new
-    if (this.state.projectTitle !== this.props.project.title && !this.props.project._new) {
+    if ((this.state.projectTitle !== this.props.project.title) || this.props.project._new) {
       this.props.project.title = this.state.projectTitle;
-      this.props.updateProject(this.props.project);
+      if (!this.props.project._new) {
+        this.props.updateProject(this.props.project);
+      }
     }
   }
 

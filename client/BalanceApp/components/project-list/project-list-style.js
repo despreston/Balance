@@ -5,5 +5,8 @@ export const Style = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 10
+  },
+  project: {
+    marginBottom: 15
   }
 });

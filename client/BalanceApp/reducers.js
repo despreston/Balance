@@ -17,7 +17,8 @@ function replaceNoteInProject (note, projects) {
 function getProject (projects, id) {
   const emptyProject = {
     _new: true,
-    title: ''
+    title: '',
+    user: CONFIG.userId
   };
   const test = id
     ? projects.find(project => project._id === id)

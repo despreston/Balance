@@ -3,11 +3,13 @@ const Project = require('../../models/Project');
 const _ = require('lodash');
 
 function createProject (req, res) {
-  if (!req.params.createdAt) {
-    req.params.createdAt = new Date()
+  req.body = JSON.parse(req.body);
+
+  if (!req.body.createdAt) {
+    req.body.createdAt = new Date()
   }
   
-  Project.create(req.params).then((err, newProject) => {
+  Project.create(req.body).then((newProject, err) => {
     if (err) {
       res.send(500);
     } else {
@@ -47,9 +49,9 @@ function updateProject (req, res) {
   req.body = JSON.parse(req.body);
   
   Project.findOne({_id: req.params._id}).then(project => {
-      project = _.extend(project, req.body);
-      project.save();
-      res.send(200, project);
+    project = _.extend(project, req.body);
+    project.save();
+    res.send(200, project);
   });
 }
 
@@ -57,9 +59,10 @@ module.exports = (server, routeHelper) => {
   server.get('projects/:_id', findProject);
   // server.get('projects', findProjects);
 
-  server.post('projects', (req, res) => {
-    routeHelper.requiredParams(req, res, ['title']);
+  server.post('projects', (req, res, next) => {
+    routeHelper.requiredParams(req.body, res, next, ['title', 'user']);
   }, createProject);
+  // server.post('projects', createProject);
 
   server.put('projects/:_id', updateProject);
 };
