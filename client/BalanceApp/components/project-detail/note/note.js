@@ -16,9 +16,12 @@ function Note ({ content, header, onEdit, emptyText }) {
     <View style={Styles.note}>
       <View style={Styles.header}>
         <Text style={Styles.headerTitle}>{header}</Text>
-        <TouchableHighlight onPress={onEdit}>
-          <Image style={Styles.noteButton} source={require("../../../assets/note-menu.png")}/>
-        </TouchableHighlight>
+        {
+          !!content && 
+          (<TouchableHighlight onPress={onEdit}>
+            <Image style={Styles.noteButton} source={require("../../../assets/note-menu.png")}/>
+          </TouchableHighlight>)
+        }
       </View>
       {getContent()}
     </View>

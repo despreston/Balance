@@ -43,18 +43,18 @@ class ProjectDetail extends Component {
 
   static navigationOptions = {
     header: ({ goBack, dispatch, state }) => {
-      const projectId = get(state, 'params.projectId');
+      const isNew = state.params.new;
       const title = <Text style={[NavStyles.text, NavStyles.title]}>Details</Text>;
       const style = { backgroundColor: '#333' };
       const left = (
         <Button
           color='#FFFFFF'
           style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
-          title={projectId ? 'Back' : 'Cancel'}
+          title={isNew ? 'Cancel' : 'Back'}
           onPress={() => state.params.onBack()}
         />
       );
-      const right = projectId
+      const right = !isNew
         ? (<View />)
         : (<Button
             color='#FFFFFF'
