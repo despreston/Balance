@@ -162,10 +162,12 @@ class ProjectDetail extends Component {
               <Note
                 content={notes.Past.content}
                 header="Here's where you left off:"
+                emptyText="Tap 'I did work' to add a new entry."
                 onEdit={this.toggleEditNoteModal.bind(this, notes.Past)} />
               <Note
                 content={notes.Future.content}
                 header="To do next:"
+                emptyText="Tap 'To do next' to add a new entry."
                 onEdit={this.toggleEditNoteModal.bind(this, notes.Future)} />
             </View>
           </View>

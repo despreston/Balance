@@ -57,12 +57,10 @@ function updateProject (req, res) {
 
 module.exports = (server, routeHelper) => {
   server.get('projects/:_id', findProject);
-  // server.get('projects', findProjects);
 
   server.post('projects', (req, res, next) => {
     routeHelper.requiredParams(req.body, res, next, ['title', 'user']);
   }, createProject);
-  // server.post('projects', createProject);
 
   server.put('projects/:_id', updateProject);
 };

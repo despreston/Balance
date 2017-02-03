@@ -28,5 +28,8 @@ export const Styles = StyleSheet.create  ({
     height: 20,
     marginRight: 5,
     width: 20
+  },
+  empty: {
+    alignSelf: 'center'
   }
 });
