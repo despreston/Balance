@@ -5,9 +5,12 @@ import { api } from './middleware/api';
  */
 export const RECEIVE_USER = 'RECEIVE_USER';
 export const REQUEST_USER_FAILED = 'REQUEST_USER_FAILED';
+
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
+export const OPEN_PROJECT = 'OPEN_PROJECT';
+
 export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 
 /*
@@ -23,6 +26,14 @@ export function requestUserFailed (err) {
 
 export function requestProjects () {
   return { type: REQUEST_PROJECTS };
+};
+
+/**
+ * Set the project that is being viewed
+ * @param {string} id Project ID
+ */
+export function openProject (id = null) {
+  return { type: OPEN_PROJECT, id };
 };
 
 export function receiveProjects (json) {
@@ -49,7 +60,7 @@ export function receiveProjects (json) {
 export function receiveProject (project) {
   return {
     type: RECEIVE_PROJECT,
-    project: project,
+    project,
     receivedAt: Date.now()
   };
 };
@@ -60,7 +71,7 @@ export function receiveNote (note) {
   }
   return {
     type: RECEIVE_NOTE,
-    note: note,
+    note,
     receivedAt: Date.now()
   };
 };

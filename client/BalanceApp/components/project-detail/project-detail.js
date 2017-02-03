@@ -19,24 +19,13 @@ import Note from './note/note';
 import EditNote from '../edit-note/edit-note';
 import { fetchProjects, saveNote, saveProject } from '../../actions';
 
-function onBackPress (back, dispatch) {
-  // Reload the projects from the server. They may have changed
-  dispatch(fetchProjects());
-  back();
-}
-
 function mapStateToProps (state, props) {
-  const projectId = get(props.navigation.state, 'params.projectId');
-  const emptyProject = {
-    _new: true,
-    title: '',
-    user: CONFIG.userId
-  };
-  return { project: (projectId ? state.projects.find(project => project._id === projectId) : emptyProject) };
+  return { project: state.open_project };
 }
 
 function mapDispatchToProps (dispatch) {
   return {
+    dispatch,
     updateNote: note => dispatch(saveNote(note)),
     updateProject: project => dispatch(saveProject(project))
   };
@@ -46,10 +35,11 @@ class ProjectDetail extends Component {
   static propTypes = {
     updateNote: PropTypes.func.isRequired,
     updateProject: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
     }).isRequired
-  }
+  };
 
   static navigationOptions = {
     header: ({ goBack, dispatch, state }) => {
@@ -58,14 +48,16 @@ class ProjectDetail extends Component {
       const style = { backgroundColor: '#333' };
       const left = (
         <Button
+          color='#FFFFFF'
           style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
           title={projectId ? 'Back' : 'Cancel'}
-          onPress={onBackPress.bind(this, goBack, dispatch)}
+          onPress={() => state.params.onBack()}
         />
       );
       const right = projectId
         ? (<View />)
         : (<Button
+            color='#FFFFFF'
             style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
             title='Save'
             onPress={() => null}
@@ -73,10 +65,10 @@ class ProjectDetail extends Component {
 
       return { title, style, left, right };
     }
-  }
+  };
 
   constructor (props) {
-    super();
+    super(props);
     this.state = {
       editModalVisible: false,
       note: {},
@@ -89,6 +81,9 @@ class ProjectDetail extends Component {
     if (!this.props.project.title) {
       this.projectTitle.focus();
     }
+
+    // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900
+    setTimeout(() => this.props.navigation.setParams({ onBack: this.onBack.bind(this) }), 500);
   }
 
   toggleEditNoteModal = (note) => {
@@ -109,14 +104,20 @@ class ProjectDetail extends Component {
       user: this.props.project.user,
       project: this.props.project._id,
       content: '',
-      type: type
+      type
     };
+  }
+
+  onBack () {
+    // Reload the projects from the server. They may have changed
+    this.props.dispatch(fetchProjects());
+    this.props.navigation.goBack();
   }
 
   getNotesFromProject (project) {
     let notes = { Future: {}, Past: {} };
-    notes.Future = project.Future ? project.Future : this.emptyNote('Future');
-    notes.Past = project.Past ? project.Past : this.emptyNote('Past');
+    notes.Future = project.Future || this.emptyNote('Future');
+    notes.Past = project.Past || this.emptyNote('Past');
     return notes;
   }
 

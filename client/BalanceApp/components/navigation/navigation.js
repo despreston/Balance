@@ -1,6 +1,7 @@
 // Vendors
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
+import { connect } from 'react-redux';
 
 // Components
 import MainScene from '../main/main';
