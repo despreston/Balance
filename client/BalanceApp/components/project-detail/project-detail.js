@@ -10,7 +10,6 @@ import {
   TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import dismissKeyboard from 'dismissKeyboard';
-import { get } from 'lodash';
 
 // Components
 import { Styles } from './project-detail-style';
