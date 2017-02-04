@@ -20,7 +20,7 @@ function ProjectListItem ({ project }) {
 
   function getEmptyNotesMessage () {
     return !(Past || Future)
-      ? (<Text style={Style.empty}>Nothing yet. 😕</Text>)
+      ? (<Text style={[Style.noteContent, Style.empty]}>Nothing yet. 😕</Text>)
       : null;
   }
 
