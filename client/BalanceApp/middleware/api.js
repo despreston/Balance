@@ -13,7 +13,7 @@ export function api (url, action, properties = { method: 'GET' }) {
       .then(response => {
         response.json().then(json => {
           if (!response.ok) {
-            return Promise.reject();
+            return Promise.reject(); 
           }
           return dispatch(action(json));
         });

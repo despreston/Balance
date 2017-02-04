@@ -4,17 +4,21 @@ export const styles = StyleSheet.create  ({
   view: {
     backgroundColor: "#333333"
   },
+  mainTitle: {
+    letterSpacing: 5,
+    fontWeight: 'bold'
+  },
   title: {
+    flex: 1,
     fontFamily: "Helvetica Neue",
-    letterSpacing: 5
+    textAlign: 'center'
   },
   button: {
     paddingHorizontal: 20
   },
   text: {
-    paddingTop: 10,
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: 'bold',
-    color: "#FFFFFF"
+    fontWeight: 'bold'
   }
 });

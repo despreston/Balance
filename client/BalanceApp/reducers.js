@@ -2,7 +2,8 @@
 
 const initialState = {
 	user: null,
-  projects: []
+  projects: [],
+  open_project: null // Project shown in project detail page
 };
 
 function replaceNoteInProject (note, projects) {
@@ -13,13 +14,28 @@ function replaceNoteInProject (note, projects) {
   return projects;
 }
 
+function getProject (projects, id) {
+  const emptyProject = {
+    _new: true,
+    title: '',
+    user: CONFIG.userId
+  };
+  const test = id
+    ? projects.find(project => project._id === id)
+    : emptyProject;
+  
+  return test;
+}
+
 function balance (state = initialState, action) {
   switch (action.type) {
-    case "RECEIVE_PROJECTS":
+    case 'OPEN_PROJECT':
+      return Object.assign({}, state, { open_project: getProject(state.projects, action.id)});
+    case 'RECEIVE_PROJECTS':
       return Object.assign({}, state, { projects: action.projects });
-    case "RECEIVE_USER":
+    case 'RECEIVE_USER':
       return Object.assign({}, state, { user: action.user });
-    case "RECEIVE_NOTE":
+    case 'RECEIVE_NOTE':
       return Object.assign({}, state, { projects: replaceNoteInProject(action.note, state.projects) });
     default:
       return state;

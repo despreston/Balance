@@ -45,7 +45,6 @@ Project.pre('save', function(next) {
   // Keep user from changing these properties indirectly
   const excludedProperties = ['lastUpdated', 'user', 'createdAt'];
   excludedProperties.forEach(prop => delete this[prop]);
-
   this.lastUpdated = new Date();
   next();
 });

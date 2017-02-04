@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const Styles = StyleSheet.create  ({
   projectDetail: {
+    backgroundColor: '#FFFFFF',
     flex: 1
   },
   title: {

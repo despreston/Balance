@@ -3,34 +3,91 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
-  TouchableHighlight,
+  Button,
   Modal,
   TextInput,
+  TouchableHighlight,
   TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import dismissKeyboard from 'dismissKeyboard';
 
 // Components
 import { Styles } from './project-detail-style';
+import { styles as NavStyles } from '../navigation/navigation-styles';
 import Note from './note/note';
 import EditNote from '../edit-note/edit-note';
-import { saveNote, saveProject } from '../../actions';
+import { fetchProjects, saveNote, saveProject } from '../../actions';
+
+function mapStateToProps (state, props) {
+  return { project: state.open_project };
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    fetchProjects: () => dispatch(fetchProjects()),
+    updateNote: note => dispatch(saveNote(note)),
+    updateProject: project => dispatch(saveProject(project))
+  };
+}
 
 class ProjectDetail extends Component {
   static propTypes = {
-    projectId: PropTypes.string.isRequired,
-    project: PropTypes.object.isRequired,
     updateNote: PropTypes.func.isRequired,
-    updateProject: PropTypes.func.isRequired
-  }
+    updateProject: PropTypes.func.isRequired,
+    fetchProjects: PropTypes.func.isRequired,
+    project: PropTypes.shape({
+      title: PropTypes.string.isRequired
+    }).isRequired
+  };
+
+  static navigationOptions = {
+    header: ({ goBack, dispatch, state }) => {
+      const isNew = state.params.new;
+      const title = <Text style={[NavStyles.text, NavStyles.title]}>Details</Text>;
+      const style = { backgroundColor: '#333' };
+      const left = (
+        <Button
+          color='#FFFFFF'
+          style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+          title={isNew ? 'Cancel' : 'Back'}
+          onPress={() => state.params.onBack()}
+        />
+      );
+      const right = !isNew
+        ? (<View />)
+        : (<Button
+            color='#FFFFFF'
+            style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+            title='Save'
+            onPress={() => state.params.saveProject()}
+          />);
+
+      return { title, style, left, right };
+    }
+  };
 
   constructor (props) {
-    super();
+    super(props);
+
     this.state = {
       editModalVisible: false,
       note: {},
-      projectTitle: props.project.title
+      projectTitle: props.project.title,
+      invalid: false
     };
+  }
+
+  componentDidMount () {
+    // Set focus to project title when its a new project
+    if (!this.props.project.title) {
+      this.projectTitle.focus();
+    }
+
+    // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900
+    setTimeout(() => this.props.navigation.setParams({
+      onBack: () => this.onBack(),
+      saveProject: () => this.saveProject()
+    }), 500);
   }
 
   toggleEditNoteModal = (note) => {
@@ -51,23 +108,44 @@ class ProjectDetail extends Component {
       user: this.props.project.user,
       project: this.props.project._id,
       content: '',
-      type: type
+      type
     };
+  }
+
+  onBack () {
+    // Reload the projects from the server. They may have changed
+    this.props.fetchProjects();
+    this.props.navigation.goBack();
   }
 
   getNotesFromProject (project) {
     let notes = { Future: {}, Past: {} };
-    notes.Future = project.Future ? project.Future : this.emptyNote('Future');
-    notes.Past = project.Past ? project.Past : this.emptyNote('Past');
+    notes.Future = project.Future || this.emptyNote('Future');
+    notes.Past = project.Past || this.emptyNote('Past');
     return notes;
   }
 
-  onProjectTitleBlur () {
-    const oldTitle = this.props.project.title;
+  // Handle any form validation before saving
+  saveProject () {
     this.props.project.title = this.state.projectTitle;
-    // dirty check
-    if (this.state.projectTitle !== oldTitle) {
-      this.props.updateProject(this.props.project);
+    
+    // Empty project title
+    if (!this.props.project.title || this.props.project.title === '') {
+      this.setState({ invalid: true });
+      this.projectTitle.focus();
+      return;
+    }
+
+    this.props.updateProject(this.props.project);
+    this.onBack();
+  }
+
+  onProjectTitleBlur () {
+    // dirty check and project is not new
+    if ((this.state.projectTitle !== this.props.project.title) || this.props.project._new) {
+      if (!this.props.project._new) {
+        this.saveProject();
+      }
     }
   }
 
@@ -76,10 +154,13 @@ class ProjectDetail extends Component {
     return (
       <View style={Styles.projectDetail}>
         <TextInput
+          ref={input => this.projectTitle = input}
           value={this.state.projectTitle}
           style={Styles.title}
+          placeholder="Project Title (required)"
+          placeholderTextColor={this.state.invalid ? '#B86D6F' : '#C7C7CD'}
           onBlur={this.onProjectTitleBlur.bind(this)}
-          onChangeText={text => this.setState({ projectTitle: text }) } />
+          onChangeText={text => this.setState({ projectTitle: text, invalid: false })} />
         <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           <View style={Styles.container}>
             <View style={Styles.updateButtonContainer}>
@@ -98,10 +179,12 @@ class ProjectDetail extends Component {
               <Note
                 content={notes.Past.content}
                 header="Here's where you left off:"
+                emptyText="Tap 'I did work' to add a new entry."
                 onEdit={this.toggleEditNoteModal.bind(this, notes.Past)} />
               <Note
                 content={notes.Future.content}
                 header="To do next:"
+                emptyText="Tap 'To do next' to add a new entry."
                 onEdit={this.toggleEditNoteModal.bind(this, notes.Future)} />
             </View>
           </View>
@@ -115,19 +198,6 @@ class ProjectDetail extends Component {
       </View>
     );
   }
-}
-
-function mapStateToProps (state, props) {
-  return {
-    project: state.projects.find(project => project._id === props.projectId)
-  };
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    updateNote: note => dispatch(saveNote(note)),
-    updateProject: project => dispatch(saveProject(project))
-  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetail);
