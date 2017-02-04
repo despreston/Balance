@@ -14,8 +14,9 @@ function ProjectListItem ({ project }) {
     if (Past && Future) {
       lastUpdated = Past.lastUpdated.getTime() > Future.lastUpdated.getTime() ?
       Past.lastUpdated : Future.lastUpdated;
+    } else {
+      lastUpdated = Past.lastUpdated || Future.lastUpdated;
     }
-    lastUpdated = Past.lastUpdated || Future.lastUpdated;
   }
 
   function getEmptyNotesMessage () {
