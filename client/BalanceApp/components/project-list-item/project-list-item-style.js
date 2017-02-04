@@ -21,7 +21,7 @@ export const Style = StyleSheet.create({
     paddingHorizontal: 10
   },
   title: {
-    color: '#487CC3',
+    color: '#2E92E1',
     fontSize: 18,
     fontWeight: 'bold'
   },
