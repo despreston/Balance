@@ -159,18 +159,18 @@ class ProjectDetail extends Component {
           style={Styles.title}
           placeholder="Project Title (required)"
           placeholderTextColor={this.state.invalid ? '#B86D6F' : '#C7C7CD'}
-          onBlur={this.onProjectTitleBlur.bind(this)}
+          onBlur={() => this.onProjectTitleBlur()}
           onChangeText={text => this.setState({ projectTitle: text, invalid: false })} />
         <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           <View style={Styles.container}>
             <View style={Styles.updateButtonContainer}>
               <TouchableHighlight
-                onPress={this.toggleEditNoteModal.bind(this, this.emptyNote('Past'))}
+                onPress={() => this.toggleEditNoteModal(this.emptyNote('Past'))}
                 style={Styles.updateButton}>
                 <Text style={Styles.updateButtonText}>I did work</Text>
               </TouchableHighlight>
               <TouchableHighlight
-                onPress={this.toggleEditNoteModal.bind(this, this.emptyNote('Future'))}
+                onPress={() => this.toggleEditNoteModal(this.emptyNote('Future'))}
                 style={Styles.updateButton}>
                 <Text style={Styles.updateButtonText}>To do next</Text>
               </TouchableHighlight>
@@ -180,20 +180,20 @@ class ProjectDetail extends Component {
                 content={notes.Past.content}
                 header="Here's where you left off:"
                 emptyText="Tap 'I did work' to add a new entry."
-                onEdit={this.toggleEditNoteModal.bind(this, notes.Past)} />
+                onEdit={() => this.toggleEditNoteModal(notes.Past)} />
               <Note
                 content={notes.Future.content}
                 header="To do next:"
                 emptyText="Tap 'To do next' to add a new entry."
-                onEdit={this.toggleEditNoteModal.bind(this, notes.Future)} />
+                onEdit={() => this.toggleEditNoteModal(notes.Future)} />
             </View>
           </View>
         </TouchableWithoutFeedback>
         <EditNote
           style={Styles.editNoteModal}
           visible={this.state.editModalVisible}
-          onSave={this.saveNote.bind(this)}
-          onClose={this.toggleEditNoteModal.bind(this, {})}
+          onSave={() => this.saveNote()}
+          onClose={() => this.toggleEditNoteModal({})}
           note={this.state.note} />
       </View>
     );

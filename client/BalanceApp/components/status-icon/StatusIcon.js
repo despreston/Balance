@@ -10,9 +10,9 @@ function StatusIcon ({ lastUpdated }) {
 
     if (difference < 1) {
       return '#B0D391';
-    } else if (difference < 7) {
+    } else if (difference <= 7) {
       return '#DDDDDD';
-    } else if (difference < 14) {
+    } else if (difference <= 14) {
       return '#FACA9C';
     }
     
