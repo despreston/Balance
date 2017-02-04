@@ -13,7 +13,7 @@ function createProject (req, res) {
     if (err) {
       res.send(500);
     } else {
-      res.send(204, newProject);
+      res.send(200, newProject);
     }
   });
 }
@@ -55,12 +55,10 @@ function updateProject (req, res) {
   });
 }
 
-module.exports = (server, routeHelper) => {
+module.exports = (server) => {
   server.get('projects/:_id', findProject);
 
-  server.post('projects', (req, res, next) => {
-    routeHelper.requiredParams(req.body, res, next, ['title', 'user']);
-  }, createProject);
+  server.post('projects', createProject);
 
   server.put('projects/:_id', updateProject);
 };

@@ -24,7 +24,7 @@ function mapStateToProps (state, props) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    dispatch,
+    fetchProjects: () => dispatch(fetchProjects()),
     updateNote: note => dispatch(saveNote(note)),
     updateProject: project => dispatch(saveProject(project))
   };
@@ -34,7 +34,7 @@ class ProjectDetail extends Component {
   static propTypes = {
     updateNote: PropTypes.func.isRequired,
     updateProject: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired,
+    fetchProjects: PropTypes.func.isRequired,
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
     }).isRequired
@@ -59,7 +59,7 @@ class ProjectDetail extends Component {
             color='#FFFFFF'
             style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
             title='Save'
-            onPress={() => state.params.updateProject()}
+            onPress={() => state.params.saveProject()}
           />);
 
       return { title, style, left, right };
@@ -68,10 +68,12 @@ class ProjectDetail extends Component {
 
   constructor (props) {
     super(props);
+
     this.state = {
       editModalVisible: false,
       note: {},
-      projectTitle: props.project.title
+      projectTitle: props.project.title,
+      invalid: false
     };
   }
 
@@ -83,8 +85,8 @@ class ProjectDetail extends Component {
 
     // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900
     setTimeout(() => this.props.navigation.setParams({
-      onBack: this.onBack.bind(this),
-      updateProject: () => this.props.updateProject(this.props.project)
+      onBack: () => this.onBack(),
+      saveProject: () => this.saveProject()
     }), 500);
   }
 
@@ -112,7 +114,7 @@ class ProjectDetail extends Component {
 
   onBack () {
     // Reload the projects from the server. They may have changed
-    this.props.dispatch(fetchProjects());
+    this.props.fetchProjects();
     this.props.navigation.goBack();
   }
 
@@ -123,12 +125,26 @@ class ProjectDetail extends Component {
     return notes;
   }
 
+  // Handle any form validation before saving
+  saveProject () {
+    this.props.project.title = this.state.projectTitle;
+    
+    // Empty project title
+    if (!this.props.project.title || this.props.project.title === '') {
+      this.setState({ invalid: true });
+      this.projectTitle.focus();
+      return;
+    }
+
+    this.props.updateProject(this.props.project);
+    this.onBack();
+  }
+
   onProjectTitleBlur () {
     // dirty check and project is not new
     if ((this.state.projectTitle !== this.props.project.title) || this.props.project._new) {
-      this.props.project.title = this.state.projectTitle;
       if (!this.props.project._new) {
-        this.props.updateProject(this.props.project);
+        this.saveProject();
       }
     }
   }
@@ -141,8 +157,10 @@ class ProjectDetail extends Component {
           ref={input => this.projectTitle = input}
           value={this.state.projectTitle}
           style={Styles.title}
+          placeholder="Project Title (required)"
+          placeholderTextColor={this.state.invalid ? '#B86D6F' : '#C7C7CD'}
           onBlur={this.onProjectTitleBlur.bind(this)}
-          onChangeText={text => this.setState({ projectTitle: text })} />
+          onChangeText={text => this.setState({ projectTitle: text, invalid: false })} />
         <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           <View style={Styles.container}>
             <View style={Styles.updateButtonContainer}>
