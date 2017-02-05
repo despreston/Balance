@@ -58,7 +58,6 @@ export default class EditNote extends Component {
 
   save () {
     this.props.note.content = this.state.textValue;
-    console.log(this.props.note)
     this.props.onSave(this.props.note);
     this.props.onClose();
   }
