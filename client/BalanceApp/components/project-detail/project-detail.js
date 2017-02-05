@@ -99,7 +99,11 @@ class ProjectDetail extends Component {
 
   saveNote (note) {
     this.props.project[note.type] = note;
-    this.props.updateNote(note);
+    // If the project is new, dont save the note because then it won't be tied to
+    // any project id. For now, the backend will handle saving new notes for new projects
+    if (!this.props.project._new) {
+      this.props.updateNote(note);
+    }
   }
 
   emptyNote (type) {
@@ -192,7 +196,7 @@ class ProjectDetail extends Component {
         <EditNote
           style={Styles.editNoteModal}
           visible={this.state.editModalVisible}
-          onSave={() => this.saveNote()}
+          onSave={this.saveNote.bind(this)}
           onClose={() => this.toggleEditNoteModal({})}
           note={this.state.note} />
       </View>

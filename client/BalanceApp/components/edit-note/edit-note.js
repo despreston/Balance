@@ -14,7 +14,11 @@ import { Styles } from './edit-note-style';
 
 export default class EditNote extends Component {
   static propTypes = {
-    note: PropTypes.object.isRequired,
+    note: PropTypes.shape({
+      content: PropTypes.string,
+      type: PropTypes.string,
+      project: PropTypes.string
+    }).isRequired,
     onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired
@@ -54,6 +58,7 @@ export default class EditNote extends Component {
 
   save () {
     this.props.note.content = this.state.textValue;
+    console.log(this.props.note)
     this.props.onSave(this.props.note);
     this.props.onClose();
   }

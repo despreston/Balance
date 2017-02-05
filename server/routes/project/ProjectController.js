@@ -1,49 +1,44 @@
 'use strict';
 const Project = require('../../models/Project');
+const Note = require('../../models/Note');
 const _ = require('lodash');
 
 function createProject (req, res) {
-  req.body = JSON.parse(req.body);
+  let body = JSON.parse(req.body);
 
-  if (!req.body.createdAt) {
-    req.body.createdAt = new Date()
+  if (!body.createdAt) {
+    body.createdAt = new Date()
   }
   
-  Project.create(req.body).then((newProject, err) => {
+  Project.create(body).then((newProject, err) => {
     if (err) {
       res.send(500);
-    } else {
-      res.send(200, newProject);
     }
+    return newProject;
+  }).then(newProject => {
+    let promises = [];
+
+    // Create any notes that were added to the new project
+    if (body.Past) {
+      body.Past.project = newProject._id;
+      promises.push(Note.create(body.Past));
+    }
+
+    if (body.Future) {
+      body.Future.project = newProject._id;
+      promises.push(Note.create(body.Future));
+    }
+
+    Promise.all(promises).then(notes => {
+      notes.forEach(note => newProject[note.type] = note);
+      res.send(200, newProject);
+    });
   });
 }
-
-/**
- * Find the latest future and previous notes for all project ids
- * @param {Array} projectIds Array of project ids
- * @return {Map} Key value of (project id, future and previous notes)
- */
-// function findLatestNotesForProjects (projectIds) {
-//   return Note.aggregate([
-//     { $match: { project: { $in: projectIds } } },
-//     { $group: { _id: "$project" }}
-//   ]).then(results => {
-//     console.log("HERE", results)
-//   });
-// }
 
 function findProject (req, res) {
   Project.findOne(req.params).lean().then(project => res.send(200, project));
 }
-
-// function findProjects (req, res) {
-//   Promise.all([
-//     findLatestNotesForProjects(req.params),
-//     Project.find(req.params)
-//   ]).then(results => {
-//     res.send(200, results)
-//   });
-// }
 
 function updateProject (req, res) {
   req.body = JSON.parse(req.body);
