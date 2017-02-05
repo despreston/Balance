@@ -9,6 +9,7 @@ export const Styles = StyleSheet.create  ({
     color: '#2E92E1',
     fontFamily: 'Helvetica Neue',
     fontSize: 22,
+    fontWeight: 'bold',
     height: 70,
     textAlign: 'center',
     paddingHorizontal: 10
@@ -40,7 +41,7 @@ export const Styles = StyleSheet.create  ({
   notesContainer: {
     flex: 1,
     justifyContent: 'space-between',
-    marginTop: 20
+    marginTop: 10
   },
   note: {
     flex: 1
