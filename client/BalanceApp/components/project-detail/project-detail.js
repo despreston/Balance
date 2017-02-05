@@ -146,10 +146,8 @@ class ProjectDetail extends Component {
 
   onProjectTitleBlur () {
     // dirty check and project is not new
-    if ((this.state.projectTitle !== this.props.project.title) || this.props.project._new) {
-      if (!this.props.project._new) {
-        this.saveProject();
-      }
+    if ((this.state.projectTitle !== this.props.project.title) && !this.props.project._new) {
+      this.saveProject();
     }
   }
 
