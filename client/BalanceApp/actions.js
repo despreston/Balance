@@ -12,6 +12,7 @@ export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
 export const OPEN_PROJECT = 'OPEN_PROJECT';
 
 export const RECEIVE_NOTE = 'RECEIVE_NOTE';
+export const RECEIVE_NOTES_FOR_PROJECT = 'RECEIVE_NOTES_FOR_PROJECT';
 
 /*
  * action creators
@@ -36,6 +37,11 @@ export function openProject (id = null) {
   return { type: OPEN_PROJECT, id };
 };
 
+/**
+ * Receive projects and convert dates to date objects
+ * @param {json} json
+ * @return {action}
+ */
 export function receiveProjects (json) {
   // Convert to date object
   json.forEach(project => {
@@ -57,6 +63,11 @@ export function receiveProjects (json) {
   };
 };
 
+/**
+ * Create action for receiving a single project
+ * @param {object} project
+ * @return {action}
+ */
 export function receiveProject (project) {
   return {
     type: RECEIVE_PROJECT,
@@ -65,6 +76,11 @@ export function receiveProject (project) {
   };
 };
 
+/**
+ * Create action for receiving a single note
+ * @param {object} note
+ * @return {action}
+ */
 export function receiveNote (note) {
   if (note.lastUpdated) {
     note.lastUpdated = new Date(note.lastUpdated);
@@ -76,8 +92,14 @@ export function receiveNote (note) {
   };
 };
 
+/**
+ * Save a project to server
+ * Properly handles POST or PUT determination based on _new flag in project
+ * @param {object} project
+ * @return {Promise}
+ */
 export function saveProject (project) {
-  let method, url = `${CONFIG.apiUrl}projects`;
+  let method, url = 'projects';
   if (project._new) {
     method = 'POST';
     delete project._new;
@@ -88,8 +110,14 @@ export function saveProject (project) {
   return api(url, receiveProject, { method: method, body: project });
 };
 
+/**
+ * Save a note to server
+ * Properly handles POST or PUT determination based on _new flag in note
+ * @param {object} note
+ * @return {Promise}
+ */
 export function saveNote (note) {
-  let method, url = `${CONFIG.apiUrl}notes`;
+  let method, url = 'notes';
   if (note._new) {
     method = 'POST';
     delete note._new;
@@ -100,10 +128,28 @@ export function saveNote (note) {
   return api(url, receiveNote, { method: method, body: note });
 };
 
+/**
+ * Fetches single project from server
+ * @param {string} project Project ID
+ * @return {Promise}
+ */
 export function fetchProject (project) {
-  return api(`${CONFIG.apiUrl}projects/${project._id}`, receiveProject);
+  return api(`projects/${project._id}`, receiveProject);
 };
 
+/**
+ * Fetches all projects for current user
+ * @return {Promise}
+ */
 export function fetchProjects () {
-  return api(`${CONFIG.apiUrl}users/${CONFIG.userId}/projects`, receiveProjects);
+  return api(`users/${CONFIG.userId}/projects`, receiveProjects);
+};
+
+/**
+ * Fetches all notes for single project
+ * @param {string} project Project ID
+ * @return {Promise}
+ */
+export function requestNotesForProject (project) {
+  return api(`projects/${project}/notes`, receiveNotesForProject);
 };

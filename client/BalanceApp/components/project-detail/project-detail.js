@@ -16,6 +16,7 @@ import { Styles } from './project-detail-style';
 import { styles as NavStyles } from '../navigation/navigation-styles';
 import Note from './note/note';
 import EditNote from '../edit-note/edit-note';
+import FutureNote from './future-note/future-note';
 import { fetchProjects, saveNote, saveProject } from '../../actions';
 
 function mapStateToProps (state, props) {
@@ -177,18 +178,7 @@ class ProjectDetail extends Component {
                 <Text style={Styles.updateButtonText}>To do next</Text>
               </TouchableHighlight>
             </View>
-            <View style={Styles.notesContainer}>
-              <Note
-                content={notes.Past.content}
-                header="Here's where you left off:"
-                emptyText="Tap 'I did work' to add a new entry."
-                onEdit={() => this.toggleEditNoteModal(notes.Past)} />
-              <Note
-                content={notes.Future.content}
-                header="To do next:"
-                emptyText="Tap 'To do next' to add a new entry."
-                onEdit={() => this.toggleEditNoteModal(notes.Future)} />
-            </View>
+            <FutureNote note={notes.Future}/>
           </View>
         </TouchableWithoutFeedback>
         <EditNote

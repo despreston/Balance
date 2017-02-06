@@ -19,6 +19,7 @@ export const Styles = StyleSheet.create  ({
   },
   updateButtonContainer: {
     flexDirection: 'row',
+    marginBottom: 10
   },
   updateButton: {
     backgroundColor: '#2E92E1',
