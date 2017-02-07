@@ -6,6 +6,7 @@ const initialState = {
   users: {},
   sessionUserId: null,
   projects: [],
+  notes: [],
   open_project: null
 };
 

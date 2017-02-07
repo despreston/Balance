@@ -17,17 +17,27 @@ import { styles as NavStyles } from '../navigation/navigation-styles';
 import Note from './note/note';
 import EditNote from '../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
-import { fetchProjects, saveNote, saveProject } from '../../actions';
+import NoteList from '../note-list/note-list';
+import {
+  fetchProjects,
+  saveNote,
+  saveProject,
+  requestNotesForProject 
+} from '../../actions';
 
 function mapStateToProps (state, props) {
-  return { project: state.open_project };
+  return { 
+    project: state.open_project,
+    notes: state.notes
+  };
 }
 
 function mapDispatchToProps (dispatch) {
   return {
     fetchProjects: () => dispatch(fetchProjects()),
     updateNote: note => dispatch(saveNote(note)),
-    updateProject: project => dispatch(saveProject(project))
+    updateProject: project => dispatch(saveProject(project)),
+    requestNotesForProject: (project, noteType) => dispatch(requestNotesForProject(project, noteType))
   };
 }
 
@@ -82,6 +92,8 @@ class ProjectDetail extends Component {
     // Set focus to project title when its a new project
     if (!this.props.project.title) {
       this.projectTitle.focus();
+    } else {
+      this.props.requestNotesForProject(this.props.project._id, 'Past');
     }
 
     // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900
@@ -181,6 +193,7 @@ class ProjectDetail extends Component {
               </TouchableHighlight>
             </View>
             <FutureNote note={notes.Future}/>
+            <NoteList notes={this.props.notes}/>
           </View>
         </TouchableWithoutFeedback>
         <EditNote

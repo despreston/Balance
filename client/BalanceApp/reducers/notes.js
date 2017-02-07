@@ -13,6 +13,13 @@ export default {
    */
   RECEIVE_NOTE (state, { note }) {
     return Object.assign({}, state, { projects: replaceNoteInProject(note, state.projects) });
+  },
+
+  /**
+   * Set state property `notes`
+   */
+  RECEIVE_NOTES (state, { notes }) {
+    return Object.assign({}, state, { notes });
   }
 
 };

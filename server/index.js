@@ -15,6 +15,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(dbUrl);
 server.pre(restify.pre.sanitizePath());
 
+server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
 server.use((req, res, next) => {

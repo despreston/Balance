@@ -4,12 +4,25 @@ const Note = require('../../models/Note');
 const _ = require('lodash');
 
 module.exports = (server) => {
+
   server.get(
     'projects/:_id', (req, res) => {
       Project
       .findOne(req.params)
       .lean()
       .then(project => res.send(200, project));
+    });
+
+  server.get(
+    'projects/:_id/notes', (req, res) => {
+      let id = req.params._id;
+      delete req.params._id;
+      let query = Object.assign({ project: id }, req.params);
+
+      Note
+      .find(query)
+      .lean()
+      .then(notes => res.send(200, notes));
     });
 
   server.post(
@@ -56,4 +69,5 @@ module.exports = (server) => {
         res.send(200, project);
       });
     });
+
 };

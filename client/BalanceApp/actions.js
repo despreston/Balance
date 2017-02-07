@@ -12,6 +12,7 @@ export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
 export const OPEN_PROJECT = 'OPEN_PROJECT';
 
 export const RECEIVE_NOTE = 'RECEIVE_NOTE';
+export const RECEIVE_NOTES = 'RECEIVE_NOTES';
 export const RECEIVE_NOTES_FOR_PROJECT = 'RECEIVE_NOTES_FOR_PROJECT';
 
 /*
@@ -72,6 +73,20 @@ export function receiveProject (project) {
   return {
     type: RECEIVE_PROJECT,
     project,
+    receivedAt: Date.now()
+  };
+};
+
+/**
+ * Create action for receiving new list of notes
+ * @param {object} notes
+ * @param {action}
+ */
+export function receiveNotes (notes) {
+  console.log("HERE", notes)
+  return {
+    type: RECEIVE_NOTES,
+    notes,
     receivedAt: Date.now()
   };
 };
@@ -150,8 +165,8 @@ export function fetchProjects () {
  * @param {string} project Project ID
  * @return {Promise}
  */
-export function requestNotesForProject (project) {
-  return api(`projects/${project}/notes`, receiveNotesForProject);
+export function requestNotesForProject (project, noteType) {
+  return api(`projects/${project}/notes?type=${noteType}`, receiveNotes);
 };
 
 /**
