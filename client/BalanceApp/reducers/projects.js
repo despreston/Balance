@@ -1,7 +1,6 @@
 export default {
 
   RECEIVE_PROJECTS (state, { projects }) {
-    console.log(projects)
     return Object.assign({}, state, { projects });
   },
 
