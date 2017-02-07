@@ -18,6 +18,7 @@ function FutureNote ({ note }) {
       minute: '2-digit'
     });
   }
+  
   return (
     <View style={Style.container}>
       <View style={Style.top}>
