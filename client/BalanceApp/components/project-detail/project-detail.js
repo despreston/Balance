@@ -124,10 +124,10 @@ class ProjectDetail extends Component {
   }
 
   getNotesFromProject (project) {
-    let notes = { Future: {}, Past: {} };
-    notes.Future = project.Future || this.emptyNote('Future');
-    notes.Past = project.Past || this.emptyNote('Past');
-    return notes;
+    return {
+      Future: project.Future || this.emptyNote('Future'),
+      Past: project.Past || this.emptyNote('Past')
+    };
   }
 
   // Handle any form validation before saving

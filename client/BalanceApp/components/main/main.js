@@ -51,7 +51,7 @@ class MainScene extends Component {
   openProject (project) {
     const id = get(project, '_id');
     this.props.dispatch(openProject(id));
-    this.props.navigation.navigate('Project', {new: !!id ? false : true});
+    this.props.navigation.navigate('Project', { new: !!id ? false : true });
   }
 
   render () {

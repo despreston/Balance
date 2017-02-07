@@ -107,7 +107,7 @@ export function saveProject (project) {
     method = 'PUT';
     url += `/${project._id}`;
   }
-  return api(url, receiveProject, { method: method, body: project });
+  return api(url, receiveProject, { method, body: project });
 };
 
 /**
@@ -125,7 +125,7 @@ export function saveNote (note) {
     method = 'PUT';
     url += `/${note._id}`;
   }
-  return api(url, receiveNote, { method: method, body: note });
+  return api(url, receiveNote, { method, body: note });
 };
 
 /**
@@ -153,3 +153,11 @@ export function fetchProjects () {
 export function requestNotesForProject (project) {
   return api(`projects/${project}/notes`, receiveNotesForProject);
 };
+
+/**
+ * Fetch single user
+ * @param {string} user ID of user
+ */
+ // export function fetchUser (user) {
+  
+ // }
