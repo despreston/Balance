@@ -142,7 +142,9 @@ class ProjectDetail extends Component {
     }
 
     this.props.updateProject(this.props.project);
-    this.onBack();
+
+    // Handle race condition; project not saved before project list is fetched
+    setTimeout(this.onBack.bind(this), 200);
   }
 
   onProjectTitleBlur () {

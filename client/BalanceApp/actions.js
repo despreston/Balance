@@ -158,6 +158,6 @@ export function requestNotesForProject (project) {
  * Fetch single user
  * @param {string} user ID of user
  */
- // export function fetchUser (user) {
-  
- // }
+export function fetchUser (user) {
+  return api(`users/${CONFIG.userId}`, receiveUser);
+};
