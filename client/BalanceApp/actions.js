@@ -1,4 +1,5 @@
 import { api } from './middleware/api';
+import { arrayToObj } from './middleware/helpers';
 
 /*
  * action types
@@ -59,7 +60,7 @@ export function receiveProjects (json) {
   
   return {
     type: RECEIVE_PROJECTS,
-    projects: json,
+    projects: arrayToObj(json, '_id'),
     receivedAt: Date.now()
   };
 };
@@ -88,6 +89,8 @@ export function receiveNotes (notes) {
       note.lastUpdated = new Date(note.lastUpdated);
     }
   });
+
+  notes = arrayToObj(notes, '_id');
   
   return {
     type: RECEIVE_NOTES,

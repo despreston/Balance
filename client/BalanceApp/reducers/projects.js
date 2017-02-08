@@ -18,7 +18,7 @@ export default {
     };
 
     const open_project = id
-      ? state.projects.find(project => project._id === id)
+      ? state.projects[id]
       : emptyProject;
 
     return Object.assign({}, state, { open_project });

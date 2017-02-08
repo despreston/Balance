@@ -8,7 +8,7 @@ import { fetchProjects } from '../../actions';
 
 class ProjectListContainer extends Component {
   static propTypes = {
-    projects: PropTypes.array.isRequired,
+    projects: PropTypes.object.isRequired,
     onProjectTap: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired
   }
