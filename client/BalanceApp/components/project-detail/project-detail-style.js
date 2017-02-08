@@ -39,30 +39,14 @@ export const Styles = StyleSheet.create  ({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  notesContainer: {
-    flex: 1,
-    justifyContent: 'space-between',
-    marginTop: 10
+  pastNotesView: {
+    marginTop: 15,
+    padding: 5
   },
-  note: {
-    flex: 1
-  },
-  header: {
-    backgroundColor: '#F9F9F9',
-    borderTopColor: '#F6F6F6',
-    borderStyle: 'solid',
-    borderTopWidth: 2, 
-    paddingHorizontal: 10,
-    paddingVertical: 10
-  },
-  headerTitle: {
-    color: '#525252',
+  finishedTitleText: {
+    color: '#3D3F3E',
     fontSize: 16,
-    fontWeight: 'bold'
-  },
-  content: {
-    color: '#525252',
-    fontSize: 14,
-    padding: 10
+    fontWeight: 'bold',
+    marginBottom: 15
   }
 });

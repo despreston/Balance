@@ -8,17 +8,10 @@ import {
 // Components
 import { Style } from './future-note-style';
 
+// Tools
+import { formatDate } from '../../../middleware/helpers';
+
 function FutureNote ({ note }) {
-  function formatDate (date) {
-    return date.toLocaleDateString([], {
-      month: 'numeric',
-      day: 'numeric',
-      year: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
-  
   return (
     <View style={Style.container}>
       <View style={Style.top}>

@@ -83,7 +83,12 @@ export function receiveProject (project) {
  * @param {action}
  */
 export function receiveNotes (notes) {
-  console.log("HERE", notes)
+  notes.forEach(note => {
+    if (note.lastUpdated) {
+      note.lastUpdated = new Date(note.lastUpdated);
+    }
+  });
+  
   return {
     type: RECEIVE_NOTES,
     notes,
