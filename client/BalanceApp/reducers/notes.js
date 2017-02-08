@@ -5,10 +5,9 @@ export default {
    */
   RECEIVE_NOTE (state, { note }) {
     let projects;
-    const projectIndex = projects.findIndex(project => note.project === project._id);
 
-    if (projectIndex > -1) {
-      projects[projectIndex][note.type] = note;
+    if (projects[note.project]) {
+      projects[note.project][note.type] = note;
     }
 
     return Object.assign({}, state, projects);

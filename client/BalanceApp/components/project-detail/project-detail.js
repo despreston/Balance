@@ -167,8 +167,8 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    console.log("RENDERING PROJECT DETAIL")
     const notes = this.getNotesFromProject(this.props.project);
+    
     return (
       <View style={Styles.projectDetail}>
         <TextInput
