@@ -124,8 +124,6 @@ class ProjectDetail extends Component {
   }
 
   saveNote (note) {
-    this.props.project[note.type] = note;
-
     // If the project is new, dont save the note because then it won't be tied to
     // any project id. For now, the backend will handle saving new notes for new projects
     if (!this.props.project._new) {
@@ -181,17 +179,11 @@ class ProjectDetail extends Component {
 
   render () {
     const futureNote = this.getNotesFromProject(this.props.project).Future;
+    const { project, notes } = this.props;
 
     return (
       <ScrollView style={Styles.projectDetail}>
-        <TextInput
-          ref={input => this.projectTitle = input}
-          value={this.state.projectTitle}
-          style={Styles.title}
-          placeholder="Project Title (required)"
-          placeholderTextColor={this.state.invalid ? '#B86D6F' : '#C7C7CD'}
-          onBlur={() => this.onProjectTitleBlur()}
-          onChangeText={text => this.setState({ projectTitle: text, invalid: false })} />
+        <Text style={Styles.title} >{project.title}</Text>
         <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           <View style={Styles.container}>
             <View style={Styles.updateButtonContainer}>
@@ -209,7 +201,7 @@ class ProjectDetail extends Component {
             <FutureNote note={futureNote}/>
             <View style={Styles.pastNotesView}>
               <Text style={Styles.finishedTitleText}>Completed</Text>
-              <NoteList notes={this.props.notes} onEdit={this.toggleEditNoteModal}/>
+              <NoteList notes={notes} onEdit={this.toggleEditNoteModal}/>
             </View>
           </View>
         </TouchableWithoutFeedback>
