@@ -9,7 +9,7 @@ export function api (url, action, properties = { method: 'GET' }) {
     properties.body = JSON.stringify(properties.body);
   }
   return function(dispatch) {
-    return fetch(url, properties)
+    return fetch(`${CONFIG.apiUrl}${url}`, properties)
       .then(response => {
         response.json().then(json => {
           if (!response.ok) {

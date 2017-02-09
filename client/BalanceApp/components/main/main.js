@@ -6,7 +6,6 @@ import { get } from 'lodash';
 
 // Components
 import ProjectListContainer from '../project-list/project-list-container';
-import { openProject } from '../../actions';
 import { styles } from '../navigation/navigation-styles';
 
 class MainScene extends Component {
@@ -16,9 +15,9 @@ class MainScene extends Component {
   };
 
   static navigationOptions = {
-    header: ({ state, navigate, dispatch }) => ({
+    header: ({ state, navigate, dispatch }, defaultHeader) => ({
+      ...defaultHeader,
       title: <Text style={[styles.text, styles.title, styles.mainTitle]}>BALANCE</Text>,
-      style: { backgroundColor: '#333' },
       left: (
         <Button
           color='#FFFFFF'
@@ -50,8 +49,7 @@ class MainScene extends Component {
 
   openProject (project) {
     const id = get(project, '_id');
-    this.props.dispatch(openProject(id));
-    this.props.navigation.navigate('Project', {new: !!id ? false : true});
+    this.props.navigation.navigate('Project', { project: id || null });
   }
 
   render () {

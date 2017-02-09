@@ -1,6 +1,7 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
 import {
+  ScrollView,
   View,
   Text,
   Button,
@@ -11,26 +12,45 @@ import {
 import { connect } from 'react-redux';
 import dismissKeyboard from 'dismissKeyboard';
 
-// Components
+// styles
 import { Styles } from './project-detail-style';
 import { styles as NavStyles } from '../navigation/navigation-styles';
-import Note from './note/note';
-import EditNote from '../edit-note/edit-note';
-import { fetchProjects, saveNote, saveProject } from '../../actions';
 
-function mapStateToProps (state, props) {
-  return { project: state.open_project };
+// Components
+import EditNote from '../edit-note/edit-note';
+import FutureNote from './future-note/future-note';
+import NoteList from '../note-list/note-list';
+
+// utils
+import emptyProject from '../../utils/empty-project';
+
+// actions
+import {
+  fetchProjects,
+  saveNote,
+  saveProject,
+  requestNotesForProject 
+} from '../../actions';
+
+function mapStateToProps (state, { navigation }) {
+  console.log("HERE", emptyProject())
+  return {
+    project: state.projects[navigation.state.params.project] || emptyProject(),
+    notes: state.notes
+  };
 }
 
 function mapDispatchToProps (dispatch) {
   return {
     fetchProjects: () => dispatch(fetchProjects()),
     updateNote: note => dispatch(saveNote(note)),
-    updateProject: project => dispatch(saveProject(project))
+    updateProject: project => dispatch(saveProject(project)),
+    requestNotesForProject: (project, noteType) => dispatch(requestNotesForProject(project, noteType))
   };
 }
 
 class ProjectDetail extends Component {
+
   static propTypes = {
     updateNote: PropTypes.func.isRequired,
     updateProject: PropTypes.func.isRequired,
@@ -41,10 +61,10 @@ class ProjectDetail extends Component {
   };
 
   static navigationOptions = {
-    header: ({ goBack, dispatch, state }) => {
-      const isNew = state.params.new;
-      const title = <Text style={[NavStyles.text, NavStyles.title]}>Details</Text>;
-      const style = { backgroundColor: '#333' };
+    header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
+      console.log("SHIT", state.params.project)
+      const isNew = state.params.project === null;
+      
       const left = (
         <Button
           color='#FFFFFF'
@@ -53,8 +73,14 @@ class ProjectDetail extends Component {
           onPress={() => state.params.onBack()}
         />
       );
+      
       const right = !isNew
-        ? (<View />)
+        ? (<Button
+            color="#FFFFFF"
+            style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+            title='Edit'
+            onPress={() => navigate('EditProject', { project: state.params.project })}
+          />)
         : (<Button
             color='#FFFFFF'
             style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
@@ -62,7 +88,7 @@ class ProjectDetail extends Component {
             onPress={() => state.params.saveProject()}
           />);
 
-      return { title, style, left, right };
+      return { left, right, ...defaultHeader };
     }
   };
 
@@ -81,6 +107,8 @@ class ProjectDetail extends Component {
     // Set focus to project title when its a new project
     if (!this.props.project.title) {
       this.projectTitle.focus();
+    } else {
+      this.props.requestNotesForProject(this.props.project._id, 'Past');
     }
 
     // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900
@@ -99,6 +127,7 @@ class ProjectDetail extends Component {
 
   saveNote (note) {
     this.props.project[note.type] = note;
+
     // If the project is new, dont save the note because then it won't be tied to
     // any project id. For now, the backend will handle saving new notes for new projects
     if (!this.props.project._new) {
@@ -123,10 +152,10 @@ class ProjectDetail extends Component {
   }
 
   getNotesFromProject (project) {
-    let notes = { Future: {}, Past: {} };
-    notes.Future = project.Future || this.emptyNote('Future');
-    notes.Past = project.Past || this.emptyNote('Past');
-    return notes;
+    return {
+      Future: project.Future || this.emptyNote('Future'),
+      Past: project.Past || this.emptyNote('Past')
+    };
   }
 
   // Handle any form validation before saving
@@ -140,8 +169,9 @@ class ProjectDetail extends Component {
       return;
     }
 
-    this.props.updateProject(this.props.project);
-    this.onBack();
+    this.props.updateProject(this.props.project).then(() => {
+      this.onBack();
+    });
   }
 
   onProjectTitleBlur () {
@@ -152,9 +182,10 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const notes = this.getNotesFromProject(this.props.project);
+    const futureNote = this.getNotesFromProject(this.props.project).Future;
+
     return (
-      <View style={Styles.projectDetail}>
+      <ScrollView style={Styles.projectDetail}>
         <TextInput
           ref={input => this.projectTitle = input}
           value={this.state.projectTitle}
@@ -177,17 +208,10 @@ class ProjectDetail extends Component {
                 <Text style={Styles.updateButtonText}>To do next</Text>
               </TouchableHighlight>
             </View>
-            <View style={Styles.notesContainer}>
-              <Note
-                content={notes.Past.content}
-                header="Here's where you left off:"
-                emptyText="Tap 'I did work' to add a new entry."
-                onEdit={() => this.toggleEditNoteModal(notes.Past)} />
-              <Note
-                content={notes.Future.content}
-                header="To do next:"
-                emptyText="Tap 'To do next' to add a new entry."
-                onEdit={() => this.toggleEditNoteModal(notes.Future)} />
+            <FutureNote note={futureNote}/>
+            <View style={Styles.pastNotesView}>
+              <Text style={Styles.finishedTitleText}>Completed</Text>
+              <NoteList notes={this.props.notes} onEdit={this.toggleEditNoteModal}/>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -197,9 +221,10 @@ class ProjectDetail extends Component {
           onSave={this.saveNote.bind(this)}
           onClose={() => this.toggleEditNoteModal({})}
           note={this.state.note} />
-      </View>
+      </ScrollView>
     );
   }
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetail);

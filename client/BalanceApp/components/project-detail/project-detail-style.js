@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
-export const Styles = StyleSheet.create  ({
+export const Styles = StyleSheet.create ({
+
   projectDetail: {
     backgroundColor: '#FFFFFF',
     flex: 1
@@ -8,7 +9,8 @@ export const Styles = StyleSheet.create  ({
   title: {
     color: '#2E92E1',
     fontFamily: 'Helvetica Neue',
-    fontSize: 22,
+    fontSize: 20,
+    fontWeight: 'bold',
     height: 70,
     textAlign: 'center',
     paddingHorizontal: 10
@@ -18,6 +20,7 @@ export const Styles = StyleSheet.create  ({
   },
   updateButtonContainer: {
     flexDirection: 'row',
+    marginBottom: 10
   },
   updateButton: {
     backgroundColor: '#2E92E1',
@@ -37,30 +40,15 @@ export const Styles = StyleSheet.create  ({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  notesContainer: {
-    flex: 1,
-    justifyContent: 'space-between',
-    marginTop: 20
+  pastNotesView: {
+    marginTop: 15,
+    padding: 5
   },
-  note: {
-    flex: 1
-  },
-  header: {
-    backgroundColor: '#F9F9F9',
-    borderTopColor: '#F6F6F6',
-    borderStyle: 'solid',
-    borderTopWidth: 2, 
-    paddingHorizontal: 10,
-    paddingVertical: 10
-  },
-  headerTitle: {
-    color: '#525252',
+  finishedTitleText: {
+    color: '#3D3F3E',
     fontSize: 16,
-    fontWeight: 'bold'
-  },
-  content: {
-    color: '#525252',
-    fontSize: 14,
-    padding: 10
+    fontWeight: 'bold',
+    marginBottom: 15
   }
+  
 });

@@ -11,23 +11,16 @@ import thunkMiddleware from 'redux-thunk';
 // Components
 import config from './config/development';
 import MainNavigation from './components/navigation/navigation';
-import { receiveUser, requestUserFailed } from './actions';
-import balance from './reducers';
+import { fetchUser } from './actions';
+import reducer from './reducers/index';
 
 global.CONFIG = config;
-const store = createStore(balance, applyMiddleware(thunkMiddleware));
+const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 class BalanceApp extends Component {
-  getUser () {
-    return fetch(`${CONFIG.apiUrl}users/${CONFIG.userId}`)
-      .then(response => response.json())
-      .then(json => store.dispatch(receiveUser(json)))
-      .catch(err => store.dispatch(requestUserFailed(err)))
-      .done();
-  }
 
   componentWillMount () {
-    this.getUser();
+    store.dispatch(fetchUser());
   }
   
   render () {
@@ -37,6 +30,7 @@ class BalanceApp extends Component {
       </Provider>
     )
   }
+  
 }
 
 AppRegistry.registerComponent('BalanceApp', () => BalanceApp);

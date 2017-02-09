@@ -9,7 +9,7 @@ import { Style } from './project-list-style';
 export default class ProjectList extends Component {
   static propTypes = {
     onProjectTap: PropTypes.func.isRequired,
-    projects: PropTypes.array.isRequired
+    projects: PropTypes.object.isRequired
   }
 
   constructor (props) {
@@ -26,7 +26,7 @@ export default class ProjectList extends Component {
     return (
       <TouchableHighlight onPress={this.props.onProjectTap.bind(this,rowData)} style={Style.project}>
         <View ref={component => this._root = component}>
-          <ProjectListItem  project={rowData} />
+          <ProjectListItem project={rowData} />
         </View>
       </TouchableHighlight>
     );    
