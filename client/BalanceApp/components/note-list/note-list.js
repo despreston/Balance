@@ -9,6 +9,7 @@ import {
 
 // components
 import NoteListItem from '../note-list-item/note-list-item';
+import { Styles } from './note-list-style';
 
 export default class NoteList extends Component {
 
@@ -23,7 +24,11 @@ export default class NoteList extends Component {
 
   renderNotes () {
     return Object.keys(this.props.notes).map(id => {
-      return ( <NoteListItem key={id} note={this.props.notes[id]} onEdit={this.props.onEdit} /> );
+      return (
+        <View key={id} style={Styles.noteListItem}>
+          <NoteListItem note={this.props.notes[id]} onEdit={this.props.onEdit} />
+        </View>
+      );
     });
   }
 

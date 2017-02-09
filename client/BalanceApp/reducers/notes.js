@@ -4,13 +4,12 @@ export default {
    * Replace note in specific project
    */
   RECEIVE_NOTE (state, { note }) {
-    let projects;
+    const notes = {
+      ...state.notes,
+      [note._id]: note
+    };
 
-    if (projects[note.project]) {
-      projects[note.project][note.type] = note;
-    }
-
-    return Object.assign({}, state, projects);
+    return Object.assign({}, state, { notes });
   },
 
   /**

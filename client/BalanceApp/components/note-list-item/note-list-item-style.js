@@ -19,7 +19,7 @@ export const Styles = StyleSheet.create  ({
   },
   content: {
     color: '#333',
-    fontSize: 16,
+    fontSize: 14,
     paddingVertical: 5
   }
 });

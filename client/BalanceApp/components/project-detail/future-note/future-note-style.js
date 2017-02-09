@@ -19,8 +19,8 @@ export const Style = StyleSheet.create  ({
     justifyContent: 'space-between'
   },
   content: {
-    color: '#77778A',
-    fontSize: 16,
+    color: '#333',
+    fontSize: 14,
     marginTop: 15
   }
 });

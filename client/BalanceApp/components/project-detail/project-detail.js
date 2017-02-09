@@ -112,6 +112,7 @@ class ProjectDetail extends Component {
 
   saveNote (note) {
     this.props.project[note.type] = note;
+
     // If the project is new, dont save the note because then it won't be tied to
     // any project id. For now, the backend will handle saving new notes for new projects
     if (!this.props.project._new) {
@@ -153,10 +154,9 @@ class ProjectDetail extends Component {
       return;
     }
 
-    this.props.updateProject(this.props.project);
-
-    // Handle race condition; project not saved before project list is fetched
-    setTimeout(this.onBack.bind(this), 200);
+    this.props.updateProject(this.props.project).then(() => {
+      this.onBack();
+    });
   }
 
   onProjectTitleBlur () {
@@ -167,8 +167,8 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const notes = this.getNotesFromProject(this.props.project);
-    
+    const futureNote = this.getNotesFromProject(this.props.project).Future;
+
     return (
       <View style={Styles.projectDetail}>
         <TextInput
@@ -193,7 +193,7 @@ class ProjectDetail extends Component {
                 <Text style={Styles.updateButtonText}>To do next</Text>
               </TouchableHighlight>
             </View>
-            <FutureNote note={notes.Future}/>
+            <FutureNote note={futureNote}/>
             <View style={Styles.pastNotesView}>
               <Text style={Styles.finishedTitleText}>Completed</Text>
               <NoteList notes={this.props.notes} onEdit={this.toggleEditNoteModal.bind(this)}/>

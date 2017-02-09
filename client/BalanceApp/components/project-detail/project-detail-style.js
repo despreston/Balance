@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
-export const Styles = StyleSheet.create  ({
+export const Styles = StyleSheet.create ({
+
   projectDetail: {
     backgroundColor: '#FFFFFF',
     flex: 1
@@ -49,4 +50,5 @@ export const Styles = StyleSheet.create  ({
     fontWeight: 'bold',
     marginBottom: 15
   }
+  
 });

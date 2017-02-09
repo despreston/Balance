@@ -8,14 +8,15 @@ import { Styles } from './note-list-item-style';
 // tools
 import { formatDate } from '../../middleware/helpers';
 
+// components
+import EditButton from '../edit-button/edit-button';
+
 function NoteListItem ({ note, onEdit }) {
   return (
     <View style={Styles.container}>
       <View style={Styles.top}>
         <Text style={Styles.lastUpdated}>{formatDate(note.lastUpdated)}</Text>
-        <TouchableHighlight onPress={() => onEdit(note)}>
-          <Image style={Styles.editButton} source={require("../../assets/note-menu.png")}/>
-        </TouchableHighlight>
+        <EditButton onEdit={onEdit.bind(this, note)} style={Styles.editButton} />
       </View>
       <Text style={Styles.content}>{note.content}</Text>
     </View>
