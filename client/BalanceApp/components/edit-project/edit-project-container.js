@@ -48,19 +48,61 @@ class EditProjectContainer extends Component {
         />
       );
 
-      return { style, left, title, tintColor };
+      const right = (
+        <Button
+          color='#FFFFFF'
+          style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+          title='Save'
+          onPress={() => state.params.saveProject()}
+        />
+      );
+
+      return { style, left, right, title, tintColor };
     }
   };
   
   
   constructor (props) {
     super();
+
+    this.state = {
+      project: props.project,
+      invalid: false
+    };
+  }
+
+  componentDidMount () {
+    setTimeout(() => this.props.navigation.setParams({
+      saveProject: () => this.saveProject()
+    }), 500);
+  }
+
+  onProjectEdit = (property, value) => {
+    this.setState({ 
+      project: {
+        ...this.state.project,
+        [property]: value 
+      }
+    });
+  }
+
+  // Handle any form validation before saving
+  saveProject () {
+    
+    // Empty project title
+    if (!this.state.project.title || this.state.project.title === '') {
+      this.setState({ invalid: true });
+      return;
+    }
+
+    this.props.updateProject(this.state.project).then(() => {
+      this.props.navigation.goBack();
+    });
   }
 
   render () {
-    console.log('WTF', this.props)
-    let { project } = this.props;
-    return <EditProject project={project} />;
+    let project = this.state.project;
+    return <EditProject project={project} onEdit={this.onProjectEdit}/>;
   }
 
 }

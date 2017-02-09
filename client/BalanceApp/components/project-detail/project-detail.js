@@ -206,7 +206,7 @@ class ProjectDetail extends Component {
             <FutureNote note={futureNote}/>
             <View style={Styles.pastNotesView}>
               <Text style={Styles.finishedTitleText}>Completed</Text>
-              <NoteList notes={this.props.notes} onEdit={this.toggleEditNoteModal.bind(this)}/>
+              <NoteList notes={this.props.notes} onEdit={this.toggleEditNoteModal}/>
             </View>
           </View>
         </TouchableWithoutFeedback>

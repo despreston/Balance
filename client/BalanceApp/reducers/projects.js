@@ -8,6 +8,18 @@ export default {
   },
 
   /**
+   * Replace specific project
+   */
+  RECEIVE_PROJECT (state, { project }) {
+    const projects = {
+      ...state.projects,
+      [project._id]: project
+    };
+
+    return Object.assign({}, state, { projects });
+  },
+
+  /**
    * Set store property `open_project`
    */
   OPEN_PROJECT (state, { id }) {
