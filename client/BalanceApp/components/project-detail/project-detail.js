@@ -1,6 +1,7 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
 import {
+  ScrollView,
   View,
   Text,
   Button,
@@ -45,6 +46,7 @@ function mapDispatchToProps (dispatch) {
 }
 
 class ProjectDetail extends Component {
+
   static propTypes = {
     updateNote: PropTypes.func.isRequired,
     updateProject: PropTypes.func.isRequired,
@@ -173,7 +175,7 @@ class ProjectDetail extends Component {
     const futureNote = this.getNotesFromProject(this.props.project).Future;
 
     return (
-      <View style={Styles.projectDetail}>
+      <ScrollView style={Styles.projectDetail}>
         <TextInput
           ref={input => this.projectTitle = input}
           value={this.state.projectTitle}
@@ -209,9 +211,10 @@ class ProjectDetail extends Component {
           onSave={this.saveNote.bind(this)}
           onClose={() => this.toggleEditNoteModal({})}
           note={this.state.note} />
-      </View>
+      </ScrollView>
     );
   }
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetail);

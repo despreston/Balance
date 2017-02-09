@@ -10,8 +10,8 @@ export const Style = StyleSheet.create  ({
     fontWeight: 'bold'
   },
   date: {
-    color: '#77778A',
-    fontSize: 14
+    color: '#B8B8BA',
+    fontSize: 13
   },
   top: {
     flexDirection: 'row',
@@ -20,7 +20,7 @@ export const Style = StyleSheet.create  ({
   },
   content: {
     color: '#333',
-    fontSize: 14,
+    fontSize: 15,
     marginTop: 15
   }
 });

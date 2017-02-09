@@ -14,12 +14,12 @@ export const Styles = StyleSheet.create  ({
     justifyContent: 'space-between'
   },
   lastUpdated: {
-    color: '#77778A',
-    fontSize: 14
+    color: '#B8B8BA',
+    fontSize: 13
   },
   content: {
     color: '#333',
-    fontSize: 14,
+    fontSize: 15,
     paddingVertical: 5
   }
 });
