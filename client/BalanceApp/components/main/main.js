@@ -16,9 +16,9 @@ class MainScene extends Component {
   };
 
   static navigationOptions = {
-    header: ({ state, navigate, dispatch }) => ({
+    header: ({ state, navigate, dispatch }, defaultHeader) => ({
+      ...defaultHeader,
       title: <Text style={[styles.text, styles.title, styles.mainTitle]}>BALANCE</Text>,
-      style: { backgroundColor: '#333' },
       left: (
         <Button
           color='#FFFFFF'

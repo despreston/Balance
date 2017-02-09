@@ -6,7 +6,7 @@ import {
 
 function EditButton ({ onEdit, style }) {
   return (
-    <TouchableHighlight onPress={() => onEdit(note)}>
+    <TouchableHighlight onPress={onEdit}>
       <Image style={style} source={require("../../assets/note-menu.png")}/>
     </TouchableHighlight>
   );

@@ -57,9 +57,9 @@ class ProjectDetail extends Component {
   };
 
   static navigationOptions = {
-    header: ({ goBack, dispatch, state }) => {
+    header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
       const isNew = state.params.new;
-      const style = { backgroundColor: '#333' };
+      
       const left = (
         <Button
           color='#FFFFFF'
@@ -68,8 +68,14 @@ class ProjectDetail extends Component {
           onPress={() => state.params.onBack()}
         />
       );
+      
       const right = !isNew
-        ? (<View />)
+        ? (<Button
+            color="#FFFFFF"
+            style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+            title='Edit'
+            onPress={() => navigate('EditProject')}
+          />)
         : (<Button
             color='#FFFFFF'
             style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
@@ -77,7 +83,7 @@ class ProjectDetail extends Component {
             onPress={() => state.params.saveProject()}
           />);
 
-      return { style, left, right };
+      return { left, right, ...defaultHeader };
     }
   };
 
