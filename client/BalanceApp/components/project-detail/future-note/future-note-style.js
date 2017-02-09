@@ -10,7 +10,7 @@ export const Style = StyleSheet.create  ({
     fontWeight: 'bold'
   },
   date: {
-    color: '#CFD0D4',
+    color: '#77778A',
     fontSize: 14
   },
   top: {
