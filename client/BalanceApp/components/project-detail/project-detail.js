@@ -33,7 +33,6 @@ import {
 } from '../../actions';
 
 function mapStateToProps (state, { navigation }) {
-  console.log("HERE", emptyProject())
   return {
     project: state.projects[navigation.state.params.project] || emptyProject(),
     notes: state.notes
@@ -62,7 +61,6 @@ class ProjectDetail extends Component {
 
   static navigationOptions = {
     header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
-      console.log("SHIT", state.params.project)
       const isNew = state.params.project === null;
       
       const left = (
