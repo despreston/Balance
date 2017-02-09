@@ -59,7 +59,6 @@ class ProjectDetail extends Component {
   static navigationOptions = {
     header: ({ goBack, dispatch, state }) => {
       const isNew = state.params.new;
-      const title = <Text style={[NavStyles.text, NavStyles.title]}>Details</Text>;
       const style = { backgroundColor: '#333' };
       const left = (
         <Button
@@ -78,7 +77,7 @@ class ProjectDetail extends Component {
             onPress={() => state.params.saveProject()}
           />);
 
-      return { title, style, left, right };
+      return { style, left, right };
     }
   };
 
