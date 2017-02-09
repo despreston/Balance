@@ -11,13 +11,16 @@ import {
 import { connect } from 'react-redux';
 import dismissKeyboard from 'dismissKeyboard';
 
-// Components
+// styles
 import { Styles } from './project-detail-style';
 import { styles as NavStyles } from '../navigation/navigation-styles';
-import Note from './note/note';
+
+// Components
 import EditNote from '../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
 import NoteList from '../note-list/note-list';
+
+// actions
 import {
   fetchProjects,
   saveNote,
