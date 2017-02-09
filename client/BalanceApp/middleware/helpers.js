@@ -9,6 +9,10 @@ export function formatDate (date) {
 };
 
 export function arrayToObj (array, key) {
+  if (array.length === 0) {
+    return {};
+  }
+  
   return Object.assign(...array.map(el => {
     return { [el[key]] : el }; 
   }));

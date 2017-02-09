@@ -17,11 +17,17 @@ export default {
       user: CONFIG.userId
     };
 
-    const open_project = id
-      ? state.projects[id]
-      : emptyProject;
+    let open_project, notes;
 
-    return Object.assign({}, state, { open_project });
+    if (id) {
+      open_project = state.projects[id];
+      notes = state.notes;
+    } else {
+      open_project = emptyProject;
+      notes = {};
+    }
+
+    return Object.assign({}, state, { open_project, notes } );
   }
 
 };
