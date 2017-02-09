@@ -19,7 +19,7 @@ export const Style = StyleSheet.create  ({
     justifyContent: 'space-between'
   },
   content: {
-    color: '#333',
+    color: '#3D3F3E',
     fontSize: 15,
     marginTop: 15
   }

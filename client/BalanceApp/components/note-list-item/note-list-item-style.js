@@ -18,7 +18,7 @@ export const Styles = StyleSheet.create  ({
     fontSize: 13
   },
   content: {
-    color: '#333',
+    color: '#3D3F3E',
     fontSize: 15,
     paddingVertical: 5
   }
