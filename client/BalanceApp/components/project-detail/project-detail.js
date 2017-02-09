@@ -21,6 +21,9 @@ import EditNote from '../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
 import NoteList from '../note-list/note-list';
 
+// utils
+import emptyProject from '../../utils/empty-project';
+
 // actions
 import {
   fetchProjects,
@@ -30,14 +33,9 @@ import {
 } from '../../actions';
 
 function mapStateToProps (state, { navigation }) {
-  const emptyProject = {
-    _new: true,
-    title: '',
-    user: CONFIG.userId
-  };
-
+  console.log("HERE", emptyProject())
   return {
-    project: state.projects[navigation.state.params.project] || emptyProject,
+    project: state.projects[navigation.state.params.project] || emptyProject(),
     notes: state.notes
   };
 }
@@ -64,7 +62,8 @@ class ProjectDetail extends Component {
 
   static navigationOptions = {
     header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
-      const isNew = state.params.project._new;
+      console.log("SHIT", state.params.project)
+      const isNew = state.params.project === null;
       
       const left = (
         <Button

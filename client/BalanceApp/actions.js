@@ -10,7 +10,6 @@ export const REQUEST_USER_FAILED = 'REQUEST_USER_FAILED';
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
-export const OPEN_PROJECT = 'OPEN_PROJECT';
 
 export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
@@ -30,14 +29,6 @@ export function requestUserFailed (err) {
 export function requestProjects () {
   return { type: REQUEST_PROJECTS };
 };
-
-/**
- * Set the project that is being viewed
- * @param {string} id Project ID
- */
-// export function openProject (id = null) {
-//   return { type: OPEN_PROJECT, id };
-// };
 
 /**
  * Receive projects and convert dates to date objects
