@@ -12,9 +12,9 @@ import { saveProject } from '../../actions';
 // components
 import EditProject from './edit-project';
 
-function mapStateToProps (state, props) {
+function mapStateToProps (state, { navigation }) {
   return {
-    project: state.open_project
+    project: state.projects[navigation.state.params.project]
   };
 }
 

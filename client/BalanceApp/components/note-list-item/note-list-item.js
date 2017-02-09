@@ -6,7 +6,7 @@ import { View, Text, TouchableHighlight, Image } from 'react-native';
 import { Styles } from './note-list-item-style';
 
 // tools
-import { formatDate } from '../../middleware/helpers';
+import { formatDate } from '../../utils/helpers';
 
 // components
 import EditButton from '../edit-button/edit-button';

@@ -29,9 +29,15 @@ import {
   requestNotesForProject 
 } from '../../actions';
 
-function mapStateToProps (state, props) {
-  return { 
-    project: state.open_project,
+function mapStateToProps (state, { navigation }) {
+  const emptyProject = {
+    _new: true,
+    title: '',
+    user: CONFIG.userId
+  };
+
+  return {
+    project: state.projects[navigation.state.params.project] || emptyProject,
     notes: state.notes
   };
 }
@@ -58,7 +64,7 @@ class ProjectDetail extends Component {
 
   static navigationOptions = {
     header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
-      const isNew = state.params.new;
+      const isNew = state.params.project._new;
       
       const left = (
         <Button
@@ -74,7 +80,7 @@ class ProjectDetail extends Component {
             color="#FFFFFF"
             style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
             title='Edit'
-            onPress={() => navigate('EditProject')}
+            onPress={() => navigate('EditProject', { project: state.params.project })}
           />)
         : (<Button
             color='#FFFFFF'

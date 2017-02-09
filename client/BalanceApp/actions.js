@@ -1,5 +1,5 @@
-import { api } from './middleware/api';
-import { arrayToObj } from './middleware/helpers';
+import { api } from './utils/api';
+import { arrayToObj } from './utils/helpers';
 
 /*
  * action types
@@ -35,9 +35,9 @@ export function requestProjects () {
  * Set the project that is being viewed
  * @param {string} id Project ID
  */
-export function openProject (id = null) {
-  return { type: OPEN_PROJECT, id };
-};
+// export function openProject (id = null) {
+//   return { type: OPEN_PROJECT, id };
+// };
 
 /**
  * Receive projects and convert dates to date objects
