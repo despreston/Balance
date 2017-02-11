@@ -33,6 +33,16 @@ export default StyleSheet.create  ({
     fontSize: 18,
     paddingLeft: 10,
     flex: 3
+  },
+
+  removeButton: {
+    padding: 10
+  },
+
+  removeButtonText: {
+    color: '#B86D6F',
+    fontWeight: 'bold',
+    fontSize: 18
   }
 
 });

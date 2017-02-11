@@ -21,9 +21,6 @@ import EditNote from '../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
 import NoteList from '../note-list/note-list';
 
-// utils
-import emptyProject from '../../utils/empty-project';
-
 // actions
 import {
   fetchProjects,
@@ -34,7 +31,7 @@ import {
 
 function mapStateToProps (state, { navigation }) {
   return {
-    project: state.projects[navigation.state.params.project] || emptyProject(),
+    project: state.projects[navigation.state.params.project],
     notes: state.notes
   };
 }
@@ -103,9 +100,7 @@ class ProjectDetail extends Component {
 
   componentDidMount () {
     // Set focus to project title when its a new project
-    if (!this.props.project.title) {
-      this.projectTitle.focus();
-    } else {
+    if (this.props.project._id) {
       this.props.requestNotesForProject(this.props.project._id, 'Past');
     }
 

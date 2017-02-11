@@ -22,10 +22,6 @@ export function receiveUser (user) {
 	return { type: RECEIVE_USER, user };
 };
 
-export function requestUserFailed (err) {
-  return { type: REQUEST_USER_FAILED, err };
-};
-
 export function requestProjects () {
   return { type: REQUEST_PROJECTS };
 };
@@ -174,4 +170,12 @@ export function requestNotesForProject (project, noteType) {
  */
 export function fetchUser (user) {
   return api(`users/${CONFIG.userId}`, receiveUser);
+};
+
+/**
+ * Delete project
+ * @param {string} id Project ID
+ */
+export function deleteProject (id) {
+  return api(`projects/${id}`, receiveProjects, { method: 'DELETE' });
 };

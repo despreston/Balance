@@ -8,14 +8,19 @@ export function api (url, action, properties = { method: 'GET' }) {
   if (properties.body) {
     properties.body = JSON.stringify(properties.body);
   }
-  return function(dispatch) {
+  return function (dispatch) {
     return fetch(`${CONFIG.apiUrl}${url}`, properties)
       .then(response => {
         response.json().then(json => {
           if (!response.ok) {
             return Promise.reject(); 
           }
-          return dispatch(action(json));
+
+          if (action) {
+            return dispatch(action(json));
+          }
+
+          return;
         });
       })
   }

@@ -7,19 +7,30 @@ import { connect } from 'react-redux';
 import { styles as NavStyles } from '../navigation/navigation-styles';
 
 // actions
-import { saveProject } from '../../actions';
+import { saveProject, deleteProject } from '../../actions';
 
 // components
 import EditProject from './edit-project';
 
+// utils
+import emptyProject from '../../utils/empty-project';
+
 function mapStateToProps (state, { navigation }) {
-  return {
-    project: state.projects[navigation.state.params.project]
-  };
+  let project;
+
+  if (navigation.state.params && navigation.state.params.project) {
+    project = state.projects[navigation.state.params.project];
+  }
+  else {
+    project = emptyProject();
+  }
+
+  return { project };
 }
 
 function mapDispatchToProps (dispatch) {
   return {
+    deleteProject: project => dispatch(deleteProject(project)),
     updateProject: project => dispatch(saveProject(project))
   };
 }
@@ -28,7 +39,8 @@ class EditProjectContainer extends Component {
 
   static propTypes = {
     project: PropTypes.object.isRequired,
-    updateProject: PropTypes.func.isRequired
+    updateProject: PropTypes.func.isRequired,
+    deleteProject: PropTypes.func.isRequired
   };
 
   static navigationOptions = {
@@ -88,7 +100,6 @@ class EditProjectContainer extends Component {
 
   // Handle any form validation before saving
   saveProject () {
-    
     // Empty project title
     if (!this.state.project.title || this.state.project.title === '') {
       this.setState({ invalid: true });
@@ -100,9 +111,15 @@ class EditProjectContainer extends Component {
     });
   }
 
+  delete = () => {
+    this.props.navigation.navigate('Home');
+    this.props.deleteProject(this.state.project._id);
+  }
+
   render () {
     let project = this.state.project;
-    return <EditProject project={project} onEdit={this.onProjectEdit}/>;
+
+    return <EditProject project={project} onEdit={this.onProjectEdit} onRemove={this.delete} />;
   }
 
 }

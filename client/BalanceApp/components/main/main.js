@@ -30,7 +30,7 @@ class MainScene extends Component {
         <Button
           color='#FFFFFF'
           style={[styles.button, styles.text]}
-          onPress={() => state.params.openProject()}
+          onPress={() => state.params.newProject()}
           title="✚"
         />
       )
@@ -39,17 +39,23 @@ class MainScene extends Component {
 
   constructor (props) {
     super(props);
+
+    this.navigate = this.props.navigation.navigate;
   }
 
   componentDidMount () {
     this.props.navigation.setParams({
-      openProject: this.openProject.bind(this)
+      newProject: this.newProject.bind(this)
     });
   }
 
   openProject (project) {
     const id = get(project, '_id');
-    this.props.navigation.navigate('Project', { project: id || null });
+    this.navigate('Project', { project: id });
+  }
+
+  newProject () {
+    this.navigate('EditProject');
   }
 
   render () {

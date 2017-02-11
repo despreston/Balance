@@ -70,4 +70,14 @@ module.exports = (server) => {
       });
     });
 
+  server.del(
+    'projects/:_id', (req, res) => {
+      Project.remove({ _id: req.params._id }).then(err => {
+        if (err) {
+          res.send(500);
+        }
+        res.send(200);
+      });
+    });
+
 };
