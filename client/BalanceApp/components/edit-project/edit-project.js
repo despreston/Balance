@@ -27,6 +27,10 @@ export default class EditProject extends Component {
   }
 
   renderRemoveButton () {
+    if (this.props.project._new) {
+      return null;
+    }
+    
     if (this.state.confirmDelete) {
       return (
         <View style={Styles.inputRow}>
