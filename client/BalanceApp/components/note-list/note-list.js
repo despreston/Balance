@@ -11,32 +11,35 @@ import {
 import NoteListItem from '../note-list-item/note-list-item';
 import { Styles } from './note-list-style';
 
-export default class NoteList extends Component {
+function NoteList ({ notes, onEdit }) {
 
-  static propTypes = {
-    notes: PropTypes.object.isRequired,
-    onEdit: PropTypes.func.isRequired
-  }
+  function renderNotes () {
+    const notesById = Object.keys(notes);
 
-  constructor (props) {
-    super();
-  }
+    if (notesById.length === 0) {
+      return ( <Text style={Styles.emptyText}>Tap 'To do next' to add a new entry.</Text> );
+    }
 
-  renderNotes () {
-    return Object.keys(this.props.notes).map(id => {
+    return notesById.map(id => {
       return (
         <View key={id} style={Styles.noteListItem}>
-          <NoteListItem note={this.props.notes[id]} onEdit={this.props.onEdit} />
+          <NoteListItem note={notes[id]} onEdit={onEdit} />
         </View>
       );
     });
   }
+   
+  return (
+    <View>
+      {renderNotes()}
+    </View>
+  );
 
-  render () {
-    return (
-      <View>
-        {this.renderNotes()}
-      </View>
-    );
-  }
 }
+
+NoteList.propTypes = {
+  notes: PropTypes.object.isRequired,
+  onEdit: PropTypes.func.isRequired
+};
+
+export default NoteList;

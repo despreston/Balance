@@ -12,6 +12,13 @@ import { Style } from './future-note-style';
 import { formatDate } from '../../../utils/helpers';
 
 function FutureNote ({ note }) {
+  function renderContent () {
+    if (note.content) {
+      return ( <Text style={Style.content}>{note.content}</Text> );
+    }
+    return ( <Text style={[Style.content, Style.center]}>Tap 'I did work' to add a new entry.</Text> );
+  }
+
   return (
     <View style={Style.container}>
       <View style={Style.top}>
@@ -21,7 +28,7 @@ function FutureNote ({ note }) {
           <Text style={Style.date}>Added {formatDate(note.lastUpdated)}</Text>
         }
       </View>
-      <Text style={Style.content}>{note.content}</Text>
+      { renderContent() }
     </View>
   );
 }
