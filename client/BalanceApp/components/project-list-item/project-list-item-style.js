@@ -23,6 +23,12 @@ export const Style = StyleSheet.create({
     paddingHorizontal: 10
   },
 
+  footer: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row-reverse'
+  },
+
   title: {
     color: '#2E92E1',
     fontSize: 18,
@@ -46,11 +52,15 @@ export const Style = StyleSheet.create({
     fontSize: 14
   },
 
-  lastUpdated: {
+  footerText: {
     color: '#CFD0D4',
     fontSize: 12,
     paddingBottom: 8,
     paddingHorizontal: 10
+  },
+
+  privacyIcon: {
+    opacity: 0.8
   },
 
   empty: {

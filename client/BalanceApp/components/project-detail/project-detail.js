@@ -142,11 +142,17 @@ class ProjectDetail extends Component {
     this.props.navigation.goBack();
   }
 
-  getNotesFromProject (project) {
-    return {
-      Future: project.Future || this.emptyNote('Future'),
-      Past: project.Past || this.emptyNote('Past')
-    };
+  notesForType (type) {
+    const { notes } = this.props;
+    let notesWithType = [];
+
+    Object.keys(notes).forEach(id => {
+      if (notes[id].type === type) {
+        notesWithType.push(notes[id]);
+      }
+    });
+
+    return notesWithType;
   }
 
   // Handle any form validation before saving
@@ -173,8 +179,19 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const futureNote = this.getNotesFromProject(this.props.project).Future;
-    const { project, notes } = this.props;
+    const { project } = this.props;
+
+    let pastNotes = this.notesForType('Past');
+    let futureNotes = this.notesForType('Future');
+    let futureNote;
+
+    if (futureNotes.length > 0) {
+      futureNote = futureNotes[0];
+    } else if (project.Future) {
+      futureNote = project.Future;
+    } else {
+      futureNote = this.emptyNote('Future');
+    }
 
     return (
       <ScrollView style={Styles.projectDetail}>
@@ -196,7 +213,7 @@ class ProjectDetail extends Component {
             <FutureNote note={futureNote}/>
             <View style={Styles.pastNotesView}>
               <Text style={Styles.finishedTitleText}>Completed</Text>
-              <NoteList notes={notes} onEdit={this.toggleEditNoteModal}/>
+              <NoteList notes={pastNotes} onEdit={this.toggleEditNoteModal}/>
             </View>
           </View>
         </TouchableWithoutFeedback>

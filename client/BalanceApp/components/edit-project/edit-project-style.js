@@ -34,7 +34,7 @@ export default StyleSheet.create  ({
     color: '#77778A',
     fontSize: 16,
     paddingLeft: 10,
-    flex: 3
+    flex: 2
   },
 
   removeButton: {

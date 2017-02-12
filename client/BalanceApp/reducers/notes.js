@@ -1,7 +1,7 @@
 export default {
 
   /**
-   * Replace note in specific project
+   * add single note to notes object
    */
   RECEIVE_NOTE (state, { note }) {
     const notes = {

@@ -14,16 +14,14 @@ import { Styles } from './note-list-style';
 function NoteList ({ notes, onEdit }) {
 
   function renderNotes () {
-    const notesById = Object.keys(notes);
-
-    if (notesById.length === 0) {
+    if (notes.length === 0) {
       return ( <Text style={Styles.emptyText}>Tap 'To do next' to add a new entry.</Text> );
     }
 
-    return notesById.map(id => {
+    return notes.map(note => {
       return (
-        <View key={id} style={Styles.noteListItem}>
-          <NoteListItem note={notes[id]} onEdit={onEdit} />
+        <View key={note._id} style={Styles.noteListItem}>
+          <NoteListItem note={note} onEdit={onEdit} />
         </View>
       );
     });
@@ -38,7 +36,7 @@ function NoteList ({ notes, onEdit }) {
 }
 
 NoteList.propTypes = {
-  notes: PropTypes.object.isRequired,
+  notes: PropTypes.array.isRequired,
   onEdit: PropTypes.func.isRequired
 };
 

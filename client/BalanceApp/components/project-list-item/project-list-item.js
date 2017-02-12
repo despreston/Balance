@@ -10,19 +10,28 @@ function ProjectListItem ({ project }) {
   const { Past, Future } = project;
   let lastUpdated;
 
-  if (Past || Future) {
     if (Past && Future) {
       lastUpdated = Past.lastUpdated.getTime() > Future.lastUpdated.getTime() ?
       Past.lastUpdated : Future.lastUpdated;
-    } else {
-      lastUpdated = Past.lastUpdated || Future.lastUpdated;
+    } else if (Past) {
+      lastUpdated = Past.lastUpdated;
+    } else if (Future) {
+      lastUpdated = Future.lastUpdated; 
     }
-  }
 
   function getEmptyNotesMessage () {
     return !(Past || Future)
       ? (<Text style={[Style.noteContent, Style.empty]}>Nothing yet. 😕</Text>)
       : null;
+  }
+
+  function privacyLevelIcon (level) {
+    switch (level) {
+      case 'global':  return '🌎';
+      case 'friends': return '👥';
+      case 'private': return '🔒';
+      default:        return '';
+    };
   }
 
   return (
@@ -32,11 +41,31 @@ function ProjectListItem ({ project }) {
         {lastUpdated && <StatusIcon lastUpdated={lastUpdated} />}
       </View>
       <View style={Style.notes}>
-        {Past && <Text style={Style.noteContent}><Text style={Style.noteType}>Last:</Text> {Past.content}</Text>}
-        {Future && <Text style={Style.noteContent}><Text style={Style.noteType}>Next:</Text> {Future && Future.content}</Text>}
+        {
+          Past && <Text style={Style.noteContent}>
+            <Text style={Style.noteType}>Last: </Text>
+            {Past.content}
+          </Text>
+        }
+        {
+          Future && <Text style={Style.noteContent}>
+            <Text style={Style.noteType}>Next: </Text>
+            {Future.content}
+          </Text>
+        }
         {getEmptyNotesMessage()}
       </View>
-      {lastUpdated && <Text style={Style.lastUpdated}>Last Updated: {lastUpdated.toLocaleString()}</Text>}
+      <View style={Style.footer}>
+        <Text style={[Style.footerText, Style.privacyIcon]}>
+          {privacyLevelIcon(project.privacyLevel)}
+        </Text>
+        {
+          lastUpdated && <Text style={Style.footerText}>
+            Last Updated: {lastUpdated.toLocaleString()}
+          </Text>
+        }
+      </View>
+
     </View>
   );
 }
