@@ -1,3 +1,5 @@
+import convertDates from './convert-dates';
+
 /**
  * Sets up api calls.
  * @param {string} url
@@ -12,6 +14,8 @@ export function api (url, action, properties = { method: 'GET' }) {
     return fetch(`${CONFIG.apiUrl}${url}`, properties)
       .then(response => {
         response.json().then(json => {
+          json = convertDates(json);
+          
           if (!response.ok) {
             return Promise.reject(); 
           }

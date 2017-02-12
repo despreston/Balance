@@ -15,7 +15,7 @@ function NoteListItem ({ note, onEdit }) {
   return (
     <View style={Styles.container}>
       <View style={Styles.top}>
-        <Text style={Styles.lastUpdated}>{formatDate(note.lastUpdated)}</Text>
+        <Text style={Styles.createdAt}>{formatDate(note.createdAt)}</Text>
         <EditButton onEdit={onEdit.bind(this, note)} style={Styles.editButton} />
       </View>
       <Text style={Styles.content}>{note.content}</Text>
@@ -26,7 +26,7 @@ function NoteListItem ({ note, onEdit }) {
 NoteListItem.propTypes = {
   note: PropTypes.shape({
     content: PropTypes.string.isRequired,
-    lastUpdated: PropTypes.instanceOf(Date).isRequired
+    createdAt: PropTypes.instanceOf(Date).isRequired
   }).isRequired
 };
 

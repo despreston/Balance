@@ -32,19 +32,6 @@ export function requestProjects () {
  * @return {action}
  */
 export function receiveProjects (json) {
-  // Convert to date object
-  json.forEach(project => {
-    if (project.lastUpdated) {
-      project.lastUpdated = new Date(project.lastUpdated);
-    }
-    if (project.Future) {
-      project.Future.lastUpdated = new Date(project.Future.lastUpdated);
-    }
-    if (project.Past) {
-      project.Past.lastUpdated = new Date(project.Past.lastUpdated);
-    }
-  });
-  
   return {
     type: RECEIVE_PROJECTS,
     projects: arrayToObj(json, '_id'),
@@ -71,17 +58,9 @@ export function receiveProject (project) {
  * @param {action}
  */
 export function receiveNotes (notes) {
-  notes.forEach(note => {
-    if (note.lastUpdated) {
-      note.lastUpdated = new Date(note.lastUpdated);
-    }
-  });
-
-  notes = arrayToObj(notes, '_id');
-  
   return {
     type: RECEIVE_NOTES,
-    notes,
+    notes: arrayToObj(notes, '_id'),
     receivedAt: Date.now()
   };
 };
@@ -92,9 +71,6 @@ export function receiveNotes (notes) {
  * @return {action}
  */
 export function receiveNote (note) {
-  if (note.lastUpdated) {
-    note.lastUpdated = new Date(note.lastUpdated);
-  }
   return {
     type: RECEIVE_NOTE,
     note,

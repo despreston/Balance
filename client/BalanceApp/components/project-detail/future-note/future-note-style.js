@@ -8,13 +8,13 @@ export const Style = StyleSheet.create  ({
 
   title: {
     color: '#3D3F3E',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold'
   },
 
   date: {
     color: '#B8B8BA',
-    fontSize: 13
+    fontSize: 12
   },
 
   top: {
@@ -25,7 +25,7 @@ export const Style = StyleSheet.create  ({
 
   content: {
     color: '#3D3F3E',
-    fontSize: 15,
+    fontSize: 14,
     marginTop: 15
   },
 

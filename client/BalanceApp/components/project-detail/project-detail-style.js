@@ -53,7 +53,7 @@ export const Styles = StyleSheet.create ({
 
   finishedTitleText: {
     color: '#3D3F3E',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 15
   }

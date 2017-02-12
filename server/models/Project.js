@@ -3,16 +3,21 @@ const mongoose = require("mongoose");
 const Note = require("./Note");
 
 let Project = new mongoose.Schema({
+
   title: {
     required: true,
     type: String
   },
+
   user: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'user'
   },
+
   lastUpdated: Date,
+
   createdAt: Date
+  
 });
 
 /**
