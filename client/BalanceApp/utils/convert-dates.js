@@ -7,7 +7,7 @@ import { get, set } from 'lodash';
  */
 export default function convertDates (json) {
   const dateProps = ['createdAt', 'lastUpdated'];
-  let obj = json;
+  let obj = Object.assign({}, json);
 
   if (Array.isArray(json)) {
     return json.map(singleObj => {
