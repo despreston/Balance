@@ -47,7 +47,7 @@ class EditProjectContainer extends Component {
     header: ({ goBack, dispatch, state, navigate }) => {
       const style = { backgroundColor: '#333' };
 
-      const title = 'Edit Project';
+      const title = state.params && state.params.project ? 'Edit Project' : 'New Project';
 
       const tintColor = '#FFFFFF';
 
