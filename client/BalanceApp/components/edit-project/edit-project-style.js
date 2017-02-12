@@ -19,18 +19,20 @@ export default StyleSheet.create  ({
   inputRow: {
     flexDirection: 'row',
     justifyContent: 'center',
+    paddingVertical: 10
   },
 
   rowLabel: {
     color: '#3D3F3E',
     fontWeight: 'bold',
-    fontSize: 18,
-    paddingLeft: 10
+    fontSize: 16,
+    paddingLeft: 10,
+    flex: 1
   },
 
   rowInput: {
     color: '#77778A',
-    fontSize: 18,
+    fontSize: 16,
     paddingLeft: 10,
     flex: 3
   },

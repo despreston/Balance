@@ -22,9 +22,21 @@ let Note = new mongoose.Schema({
     ref: 'user'
   },
 
-  lastUpdated: Date,
+  lastUpdated: {
+    type: Date,
+    required: true
+  },
 
-  createdAt: Date
+  createdAt: {
+    type: Date,
+    required: true
+  },
+
+  // Potential values are [global, friends, private]
+  privacyLevel: {
+    required: true,
+    type: String,
+  }
   
 });
 

@@ -7,8 +7,11 @@ import {
   TextInput
 } from 'react-native';
 
- // styles
- import Styles from './edit-project-style';
+// styles
+import Styles from './edit-project-style';
+
+// components
+import PrivacyPicker from '../privacy-picker/privacy-picker';
 
 export default class EditProject extends Component {
 
@@ -56,8 +59,6 @@ export default class EditProject extends Component {
     );
   }
 
-
-
   render () {
     const { project, onEdit } = this.props;
 
@@ -71,6 +72,13 @@ export default class EditProject extends Component {
               style={Styles.rowInput}
               placeholder="Project Title (required)"
               onChangeText={value => onEdit('title', value)} />
+          </View>
+          <View style={Styles.inputRow}>
+            <Text style={Styles.rowLabel}>Share with</Text>
+            <PrivacyPicker
+              textStyle={Styles.rowInput}
+              initLevel={project.privacyLevel}
+              onChange={val => onEdit('privacyLevel', val)} />
           </View>
           <View style={{ height: 30 }} />
           { this.renderRemoveButton() }
