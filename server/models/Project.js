@@ -1,6 +1,7 @@
 'use strict';
 const mongoose = require("mongoose");
 const Note = require("./Note");
+const privacyLevel = require('./shared/privacy-level');
 
 let Project = new mongoose.Schema({
 
@@ -24,11 +25,7 @@ let Project = new mongoose.Schema({
     required: true
   },
 
-  // Potential values are [global, friends, private]
-  privacyLevel: {
-    required: true,
-    type: String,
-  }
+  privacyLevel: privacyLevel
   
 });
 
