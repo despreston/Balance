@@ -4,7 +4,8 @@ export const Styles = StyleSheet.create  ({
 
   editButton: {
     height: 20,
-    width: 20
+    width: 20,
+    opacity: 0.4
   },
 
   container: {
@@ -25,7 +26,7 @@ export const Styles = StyleSheet.create  ({
   content: {
     color: '#3D3F3E',
     fontSize: 14,
-    paddingVertical: 5
+    paddingBottom: 5
   }
   
 });

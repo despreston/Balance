@@ -26,6 +26,9 @@ export function api (url, action, properties = { method: 'GET' }) {
 
           return;
         });
+
+      }).catch(err => {
+        console.log(err);
       })
   }
 }

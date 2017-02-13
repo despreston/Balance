@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Button } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 // styles
 import { styles as NavStyles } from '../navigation/navigation-styles';
@@ -112,7 +113,17 @@ class EditProjectContainer extends Component {
   }
 
   delete = () => {
-    this.props.navigation.navigate('Home');
+    // const resetAndNavigate = NavigationActions.reset({
+    //   index: 1,
+    //   actions: [
+    //     NavigationActions.navigate({ routeName: 'ProjectDetail' }),
+    //     NavigationActions.navigate({ routeName: 'Home' })
+    //   ]
+    // });
+
+    // this.props.navigation.dispatch(resetAndNavigate);
+    // this.props.navigation.navigate('Home');
+    this.props.navigation.goBack('ProjectDetail');
     this.props.deleteProject(this.state.project._id);
   }
 
