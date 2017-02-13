@@ -32,7 +32,7 @@ Project.statics.queryWithNotes = function (query) {
   function getLatestNotesForProjects (notes, projects) {
     notes.forEach(note => {
       const index = projects.findIndex(project => {
-        note.project.equals(project._id)
+        return note.project.equals(project._id);
       });
 
       if (index > -1) {
