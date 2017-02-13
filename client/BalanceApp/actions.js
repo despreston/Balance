@@ -137,7 +137,7 @@ export function fetchProjects () {
  * @return {Promise}
  */
 export function requestNotesForProject (project, noteType) {
-  return api(`projects/${project}/notes?type=${noteType}`, receiveNotes);
+  return api(`notes?project=${project}&type=${noteType}`, receiveNotes);
 };
 
 /**
@@ -153,5 +153,5 @@ export function fetchUser (user) {
  * @param {string} id Project ID
  */
 export function deleteProject (id) {
-  return api(`projects/${id}`, receiveProjects, { method: 'DELETE' });
+  return api(`projects/${id}`, null, { method: 'DELETE' });
 };

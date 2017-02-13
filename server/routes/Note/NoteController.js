@@ -1,48 +1,57 @@
-'use strict';
 const Note = require('../../models/Note');
 const _ = require('lodash');
 
-function createNote (req, res) {
-  req.body = JSON.parse(req.body);
+module.exports = server => {
 
-  if (!req.body.createdAt) {
-    req.body.createdAt = new Date()
-  }
+  server.get(
+    'notes/:_id', (res, req) => {
+      Note
+      .findOne(req.params)
+      .lean()
+      .then(note => res.send(200, note));
+    });
 
-  Note.create(req.body).then((newNote, err) => {
-    if (err) {
-      res.send(500);
-    } else {
-      res.send(200, newNote);
-    }
-  });
-}
+  server.get(
+    'notes', (req, res) => {
+      Note
+      .find(req.params)
+      .sort({'lastUpdated': -1})
+      .lean()
+      .then(notes => {
+        res.send(200, notes)
+      });
+    });
 
-function findNote (req, res) {
-  Note.findOne(req.params).then(note => res.send(200, note));
-}
+  server.post(
+    'notes', (res, req) => {
+      req.body = JSON.parse(req.body);
 
-function findNotes (req, res) {
-  Note.find(req.params).then(notes => res.send(200, notes));
-}
+      if (!req.body.createdAt) {
+        req.body.createdAt = new Date()
+      }
 
-function updateNote(req, res) {
-  req.body = JSON.parse(req.body);
+      Note
+      .create(req.body)
+      .then((newNote, err) => {
+        if (err) {
+          res.send(500);
+        } else {
+          res.send(200, newNote);
+        }
+      });
+    });
 
-  Note.findOne({_id: req.params._id}).then(note => {
-      note = _.extend(note, req.body);
-      note.save();
-      res.send(200, note);
-  });
-}
+  server.put(
+    'notes/:_id', (res, req) => {
+      req.body = JSON.parse(req.body);
 
-module.exports = (server, routeHelper) => {
-  server.get('notes/:_id', findNote);
-  server.get('notes', (req, res) => {
-    routeHelper.requiredParams(req.params, res, ['project'])
-  }, findNotes);
+      Note
+      .findOne({_id: req.params._id})
+      .then(note => {
+        note = Object.assign({}, note, req.body);
+        note.save();
+        res.send(200, note);
+      });
+    });
 
-  server.post('notes', createNote);
-
-  server.put('notes/:_id', updateNote);
 };
