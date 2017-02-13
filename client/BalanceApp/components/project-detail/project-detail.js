@@ -20,6 +20,7 @@ import { styles as NavStyles } from '../navigation/navigation-styles';
 import EditNote from '../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
 import NoteList from '../note-list/note-list';
+import NavBtn from '../navigation/nav-btn';
 
 // actions
 import {
@@ -63,9 +64,7 @@ class ProjectDetail extends Component {
       const isNew = state.params.project === null;
       
       const left = (
-        <Button
-          color='#FFFFFF'
-          style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+        <NavBtn
           title={isNew ? 'Cancel' : 'Back'}
           onPress={() => state.params.onBack()}
         />
@@ -76,7 +75,9 @@ class ProjectDetail extends Component {
             color="#FFFFFF"
             style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
             title='Edit'
-            onPress={() => navigate('EditProject', { project: state.params.project })}
+            onPress={() => {
+              navigate('EditProject', { project: state.params.project })
+            }}
           />)
         : (<Button
             color='#FFFFFF'
