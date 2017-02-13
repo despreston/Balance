@@ -3,7 +3,7 @@ const Note = require('../../models/Note');
 module.exports = server => {
 
   server.get(
-    'notes/:_id', (res, req) => {
+    'notes/:_id', (req, res) => {
       Note
       .findOne(req.params)
       .lean()
@@ -22,7 +22,7 @@ module.exports = server => {
     });
 
   server.post(
-    'notes', (res, req) => {
+    'notes', (req, res) => {
       req.body = JSON.parse(req.body);
 
       if (!req.body.createdAt) {
@@ -41,13 +41,13 @@ module.exports = server => {
     });
 
   server.put(
-    'notes/:_id', (res, req) => {
+    'notes/:_id', (req, res) => {
       req.body = JSON.parse(req.body);
 
       Note
       .findOne({_id: req.params._id})
       .then(note => {
-        note = Object.assign({}, note, req.body);
+        note = Object.assign(note, req.body);
         note.save();
         res.send(200, note);
       });

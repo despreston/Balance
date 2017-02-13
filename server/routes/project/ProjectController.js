@@ -1,7 +1,6 @@
 'use strict';
 const Project = require('../../models/Project');
 const Note = require('../../models/Note');
-const _ = require('lodash');
 
 module.exports = (server) => {
 
@@ -51,8 +50,10 @@ module.exports = (server) => {
     'projects/:_id', (req, res) => {
       req.body = JSON.parse(req.body);
 
-      Project.findOne({_id: req.params._id}).then(project => {
-        project = _.extend(project, req.body);
+      Project
+      .findOne({_id: req.params._id})
+      .then(project => {
+        project = Object.assign(project, req.body);
         project.save();
         res.send(200, project);
       });
@@ -60,7 +61,9 @@ module.exports = (server) => {
 
   server.del(
     'projects/:_id', (req, res) => {
-      Project.remove({ _id: req.params._id }).then(() => {
+      Project
+      .remove({ _id: req.params._id })
+      .then(() => {
         res.send(200, []);
       });
     });
