@@ -6,6 +6,9 @@ import { get } from 'lodash';
 
 // Components
 import ProjectListContainer from '../project-list/project-list-container';
+import NavBtn from '../navigation/nav-btn';
+
+// styles
 import { styles } from '../navigation/navigation-styles';
 
 class MainScene extends Component {
@@ -19,17 +22,13 @@ class MainScene extends Component {
       ...defaultHeader,
       title: <Text style={[styles.text, styles.title, styles.mainTitle]}>BALANCE</Text>,
       left: (
-        <Button
-          color='#FFFFFF'
-          style={[styles.button, styles.text]}
+        <NavBtn
           title="!?"
           onPress={() => null}
         />
       ),
       right: (
-        <Button
-          color='#FFFFFF'
-          style={[styles.button, styles.text]}
+        <NavBtn
           onPress={() => state.params.newProject()}
           title="✚"
         />

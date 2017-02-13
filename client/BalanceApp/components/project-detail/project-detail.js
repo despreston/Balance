@@ -14,7 +14,6 @@ import dismissKeyboard from 'dismissKeyboard';
 
 // styles
 import { Styles } from './project-detail-style';
-import { styles as NavStyles } from '../navigation/navigation-styles';
 
 // Components
 import EditNote from '../edit-note/edit-note';
@@ -70,21 +69,14 @@ class ProjectDetail extends Component {
         />
       );
       
-      const right = !isNew
-        ? (<Button
-            color="#FFFFFF"
-            style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
-            title='Edit'
-            onPress={() => {
-              navigate('EditProject', { project: state.params.project })
-            }}
-          />)
-        : (<Button
-            color='#FFFFFF'
-            style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
-            title='Save'
-            onPress={() => state.params.saveProject()}
-          />);
+      const right = (
+        <NavBtn
+          title='Edit'
+          onPress={() => {
+            navigate('EditProject', { project: state.params.project })
+          }}
+        />
+      );
 
       return { left, right, ...defaultHeader };
     }

@@ -12,6 +12,7 @@ import { saveProject, deleteProject } from '../../actions';
 
 // components
 import EditProject from './edit-project';
+import NavBtn from '../navigation/nav-btn';
 
 // utils
 import emptyProject from '../../utils/empty-project';
@@ -55,18 +56,14 @@ class EditProjectContainer extends Component {
       const tintColor = '#FFFFFF';
 
       const left = (
-        <Button
-          color='#FFFFFF'
-          style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+        <NavBtn
           title='Cancel'
           onPress={() => goBack()}
         />
       );
 
       const right = (
-        <Button
-          color='#FFFFFF'
-          style={[NavStyles.button, NavStyles.text, { fontWeight: 'normal' }]}
+        <NavBtn
           title='Save'
           onPress={() => state.params.saveProject()}
         />
