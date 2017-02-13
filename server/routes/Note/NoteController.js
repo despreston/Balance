@@ -1,5 +1,4 @@
 const Note = require('../../models/Note');
-const _ = require('lodash');
 
 module.exports = server => {
 

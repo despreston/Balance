@@ -13,18 +13,6 @@ module.exports = (server) => {
       .then(project => res.send(200, project));
     });
 
-  server.get(
-    'projects/:_id/notes', (req, res) => {
-      let id = req.params._id;
-      delete req.params._id;
-      let query = Object.assign({ project: id }, req.params);
-
-      Note
-      .find(query)
-      .lean()
-      .then(notes => res.send(200, notes));
-    });
-
   server.post(
     'projects', (req, res) => {
       let body = JSON.parse(req.body);
@@ -54,7 +42,7 @@ module.exports = (server) => {
 
         Promise.all(promises).then(notes => {
           notes.forEach(note => newProject[note.type] = note);
-          res.send(200, newProject);
+          res.send(201, newProject);
         });
       });
     });
@@ -72,11 +60,8 @@ module.exports = (server) => {
 
   server.del(
     'projects/:_id', (req, res) => {
-      Project.remove({ _id: req.params._id }).then(err => {
-        if (err) {
-          res.send(500);
-        }
-        res.send(200);
+      Project.remove({ _id: req.params._id }).then(() => {
+        res.send(200, []);
       });
     });
 
