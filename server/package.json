@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/despreston/Balance#readme",
   "dependencies": {
+    "mongodb": "2.2.22",
     "mongo": "^0.1.0",
     "mongoose": "^4.7.6",
     "recursive-readdir": "^2.1.0",
