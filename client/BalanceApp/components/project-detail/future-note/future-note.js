@@ -16,7 +16,11 @@ function FutureNote ({ note }) {
     if (note.content) {
       return ( <Text style={Style.content}>{note.content}</Text> );
     }
-    return ( <Text style={[Style.content, Style.center]}>Tap 'I did work' to add a new entry.</Text> );
+    return (
+      <Text style={[Style.content, Style.center]}>
+        Tap 'I did work' to add a new entry.
+      </Text> 
+    );
   }
 
   return (

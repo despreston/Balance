@@ -15,7 +15,11 @@ function NoteList ({ notes, onEdit }) {
 
   function renderNotes () {
     if (notes.length === 0) {
-      return ( <Text style={Styles.emptyText}>Tap 'To do next' to add a new entry.</Text> );
+      return (
+        <Text style={Styles.emptyText}>
+          Tap 'To do next' to add a new entry.
+        </Text>
+      );
     }
 
     return notes.map(note => {

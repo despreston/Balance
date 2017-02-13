@@ -31,7 +31,10 @@ let Project = new mongoose.Schema({
 Project.statics.queryWithNotes = function (query) {
   function getLatestNotesForProjects (notes, projects) {
     notes.forEach(note => {
-      const index = projects.findIndex(project => note.project.equals(project._id));
+      const index = projects.findIndex(project => {
+        note.project.equals(project._id)
+      });
+
       if (index > -1) {
         if (!projects[index][note.type]) {
           projects[index][note.type] = note;
@@ -43,9 +46,14 @@ Project.statics.queryWithNotes = function (query) {
 
   return this.find(query).lean().then(projects => {
     const projectIds = projects.map(project => project._id);
-    return Note.find({project: { $in: projectIds }}).sort('-createdAt').lean().then(notes => {
-      return getLatestNotesForProjects(notes, projects);
-    });
+    
+    return Note
+      .find({ project: { $in: projectIds } })
+      .sort('-createdAt')
+      .lean()
+      .then(notes => {
+        return getLatestNotesForProjects(notes, projects);
+      });
   });
 };
 

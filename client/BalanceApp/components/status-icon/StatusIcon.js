@@ -6,7 +6,9 @@ function StatusIcon ({ lastUpdated }) {
   function iconColor () {
     const dayMilliseconds = 24*60*60*1000;
     const today = new Date();
-    const difference = Math.round(Math.abs((lastUpdated.getTime() - today)) / dayMilliseconds);
+    const difference = Math.round(
+      Math.abs((lastUpdated.getTime() - today)) / dayMilliseconds
+    );
 
     if (difference < 1) {
       return '#B0D391';
@@ -22,7 +24,7 @@ function StatusIcon ({ lastUpdated }) {
   const color = iconColor();
 
   return (
-    <View style={ [ Style.Icon, { backgroundColor: color, shadowColor: color } ] }></View>
+    <View style={[Style.Icon, { backgroundColor: color, shadowColor: color }]} />
   );
 };
 

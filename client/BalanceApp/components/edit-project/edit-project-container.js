@@ -48,7 +48,9 @@ class EditProjectContainer extends Component {
     header: ({ goBack, dispatch, state, navigate }) => {
       const style = { backgroundColor: '#333' };
 
-      const title = state.params && state.params.project ? 'Edit Project' : 'New Project';
+      const title = state.params && state.params.project
+        ? 'Edit Project'
+        : 'New Project';
 
       const tintColor = '#FFFFFF';
 
@@ -130,7 +132,12 @@ class EditProjectContainer extends Component {
   render () {
     let project = this.state.project;
 
-    return <EditProject project={project} onEdit={this.onProjectEdit} onRemove={this.delete} />;
+    return (
+      <EditProject
+        project={project}
+        onEdit={this.onProjectEdit}
+        onRemove={this.delete} />
+    );
   }
 
 }

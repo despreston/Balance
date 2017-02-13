@@ -24,7 +24,9 @@ export default class ProjectList extends Component {
 
   _renderRow (rowData) {
     return (
-      <TouchableHighlight onPress={this.props.onProjectTap.bind(this,rowData)} style={Style.project}>
+      <TouchableHighlight
+        onPress={this.props.onProjectTap.bind(this,rowData)}
+        style={Style.project}>
         <View ref={component => this._root = component}>
           <ProjectListItem project={rowData} />
         </View>

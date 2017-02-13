@@ -38,10 +38,14 @@ export default class EditProject extends Component {
       return (
         <View style={Styles.inputRow}>
           <Text style={Styles.rowLabel, { padding: 10 }}>Are you sure?</Text>
-          <TouchableHighlight style={Styles.removeButton} onPress={this.props.onRemove}>
+          <TouchableHighlight
+            style={Styles.removeButton}
+            onPress={this.props.onRemove}>
             <Text style={Styles.removeButtonText}>Delete</Text>
           </TouchableHighlight>
-          <TouchableHighlight style={Styles.removeButton} onPress={() => this.setState({ confirmDelete: false })}>
+          <TouchableHighlight
+            style={Styles.removeButton}
+            onPress={() => this.setState({ confirmDelete: false })}>
             <Text style={Styles.rowLabel}>Cancel</Text>
           </TouchableHighlight>
         </View>

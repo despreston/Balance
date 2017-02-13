@@ -77,11 +77,19 @@ export default class EditNote extends Component {
               </TouchableHighlight>
               <View style={Styles.actions}>
                 <TouchableHighlight>
-                  <Text style={[Styles.headerText, Styles.clear]} onPress={() => this.onClear()}>Clear</Text>
+                  <Text
+                    style={[Styles.headerText, Styles.clear]}
+                    onPress={() => this.onClear()}>
+                    Clear
+                  </Text>
                 </TouchableHighlight>
                 <View style={Styles.spacer} />
                 <TouchableHighlight>
-                  <Text style={[Styles.headerText, this.getSaveTextColor() ]} onPress={() => this.save()}>Save</Text>
+                  <Text
+                    style={[Styles.headerText, this.getSaveTextColor() ]}
+                    onPress={() => this.save()}>
+                    Save
+                  </Text>
                 </TouchableHighlight>
               </View>
             </View>

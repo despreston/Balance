@@ -22,7 +22,11 @@ class ProjectListContainer extends Component {
   }
 
   render () {
-    return (<ProjectList onProjectTap={this.props.onProjectTap} projects={this.props.projects} />);
+    return (
+      <ProjectList
+        onProjectTap={this.props.onProjectTap}
+        projects={this.props.projects} />
+    );
   }
 }
 
