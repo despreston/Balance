@@ -6,6 +6,11 @@ A platform for managing and sharing personal progress.
 NodeJS v6.9.x
 Xcode (latest)
 
+### Db
+1. brew install mongodb
+2. mkdir -p /data/db
+3. mongod
+
 #### Server
 1. cd /server/
 1. npm i
