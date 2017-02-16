@@ -19,8 +19,12 @@
   },
   "homepage": "https://github.com/despreston/Balance#readme",
   "dependencies": {
-    "mongodb": "2.2.22",
+    "connect-ensure-login": "0.1.1",
+    "passport": "0.3.2",
+    "passport-auth0": "0.6.0",
+    "logbro": "^1.2.0",
     "mongo": "^0.1.0",
+    "mongodb": "2.2.22",
     "mongoose": "^4.7.6",
     "recursive-readdir": "^2.1.0",
     "restify": "^4.3.0"
