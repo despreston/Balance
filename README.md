@@ -8,7 +8,7 @@ Xcode (latest)
 
 #### Db
 1. `brew install mongodb`
-2. `mkdir -p /data/db`
+2. `sudo mkdir -p /data/db`
 3. `mongod`
 
 #### Server
@@ -19,5 +19,7 @@ Xcode (latest)
 #### iOS App
 1. `cd /client/BalanceApp/`
 2. `npm i`
-3. `react-native run-ios`
-4. Optionally (to see console output): `react-native log-ios`
+3. `npm i -g react-native'
+4. `npm i -g react-native-cli'
+5. `react-native run-ios`
+6. Optionally (to see console output): `react-native log-ios`
