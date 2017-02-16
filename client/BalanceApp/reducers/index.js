@@ -8,7 +8,10 @@ const initialState = {
    */
   users: {},
   
-  sessionUserId: null,
+  /**
+   * True if logged in user has been authenticated
+   */
+  authenticated: false,
 
   /**
    * Projects key'd by _id

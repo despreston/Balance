@@ -7,6 +7,8 @@ import { arrayToObj } from './utils/helpers';
 export const RECEIVE_USER = 'RECEIVE_USER';
 export const REQUEST_USER_FAILED = 'REQUEST_USER_FAILED';
 
+export const SET_AUTHENTICATION = 'SET_AUTHENTICATION';
+
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
@@ -24,6 +26,15 @@ export function receiveUser (user) {
 
 export function requestProjects () {
   return { type: REQUEST_PROJECTS };
+};
+
+/**
+ * Set authenticated flag
+ * @param {boolean} authenticated
+ * @return {action}
+ */
+export function setAuthenticated (authenticated) {
+  return { type: SET_AUTHENTICATION, authenticated };
 };
 
 /**
