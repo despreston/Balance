@@ -1,4 +1,4 @@
-const defaults = require('../config/default');
-const dev = require('../config/development') || {};
+const defaults = require('../config/default').default;
+const dev = require('../config/development').default;
 
-global.CONFIG = Object.assign({}, defaults, dev);
+export default Object.assign({}, defaults, dev);

@@ -16,6 +16,10 @@ import reducer from './reducers/index';
 // Utils
 import config from './utils/set-config';
 
+console.log(config)
+
+global.CONFIG = config;
+
 const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 
 class BalanceApp extends Component {

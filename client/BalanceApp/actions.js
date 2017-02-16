@@ -145,6 +145,7 @@ export function requestNotesForProject (project, noteType) {
  * @param {string} user ID of user
  */
 export function fetchUser (user) {
+  console.log("FUCK", CONFIG.userId)
   return api(`users/${CONFIG.userId}`, receiveUser);
 };
 
