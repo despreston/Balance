@@ -19,7 +19,7 @@ Xcode (latest)
 #### iOS App
 1. `cd /client/BalanceApp/`
 2. `npm i`
-3. `npm i -g react-native'
-4. `npm i -g react-native-cli'
+3. `npm i -g react-native`
+4. `npm i -g react-native-cli`
 5. `react-native run-ios`
 6. Optionally (to see console output): `react-native log-ios`
