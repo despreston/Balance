@@ -1,7 +1,5 @@
 'use strict';
 const User = require('../../models/User');
-const Project = require('../../models/Project');
-const ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = (server) => {
   server.get(
@@ -10,13 +8,6 @@ module.exports = (server) => {
       .findOne(req.params)
       .lean()
       .then(user => res.send(200, user));
-    });
-
-  server.get(
-    "users/:_id/projects", (req, res) => {
-      Project
-      .queryWithNotes({ user: ObjectId(req.params._id) })
-      .then(projects => res.send(200, projects));
     });
   
   server.post(

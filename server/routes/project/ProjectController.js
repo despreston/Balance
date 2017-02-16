@@ -5,6 +5,13 @@ const Note = require('../../models/Note');
 module.exports = (server) => {
 
   server.get(
+    'projects', (req, res) => {
+      Project
+      .queryWithNotes(req.params)
+      .then(projects => res.send(200, projects));
+    });
+
+  server.get(
     'projects/:_id', (req, res) => {
       Project
       .findOne(req.params)

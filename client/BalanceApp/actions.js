@@ -135,11 +135,11 @@ export function fetchProject (project) {
 };
 
 /**
- * Fetches all projects for current user
+ * Fetches projects
  * @return {Promise}
  */
 export function fetchProjects () {
-  return api(`users/${CONFIG.userId}/projects`, receiveProjects);
+  return api(`projects?user=${CONFIG.userId}`, receiveProjects);
 };
 
 /**
