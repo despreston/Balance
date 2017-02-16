@@ -1,16 +1,13 @@
 /**
  *  Main starting point for Balance server
  */
-'use strict';
 const port = 9000;
 const restify = require('restify');
 const server = restify.createServer();
 const mongoose = require('mongoose');
 const recursive = require('recursive-readdir');
 const dbUrl = 'mongodb://127.0.0.1:27017/balance';
-const routeHelper = require('./middleware/route_helpers');
-//const auth = require('./auth');
-const logging = require('./logging');
+const bro = require('logbro');
 
 // mongoose promise library is deprecated. Use standard es6 lib instead
 mongoose.Promise = global.Promise;
@@ -24,11 +21,24 @@ server.pre(restify.pre.sanitizePath());
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-server.use(logging);
+server.use((req, res, next) => {
+  let logObj = {
+    method: req.method,
+    url: req.url,
+    params: req.params
+  };
+
+  if (req.body) {
+    logObj.body = req.body;
+  }
+
+  bro.info(logObj);
+  next();
+});
 
 recursive('./routes', (err, files) => {
   files.forEach(file => {
-    require('./'+file)(server, routeHelper);
+    require('./'+file)(server);
   });
 });
 
