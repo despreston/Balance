@@ -38,7 +38,6 @@ function mapStateToProps (state, { navigation }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchProjects: () => dispatch(fetchProjects()),
     updateNote: note => dispatch(saveNote(note)),
     updateProject: project => dispatch(saveProject(project)),
     requestNotesForProject: (project, noteType) => {
@@ -52,7 +51,6 @@ class ProjectDetail extends Component {
   static propTypes = {
     updateNote: PropTypes.func.isRequired,
     updateProject: PropTypes.func.isRequired,
-    fetchProjects: PropTypes.func.isRequired,
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
     }).isRequired
@@ -132,8 +130,11 @@ class ProjectDetail extends Component {
   }
 
   onBack () {
-    // Reload the projects from the server. They may have changed
-    this.props.fetchProjects(this.props.user);
+    // Allow a hook to be passed with the navigation params
+    if (this.props.navigation.state.params.onBackHook) {
+      this.props.navigation.state.params.onBackHook();
+    }
+
     this.props.navigation.goBack();
   }
 

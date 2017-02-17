@@ -95,6 +95,7 @@ export function receiveNote (note) {
  */
 export function saveProject (project) {
   let method, url = 'projects';
+
   if (project._new) {
     method = 'POST';
     delete project._new;
@@ -102,6 +103,10 @@ export function saveProject (project) {
     method = 'PUT';
     url += `/${project._id}`;
   }
+
+  delete project.Future;
+  delete project.Past;
+
   return api(url, receiveProject, { method, body: project });
 };
 
