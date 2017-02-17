@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "validate": "npm ls"
+    "validate": "npm ls",
+    "start": "nodemon",
+    "debug": "NODE_DEBUG=info nodemon"
   },
   "repository": {
     "type": "git",
