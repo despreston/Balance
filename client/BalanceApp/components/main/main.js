@@ -14,7 +14,10 @@ import Logout from '../signon/logout';
 import { styles } from '../navigation/navigation-styles';
 
 // utils
-import { isLoggedIn } from '../../utils/auth';
+import { isLoggedIn, parseToken } from '../../utils/auth';
+
+// actions
+import { setCurrentUser } from '../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -22,10 +25,16 @@ function mapStateToProps (state) {
   }
 }
 
+function mapDispatchToProps (dispatch) {
+  return {
+    setUser: (id) => dispatch(setCurrentUser(id))
+  };
+}
+
 class MainScene extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
+    setUser: PropTypes.func.isRequired
   };
 
   static navigationOptions = {
@@ -51,15 +60,23 @@ class MainScene extends Component {
     super(props);
 
     this.state = { loading: true, authenticated: false };
-
     this.navigate = this.props.navigation.navigate;
   }
 
   componentWillReceiveProps () {
-    this.setState({ loading: false });
+    this.setState({ loading: true });
 
     isLoggedIn().then(authenticated => {
-      this.setState({ loading: false, authenticated });
+      if (authenticated) {
+        parseToken().then(token => {
+          if (token.sub !== this.props.current_user) {
+            this.props.setUser(token.sub);
+            this.setState({ loading: false, authenticated });
+          }
+        });
+      } else {
+        this.setState({ loading: false });
+      }
     });
   }
 
@@ -79,30 +96,30 @@ class MainScene extends Component {
   }
 
   render () {
+
     if (!this.state.loading) {
-        if (this.state.authenticated && this.props.current_user) {
-          return (
-            <View>
-              <ProjectListContainer
-                onProjectTap={this.openProject.bind(this)}
-                user={this.props.current_user}
-              />
-              <Logout />
-            </View>
-          );
-        }
+      if (this.state.authenticated && this.props.current_user) {
+        return (
+          <View>
+            <ProjectListContainer
+              onProjectTap={this.openProject.bind(this)}
+              user={this.props.current_user}
+            />
+            <Logout />
+          </View>
+        );
+      }
+      /**
+       * This could be expanded to include a message about logging in.
+       * Show a message here when authenticated = false, then inside that message,
+       * provide a button or link to open <Auth />
+       */
 
-        /**
-         * This could be expanded to include a message about logging in.
-         * Show a message here when authenticated = false, then inside that message,
-         * provide a button or link to open <Auth />
-         */
-
-        return <SignOn />;      
-    };
+      return <SignOn />;
+    }
 
     return <View />
   }
 }
 
-export default connect(mapStateToProps)(MainScene);
+export default connect(mapStateToProps, mapDispatchToProps)(MainScene);

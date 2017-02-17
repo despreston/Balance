@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import Auth0Lock from 'react-native-lock';
 
 // actions
-import { fetchUser, setCurrentUser } from '../../actions';
+import { setCurrentUser } from '../../actions';
 
 // utils
 import { saveToken } from '../../utils/auth';

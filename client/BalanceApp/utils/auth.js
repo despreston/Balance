@@ -48,4 +48,19 @@ export async function isLoggedIn () {
     return false;
 
   } catch (e) { Promise.reject(e); }
-}
+};
+
+/**
+ * Parses the token
+ * @return the JSON-parsed token
+ */
+export async function parseToken () {
+  let authenticated = await isLoggedIn();
+
+  if (authenticated) {
+    try {
+      let token = await getToken();
+      return jwtDecode(token);
+    } catch (e) { throw e; }
+  }
+};
