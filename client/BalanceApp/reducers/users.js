@@ -8,10 +8,11 @@ export default {
   },
 
   /**
-   * Set authentication
+   * Set `current_user`
    */
-  SET_AUTHENTICATION (state, { authenticated }) {
-    return Object.assign({}, state, { authenticated });
+  SET_CURRENT_USER (state, { current_user }) {
+    return Object.assign({}, state, { current_user });
   }
+
 
 };

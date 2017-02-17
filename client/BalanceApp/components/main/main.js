@@ -7,15 +7,15 @@ import { get } from 'lodash';
 // Components
 import ProjectListContainer from '../project-list/project-list-container';
 import NavBtn from '../navigation/nav-btn';
-import Auth from '../auth/auth';
-import Logout from '../auth/logout';
+import SignOn from '../signon/signon';
+import Logout from '../signon/logout';
 
 // styles
 import { styles } from '../navigation/navigation-styles';
 
 function mapStateToProps (state) {
   return {
-    authenticated: state.authenticated
+    current_user: state.current_user
   }
 }
 
@@ -66,9 +66,9 @@ class MainScene extends Component {
   }
 
   render () {
-    const { authenticated } = this.props;
+    const { current_user } = this.props;
 
-    if (authenticated) {
+    if (current_user) {
       return (
         <View>
           <ProjectListContainer onProjectTap={this.openProject.bind(this)}/>
@@ -83,7 +83,7 @@ class MainScene extends Component {
      * provide a button or link to open <Auth />
      */
 
-    return <Auth />;
+    return <SignOn />;
   }
 }
 

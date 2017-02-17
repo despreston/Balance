@@ -5,9 +5,7 @@ import { arrayToObj } from './utils/helpers';
  * action types
  */
 export const RECEIVE_USER = 'RECEIVE_USER';
-export const REQUEST_USER_FAILED = 'REQUEST_USER_FAILED';
-
-export const SET_AUTHENTICATION = 'SET_AUTHENTICATION';
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
@@ -29,12 +27,12 @@ export function requestProjects () {
 };
 
 /**
- * Set authenticated flag
- * @param {boolean} authenticated
+ * Set current userId from Auth0
+ * @param {string} userId
  * @return {action}
  */
-export function setAuthenticated (authenticated) {
-  return { type: SET_AUTHENTICATION, authenticated };
+export function setCurrentUser (current_user) {
+  return { type: SET_CURRENT_USER, current_user };
 };
 
 /**
