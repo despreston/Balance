@@ -13,6 +13,9 @@ import Logout from '../signon/logout';
 // styles
 import { styles } from '../navigation/navigation-styles';
 
+// utils
+import { isLoggedIn } from '../../utils/auth';
+
 function mapStateToProps (state) {
   return {
     current_user: state.current_user
@@ -47,7 +50,17 @@ class MainScene extends Component {
   constructor (props) {
     super(props);
 
+    this.state = { loading: true, authenticated: false };
+
     this.navigate = this.props.navigation.navigate;
+  }
+
+  componentWillReceiveProps () {
+    this.setState({ loading: false });
+
+    isLoggedIn().then(authenticated => {
+      this.setState({ loading: false, authenticated });
+    });
   }
 
   componentDidMount () {
@@ -66,24 +79,29 @@ class MainScene extends Component {
   }
 
   render () {
-    const { current_user } = this.props;
+    if (!this.state.loading) {
+        if (this.state.authenticated && this.props.current_user) {
+          return (
+            <View>
+              <ProjectListContainer
+                onProjectTap={this.openProject.bind(this)}
+                user={this.props.current_user}
+              />
+              <Logout />
+            </View>
+          );
+        }
 
-    if (current_user) {
-      return (
-        <View>
-          <ProjectListContainer onProjectTap={this.openProject.bind(this)}/>
-          <Logout />
-        </View>
-      );
-    }
+        /**
+         * This could be expanded to include a message about logging in.
+         * Show a message here when authenticated = false, then inside that message,
+         * provide a button or link to open <Auth />
+         */
 
-    /**
-     * This could be expanded to include a message about logging in.
-     * Show a message here when authenticated = false, then inside that message,
-     * provide a button or link to open <Auth />
-     */
+        return <SignOn />;      
+    };
 
-    return <SignOn />;
+    return <View />
   }
 }
 

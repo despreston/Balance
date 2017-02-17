@@ -136,8 +136,8 @@ export function fetchProject (project) {
  * Fetches projects
  * @return {Promise}
  */
-export function fetchProjects () {
-  return api(`projects?user=${CONFIG.userId}`, receiveProjects);
+export function fetchProjects (userId) {
+  return api(`projects?user=${userId}`, receiveProjects);
 };
 
 /**
@@ -154,7 +154,6 @@ export function requestNotesForProject (project, noteType) {
  * @param {string} user ID of user
  */
 export function fetchUser (user) {
-  console.log("FUCK", CONFIG.userId)
   return api(`users/${CONFIG.userId}`, receiveUser);
 };
 

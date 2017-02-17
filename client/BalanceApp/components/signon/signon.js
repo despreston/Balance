@@ -11,7 +11,7 @@ import { saveToken } from '../../utils/auth';
 
 function mapDispatchToProps (dispatch) {
   return {
-    setCurrentUser: () => dispatch(setCurrentUser(true))
+    setUser: (id) => dispatch(setCurrentUser(id))
   };
 }
 
@@ -22,7 +22,7 @@ class SignOn extends Component {
 
     const { clientId, domain } = CONFIG;
 
-    this.lock = new Auth0Lock({ clientId, domain });
+    this.lockModal = new Auth0Lock({ clientId, domain });
   }
 
   componentWillMount () {
@@ -31,16 +31,16 @@ class SignOn extends Component {
 
   showLogin () {
 
-    this.lock.show({
-      closable: false
-    }, (err, profile, tokens) => {
+    this.lockModal.show({ closable: false }, (err, profile, tokens) => {
       if (err) {
         Promise.reject(err);
       }
 
-      saveToken(tokens.idToken).catch(Promise.reject);
+      saveToken(tokens.idToken).catch( err => {
+        throw 'Could not save token';
+      });
 
-      this.props.setCurrentUser(profile.userId);
+      this.props.setUser(profile.userId);
     });
 
   }

@@ -133,7 +133,7 @@ class ProjectDetail extends Component {
 
   onBack () {
     // Reload the projects from the server. They may have changed
-    this.props.fetchProjects();
+    this.props.fetchProjects(this.props.user);
     this.props.navigation.goBack();
   }
 

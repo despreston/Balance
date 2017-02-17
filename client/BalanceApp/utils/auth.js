@@ -1,3 +1,4 @@
+const jwtDecode = require('jwt-decode');
 import { AsyncStorage } from 'react-native';
 
 const AUTH_TOKEN = 'AUTH_TOKEN';
@@ -38,9 +39,7 @@ export async function isLoggedIn () {
     let payload;
 
     if (token) {
-      payload = token.split('.')[1];
-      payload = window.atob(payload);
-      payload = JSON.parse(payload);
+      payload = jwtDecode(token);
 
       // Has the token expired? 
       return payload.exp > Date.now() / 1000;

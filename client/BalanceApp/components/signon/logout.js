@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native';
-import { AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
-import { setAuthenticated } from '../../actions';
+import { setCurrentUser } from '../../actions';
+import { removeToken } from '../../utils/auth';
 
 function mapDispatchToProps (dispatch) {
   return {
-    setAuth: () => dispatch(setAuthenticated(false))
+    resetCurrentUser: () => dispatch(setCurrentUser(null))
   };
 }
 
@@ -17,8 +17,12 @@ class Logout extends Component {
   }
 
   logout = () => {
-    AsyncStorage.removeItem('AUTH_TOKEN').then(() => {
-      this.props.setAuth();
+    removeToken().then( err => {  
+      if (err) {
+        throw "Could not log out";
+      }
+
+      this.props.resetCurrentUser();
     });
   }
 
