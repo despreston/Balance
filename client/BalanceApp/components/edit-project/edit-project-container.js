@@ -22,8 +22,7 @@ function mapStateToProps (state, { navigation }) {
 
   if (navigation.state.params && navigation.state.params.project) {
     project = state.projects[navigation.state.params.project];
-  }
-  else {
+  } else {
     project = emptyProject(state.current_user);
   }
 
