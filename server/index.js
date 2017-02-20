@@ -16,17 +16,18 @@ mongoose.connect(dbUrl);
 
 server.pre(restify.pre.sanitizePath());
 
-
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(log);
 
+// load routes
 recursive('./routes', (err, files) => {
   files.forEach(file => {
     require('./'+file)(server);
   });
 });
 
+// load models
 recursive('./models', (err, files) => {
   files.forEach(file => {
     require('./'+file);
