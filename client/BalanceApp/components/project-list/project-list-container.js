@@ -18,6 +18,12 @@ class ProjectListContainer extends Component {
     super(props);
   }
 
+  componentWillReceiveProps ({ projectsStale, user, dispatch }) {
+    if (projectsStale) {
+      dispatch(fetchProjects(user));
+    }
+  }
+
   componentWillMount (nextProps) {
     if (this.props.user) {
       this.props.dispatch(fetchProjects(this.props.user));
@@ -35,6 +41,7 @@ class ProjectListContainer extends Component {
 
 function mapStateToProps (state) {
   return {
+    projectsStale: state.projects_invalidated,
     projects: state.projects
   };
 }

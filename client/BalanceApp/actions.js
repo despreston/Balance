@@ -10,6 +10,7 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
+export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
 export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
@@ -59,6 +60,23 @@ export function receiveProject (project) {
     project,
     receivedAt: Date.now()
   };
+};
+
+/**
+ * Marks collection as invalidated to flag that a fetch is needed
+ * @param {string} collection
+ * @return {action} 
+ */
+export function invalidate (collection) {
+  const invalidateProp = {
+    projects: INVALIDATE_PROJECTS
+  };
+
+  if (invalidateProp[collection]) {
+    throw `Can't validate ${collection}`;
+  }
+
+  return { type: invalidateProp[collection] };
 };
 
 /**

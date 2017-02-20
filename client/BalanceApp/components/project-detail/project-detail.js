@@ -63,7 +63,7 @@ class ProjectDetail extends Component {
       const left = (
         <NavBtn
           title={isNew ? 'Cancel' : 'Back'}
-          onPress={() => state.params.onBack()}
+          onPress={() => goBack()}
         />
       );
       
@@ -99,7 +99,6 @@ class ProjectDetail extends Component {
 
     // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900
     setTimeout(() => this.props.navigation.setParams({
-      onBack: () => this.onBack(),
       saveProject: () => this.saveProject()
     }), 500);
   }
@@ -129,15 +128,6 @@ class ProjectDetail extends Component {
     };
   }
 
-  onBack () {
-    // Allow a hook to be passed with the navigation params
-    if (this.props.navigation.state.params.onBackHook) {
-      this.props.navigation.state.params.onBackHook();
-    }
-
-    this.props.navigation.goBack();
-  }
-
   notesForType (type) {
     const { notes } = this.props;
     let notesWithType = [];
@@ -163,7 +153,7 @@ class ProjectDetail extends Component {
     }
 
     this.props.updateProject(this.props.project).then(() => {
-      this.onBack();
+      this.props.navigation.goBack();
     });
   }
 

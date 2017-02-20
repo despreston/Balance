@@ -88,12 +88,8 @@ class MainScene extends Component {
   }
 
   openProject (project) {
-    function onProjectBack () {
-      this.props.fetchProjects(this.props.current_user);
-    }
-
     const id = get(project, '_id');
-    this.navigate('Project', { project: id, onBackHook: onProjectBack.bind(this) });
+    this.navigate('Project', { project: id });
   }
 
   newProject () {
