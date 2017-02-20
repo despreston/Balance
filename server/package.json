@@ -28,6 +28,8 @@
     "mongo": "^0.1.0",
     "mongodb": "2.2.22",
     "mongoose": "^4.7.6",
+    "passport": "^0.3.2",
+    "passport-auth0": "^0.6.0",
     "recursive-readdir": "^2.1.0",
     "restify": "^4.3.0"
   },

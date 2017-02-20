@@ -1,8 +1,8 @@
-export default function emptyProject () {
+export default function emptyProject (userId) {
   return {
     _new: true,
     title: '',
-    user: CONFIG.userId,
+    user: userId,
     privacyLevel: 'global'
   };
 };

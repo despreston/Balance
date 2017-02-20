@@ -5,7 +5,7 @@ import { arrayToObj } from './utils/helpers';
  * action types
  */
 export const RECEIVE_USER = 'RECEIVE_USER';
-export const REQUEST_USER_FAILED = 'REQUEST_USER_FAILED';
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
 export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
@@ -24,6 +24,15 @@ export function receiveUser (user) {
 
 export function requestProjects () {
   return { type: REQUEST_PROJECTS };
+};
+
+/**
+ * Set current userId from Auth0
+ * @param {string} userId
+ * @return {action}
+ */
+export function setCurrentUser (current_user) {
+  return { type: SET_CURRENT_USER, current_user };
 };
 
 /**
@@ -86,6 +95,7 @@ export function receiveNote (note) {
  */
 export function saveProject (project) {
   let method, url = 'projects';
+
   if (project._new) {
     method = 'POST';
     delete project._new;
@@ -93,6 +103,10 @@ export function saveProject (project) {
     method = 'PUT';
     url += `/${project._id}`;
   }
+
+  delete project.Future;
+  delete project.Past;
+
   return api(url, receiveProject, { method, body: project });
 };
 
@@ -124,11 +138,11 @@ export function fetchProject (project) {
 };
 
 /**
- * Fetches all projects for current user
+ * Fetches projects
  * @return {Promise}
  */
-export function fetchProjects () {
-  return api(`users/${CONFIG.userId}/projects`, receiveProjects);
+export function fetchProjects (userId) {
+  return api(`projects?user=${userId}`, receiveProjects);
 };
 
 /**
@@ -145,8 +159,7 @@ export function requestNotesForProject (project, noteType) {
  * @param {string} user ID of user
  */
 export function fetchUser (user) {
-  console.log("FUCK", CONFIG.userId)
-  return api(`users/${CONFIG.userId}`, receiveUser);
+  return api(`users/${user}`, receiveUser);
 };
 
 /**

@@ -11,9 +11,13 @@ const bro = require('logbro');
 
 // mongoose promise library is deprecated. Use standard es6 lib instead
 mongoose.Promise = global.Promise;
+
 mongoose.connect(dbUrl);
+
 server.pre(restify.pre.sanitizePath());
 
+// server.use(auth.initialize());
+// server.use(auth.session());
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
@@ -32,13 +36,13 @@ server.use((req, res, next) => {
   next();
 });
 
-recursive('./routes', function (err, files) {
+recursive('./routes', (err, files) => {
   files.forEach(file => {
     require('./'+file)(server);
   });
 });
 
-recursive('./models', function (err, files) {
+recursive('./models', (err, files) => {
   files.forEach(file => {
     require('./'+file);
   });

@@ -11,7 +11,7 @@ let Project = new mongoose.Schema({
   },
 
   user: { 
-    type: mongoose.Schema.Types.ObjectId, 
+    type: String, 
     ref: 'user'
   },
 
