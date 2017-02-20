@@ -58,14 +58,6 @@ class ProjectDetail extends Component {
 
   static navigationOptions = {
     header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
-      const isNew = state.params.project === null;
-      
-      const left = (
-        <NavBtn
-          title={isNew ? 'Cancel' : 'Back'}
-          onPress={() => goBack()}
-        />
-      );
       
       const right = (
         <NavBtn
@@ -76,7 +68,7 @@ class ProjectDetail extends Component {
         />
       );
 
-      return { left, right, ...defaultHeader };
+      return { right, ...defaultHeader };
     }
   };
 

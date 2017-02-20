@@ -17,10 +17,7 @@ let Note = new mongoose.Schema({
     ref: 'project'
   },
 
-  user: {
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'user'
-  },
+  user: String,
 
   lastUpdated: Date,
 
