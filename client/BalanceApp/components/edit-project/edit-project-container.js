@@ -45,8 +45,7 @@ class EditProjectContainer extends Component {
   };
 
   static navigationOptions = {
-    header: ({ goBack, dispatch, state, navigate }) => {
-      const style = { backgroundColor: '#333' };
+    header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
 
       const title = state.params && state.params.project
         ? 'Edit Project'
@@ -68,7 +67,7 @@ class EditProjectContainer extends Component {
         />
       );
 
-      return { style, left, right, title, tintColor };
+      return { ...defaultHeader, left, right, title, tintColor };
     }
   };
   
@@ -121,7 +120,7 @@ class EditProjectContainer extends Component {
 
     // this.props.navigation.dispatch(resetAndNavigate);
     // this.props.navigation.navigate('Home');
-    this.props.navigation.goBack('ProjectDetail');
+    this.props.navigation.goBack('Home');
     this.props.deleteProject(this.state.project._id);
   }
 
