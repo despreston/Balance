@@ -3,3 +3,4 @@
 data/
 **/config/development.js
 **/Pods
+config.json
