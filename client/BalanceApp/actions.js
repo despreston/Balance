@@ -32,8 +32,8 @@ export function requestProjects () {
  * @param {string} userId
  * @return {action}
  */
-export function setCurrentUser (current_user) {
-  return { type: SET_CURRENT_USER, current_user };
+export function setCurrentUser (userId) {
+  return { type: SET_CURRENT_USER, current_user: userId };
 };
 
 /**
@@ -178,6 +178,18 @@ export function requestNotesForProject (project, noteType) {
  */
 export function fetchUser (user) {
   return api(`users/${user}`, receiveUser);
+};
+
+/**
+ * Create a new user
+ * @param {object} user 
+ */
+export function createUser (user) {
+  function setUser (json) {
+    return setCurrentUser(json.userId);
+  }
+
+  return api(`users`, setUser, { method: 'POST', body: user }); 
 };
 
 /**

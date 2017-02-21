@@ -4,14 +4,14 @@ import { View } from 'react-native';
 import Auth0Lock from 'react-native-lock';
 
 // actions
-import { setCurrentUser } from '../../actions';
+import { createUser } from '../../actions';
 
 // utils
 import { saveToken } from '../../utils/auth';
 
 function mapDispatchToProps (dispatch) {
   return {
-    setUser: (id) => dispatch(setCurrentUser(id))
+    createUser: (user) => dispatch(createUser(user))
   };
 }
 
@@ -40,13 +40,15 @@ class SignOn extends Component {
         throw 'Could not save token';
       });
 
-      this.props.setUser(profile.userId);
+      delete profile.extraInfo;
+
+      this.props.createUser(profile);
     });
 
   }
 
   render () {
-    return <View />;
+    return null;
   }
 
 }

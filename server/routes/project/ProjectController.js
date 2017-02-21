@@ -1,22 +1,59 @@
 'use strict';
 const Project = require('../../models/Project');
 const Note = require('../../models/Note');
+const User = require('../../models/User');
 
 module.exports = (server) => {
 
   server.get(
-    'projects', (req, res) => {
-      Project
-      .queryWithNotes(req.params)
-      .then(projects => res.send(200, projects));
+    'projects', ({ params, user }, res) => {
+
+      if (!params.user) {
+        return res.send(400, 'Missing user parameter');
+      }
+
+      return new Promise( (resolve, reject) => {
+
+        if (params.user === user.sub) {
+          resolve();
+        }
+
+        /**
+         * If projects dont belong to the logged-in user,
+         * check if the logged-in user is friends with the user.
+         *
+         * If they arent friends and privacyLevel filter is not specified,
+         * send all 'global' projects for the user.
+         *
+         * If the users are not friends and the privacyLevel !== global,
+         * reject the request
+         */
+        User.areFriends(user.sub, params.user).then(isFriend => {
+          if (!isFriend) {
+            if (params.privacyLevel && params.privacyLevel !== 'global') {
+              reject('Not friends');
+            }
+            params.privacyLevel = 'global';
+          }
+          resolve();
+        });
+
+      }).then(() => {
+
+          Project
+          .queryWithNotes(params)
+          .then(projects => res.send(200, projects))
+          .catch(err => res.send(500, err));
+
+      }).catch(err => res.send(403, 'Failed: ' + err));
     });
 
   server.get(
     'projects/:_id', (req, res) => {
       Project
-      .findOne(req.params)
-      .lean()
-      .then(project => res.send(200, project));
+      .findOne(req.params).lean()
+      .then(project => res.send(200, project))
+      .catch(err => res.send(500, err))
     });
 
   server.post(
