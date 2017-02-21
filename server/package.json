@@ -22,8 +22,6 @@
   "homepage": "https://github.com/despreston/Balance#readme",
   "dependencies": {
     "connect-ensure-login": "0.1.1",
-    "passport": "0.3.2",
-    "passport-auth0": "0.6.0",
     "logbro": "^1.2.0",
     "mongo": "^0.1.0",
     "mongodb": "2.2.22",
@@ -31,7 +29,8 @@
     "passport": "^0.3.2",
     "passport-auth0": "^0.6.0",
     "recursive-readdir": "^2.1.0",
-    "restify": "^4.3.0"
+    "restify": "^4.3.0",
+    "restify-jwt": "^0.4.0"
   },
   "devDependencies": {
     "eslint": "^3.13.0",
