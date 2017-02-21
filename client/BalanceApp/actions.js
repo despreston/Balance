@@ -14,7 +14,6 @@ export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
 export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
-export const RECEIVE_NOTES_FOR_PROJECT = 'RECEIVE_NOTES_FOR_PROJECT';
 
 /*
  * action creators
