@@ -46,14 +46,41 @@ module.exports = (server) => {
           .catch(err => res.send(500, err));
 
       }).catch(err => res.send(403, 'Failed: ' + err));
+
     });
 
   server.get(
-    'projects/:_id', (req, res) => {
+    'projects/:_id', ({ params, user }, res) => {
+
       Project
-      .findOne(req.params).lean()
-      .then(project => res.send(200, project))
-      .catch(err => res.send(500, err))
+      .findOne(params).lean()
+      .then(project => {
+
+        /**
+         * If project does not belong to logged-in user and project is not
+         * global, then reject if:
+         * 1. project is private
+         * 2. users are not friends
+         */
+        if (project.user !== user.sub && project.privacyLevel !== 'global') {
+          
+          if (project.privacyLevel === 'private') {
+            return res.send(403, 'Private project');
+          }
+
+          User.areFriends(user.sub, project.user).then(isFriend => {
+            if (!isFriend) {
+              return res.send(403, 'Not friends');
+            }
+            return res.send(200, project);
+          });
+
+        } else {
+          return res.send(200, project);
+        }
+
+      }).catch(err => res.send(500, err))
+
     });
 
   server.post(

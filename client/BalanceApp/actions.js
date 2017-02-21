@@ -7,7 +7,6 @@ import { arrayToObj } from './utils/helpers';
 export const RECEIVE_USER = 'RECEIVE_USER';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
-export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
 export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
@@ -20,10 +19,6 @@ export const RECEIVE_NOTES = 'RECEIVE_NOTES';
  */
 export function receiveUser (user) {
 	return { type: RECEIVE_USER, user };
-};
-
-export function requestProjects () {
-  return { type: REQUEST_PROJECTS };
 };
 
 /**

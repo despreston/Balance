@@ -35,16 +35,18 @@ let User = new mongoose.Schema({
  * @return {promise} resolve to a boolean
  */
 User.statics.areFriends = function (userA, userB) {
-  return this.findOne({ userId: userA }, 'friends', (err, result) => {
-    if (err) {
-      bro.error("Could not determine if users are friends. ", err);
-    }
+  return new Promise ( (resolve) => {
+    this.findOne({ userId: userA }, 'friends', (err, result) => {
+      if (err) {
+        bro.error("Could not determine if users are friends. ", err);
+      }
 
-    if (result) {
-      return result.friends.indexOf(userB) !== -1;
-    }
+      if (result) {
+        resolve(result.friends.indexOf(userB) !== -1);
+      }
 
-    return false;
+      resolve(false);
+    });
   });
 };
 
