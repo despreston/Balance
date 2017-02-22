@@ -7,10 +7,10 @@ target 'BalanceApp' do
 
   # Pods for BalanceApp
 
-  target 'BalanceAppTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+   target 'BalanceAppTests' do
+     inherit! :search_paths
+     Pods for testing
+   end
 
 end
 
