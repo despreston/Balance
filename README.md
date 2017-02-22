@@ -1,6 +1,8 @@
 # Balance
 A platform for managing and sharing personal progress.
 
+[![Codeship Status for despreston/Balance](https://app.codeship.com/projects/85799e90-db62-0134-2f95-72ee877a79e5/status?branch=master)](https://app.codeship.com/projects/204010)
+
 ### First Install
 #### Requires:
 NodeJS v6.9.x
