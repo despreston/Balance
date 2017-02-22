@@ -72,14 +72,16 @@ module.exports = (server) => {
             if (!isFriend) {
               return res.send(403, 'Not friends');
             }
-            return res.send(200, project);
+            return project;
           });
-
+          
         } else {
-          return res.send(200, project);
+          return project;
         }
 
-      }).catch(err => res.send(500, err))
+      })
+      .then(project => res.send(200, project))
+      .catch(err => res.send(500, err))
 
     });
 
