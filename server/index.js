@@ -20,7 +20,7 @@ server.pre(restify.pre.sanitizePath());
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(logging);
-server.use(auth)
+server.use(auth);
 
 // load routes
 recursive('./routes', (err, files) => {

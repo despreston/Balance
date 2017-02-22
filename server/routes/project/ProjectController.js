@@ -14,8 +14,14 @@ module.exports = (server) => {
 
       return new Promise( (resolve, reject) => {
 
+        // projects belong to logged-in user
         if (params.user === user.sub) {
           resolve();
+        }
+
+        // projects are private and do not belong to logged-in user
+        if (params.privacyLevel && params.privacyLevel === 'private') {
+          reject("Can't view private projects of another user");
         }
 
         /**
@@ -35,6 +41,7 @@ module.exports = (server) => {
             }
             params.privacyLevel = 'global';
           }
+
           resolve();
         });
 
@@ -74,7 +81,7 @@ module.exports = (server) => {
             }
             return project;
           });
-          
+
         } else {
           return project;
         }
