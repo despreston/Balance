@@ -100,12 +100,8 @@ module.exports = (server) => {
         body.createdAt = new Date()
       }
       
-      Project.create(body).then((newProject, err) => {
-        if (err) {
-          res.send(500);
-        }
-        return newProject;
-      }).then(newProject => {
+      Project.create(body).then(newProject => {
+
         let promises = [];
 
         // Create any notes that were added to the new project
@@ -123,7 +119,9 @@ module.exports = (server) => {
           notes.forEach(note => newProject[note.type] = note);
           res.send(201, newProject);
         });
-      });
+
+      }).catch(err => res.send(500, err));
+      
     });
 
   server.put(
