@@ -7,14 +7,12 @@ import { arrayToObj } from './utils/helpers';
 export const RECEIVE_USER = 'RECEIVE_USER';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
-export const REQUEST_PROJECTS = 'REQUEST_PROJECTS';
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
 export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
 export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
-export const RECEIVE_NOTES_FOR_PROJECT = 'RECEIVE_NOTES_FOR_PROJECT';
 
 /*
  * action creators
@@ -23,17 +21,13 @@ export function receiveUser (user) {
 	return { type: RECEIVE_USER, user };
 };
 
-export function requestProjects () {
-  return { type: REQUEST_PROJECTS };
-};
-
 /**
  * Set current userId from Auth0
  * @param {string} userId
  * @return {action}
  */
-export function setCurrentUser (current_user) {
-  return { type: SET_CURRENT_USER, current_user };
+export function setCurrentUser (userId) {
+  return { type: SET_CURRENT_USER, current_user: userId };
 };
 
 /**
@@ -178,6 +172,18 @@ export function requestNotesForProject (project, noteType) {
  */
 export function fetchUser (user) {
   return api(`users/${user}`, receiveUser);
+};
+
+/**
+ * Create a new user
+ * @param {object} user 
+ */
+export function createUser (user) {
+  function setUser (json) {
+    return setCurrentUser(json.userId);
+  }
+
+  return api(`users`, setUser, { method: 'POST', body: user }); 
 };
 
 /**

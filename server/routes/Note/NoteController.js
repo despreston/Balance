@@ -13,12 +13,11 @@ module.exports = server => {
   server.get(
     'notes', (req, res) => {
       Note
-      .find(req.params)
-      .sort({'lastUpdated': -1})
-      .lean()
-      .then(notes => {
-        res.send(200, notes)
-      });
+      .find(req.params).sort({'lastUpdated': -1}).lean()
+      .then(
+        notes => res.send(200, notes),
+        err => res.send(500, err)
+      );
     });
 
   server.post(
@@ -33,7 +32,7 @@ module.exports = server => {
       .create(req.body)
       .then((newNote, err) => {
         if (err) {
-          res.send(500);
+          res.send(500, err);
         } else {
           res.send(200, newNote);
         }

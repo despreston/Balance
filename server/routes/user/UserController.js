@@ -2,6 +2,7 @@
 const User = require('../../models/User');
 
 module.exports = (server) => {
+
   server.get(
     "users/:_id", (req, res) => {
       User
@@ -11,15 +12,26 @@ module.exports = (server) => {
     });
   
   server.post(
-    "users", (req, res) => {
-      User
-      .create(req.params)
-      .then((err, newUser) => {
-        if (err) {
-          res.send(500);  
-        } else {
-          res.send(204, newUser);
-        }
-      });
+    "users", ({ params, body }, res) => {
+      body = JSON.parse(body);
+
+      if (!body.createdAt) {
+        body.createdAt = new Date()
+      }
+
+      User.findOneAndUpdate(
+        { userId: body.userId },
+        body,
+        { upsert: true, new: true, setDefaultsOnInsert: true },
+        (err, result) => {
+
+          if (err) {
+            return res.send(500, 'Failed ' + err);
+          }
+
+          return res.send(201, result);
+
+        });
     });
+
 };

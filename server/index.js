@@ -7,7 +7,8 @@ const server = restify.createServer();
 const mongoose = require('mongoose');
 const recursive = require('recursive-readdir');
 const dbUrl = 'mongodb://127.0.0.1:27017/balance';
-const log = require('./utils/log');
+const logging = require('./utils/log');
+const auth = require('./auth');
 
 // mongoose promise library is deprecated. Use standard es6 lib instead
 mongoose.Promise = global.Promise;
@@ -16,17 +17,19 @@ mongoose.connect(dbUrl);
 
 server.pre(restify.pre.sanitizePath());
 
-
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
-server.use(log);
+server.use(logging);
+server.use(auth);
 
+// load routes
 recursive('./routes', (err, files) => {
   files.forEach(file => {
     require('./'+file)(server);
   });
 });
 
+// load models
 recursive('./models', (err, files) => {
   files.forEach(file => {
     require('./'+file);

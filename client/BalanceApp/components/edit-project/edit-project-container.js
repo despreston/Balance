@@ -110,22 +110,12 @@ class EditProjectContainer extends Component {
   }
 
   delete = () => {
-    // const resetAndNavigate = NavigationActions.reset({
-    //   index: 1,
-    //   actions: [
-    //     NavigationActions.navigate({ routeName: 'ProjectDetail' }),
-    //     NavigationActions.navigate({ routeName: 'Home' })
-    //   ]
-    // });
-
-    // this.props.navigation.dispatch(resetAndNavigate);
-    // this.props.navigation.navigate('Home');
-    this.props.navigation.goBack('Home');
+    this.props.navigation.navigate('Home');
     this.props.deleteProject(this.state.project._id);
   }
 
   render () {
-    let project = this.state.project;
+    let { project } = this.state;
 
     return (
       <EditProject
