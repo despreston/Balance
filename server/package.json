@@ -10,7 +10,7 @@
     "start": "nodemon",
     "debug": "NODE_DEBUG=info nodemon"
   },
-  "engines": { "node": "6.9.1" },
+  "engines": { "node": "6.10.0" },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/despreston/Balance.git"
