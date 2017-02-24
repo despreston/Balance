@@ -23,10 +23,10 @@ import NavBtn from '../navigation/nav-btn';
 
 // actions
 import {
-  fetchProjects,
   saveNote,
   saveProject,
-  requestNotesForProject 
+  requestNotesForProject,
+  invalidate
 } from '../../actions';
 
 function mapStateToProps (state, { navigation }) {
@@ -41,8 +41,8 @@ function mapDispatchToProps (dispatch) {
     updateNote: note => dispatch(saveNote(note)),
     updateProject: project => dispatch(saveProject(project)),
     requestNotesForProject: (project, noteType) => {
-      dispatch(requestNotesForProject(project, noteType))
-    }
+      dispatch(requestNotesForProject(project, noteType)) },
+    invalidateProjects: () => dispatch(invalidate('projects'))
   };
 }
 
@@ -53,7 +53,9 @@ class ProjectDetail extends Component {
     updateProject: PropTypes.func.isRequired,
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
-    }).isRequired
+    }).isRequired,
+    requestNotesForProject: PropTypes.func.isRequired,
+    invalidateProjects: PropTypes.func.isRequired
   };
 
   static navigationOptions = {
@@ -106,7 +108,7 @@ class ProjectDetail extends Component {
     // If the project is new, dont save the note because then it won't be tied to
     // any project id. For now, the backend will handle saving new notes for new projects
     if (!this.props.project._new) {
-      this.props.updateNote(note);
+      this.props.updateNote(note).then(() => this.props.invalidateProjects());
     }
   }
 
@@ -145,16 +147,9 @@ class ProjectDetail extends Component {
     }
 
     this.props.updateProject(this.props.project).then(() => {
+      this.props.invalidateProjects();
       this.props.navigation.goBack();
     });
-  }
-
-  onProjectTitleBlur () {
-    // dirty check and project is not new
-    if ((this.state.projectTitle !== this.props.project.title)
-      && !this.props.project._new) {
-        this.saveProject();
-    }
   }
 
   render () {
