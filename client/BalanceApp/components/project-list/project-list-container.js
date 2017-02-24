@@ -19,7 +19,6 @@ class ProjectListContainer extends Component {
   }
 
   componentWillReceiveProps ({ projectsInvalidated, user, dispatch }) {
-    console.log("HERE", projectsInvalidated);
     if (projectsInvalidated) {
       dispatch(fetchProjects(user));
     }
