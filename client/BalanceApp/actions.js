@@ -66,7 +66,7 @@ export function invalidate (collection) {
     projects: INVALIDATE_PROJECTS
   };
 
-  if (invalidateProp[collection]) {
+  if (!invalidateProp[collection]) {
     throw `Can't validate ${collection}`;
   }
 
