@@ -18,8 +18,8 @@ class ProjectListContainer extends Component {
     super(props);
   }
 
-  componentWillReceiveProps ({ projectsStale, user, dispatch }) {
-    if (projectsStale) {
+  componentWillReceiveProps ({ projectsInvalidated, user, dispatch }) {
+    if (projectsInvalidated) {
       dispatch(fetchProjects(user));
     }
   }
@@ -41,7 +41,7 @@ class ProjectListContainer extends Component {
 
 function mapStateToProps (state) {
   return {
-    projectsStale: state.projects_invalidated,
+    projectsInvalidated: state.projects_invalidated,
     projects: state.projects
   };
 }
