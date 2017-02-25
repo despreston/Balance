@@ -2,7 +2,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Button } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
 
 // styles
 import { styles as NavStyles } from '../navigation/navigation-styles';
@@ -39,7 +38,7 @@ function mapDispatchToProps (dispatch) {
 class EditProjectContainer extends Component {
 
   static propTypes = {
-    project: PropTypes.object.isRequired,
+    project: PropTypes.object,
     updateProject: PropTypes.func.isRequired,
     deleteProject: PropTypes.func.isRequired
   };

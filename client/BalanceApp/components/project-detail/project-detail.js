@@ -53,7 +53,7 @@ class ProjectDetail extends Component {
     updateProject: PropTypes.func.isRequired,
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
-    }).isRequired,
+    }),
     requestNotesForProject: PropTypes.func.isRequired,
     invalidateProjects: PropTypes.func.isRequired
   };
@@ -154,6 +154,12 @@ class ProjectDetail extends Component {
 
   render () {
     const { project } = this.props;
+
+    /**
+     * project could be null if project is deleted, b/c of the way the
+     * navigator works.
+     */
+    if (!project) { return null; }
 
     let pastNotes = this.notesForType('Past');
     let futureNotes = this.notesForType('Future');
