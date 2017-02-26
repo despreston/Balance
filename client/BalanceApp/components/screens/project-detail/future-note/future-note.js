@@ -9,7 +9,7 @@ import {
 import { Style } from './future-note-style';
 
 // Tools
-import { formatDate } from '../../../utils/helpers';
+import { formatDate } from '../../../../utils/helpers';
 
 function FutureNote ({ note }) {
   function renderContent () {

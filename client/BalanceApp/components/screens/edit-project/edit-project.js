@@ -11,7 +11,7 @@ import {
 import Styles from './edit-project-style';
 
 // components
-import PrivacyPicker from '../privacy-picker/privacy-picker';
+import PrivacyPicker from '../../privacy-picker/privacy-picker';
 
 export default class EditProject extends Component {
 

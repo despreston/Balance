@@ -5,19 +5,19 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 
 // Components
-import ProjectListContainer from '../project-list/project-list-container';
-import NavBtn from '../navigation/nav-btn';
-import SignOn from '../signon/signon';
-import Logout from '../signon/logout';
+import ProjectListContainer from '../../project-list/project-list-container';
+import NavBtn from '../../navigation/nav-btn';
+import SignOn from '../../signon/signon';
+import Logout from '../../signon/logout';
 
 // styles
-import { styles } from '../navigation/navigation-styles';
+import { styles } from '../../navigation/navigation-styles';
 
 // utils
-import { isLoggedIn, parseToken } from '../../utils/auth';
+import { isLoggedIn, parseToken } from '../../../utils/auth';
 
 // actions
-import { setCurrentUser, fetchProjects } from '../../actions';
+import { setCurrentUser, fetchProjects } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -40,14 +40,11 @@ class MainScene extends Component {
 
   static navigationOptions = {
     header: ({ state, navigate, dispatch }, defaultHeader) => ({
+      
       ...defaultHeader,
+      
       title: <Text style={[styles.text, styles.title, styles.mainTitle]}>BALANCE</Text>,
-      left: (
-        <NavBtn
-          title="!?"
-          onPress={() => null}
-        />
-      ),
+      
       right: (
         <NavBtn
           onPress={() => state.params.newProject()}

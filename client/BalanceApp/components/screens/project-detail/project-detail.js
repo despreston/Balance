@@ -16,10 +16,10 @@ import dismissKeyboard from 'dismissKeyboard';
 import { Styles } from './project-detail-style';
 
 // Components
-import EditNote from '../edit-note/edit-note';
+import EditNote from '../../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
-import NoteList from '../note-list/note-list';
-import NavBtn from '../navigation/nav-btn';
+import NoteList from '../../note-list/note-list';
+import NavBtn from '../../navigation/nav-btn';
 
 // actions
 import {
@@ -27,7 +27,7 @@ import {
   saveProject,
   requestNotesForProject,
   invalidate
-} from '../../actions';
+} from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
   return {
