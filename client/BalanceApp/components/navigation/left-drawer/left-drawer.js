@@ -1,14 +1,17 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import {
-  View,
-  Text,
-  Image
-} from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 
 // utils
 import { parseToken } from '../../../utils/auth';
+
+// components
+import ProfileInfo from '../../profile-info/profile-info';
+import LeftDrawerMenuItem from './left-drawer-menu-item';
+
+// styles
+import { Styles } from './left-drawer-styles';
 
 function mapStateToProps (state) {
   return {
@@ -18,8 +21,29 @@ function mapStateToProps (state) {
 
 class LeftDrawer extends Component {
 
-  constructor () {
-    super();
+  static propTypes = {
+    routes: PropTypes.array.isRequired,
+    user: PropTypes.object
+  };
+
+  constructor (props) {
+    super(props);
+  }
+
+  renderMenuOptions = () => {
+    const { routes } = this.props;
+    let i = 0;
+
+    return routes.map(title => {
+      i++;
+      return (
+        <LeftDrawerMenuItem
+          key={i}
+          title={title}
+          navigate={this.props.navigate}
+        />
+      );
+    });
   }
 
   render () {
@@ -28,12 +52,9 @@ class LeftDrawer extends Component {
     if (!user) { return null; }
 
     return (
-      <View>
-        <Text>{user.name}</Text>
-        <Image
-          style={{ width: 60, height: 60 }}
-          source={{ uri: user.picture }}
-        />
+      <View style={Styles.LeftDrawer}>
+        <ProfileInfo user={user} />
+        {this.renderMenuOptions()}
       </View>
     );
   }

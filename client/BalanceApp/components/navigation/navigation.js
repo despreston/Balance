@@ -52,7 +52,13 @@ const routes = {
 };
 
 const LeftDrawerNav = DrawerNavigator(routes, {
-  contentComponent: ({ navigation }) => <LeftDrawer routes={routes} />
+  contentComponent: ({ navigation }) => {
+    return (
+      <LeftDrawer
+        routes={Object.keys(routes)} navigate={navigation.navigate}
+      />
+    );
+  }
 });
 
 export default LeftDrawerNav;
