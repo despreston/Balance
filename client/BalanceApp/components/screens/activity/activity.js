@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 // components 
 import NavBtn from '../../navigation/nav-btn';
 
-export default class Feed extends Component {
+export default class Activity extends Component {
 
   static navigationOptions = {
     header: ({ navigate }, defaultHeader) => {
@@ -23,7 +23,7 @@ export default class Feed extends Component {
   render () {
     return (
       <View>
-        <Text>Testing shit</Text>
+        <Text>activity from global, friends, and yourself</Text>
       </View>
     );
   }

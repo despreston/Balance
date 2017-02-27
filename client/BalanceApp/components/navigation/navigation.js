@@ -7,8 +7,9 @@ import {
   MainScene,
   ProjectDetail,
   EditProjectContainer,
-  Feed,
-  Help
+  Activity,
+  Help,
+  Search
 } from '../screens';
 
 // components
@@ -18,7 +19,6 @@ import NavBtn from './nav-btn';
 const navigationOptions = {
   header: ({ navigate }) => {
     const tintColor = '#FFFFFF';
-    
     const style = { backgroundColor: '#333' };
 
     return { tintColor, style };
@@ -31,17 +31,22 @@ const MainStack = StackNavigator({
   EditProject: { screen: EditProjectContainer }
 }, { navigationOptions });
 
-const FeedStack = StackNavigator({
-  Feed: { screen: Feed }
+const ActivityStack = StackNavigator({
+  Activity: { screen: Activity }
 }, { navigationOptions });
 
 const HelpStack = StackNavigator({
   Help: { screen: Help }
 }, { navigationOptions });
 
+const SearchStack = StackNavigator({
+  Search: { screen: Search }
+}, { navigationOptions });
+
 const LeftDrawer = DrawerNavigator({
   Main: { screen: MainStack },
-  Feed: { screen: FeedStack },
+  Activity: { screen: ActivityStack },
+  Search: { screen: SearchStack },
   Help: { screen: HelpStack }
 });
 
