@@ -4,7 +4,7 @@ const User = require('../../models/User');
 module.exports = (server) => {
 
   server.get(
-    "users/:_id", (req, res) => {
+    "users/:userId", (req, res) => {
       User
       .findOne(req.params)
       .lean()

@@ -14,6 +14,7 @@ import {
 
 // components
 import NavBtn from './nav-btn';
+import LeftDrawer from './left-drawer/left-drawer';
 
 // Default header for all stack navs
 const navigationOptions = {
@@ -43,11 +44,15 @@ const SearchStack = StackNavigator({
   Search: { screen: Search }
 }, { navigationOptions });
 
-const LeftDrawer = DrawerNavigator({
+const routes = {
   Main: { screen: MainStack },
   Activity: { screen: ActivityStack },
   Search: { screen: SearchStack },
   Help: { screen: HelpStack }
+};
+
+const LeftDrawerNav = DrawerNavigator(routes, {
+  contentComponent: ({ navigation }) => <LeftDrawer routes={routes} />
 });
 
-export default LeftDrawer;
+export default LeftDrawerNav;

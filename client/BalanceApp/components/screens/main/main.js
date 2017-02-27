@@ -17,7 +17,7 @@ import { styles } from '../../navigation/navigation-styles';
 import { isLoggedIn, parseToken } from '../../../utils/auth';
 
 // actions
-import { setCurrentUser, fetchProjects } from '../../../actions';
+import { setCurrentUser, fetchProjects, fetchUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -27,6 +27,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    fetchUser: (id) => dispatch(fetchUser(id)),
     setUser: (id) => dispatch(setCurrentUser(id)),
     fetchProjects: (userId) => dispatch(fetchProjects(userId))
   };
@@ -76,6 +77,7 @@ class MainScene extends Component {
         parseToken().then(token => {
           if (token.sub !== this.props.current_user) {
             this.props.setUser(token.sub);
+            this.props.fetchUser(this.props.current_user);
           }
           this.setState({ loading: false, authenticated });
         });

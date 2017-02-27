@@ -22,6 +22,9 @@ let User = new mongoose.Schema({
 
   lastUpdated: Date,
 
+  // url for picture
+  picture: String,
+
   createdAt: Date,
 
   lastLogin: Date

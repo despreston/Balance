@@ -4,7 +4,12 @@ export default {
    * Set state property `user`
    */
   RECEIVE_USER (state, { user }) {
-    return Object.assign({}, state, { user });
+    const users = {
+      ...state.users,
+      [user.userId]: user
+    };
+
+    return Object.assign({}, state, { users });
   },
 
   /**
