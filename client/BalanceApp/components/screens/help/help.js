@@ -2,13 +2,14 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-// components 
+// components
 import NavBtn from '../../navigation/nav-btn';
 
-export default class Feed extends Component {
+export default class Help extends Component {
 
   static navigationOptions = {
     header: ({ navigate }, defaultHeader) => {
+      
       const left = (
         <NavBtn
           title="More"
@@ -23,7 +24,7 @@ export default class Feed extends Component {
   render () {
     return (
       <View>
-        <Text>Testing shit</Text>
+        <Text>Help, support, versioning info, etc</Text>
       </View>
     );
   }

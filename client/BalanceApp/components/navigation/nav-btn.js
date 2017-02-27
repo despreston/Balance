@@ -5,7 +5,6 @@ import { Button } from 'react-native';
 import { styles } from './navigation-styles';
 
 function NavBtn ({ onPress, customStyle = {}, title, color = '#fff' }) {
-  console.log(title);
   return (
     <Button
       color={color}

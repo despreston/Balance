@@ -60,7 +60,7 @@ class ProjectDetail extends Component {
 
   static navigationOptions = {
     header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
-      
+
       const right = (
         <NavBtn
           title='Edit'

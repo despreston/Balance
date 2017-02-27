@@ -7,7 +7,8 @@ import {
   MainScene,
   ProjectDetail,
   EditProjectContainer,
-  Feed
+  Feed,
+  Help
 } from '../screens';
 
 // components
@@ -20,14 +21,7 @@ const navigationOptions = {
     
     const style = { backgroundColor: '#333' };
 
-    const left = (
-      <NavBtn
-        title="More"
-        onPress={() => navigate('DrawerOpen')}
-      />
-    );
-
-    return { tintColor, style, left };
+    return { tintColor, style };
   }
 };
 
@@ -38,12 +32,17 @@ const MainStack = StackNavigator({
 }, { navigationOptions });
 
 const FeedStack = StackNavigator({
-  Feed: { screen: Feed },
+  Feed: { screen: Feed }
+}, { navigationOptions });
+
+const HelpStack = StackNavigator({
+  Help: { screen: Help }
 }, { navigationOptions });
 
 const LeftDrawer = DrawerNavigator({
   Main: { screen: MainStack },
-  Feed: { screen: FeedStack }
+  Feed: { screen: FeedStack },
+  Help: { screen: HelpStack }
 });
 
 export default LeftDrawer;
