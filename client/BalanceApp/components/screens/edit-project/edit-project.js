@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   Text,
   TextInput
 } from 'react-native';
@@ -38,27 +38,27 @@ export default class EditProject extends Component {
       return (
         <View style={Styles.inputRow}>
           <Text style={Styles.rowLabel, { padding: 10 }}>Are you sure?</Text>
-          <TouchableHighlight
+          <TouchableOpacity
             style={Styles.removeButton}
             onPress={this.props.onRemove}>
             <Text style={Styles.removeButtonText}>Delete</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
+          </TouchableOpacity>
+          <TouchableOpacity
             style={Styles.removeButton}
             onPress={() => this.setState({ confirmDelete: false })}>
             <Text style={Styles.rowLabel}>Cancel</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       );
     }
 
     return (
       <View style={Styles.inputRow}>
-        <TouchableHighlight
+        <TouchableOpacity
           style={Styles.removeButton}
           onPress={() => this.setState({ confirmDelete: true })}>
           <Text style={Styles.removeButtonText}>Remove Project</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   }
