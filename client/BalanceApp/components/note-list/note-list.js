@@ -1,11 +1,6 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import {
-  View,
-  Text,
-  ListView,
-  TouchableHighlight
-} from 'react-native';
+import { View, Text } from 'react-native';
 
 // components
 import NoteListItem from '../note-list-item/note-list-item';

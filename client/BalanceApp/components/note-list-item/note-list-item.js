@@ -1,6 +1,6 @@
 // vendors
 import React, { PropTypes } from 'react';
-import { View, Text, TouchableHighlight, Image } from 'react-native';
+import { View, Text } from 'react-native';
 
 // styles
 import { Styles } from './note-list-item-style';

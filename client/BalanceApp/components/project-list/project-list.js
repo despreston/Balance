@@ -1,6 +1,6 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { View, ListView, TouchableHighlight } from 'react-native';
+import { View, ListView, TouchableOpacity } from 'react-native';
 
 // Components
 import ProjectListItem from '../project-list-item/project-list-item';
@@ -24,13 +24,13 @@ export default class ProjectList extends Component {
 
   _renderRow (rowData) {
     return (
-      <TouchableHighlight
+      <TouchableOpacity
         onPress={this.props.onProjectTap.bind(this,rowData)}
         style={Style.project}>
         <View ref={component => this._root = component}>
           <ProjectListItem project={rowData} />
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );    
   }
 
