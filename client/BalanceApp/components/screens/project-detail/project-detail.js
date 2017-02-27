@@ -7,7 +7,7 @@ import {
   Button,
   Modal,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
   TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import dismissKeyboard from 'dismissKeyboard';
@@ -179,16 +179,16 @@ class ProjectDetail extends Component {
         <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           <View style={Styles.container}>
             <View style={Styles.updateButtonContainer}>
-              <TouchableHighlight
+              <TouchableOpacity
                 onPress={() => this.toggleEditNoteModal(this.emptyNote('Past'))}
                 style={Styles.updateButton}>
                 <Text style={Styles.updateButtonText}>I did work</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => this.toggleEditNoteModal(this.emptyNote('Future'))}
                 style={Styles.updateButton}>
                 <Text style={Styles.updateButtonText}>To do next</Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
             <FutureNote note={futureNote}/>
             <View style={Styles.pastNotesView}>
