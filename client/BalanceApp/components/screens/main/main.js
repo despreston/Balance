@@ -8,7 +8,6 @@ import { get } from 'lodash';
 import ProjectListContainer from '../../project-list/project-list-container';
 import NavBtn from '../../navigation/nav-btn';
 import SignOn from '../../signon/signon';
-import Logout from '../../signon/logout';
 
 // styles
 import { styles } from '../../navigation/navigation-styles';
@@ -103,17 +102,13 @@ class MainScene extends Component {
   }
 
   render () {
-
     if (!this.state.loading) {
       if (this.state.authenticated && this.props.current_user) {
         return (
-          <View>
             <ProjectListContainer
               onProjectTap={this.openProject.bind(this)}
               user={this.props.current_user}
             />
-            <Logout />
-          </View>
         );
       }
       /**

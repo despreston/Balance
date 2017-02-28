@@ -1,6 +1,6 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { View } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 // utils
@@ -9,6 +9,7 @@ import { parseToken } from '../../../utils/auth';
 // components
 import ProfileInfo from '../../profile-info/profile-info';
 import LeftDrawerMenuItem from './left-drawer-menu-item';
+import Logout from '../../signon/logout';
 
 // styles
 import { Styles } from './left-drawer-styles';
@@ -46,6 +47,8 @@ class LeftDrawer extends Component {
     });
   }
 
+
+
   render () {
     const { user } = this.props;
 
@@ -55,6 +58,9 @@ class LeftDrawer extends Component {
       <View style={Styles.LeftDrawer}>
         <ProfileInfo user={user} />
         {this.renderMenuOptions()}
+        <TouchableOpacity onPress={() => this.props.navigate('DrawerClose')}>
+          <Logout />
+        </TouchableOpacity>
       </View>
     );
   }

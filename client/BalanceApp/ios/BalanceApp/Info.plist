@@ -28,7 +28,6 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<!-- <key>104.236.197.124:9000</key> -->
 			<key>localhost:9000</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
