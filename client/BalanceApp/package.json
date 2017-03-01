@@ -11,7 +11,7 @@
     "react-native": "0.41.0-rc.1",
     "react-native-autogrow-textinput": "^3.0.1",
     "react-native-lock": "^0.4.0",
-    "react-navigation": "git+https://git@github.com/react-community/react-navigation.git#v1.0.0-beta.3",
+    "react-navigation": "git+https://git@github.com/react-community/react-navigation.git#v1.0.0-beta.6",
     "react-redux": "^5.0.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0"
