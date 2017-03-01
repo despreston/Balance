@@ -18,8 +18,8 @@ function ProfileInfo ({ user }) {
         source={{ uri: user.picture }}
       />
       <View style={Styles.info}>
-        <Text style={Styles.name}>{user.name}</Text>
-        <Text style={Styles.displayName}>@fake-user-name</Text>
+        <Text adjustsFontSizeToFit={true} style={Styles.name}>{user.name}</Text>
+        <Text adjustsFontSizeToFit={true} style={Styles.displayName}>@fake-user-name</Text>
       </View>
     </View>
   );

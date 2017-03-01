@@ -24,7 +24,8 @@ class LeftDrawer extends Component {
 
   static propTypes = {
     routes: PropTypes.array.isRequired,
-    user: PropTypes.object
+    user: PropTypes.object,
+    navigate: PropTypes.func.isRequired
   };
 
   constructor (props) {
@@ -38,16 +39,15 @@ class LeftDrawer extends Component {
     return routes.map(title => {
       i++;
       return (
-        <LeftDrawerMenuItem
-          key={i}
-          title={title}
-          navigate={this.props.navigate}
-        />
+        <View key={i} style={Styles.link}>
+          <LeftDrawerMenuItem
+            title={title}
+            navigate={this.props.navigate}
+          />
+        </View>
       );
     });
   }
-
-
 
   render () {
     const { user } = this.props;
@@ -56,8 +56,8 @@ class LeftDrawer extends Component {
 
     return (
       <View style={Styles.LeftDrawer}>
-        <ProfileInfo user={user} />
-        {this.renderMenuOptions()}
+        <ProfileInfo style={Styles.profile} user={user} />
+        <View style={Styles.links}>{this.renderMenuOptions()}</View>
         <TouchableOpacity onPress={() => this.props.navigate('DrawerClose')}>
           <Logout />
         </TouchableOpacity>

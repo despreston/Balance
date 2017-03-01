@@ -15,16 +15,21 @@ export const Styles = StyleSheet.create  ({
 
   info: {
     marginLeft: 25,
+    flex: 1,
     justifyContent: 'center'
   },
 
-  name: {
-    fontSize: 18
+  displayName: {
+    lineHeight: 2,
+    flex: 1,
+    fontWeight: 'bold',
+    fontSize: 16
   },
 
-  displayName: {
-    fontSize: 18,
-    fontWeight: 'bold'
+  name: {
+    lineHeight: 0,
+    flex: 1,
+    fontSize: 16
   }
 
 });
