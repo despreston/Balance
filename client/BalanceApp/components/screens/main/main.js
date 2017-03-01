@@ -66,6 +66,7 @@ class MainScene extends Component {
 
     this.state = { loading: true, authenticated: false };
     this.navigate = this.props.navigation.navigate;
+    this._mounted = false;
   }
 
   componentWillReceiveProps () {
@@ -78,7 +79,9 @@ class MainScene extends Component {
             this.props.setUser(token.sub);
             this.props.fetchUser(this.props.current_user);
           }
-          this.setState({ loading: false, authenticated });
+          if (this._mounted) {
+            this.setState({ loading: false, authenticated });
+          }
         });
       } else {
         this.setState({ loading: false });
@@ -87,9 +90,14 @@ class MainScene extends Component {
   }
 
   componentDidMount () {
+    this._mounted = true;
     this.props.navigation.setParams({
       newProject: this.newProject.bind(this)
     });
+  }
+
+  componentWillUnmount () {
+    this._mounted = false;
   }
 
   openProject (project) {
