@@ -45,7 +45,7 @@ class MainScene extends Component {
 
       left: (
         <NavBtn
-          title="More"
+          title="Main"
           onPress={() => navigate('DrawerOpen')}
         />
       ),

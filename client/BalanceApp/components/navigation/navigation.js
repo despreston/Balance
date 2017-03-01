@@ -1,6 +1,6 @@
 // Vendors
 import React from 'react';
-import { StackNavigator, DrawerNavigator } from 'react-navigation';
+import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
 
 // Screens
 import {
@@ -11,10 +11,6 @@ import {
   Help,
   Search
 } from '../screens';
-
-// components
-import NavBtn from './nav-btn';
-import LeftDrawer from './left-drawer/left-drawer';
 
 // Default header for all stack navs
 const navigationOptions = {
@@ -51,14 +47,6 @@ const routes = {
   Help: { screen: HelpStack }
 };
 
-const LeftDrawerNav = DrawerNavigator(routes, {
-  contentComponent: ({ navigation }) => {
-    return (
-      <LeftDrawer
-        routes={Object.keys(routes)} navigate={navigation.navigate}
-      />
-    );
-  }
-});
+const TabBarNav = TabNavigator(routes);
 
-export default LeftDrawerNav;
+export default TabBarNav;
