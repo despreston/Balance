@@ -1,6 +1,6 @@
 // Vendors
 import React from 'react';
-import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator } from 'react-navigation';
 
 // Screens
 import {
