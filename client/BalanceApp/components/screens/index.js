@@ -7,7 +7,8 @@ import ProjectDetail from './project-detail/project-detail';
 import EditProjectContainer from './edit-project/edit-project-container';
 import Activity from './activity/activity';
 import Help from './help/help';
-import Search from './search/search';
+import Friends from './friends/friends';
+import Notifications from './notifications/notifications';
 
 export {
   MainScene,
@@ -15,5 +16,6 @@ export {
   EditProjectContainer,
   Activity,
   Help,
-  Search
+  Notifications,
+  Friends
 };
