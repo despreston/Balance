@@ -4,17 +4,17 @@ import { View, Button } from 'react-native';
 import { connect } from 'react-redux';
 
 // styles
-import { styles as NavStyles } from '../navigation/navigation-styles';
+import { styles as NavStyles } from '../../navigation/navigation-styles';
 
 // actions
-import { saveProject, deleteProject } from '../../actions';
+import { saveProject, deleteProject } from '../../../actions';
 
 // components
 import EditProject from './edit-project';
-import NavBtn from '../navigation/nav-btn';
+import NavBtn from '../../navigation/nav-btn';
 
 // utils
-import emptyProject from '../../utils/empty-project';
+import emptyProject from '../../../utils/empty-project';
 
 function mapStateToProps (state, { navigation }) {
   let project;

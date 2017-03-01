@@ -1,26 +1,52 @@
 // Vendors
-import React, { Component } from 'react';
-import { StackNavigator } from 'react-navigation';
-import { connect } from 'react-redux';
+import React from 'react';
+import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
 
-// Components
-import MainScene from '../main/main';
-import ProjectDetail from '../project-detail/project-detail';
-import EditProjectContainer from '../edit-project/edit-project-container';
+// Screens
+import {
+  MainScene,
+  ProjectDetail,
+  EditProjectContainer,
+  Activity,
+  Notifications,
+  Profile
+} from '../screens';
 
-const MainNavigation = StackNavigator({
+// Default header for all stack navs
+const navigationOptions = {
+  header: ({ navigate }) => {
+    const tintColor = '#FFFFFF';
+    const style = { backgroundColor: '#333' };
+
+    return { tintColor, style };
+  }
+};
+
+const ProjectsStack = StackNavigator({
   Home: { screen: MainScene },
   Project: { screen: ProjectDetail },
   EditProject: { screen: EditProjectContainer }
-}, {
-  navigationOptions: {
-    header: {
-      tintColor: '#FFFFFF',
-      style: {
-        backgroundColor: '#333'
-      }
-    }
-  }
-});
+}, { navigationOptions });
 
-export default MainNavigation;
+const ActivityStack = StackNavigator({
+  Activity: { screen: Activity }
+}, { navigationOptions });
+
+const NotificationsStack = StackNavigator({
+  Notifications: { screen: Notifications }
+}, { navigationOptions });
+
+const ProfileStack = StackNavigator({
+  Profile: { screen: Profile }
+}, { navigationOptions });
+
+const routes = {
+  Projects: { screen: ProjectsStack },
+  Activity: { screen: ActivityStack },
+  Notifications: { screen: NotificationsStack },
+  Profile: { screen: ProfileStack }
+};
+
+const TabBarNav = TabNavigator(routes);
+
+export default TabBarNav;

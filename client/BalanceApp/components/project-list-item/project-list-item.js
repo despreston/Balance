@@ -33,7 +33,7 @@ function ProjectListItem ({ project }) {
       default:        return '';
     };
   }
-
+  
   return (
     <View style={Style.projectListItem}>
       <View style={Style.header}>

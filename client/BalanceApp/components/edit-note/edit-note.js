@@ -5,7 +5,7 @@ import {
   Modal,
   Text,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
   View,
   Alert } from 'react-native';
 
@@ -72,25 +72,25 @@ export default class EditNote extends Component {
           >
           <View style={Styles.editNote}>
             <View style={Styles.header}>
-              <TouchableHighlight onPress={this.props.onClose}>
+              <TouchableOpacity onPress={this.props.onClose}>
                 <Text style={Styles.headerText}>Close</Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
               <View style={Styles.actions}>
-                <TouchableHighlight>
+                <TouchableOpacity>
                   <Text
                     style={[Styles.headerText, Styles.clear]}
                     onPress={() => this.onClear()}>
                     Clear
                   </Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
                 <View style={Styles.spacer} />
-                <TouchableHighlight>
+                <TouchableOpacity>
                   <Text
                     style={[Styles.headerText, this.getSaveTextColor() ]}
                     onPress={() => this.save()}>
                     Save
                   </Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
               </View>
             </View>
             <AutoGrowingTextInput

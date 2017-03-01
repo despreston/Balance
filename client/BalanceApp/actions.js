@@ -168,7 +168,7 @@ export function requestNotesForProject (project, noteType) {
 
 /**
  * Fetch single user
- * @param {string} user ID of user
+ * @param {string} userId of user
  */
 export function fetchUser (user) {
   return api(`users/${user}`, receiveUser);

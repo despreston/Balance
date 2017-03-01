@@ -7,7 +7,7 @@ import {
   Button,
   Modal,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
   TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import dismissKeyboard from 'dismissKeyboard';
@@ -16,10 +16,10 @@ import dismissKeyboard from 'dismissKeyboard';
 import { Styles } from './project-detail-style';
 
 // Components
-import EditNote from '../edit-note/edit-note';
+import EditNote from '../../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
-import NoteList from '../note-list/note-list';
-import NavBtn from '../navigation/nav-btn';
+import NoteList from '../../note-list/note-list';
+import NavBtn from '../../navigation/nav-btn';
 
 // actions
 import {
@@ -27,7 +27,7 @@ import {
   saveProject,
   requestNotesForProject,
   invalidate
-} from '../../actions';
+} from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
   return {
@@ -60,7 +60,7 @@ class ProjectDetail extends Component {
 
   static navigationOptions = {
     header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
-      
+
       const right = (
         <NavBtn
           title='Edit'
@@ -179,16 +179,16 @@ class ProjectDetail extends Component {
         <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           <View style={Styles.container}>
             <View style={Styles.updateButtonContainer}>
-              <TouchableHighlight
+              <TouchableOpacity
                 onPress={() => this.toggleEditNoteModal(this.emptyNote('Past'))}
                 style={Styles.updateButton}>
                 <Text style={Styles.updateButtonText}>I did work</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => this.toggleEditNoteModal(this.emptyNote('Future'))}
                 style={Styles.updateButton}>
                 <Text style={Styles.updateButtonText}>To do next</Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
             <FutureNote note={futureNote}/>
             <View style={Styles.pastNotesView}>

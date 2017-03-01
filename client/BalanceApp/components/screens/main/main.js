@@ -5,19 +5,18 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 
 // Components
-import ProjectListContainer from '../project-list/project-list-container';
-import NavBtn from '../navigation/nav-btn';
-import SignOn from '../signon/signon';
-import Logout from '../signon/logout';
+import ProjectListContainer from '../../project-list/project-list-container';
+import NavBtn from '../../navigation/nav-btn';
+import SignOn from '../../signon/signon';
 
 // styles
-import { styles } from '../navigation/navigation-styles';
+import { styles } from '../../navigation/navigation-styles';
 
 // utils
-import { isLoggedIn, parseToken } from '../../utils/auth';
+import { isLoggedIn, parseToken } from '../../../utils/auth';
 
 // actions
-import { setCurrentUser, fetchProjects } from '../../actions';
+import { setCurrentUser, fetchProjects, fetchUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -27,6 +26,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    fetchUser: (id) => dispatch(fetchUser(id)),
     setUser: (id) => dispatch(setCurrentUser(id)),
     fetchProjects: (userId) => dispatch(fetchProjects(userId))
   };
@@ -40,14 +40,11 @@ class MainScene extends Component {
 
   static navigationOptions = {
     header: ({ state, navigate, dispatch }, defaultHeader) => ({
+      
       ...defaultHeader,
-      title: <Text style={[styles.text, styles.title, styles.mainTitle]}>BALANCE</Text>,
-      left: (
-        <NavBtn
-          title="!?"
-          onPress={() => null}
-        />
-      ),
+      
+      title: <Text style={[ styles.text, styles.title ]}>Projects</Text>,
+      
       right: (
         <NavBtn
           onPress={() => state.params.newProject()}
@@ -62,6 +59,7 @@ class MainScene extends Component {
 
     this.state = { loading: true, authenticated: false };
     this.navigate = this.props.navigation.navigate;
+    this._mounted = false;
   }
 
   componentWillReceiveProps () {
@@ -72,8 +70,11 @@ class MainScene extends Component {
         parseToken().then(token => {
           if (token.sub !== this.props.current_user) {
             this.props.setUser(token.sub);
+            this.props.fetchUser(this.props.current_user);
           }
-          this.setState({ loading: false, authenticated });
+          if (this._mounted) {
+            this.setState({ loading: false, authenticated });
+          }
         });
       } else {
         this.setState({ loading: false });
@@ -82,9 +83,14 @@ class MainScene extends Component {
   }
 
   componentDidMount () {
+    this._mounted = true;
     this.props.navigation.setParams({
       newProject: this.newProject.bind(this)
     });
+  }
+
+  componentWillUnmount () {
+    this._mounted = false;
   }
 
   openProject (project) {
@@ -97,17 +103,13 @@ class MainScene extends Component {
   }
 
   render () {
-
     if (!this.state.loading) {
       if (this.state.authenticated && this.props.current_user) {
         return (
-          <View>
             <ProjectListContainer
               onProjectTap={this.openProject.bind(this)}
               user={this.props.current_user}
             />
-            <Logout />
-          </View>
         );
       }
       /**
