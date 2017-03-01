@@ -9,7 +9,7 @@ import {
   EditProjectContainer,
   Activity,
   Notifications,
-  Friends
+  Profile
 } from '../screens';
 
 // Default header for all stack navs
@@ -22,7 +22,7 @@ const navigationOptions = {
   }
 };
 
-const MainStack = StackNavigator({
+const ProjectsStack = StackNavigator({
   Home: { screen: MainScene },
   Project: { screen: ProjectDetail },
   EditProject: { screen: EditProjectContainer }
@@ -36,15 +36,15 @@ const NotificationsStack = StackNavigator({
   Notifications: { screen: Notifications }
 }, { navigationOptions });
 
-const FriendsStack = StackNavigator({
-  Friends: { screen: Friends }
+const ProfileStack = StackNavigator({
+  Profile: { screen: Profile }
 }, { navigationOptions });
 
 const routes = {
-  Main: { screen: MainStack },
+  Projects: { screen: ProjectsStack },
   Activity: { screen: ActivityStack },
   Notifications: { screen: NotificationsStack },
-  Friends: { screen: FriendsStack }
+  Profile: { screen: ProfileStack }
 };
 
 const TabBarNav = TabNavigator(routes);

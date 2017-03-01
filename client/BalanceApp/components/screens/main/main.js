@@ -42,15 +42,8 @@ class MainScene extends Component {
     header: ({ state, navigate, dispatch }, defaultHeader) => ({
       
       ...defaultHeader,
-
-      left: (
-        <NavBtn
-          title="Main"
-          onPress={() => navigate('DrawerOpen')}
-        />
-      ),
       
-      title: <Text style={[styles.text, styles.title, styles.mainTitle]}>BALANCE</Text>,
+      title: <Text style={[ styles.text, styles.title ]}>Projects</Text>,
       
       right: (
         <NavBtn
