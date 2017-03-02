@@ -1,9 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-export const Styles = StyleSheet.create  ({
+export default StyleSheet.create  ({
 
   ProfileInfo: {
-    alignSelf: 'center',
+    alignSelf: 'center'
+  },
+
+  row: {
+    justifyContent: 'center',
     flexDirection: 'row'
   },
 
@@ -15,21 +19,27 @@ export const Styles = StyleSheet.create  ({
 
   info: {
     marginLeft: 25,
-    flex: 1,
-    justifyContent: 'center'
+    width: 170
   },
 
   displayName: {
-    lineHeight: 2,
+    color: '#3D3F3E',
+    justifyContent: 'center',
     flex: 1,
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 18
   },
 
   name: {
-    lineHeight: 0,
+    color: '#3D3F3E',
     flex: 1,
-    fontSize: 16
+    fontSize: 18
+  },
+
+  stats: {
+    marginTop: 15,
+    marginRight: 10,
+    color: '#3D3F3E'
   }
 
 });

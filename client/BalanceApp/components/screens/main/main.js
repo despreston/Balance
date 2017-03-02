@@ -70,7 +70,7 @@ class MainScene extends Component {
         parseToken().then(token => {
           if (token.sub !== this.props.current_user) {
             this.props.setUser(token.sub);
-            this.props.fetchUser(this.props.current_user);
+            this.props.fetchUser(token.sub);
           }
           if (this._mounted) {
             this.setState({ loading: false, authenticated });

@@ -7,19 +7,25 @@ import {
 } from 'react-native';
 
 // styles
-import { Styles } from './profile-info-styles';
+import Styles from './profile-info-styles';
 
 function ProfileInfo ({ user }) {
 
   return (
     <View style={Styles.ProfileInfo}>
-      <Image
-        style={Styles.image}
-        source={{ uri: user.picture }}
-      />
-      <View style={Styles.info}>
-        <Text adjustsFontSizeToFit={true} style={Styles.name}>{user.name}</Text>
-        <Text adjustsFontSizeToFit={true} style={Styles.displayName}>@fake-user-name</Text>
+      <View style={Styles.row}>
+        <Image
+          style={Styles.image}
+          source={{ uri: user.picture }}
+        />
+        <View style={Styles.info}>
+          <Text adjustsFontSizeToFit={true} style={Styles.name}>{user.name}</Text>
+          <Text adjustsFontSizeToFit={true} style={Styles.displayName}>@fake-user-name</Text>
+        </View>
+      </View>
+      <View style={Styles.row}>
+        <Text style={Styles.stats}>Projects: {user.project_count}</Text>
+        <Text style={Styles.stats}>Friends: {user.friends.length}</Text>
       </View>
     </View>
   );

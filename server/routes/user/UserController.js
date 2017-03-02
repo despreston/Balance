@@ -1,5 +1,6 @@
 'use strict';
 const User = require('../../models/User');
+const Project = require('../../models/Project');
 
 module.exports = (server) => {
 
@@ -8,7 +9,12 @@ module.exports = (server) => {
       User
       .findOne(req.params)
       .lean()
-      .then(user => res.send(200, user));
+      .then(user => {
+        return Project.projectCountForUser(user.userId).then(projectCount => {
+          user.project_count = projectCount;
+          res.send(200, user);
+        });
+      });
     });
   
   server.post(
