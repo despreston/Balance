@@ -121,7 +121,7 @@ class MainScene extends Component {
       return <SignOn />;
     }
 
-    return <View />
+    return null;
   }
 }
 
