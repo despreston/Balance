@@ -26,7 +26,7 @@ const ProjectsStack = StackNavigator({
   Home: { screen: MainScene },
   Project: { screen: ProjectDetail },
   EditProject: { screen: EditProjectContainer }
-}, { navigationOptions });
+}, { navigationOptions, initialRouteName: 'Home' });
 
 const ActivityStack = StackNavigator({
   Activity: { screen: Activity }
@@ -47,6 +47,6 @@ const routes = {
   Profile: { screen: ProfileStack }
 };
 
-const TabBarNav = TabNavigator(routes);
+const TabBarNav = TabNavigator(routes, { lazyLoad: true });
 
 export default TabBarNav;

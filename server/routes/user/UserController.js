@@ -29,13 +29,15 @@ module.exports = (server) => {
         { userId: body.userId },
         body,
         { upsert: true, new: true, setDefaultsOnInsert: true },
-        (err, result) => {
+        (err, user) => {
 
           if (err) {
             return res.send(500, 'Failed ' + err);
           }
 
-          return res.send(201, result);
+          return Project.projectCountForUser(user.userId).then(project_count => {
+            res.send(201, Object.assign({}, user.toObject(), { project_count }));
+          });
 
         });
     });

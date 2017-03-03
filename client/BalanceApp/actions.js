@@ -1,11 +1,14 @@
-import { api } from './utils/api';
+import { apiDispatch, api } from './utils/api';
 import { arrayToObj } from './utils/helpers';
+import Auth0Lock from 'react-native-lock';
+import { saveToken, removeToken } from './utils/auth';
 
 /*
  * action types
  */
 export const RECEIVE_USER = 'RECEIVE_USER';
-export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const LOGGED_IN_USER = 'LOGGED_IN_USER';
+export const RESET_USER = 'RESET_USER';
 
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
@@ -22,12 +25,11 @@ export function receiveUser (user) {
 };
 
 /**
- * Set current userId from Auth0
- * @param {string} userId
+ * @param {object} user
  * @return {action}
  */
-export function setCurrentUser (userId) {
-  return { type: SET_CURRENT_USER, current_user: userId };
+export function setLoggedInUser (user) {
+  return { type: LOGGED_IN_USER, user };
 };
 
 /**
@@ -119,7 +121,7 @@ export function saveProject (project) {
   delete project.Future;
   delete project.Past;
 
-  return api(url, receiveProject, { method, body: project });
+  return apiDispatch(url, receiveProject, { method, body: project });
 };
 
 /**
@@ -137,7 +139,7 @@ export function saveNote (note) {
     method = 'PUT';
     url += `/${note._id}`;
   }
-  return api(url, receiveNote, { method, body: note });
+  return apiDispatch(url, receiveNote, { method, body: note });
 };
 
 /**
@@ -146,7 +148,7 @@ export function saveNote (note) {
  * @return {Promise}
  */
 export function fetchProject (project) {
-  return api(`projects/${project._id}`, receiveProject);
+  return apiDispatch(`projects/${project._id}`, receiveProject);
 };
 
 /**
@@ -154,7 +156,7 @@ export function fetchProject (project) {
  * @return {Promise}
  */
 export function fetchProjects (userId) {
-  return api(`projects?user=${userId}`, receiveProjects);
+  return apiDispatch(`projects?user=${userId}`, receiveProjects);
 };
 
 /**
@@ -163,7 +165,7 @@ export function fetchProjects (userId) {
  * @return {Promise}
  */
 export function requestNotesForProject (project, noteType) {
-  return api(`notes?project=${project}&type=${noteType}`, receiveNotes);
+  return apiDispatch(`notes?project=${project}&type=${noteType}`, receiveNotes);
 };
 
 /**
@@ -171,19 +173,7 @@ export function requestNotesForProject (project, noteType) {
  * @param {string} userId of user
  */
 export function fetchUser (user) {
-  return api(`users/${user}`, receiveUser);
-};
-
-/**
- * Create a new user
- * @param {object} user 
- */
-export function createUser (user) {
-  function setUser (json) {
-    return setCurrentUser(json.userId);
-  }
-
-  return api(`users`, setUser, { method: 'POST', body: user }); 
+  return apiDispatch(`users/${user}`, receiveUser);
 };
 
 /**
@@ -191,5 +181,43 @@ export function createUser (user) {
  * @param {string} id Project ID
  */
 export function deleteProject (id) {
-  return api(`projects/${id}`, null, { method: 'DELETE' });
+  return apiDispatch(`projects/${id}`, null, { method: 'DELETE' });
+};
+
+export function fetchCurrentUser (userId) {
+  return apiDispatch(`users/${userId}`, setLoggedInUser);
+};
+
+/**
+ * prompt for log-in and send new user to server
+ */
+export function login () {
+  const { clientId, domain } = CONFIG;
+  const lock = new Auth0Lock({ clientId, domain });
+
+  // show lock screen to prompt for login details
+  return dispatch => {
+    lock.show({}, (err, profile, tokens) => {
+      if (err) {
+        console.log('something went wrong ' + err);
+      }
+
+      // save token to local storage
+      saveToken(tokens.idToken).catch( err => {
+        console.log('could not save token ', err);
+      });
+
+      delete profile.extraInfo;
+
+      // send the user to the server
+      return api(`users`, { method: 'POST', body: profile})
+        .then(user => dispatch(setLoggedInUser(user)));
+    });
+  }
+};
+
+export function resetCurrentUser () {
+  return {
+    type: RESET_USER
+  };
 };

@@ -13,10 +13,20 @@ export default {
   },
 
   /**
-   * Set `current_user`
+   * Set `current_user` and appends user to users object
    */
-  SET_CURRENT_USER (state, { current_user }) {
-    return Object.assign({}, state, { current_user });
+  LOGGED_IN_USER (state, { user }) {
+
+    const users = {
+      ...state.users,
+      [user.userId]: user
+    };
+
+    return Object.assign({}, state, { users, current_user: user.userId });
+  },
+
+  RESET_USER (state) {
+    return Object.assign({}, state, { current_user: null });
   }
 
 
