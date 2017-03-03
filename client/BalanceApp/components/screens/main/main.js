@@ -16,7 +16,7 @@ import { styles } from '../../navigation/navigation-styles';
 import { isLoggedIn, parseToken } from '../../../utils/auth';
 
 // actions
-import { fetchProjects, fetchCurrentUser } from '../../../actions';
+import { fetchProjects, fetchUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -26,7 +26,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchCurrentUser: (userId) => dispatch(fetchCurrentUser(userId)),
+    fetchCurrentUser: (userId) => dispatch(fetchUser(userId, true)),
     fetchProjects: (userId) => dispatch(fetchProjects(userId))
   };
 }
@@ -79,7 +79,7 @@ class MainScene extends Component {
 
   componentDidMount () {
     this.setState({ isMounted: true });
-    
+
     this.props.navigation.setParams({
       newProject: this.newProject.bind(this)
     });

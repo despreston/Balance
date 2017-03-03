@@ -1,7 +1,7 @@
 import { apiDispatch, api } from './utils/api';
 import { arrayToObj } from './utils/helpers';
 import Auth0Lock from 'react-native-lock';
-import { saveToken, removeToken } from './utils/auth';
+import { saveToken } from './utils/auth';
 
 /*
  * action types
@@ -171,9 +171,12 @@ export function requestNotesForProject (project, noteType) {
 /**
  * Fetch single user
  * @param {string} userId of user
+ * @param {boolean} isLoggedIn true if the user to load is the logged in user
  */
-export function fetchUser (user) {
-  return apiDispatch(`users/${user}`, receiveUser);
+export function fetchUser (user, isLoggedIn) {
+  const action = isLoggedIn ? setLoggedInUser : receiveUser;
+
+  return apiDispatch(`users/${user}`, action);
 };
 
 /**
@@ -182,10 +185,6 @@ export function fetchUser (user) {
  */
 export function deleteProject (id) {
   return apiDispatch(`projects/${id}`, null, { method: 'DELETE' });
-};
-
-export function fetchCurrentUser (userId) {
-  return apiDispatch(`users/${userId}`, setLoggedInUser);
 };
 
 /**
