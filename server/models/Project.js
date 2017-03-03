@@ -10,10 +10,7 @@ let Project = new mongoose.Schema({
     type: String
   },
 
-  user: { 
-    type: String, 
-    ref: 'user'
-  },
+  user: String,
 
   lastUpdated: Date,
 
@@ -54,6 +51,15 @@ Project.statics.queryWithNotes = function (query) {
       .then(notes => {
         return getLatestNotesForProjects(notes, projects);
       });
+  });
+};
+
+Project.statics.projectCountForUser = function (userId) {
+  return this.count({ user: userId }, (err, count) => {
+    if (err) {
+      return Promise.reject('Could not get projects for user, ', userId);
+    }
+    return count.length;
   });
 };
 

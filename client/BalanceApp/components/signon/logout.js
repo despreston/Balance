@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
-import { setCurrentUser } from '../../actions';
+import { resetCurrentUser } from '../../actions';
 import { removeToken } from '../../utils/auth';
 
 function mapDispatchToProps (dispatch) {
   return {
-    resetCurrentUser: () => dispatch(setCurrentUser(null))
+    resetCurrentUser: () => dispatch(resetCurrentUser(null))
   };
 }
 

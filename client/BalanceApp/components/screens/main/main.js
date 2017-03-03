@@ -1,6 +1,6 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { Text, Button, View } from 'react-native';
+import { Text, View, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { get } from 'lodash';
 
@@ -16,7 +16,7 @@ import { styles } from '../../navigation/navigation-styles';
 import { isLoggedIn, parseToken } from '../../../utils/auth';
 
 // actions
-import { setCurrentUser, fetchProjects, fetchUser } from '../../../actions';
+import { fetchProjects, fetchUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -26,8 +26,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchUser: (id) => dispatch(fetchUser(id)),
-    setUser: (id) => dispatch(setCurrentUser(id)),
+    fetchCurrentUser: (userId) => dispatch(fetchUser(userId, true)),
     fetchProjects: (userId) => dispatch(fetchProjects(userId))
   };
 }
@@ -35,7 +34,8 @@ function mapDispatchToProps (dispatch) {
 class MainScene extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-    setUser: PropTypes.func.isRequired
+    fetchProjects: PropTypes.func.isRequired,
+    fetchCurrentUser: PropTypes.func.isRequired
   };
 
   static navigationOptions = {
@@ -57,23 +57,18 @@ class MainScene extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { loading: true, authenticated: false };
+    this.state = { loading: true, currentUser: null, isMounted: false };
     this.navigate = this.props.navigation.navigate;
-    this._mounted = false;
   }
 
-  componentWillReceiveProps () {
-    this.setState({ loading: true });
-
+  componentWillReceiveProps (nextProps) {
     isLoggedIn().then(authenticated => {
       if (authenticated) {
         parseToken().then(token => {
           if (token.sub !== this.props.current_user) {
-            this.props.setUser(token.sub);
-            this.props.fetchUser(this.props.current_user);
-          }
-          if (this._mounted) {
-            this.setState({ loading: false, authenticated });
+            this.props.fetchCurrentUser(token.sub).then(() =>{
+              this.setState({ loading: false });
+            });
           }
         });
       } else {
@@ -83,14 +78,11 @@ class MainScene extends Component {
   }
 
   componentDidMount () {
-    this._mounted = true;
+    this.setState({ isMounted: true });
+
     this.props.navigation.setParams({
       newProject: this.newProject.bind(this)
     });
-  }
-
-  componentWillUnmount () {
-    this._mounted = false;
   }
 
   openProject (project) {
@@ -103,8 +95,7 @@ class MainScene extends Component {
   }
 
   render () {
-    if (!this.state.loading) {
-      if (this.state.authenticated && this.props.current_user) {
+      if (this.props.current_user) {
         return (
             <ProjectListContainer
               onProjectTap={this.openProject.bind(this)}
@@ -114,14 +105,12 @@ class MainScene extends Component {
       }
       /**
        * This could be expanded to include a message about logging in.
-       * Show a message here when authenticated = false, then inside that message,
-       * provide a button or link to open <Auth />
        */
+      if (!this.state.loading) {
+        return <SignOn />
+      }
 
-      return <SignOn />;
-    }
-
-    return <View />
+      return null;
   }
 }
 
