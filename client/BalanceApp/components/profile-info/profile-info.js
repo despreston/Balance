@@ -9,7 +9,7 @@ import {
 // styles
 import Styles from './profile-info-styles';
 
-function ProfileInfo ({ user }) {
+function ProfileInfo ({ user, hideProjects }) {
 
   function handlePlural (singular, count) {
     return `${count} ${singular}${(count > 1 || count === 0)  ? 's' : ''}`;
@@ -28,9 +28,14 @@ function ProfileInfo ({ user }) {
         </View>
       </View>
       <View style={Styles.row}>
-        <Text style={Styles.stats}>
-          { handlePlural('Project', user.project_count) }
+        <Text style={[Styles.stats, { fontWeight: 'bold' }]}>
+          Latest
         </Text>
+        {
+          !hideProjects && <Text style={Styles.stats}>
+            { handlePlural('Project', user.project_count) }
+          </Text>
+        }
         <Text style={Styles.stats}>
           { handlePlural('Friend', user.friends.length) }
         </Text>

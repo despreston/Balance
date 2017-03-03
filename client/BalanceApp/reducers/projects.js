@@ -1,7 +1,7 @@
 export default {
 
   /**
-   * Set state property `projects`
+   * replace all `projects`
    * Project includes latest future and past note,
    * add those notes to the store
    */

@@ -6,9 +6,8 @@ import { saveToken } from './utils/auth';
 /*
  * action types
  */
-export const RECEIVE_USER = 'RECEIVE_USER';
 export const LOGGED_IN_USER = 'LOGGED_IN_USER';
-export const RESET_USER = 'RESET_USER';
+export const RESET_CURRENT_USER = 'RESET_CURRENT_USER';
 
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
@@ -17,19 +16,12 @@ export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
 
-/*
- * action creators
- */
-export function receiveUser (user) {
-	return { type: RECEIVE_USER, user };
-};
-
 /**
  * @param {object} user
  * @return {action}
  */
-export function setLoggedInUser (user) {
-  return { type: LOGGED_IN_USER, user };
+export function setLoggedInUser (loggedInUser) {
+  return { type: LOGGED_IN_USER, loggedInUser };
 };
 
 /**
@@ -40,8 +32,7 @@ export function setLoggedInUser (user) {
 export function receiveProjects (json) {
   return {
     type: RECEIVE_PROJECTS,
-    projects: arrayToObj(json, '_id'),
-    receivedAt: Date.now()
+    projects: arrayToObj(json, '_id')
   };
 };
 
@@ -53,8 +44,7 @@ export function receiveProjects (json) {
 export function receiveProject (project) {
   return {
     type: RECEIVE_PROJECT,
-    project,
-    receivedAt: Date.now()
+    project
   };
 };
 
@@ -83,8 +73,7 @@ export function invalidate (collection) {
 export function receiveNotes (notes) {
   return {
     type: RECEIVE_NOTES,
-    notes: arrayToObj(notes, '_id'),
-    receivedAt: Date.now()
+    notes: arrayToObj(notes, '_id')
   };
 };
 
@@ -96,8 +85,7 @@ export function receiveNotes (notes) {
 export function receiveNote (note) {
   return {
     type: RECEIVE_NOTE,
-    note,
-    receivedAt: Date.now()
+    note
   };
 };
 
@@ -169,14 +157,11 @@ export function requestNotesForProject (project, noteType) {
 };
 
 /**
- * Fetch single user
+ * Fetch user info for logged in user
  * @param {string} userId of user
- * @param {boolean} isLoggedIn true if the user to load is the logged in user
  */
-export function fetchUser (user, isLoggedIn) {
-  const action = isLoggedIn ? setLoggedInUser : receiveUser;
-
-  return apiDispatch(`users/${user}`, action);
+export function fetchUser (user, loggedIn) {
+  return apiDispatch(`users/${user}`, setLoggedInUser);
 };
 
 /**
@@ -215,8 +200,19 @@ export function login () {
   }
 };
 
+/**
+ * resets the current_user
+ */
 export function resetCurrentUser () {
   return {
-    type: RESET_USER
+    type: RESET_CURRENT_USER
   };
 };
+
+/**
+ * fetch friends for userId
+ * @param {string} userId
+ */
+export function fetchFriendsForUser (userId) {
+  return apiDispatch(`users/${userId}/friends`, receiveUsers, )
+}

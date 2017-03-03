@@ -20,13 +20,13 @@ import { fetchProjects, fetchUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
-    current_user: state.current_user
+    loggedInUser: state.loggedInUser
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchCurrentUser: (userId) => dispatch(fetchUser(userId, true)),
+    fetchCurrentUser: (userId) => dispatch(fetchUser(userId)),
     fetchProjects: (userId) => dispatch(fetchProjects(userId))
   };
 }
@@ -35,7 +35,8 @@ class MainScene extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     fetchProjects: PropTypes.func.isRequired,
-    fetchCurrentUser: PropTypes.func.isRequired
+    fetchCurrentUser: PropTypes.func.isRequired,
+    loggedInUser: PropTypes.object
   };
 
   static navigationOptions = {
@@ -57,15 +58,17 @@ class MainScene extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { loading: true, currentUser: null, isMounted: false };
+    this.state = { loading: true, isMounted: false };
     this.navigate = this.props.navigation.navigate;
   }
 
   componentWillReceiveProps (nextProps) {
+    const { loggedInUser } = nextProps;
+
     isLoggedIn().then(authenticated => {
       if (authenticated) {
         parseToken().then(token => {
-          if (token.sub !== this.props.current_user) {
+          if (!loggedInUser || token.sub !== loggedInUser.userId) {
             this.props.fetchCurrentUser(token.sub).then(() =>{
               this.setState({ loading: false });
             });
@@ -95,11 +98,13 @@ class MainScene extends Component {
   }
 
   render () {
-      if (this.props.current_user) {
+    const { loggedInUser } = this.props;
+
+      if (loggedInUser) {
         return (
             <ProjectListContainer
               onProjectTap={this.openProject.bind(this)}
-              user={this.props.current_user}
+              user={loggedInUser.userId}
             />
         );
       }

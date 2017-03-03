@@ -6,20 +6,35 @@ import { connect } from 'react-redux';
 // components
 import ProfileInfo from '../../profile-info/profile-info';
 import Logout from '../../signon/logout';
+import NavBtn from '../../navigation/nav-btn';
 
 // styles
 import Styles from './profile-styles';
 
 function mapStateToProps (state) {
   return {
-    user: state.users[state.current_user]
+    user: state.loggedInUser
   };
 }
 
 class Profile extends Component {
 
   static propTypes = {
-    user: PropTypes.object
+    user: PropTypes.object.isRequired
+  };
+
+  static navigationOptions = {
+    header: ({ state, navigate, dispatch }, defaultHeader) => ({
+      
+      ...defaultHeader,
+      
+      right: (
+        <NavBtn
+          onPress={() => null}
+          title="Edit"
+        />
+      )
+    })
   };
   
   render () {
@@ -28,7 +43,7 @@ class Profile extends Component {
     return (
       <View style={Styles.profile}>
         <View style={Styles.profileInfo}>
-          <ProfileInfo user={this.props.user} />
+          <ProfileInfo user={this.props.user} hideProjects={true} />
         </View>
         <Logout />
       </View>
