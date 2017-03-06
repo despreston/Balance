@@ -45,6 +45,8 @@ class UserProfile extends Component {
   constructor (props) {
     super(props);
 
+    this.state = { context: 'latest' };
+
     this.loadLatestNotes();
   }
 
@@ -54,16 +56,30 @@ class UserProfile extends Component {
     ]);
   }
 
-  render () {
-    return (
-      <View style={Styles.profile}>
-        <View style={Styles.profileInfo}>
-          <ProfileInfo user={this.props.user} hideProjects={true} />
-        </View>
-        <View style={Styles.latestNotes}>
+  renderBody () {
+    switch (this.state.context) {
+      case 'latest':
+        return (
           <NoteList
             notes={this.props.latestNotes}
             showContext={true} />
+        );
+      case 'friends':
+        return null;
+    }
+  }
+
+  render () {
+    return (
+      <View style={ Styles.profile }>
+        <View style={ Styles.profileInfo }>
+          <ProfileInfo
+            user={ this.props.user }
+            hideProjects={true} 
+            switchContext={ (context) => this.setState({ context }) }/>
+        </View>
+        <View>
+          { this.renderBody() }
         </View>
         <Logout />
       </View>

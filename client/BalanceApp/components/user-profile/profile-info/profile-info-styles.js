@@ -37,13 +37,17 @@ export default StyleSheet.create  ({
     textAlign: 'center'
   },
 
-  stats: {
+  contextOption: {
     marginTop: 25,
     flex: 1,
-    textAlign: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
+  },
+
+  contextOptionText: {
     color: '#3D3F3E',
-    fontSize: 14
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 
 });

@@ -3,13 +3,14 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 
 // styles
 import Styles from './profile-info-styles';
 
-function ProfileInfo ({ user, hideProjects }) {
+function ProfileInfo ({ user, hideProjects = false, switchContext }) {
 
   function handlePlural (singular, count) {
     return `${count} ${singular}${(count > 1 || count === 0)  ? 's' : ''}`;
@@ -28,17 +29,28 @@ function ProfileInfo ({ user, hideProjects }) {
         </View>
       </View>
       <View style={Styles.row}>
-        <Text style={[Styles.stats, { fontWeight: 'bold' }]}>
-          Latest
-        </Text>
+        <TouchableOpacity
+          style={Styles.contextOption}
+          onPress={() => switchContext('latest')}>
+          <Text style={Styles.contextOptionText}>Latest</Text>
+        </TouchableOpacity>
         {
-          !hideProjects && <Text style={Styles.stats}>
-            { handlePlural('Project', user.project_count) }
-          </Text>
+          !hideProjects && 
+          <TouchableOpacity
+            style={Styles.contextOption}
+            onPress={() => switchContext('projects')}>
+            <Text style={Styles.contextOptionText}>
+              { handlePlural('Project', user.project_count) }
+            </Text>
+          </TouchableOpacity>
         }
-        <Text style={Styles.stats}>
-          { handlePlural('Friend', user.friends.length) }
-        </Text>
+        <TouchableOpacity
+          style={Styles.contextOption}
+          onPress={() => switchContext('friends')}>
+          <Text style={Styles.contextOptionText}>
+            { handlePlural('Friend', user.friends.length) }
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -46,7 +58,9 @@ function ProfileInfo ({ user, hideProjects }) {
 }
 
 ProfileInfo.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  hideProjects: PropTypes.bool,
+  switchContext: PropTypes.func.isRequired
 };
 
 export default ProfileInfo;
