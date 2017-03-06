@@ -25,7 +25,7 @@ import NavBtn from '../../navigation/nav-btn';
 import {
   saveNote,
   saveProject,
-  requestNotesForProject,
+  requestNotes,
   invalidate
 } from '../../../actions';
 
@@ -37,11 +37,11 @@ function mapStateToProps (state, { navigation }) {
 }
 
 function mapDispatchToProps (dispatch) {
+
   return {
     updateNote: note => dispatch(saveNote(note)),
     updateProject: project => dispatch(saveProject(project)),
-    requestNotesForProject: (project, noteType) => {
-      dispatch(requestNotesForProject(project, noteType)) },
+    requestNotes: params => dispatch(requestNotes(params)),
     invalidateProjects: () => dispatch(invalidate('projects'))
   };
 }
@@ -54,7 +54,7 @@ class ProjectDetail extends Component {
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
     }),
-    requestNotesForProject: PropTypes.func.isRequired,
+    requestNotes: PropTypes.func.isRequired,
     invalidateProjects: PropTypes.func.isRequired
   };
 
@@ -88,7 +88,10 @@ class ProjectDetail extends Component {
   componentDidMount () {
     // Set focus to project title when its a new project
     if (this.props.project._id) {
-      this.props.requestNotesForProject(this.props.project._id, 'Past');
+      this.props.requestNotes([
+        { project: this.props.project._id },
+        { type: 'Past' }
+      ]);
     }
 
     // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900

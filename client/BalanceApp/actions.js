@@ -1,5 +1,6 @@
 import { apiDispatch, api } from './utils/api';
 import { arrayToObj } from './utils/helpers';
+import formatQueryParams from './utils/query-params';
 import Auth0Lock from 'react-native-lock';
 import { saveToken } from './utils/auth';
 
@@ -130,19 +131,19 @@ export function fetchProjectsForUser (userId) {
 };
 
 /**
- * Fetches all notes for single project
- * @param {string} project Project ID
+ * Fetch notes
+ * @param {array} params key/val object pairs. key = param, value = param value
  * @return {Promise}
  */
-export function requestNotesForProject (project, noteType) {
-  return apiDispatch(`notes?project=${project}&type=${noteType}`, receiveNotes);
+export function requestNotes (params) {
+  return apiDispatch(`notes${formatQueryParams(params)}`, receiveNotes);
 };
 
 /**
  * Fetch user 
  * @param {string} userId of user
  */
-export function fetchUser (user, loggedIn) {
+export function requestUser (user, loggedIn) {
   return apiDispatch(`users/${user}`, setLoggedInUser);
 };
 

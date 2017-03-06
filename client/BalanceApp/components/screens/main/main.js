@@ -16,7 +16,7 @@ import { styles } from '../../navigation/navigation-styles';
 import { isLoggedIn, parseToken } from '../../../utils/auth';
 
 // actions
-import { fetchUser } from '../../../actions';
+import { requestUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -26,7 +26,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchCurrentUser: (userId) => dispatch(fetchUser(userId))
+    fetchCurrentUser: (userId) => dispatch(requestUser(userId))
   };
 }
 
