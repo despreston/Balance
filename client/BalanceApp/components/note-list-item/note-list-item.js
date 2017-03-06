@@ -14,7 +14,7 @@ import EditButton from '../edit-button/edit-button';
 function NoteListItem ({ note, onEdit, showContext }) {
 
   function renderHeader () {
-    if (!showContext) { return; }
+    if (!showContext) { return formatDate(note.createdAt); }
 
     let typeText = `${note.type === 'Past' ? 'Added to-do ' : 'Did work '}`;
 
@@ -23,7 +23,18 @@ function NoteListItem ({ note, onEdit, showContext }) {
         <Text style={Styles.darker}>{ typeText }</Text>
         <Text style={Styles.dark}>for </Text>
         <Text style={Styles.darker}>{ note.project.name } </Text>
+        { formatDate(note.createdAt) }
       </Text>
+    );
+  }
+
+  function renderEditButton () {
+    if (!onEdit) { return null; }
+
+    return (
+      <EditButton
+        onEdit={onEdit.bind(this, note)}
+        style={Styles.editButton} />
     );
   }
 
@@ -32,14 +43,8 @@ function NoteListItem ({ note, onEdit, showContext }) {
       <View style={Styles.top}>
         <Text style={Styles.createdAt}>
           { renderHeader() }
-          { formatDate(note.createdAt) }
         </Text>
-        {
-          onEdit && 
-          <EditButton
-            onEdit={onEdit.bind(this, note)}
-            style={Styles.editButton} />
-        }
+        { renderEditButton() }
       </View>
       <Text style={Styles.content}>{note.content}</Text>
     </View>
