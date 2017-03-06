@@ -3,12 +3,11 @@ import { StyleSheet } from 'react-native';
 export const Styles = StyleSheet.create ({
 
   noteListItem: {
-    marginBottom: 20
-  },
-
-  emptyText: {
-    alignSelf: 'center',
-    color: '#3D3F3E'
+    marginBottom: 10,
+    paddingBottom: 20,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8E8EA'
   }
   
 });

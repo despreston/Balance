@@ -18,7 +18,7 @@ function FutureNote ({ note }) {
     }
     return (
       <Text style={[Style.content, Style.center]}>
-        Tap 'I did work' to add a new entry.
+        Tap 'To do next' to add a new entry.
       </Text> 
     );
   }

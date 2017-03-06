@@ -1,28 +1,20 @@
 import { apiDispatch, api } from './utils/api';
 import { arrayToObj } from './utils/helpers';
+import formatQueryParams from './utils/query-params';
 import Auth0Lock from 'react-native-lock';
 import { saveToken } from './utils/auth';
+import convertDates from './utils/convert-dates';
 
 /*
  * action types
  */
-export const RECEIVE_USER = 'RECEIVE_USER';
 export const LOGGED_IN_USER = 'LOGGED_IN_USER';
-export const RESET_USER = 'RESET_USER';
+export const RESET_CURRENT_USER = 'RESET_CURRENT_USER';
 
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
-export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
 export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
-export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
-
-/*
- * action creators
- */
-export function receiveUser (user) {
-	return { type: RECEIVE_USER, user };
-};
 
 /**
  * @param {object} user
@@ -38,23 +30,13 @@ export function setLoggedInUser (user) {
  * @return {action}
  */
 export function receiveProjects (json) {
+  if (!Array.isArray(json)) {
+    json = [json];
+  }
+
   return {
     type: RECEIVE_PROJECTS,
-    projects: arrayToObj(json, '_id'),
-    receivedAt: Date.now()
-  };
-};
-
-/**
- * Create action for receiving a single project
- * @param {object} project
- * @return {action}
- */
-export function receiveProject (project) {
-  return {
-    type: RECEIVE_PROJECT,
-    project,
-    receivedAt: Date.now()
+    projects: arrayToObj(json, '_id')
   };
 };
 
@@ -77,27 +59,17 @@ export function invalidate (collection) {
 
 /**
  * Create action for receiving new list of notes
- * @param {object} notes
+ * @param {object} notes (single) OR {array} notes (multiple)
  * @param {action}
  */
 export function receiveNotes (notes) {
+  if (!Array.isArray(notes)) {
+    notes = [notes];
+  }
+
   return {
     type: RECEIVE_NOTES,
-    notes: arrayToObj(notes, '_id'),
-    receivedAt: Date.now()
-  };
-};
-
-/**
- * Create action for receiving a single note
- * @param {object} note
- * @return {action}
- */
-export function receiveNote (note) {
-  return {
-    type: RECEIVE_NOTE,
-    note,
-    receivedAt: Date.now()
+    notes: arrayToObj(notes, '_id')
   };
 };
 
@@ -121,7 +93,7 @@ export function saveProject (project) {
   delete project.Future;
   delete project.Past;
 
-  return apiDispatch(url, receiveProject, { method, body: project });
+  return apiDispatch(url, receiveProjects, { method, body: project });
 };
 
 /**
@@ -139,7 +111,7 @@ export function saveNote (note) {
     method = 'PUT';
     url += `/${note._id}`;
   }
-  return apiDispatch(url, receiveNote, { method, body: note });
+  return apiDispatch(url, receiveNotes, { method, body: note });
 };
 
 /**
@@ -148,35 +120,32 @@ export function saveNote (note) {
  * @return {Promise}
  */
 export function fetchProject (project) {
-  return apiDispatch(`projects/${project._id}`, receiveProject);
+  return apiDispatch(`projects/${project._id}`, receiveProjects);
 };
 
 /**
  * Fetches projects
  * @return {Promise}
  */
-export function fetchProjects (userId) {
+export function fetchProjectsForUser (userId) {
   return apiDispatch(`projects?user=${userId}`, receiveProjects);
 };
 
 /**
- * Fetches all notes for single project
- * @param {string} project Project ID
+ * Fetch notes
+ * @param {array} params key/val object pairs. key = param, value = param value
  * @return {Promise}
  */
-export function requestNotesForProject (project, noteType) {
-  return apiDispatch(`notes?project=${project}&type=${noteType}`, receiveNotes);
+export function requestNotes (params) {
+  return apiDispatch(`notes${formatQueryParams(params)}`, receiveNotes);
 };
 
 /**
- * Fetch single user
+ * Fetch user 
  * @param {string} userId of user
- * @param {boolean} isLoggedIn true if the user to load is the logged in user
  */
-export function fetchUser (user, isLoggedIn) {
-  const action = isLoggedIn ? setLoggedInUser : receiveUser;
-
-  return apiDispatch(`users/${user}`, action);
+export function requestUser (user, loggedIn) {
+  return apiDispatch(`users/${user}`, setLoggedInUser);
 };
 
 /**
@@ -215,8 +184,19 @@ export function login () {
   }
 };
 
+/**
+ * resets the current_user
+ */
 export function resetCurrentUser () {
   return {
-    type: RESET_USER
+    type: RESET_CURRENT_USER
   };
 };
+
+/**
+ * fetch friends for userId
+ * @param {string} userId
+ */
+export function fetchFriendsForUser (userId) {
+  return apiDispatch(`users/${userId}/friends`, receiveUsers);
+}
