@@ -13,7 +13,7 @@ import Styles from './profile-styles';
 
 function mapStateToProps (state) {
   return {
-    user: state.loggedInUser
+    user: state.users[state.loggedInUser]
   };
 }
 

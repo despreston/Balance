@@ -1,7 +1,7 @@
 export default {
 
   /**
-   * Set state property `notes`
+   * add to `notes`
    */
   RECEIVE_NOTES (state, { notes }) {
     return Object.assign({}, state, {
