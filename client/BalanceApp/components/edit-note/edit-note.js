@@ -13,11 +13,14 @@ import {
 import { Styles } from './edit-note-style';
 
 export default class EditNote extends Component {
+
+  // project is a string when its an empty project.
+  // after saving, the project becomes an object.
   static propTypes = {
     note: PropTypes.shape({
       content: PropTypes.string,
       type: PropTypes.string,
-      project: PropTypes.object
+      project: PropTypes.oneOfType([ PropTypes.object, PropTypes.string ])
     }).isRequired,
     onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
