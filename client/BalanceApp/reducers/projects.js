@@ -6,7 +6,7 @@ export default {
    * add those notes to the store
    */
   RECEIVE_PROJECTS (state, { projects }) {
-    let notes = {...state.notes};
+    let notes = {};
     
     Object.keys(projects).forEach(id => {
       let project = projects[id];
@@ -21,22 +21,10 @@ export default {
     });
 
     return Object.assign({}, state, {
-      projects,
-      notes,
+      projects: { ...state.projects, ...projects },
+      notes: { ...state.notes, ...notes },
       projects_invalidated: false
     });
-  },
-
-  /**
-   * Replace specific project
-   */
-  RECEIVE_PROJECT (state, { project }) {
-    const projects = {
-      ...state.projects,
-      [project._id]: project
-    };
-
-    return Object.assign({}, state, { projects });
   },
 
   /**

@@ -98,22 +98,22 @@ class MainScene extends Component {
   render () {
     const { loggedInUser } = this.props;
 
-      if (loggedInUser) {
-        return (
-            <ProjectListContainer
-              onProjectTap={this.openProject.bind(this)}
-              user={loggedInUser.userId}
-            />
-        );
-      }
-      /**
-       * This could be expanded to include a message about logging in.
-       */
-      if (!this.state.loading) {
-        return <SignOn />
-      }
+    if (loggedInUser) {
+      return (
+          <ProjectListContainer
+            onProjectTap={this.openProject.bind(this)}
+            user={loggedInUser.userId}
+          />
+      );
+    }
+    /**
+     * This could be expanded to include a message about logging in.
+     */
+    if (!this.state.loading) {
+      return <SignOn />
+    }
 
-      return null;
+    return null;
   }
 }
 

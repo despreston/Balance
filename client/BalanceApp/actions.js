@@ -10,10 +10,8 @@ export const LOGGED_IN_USER = 'LOGGED_IN_USER';
 export const RESET_CURRENT_USER = 'RESET_CURRENT_USER';
 
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
-export const RECEIVE_PROJECT = 'RECEIVE_PROJECT';
 export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
-export const RECEIVE_NOTE = 'RECEIVE_NOTE';
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
 
 /**
@@ -93,7 +91,7 @@ export function saveProject (project) {
   delete project.Future;
   delete project.Past;
 
-  return apiDispatch(url, receiveProject, { method, body: project });
+  return apiDispatch(url, receiveProjects, { method, body: project });
 };
 
 /**
