@@ -16,7 +16,7 @@ function NoteListItem ({ note, onEdit, showContext }) {
   function renderHeader () {
     if (!showContext) { return formatDate(note.createdAt); }
 
-    let typeText = `${note.type === 'Past' ? 'Added to-do ' : 'Did work '}`;
+    let typeText = `${note.type === 'Past' ? 'Added todo ' : 'Did work '}`;
 
     return (
       <Text>

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
@@ -65,7 +65,7 @@ class UserProfile extends Component {
             showContext={true} />
         );
       case 'friends':
-        return null;
+        return <Text>friends list here</Text>;
     }
   }
 
@@ -75,7 +75,7 @@ class UserProfile extends Component {
         <View style={ Styles.profileInfo }>
           <ProfileInfo
             user={ this.props.user }
-            hideProjects={true} 
+            hideProjects={true}
             switchContext={ (context) => this.setState({ context }) }/>
         </View>
         <View>

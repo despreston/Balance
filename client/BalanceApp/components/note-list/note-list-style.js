@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const Styles = StyleSheet.create ({
 
   noteListItem: {
-    marginBottom: 20,
+    marginBottom: 10,
     paddingBottom: 20,
     paddingHorizontal: 5,
     borderBottomWidth: 1,
