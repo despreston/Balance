@@ -5,13 +5,28 @@ import { connect } from 'react-redux';
 // components
 import Logout from '../signon/logout';
 import ProfileInfo from './profile-info/profile-info';
+import NoteList from '../note-list/note-list';
+
+// actions
+import { requestNotes } from '../../actions';
 
 // styles
 import Styles from './profile-styles';
 
 function mapStateToProps (state, ownProps) {
+  const latestNotes = Object.keys(state.notes).filter(note => {
+    return note.user === ownProps.userId;
+  });
+
   return {
-    user: state.users[ownProps.userId]
+    user: state.users[ownProps.userId],
+    latestNotes
+  };
+}
+
+function mapDispatchToState (dispatch) {
+  return {
+    requestLatestNotes: params => dispatch(requestNotes(params))
   };
 }
 
@@ -20,10 +35,20 @@ class UserProfile extends Component {
   static propTypes = {
     userId: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
+    latestNotes: PropTypes.array.isRequired,
+    requestLatestNotes: PropTypes.func.isRequired
   };
 
   constructor (props) {
     super(props);
+
+    this.loadLatestNotes();
+  }
+
+  loadLatestNotes () {
+    this.props.requestLatestNotes([
+      { user: this.props.userId }
+    ]);
   }
 
   render () {
@@ -32,6 +57,7 @@ class UserProfile extends Component {
         <View style={Styles.profileInfo}>
           <ProfileInfo user={this.props.user} hideProjects={true} />
         </View>
+        <NoteList notes={this.props.latestNotes} />
         <Logout />
       </View>
     );
@@ -39,5 +65,5 @@ class UserProfile extends Component {
 
 }
 
-export default connect(mapStateToProps)(UserProfile);
+export default connect(mapStateToProps, mapDispatchToState)(UserProfile);
 

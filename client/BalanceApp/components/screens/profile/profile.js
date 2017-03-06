@@ -15,10 +15,6 @@ function mapStateToProps (state) {
 
 class Profile extends Component {
 
-  // static propTypes = {
-  //   user: PropTypes.object.isRequired
-  // };
-
   static navigationOptions = {
     header: ({ state, navigate, dispatch }, defaultHeader) => ({
       

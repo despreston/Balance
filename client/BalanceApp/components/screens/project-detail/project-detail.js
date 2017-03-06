@@ -30,14 +30,20 @@ import {
 } from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
+
+  // notes for selected project
+  const notes = Object.keys(state.notes)
+    .map(id => state.notes[id])
+    .filter(note => note.project === navigation.state.params.project);
+
   return {
     project: state.projects[navigation.state.params.project],
-    notes: state.notes
+    notes
   };
+
 }
 
 function mapDispatchToProps (dispatch) {
-
   return {
     updateNote: note => dispatch(saveNote(note)),
     updateProject: project => dispatch(saveProject(project)),
@@ -54,6 +60,7 @@ class ProjectDetail extends Component {
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
     }),
+    notes: PropTypes.array,
     requestNotes: PropTypes.func.isRequired,
     invalidateProjects: PropTypes.func.isRequired
   };
@@ -126,17 +133,10 @@ class ProjectDetail extends Component {
   }
 
   notesForType (type) {
-    const { notes } = this.props;
-    let notesWithType = [];
-
-    Object.keys(notes).forEach(id => {
-      if (notes[id].type === type) {
-        notesWithType.push(notes[id]);
-      }
-    });
-
-    return notesWithType;
+    return this.props.notes.filter(note => note.type === type);
   }
+
+
 
   // Handle any form validation before saving
   saveProject () {
@@ -153,6 +153,17 @@ class ProjectDetail extends Component {
       this.props.invalidateProjects();
       this.props.navigation.goBack();
     });
+  }
+
+  renderPastNotes (notes) {
+    if (notes.length === 0) {
+      return (
+        <Text style={Styles.emptyText}>
+          Tap 'I did work' to add a new entry.
+        </Text>
+      );
+    }
+    return <NoteList notes={notes} onEdit={this.toggleEditNoteModal}/>;
   }
 
   render () {
@@ -196,7 +207,7 @@ class ProjectDetail extends Component {
             <FutureNote note={futureNote}/>
             <View style={Styles.pastNotesView}>
               <Text style={Styles.finishedTitleText}>Completed</Text>
-              <NoteList notes={pastNotes} onEdit={this.toggleEditNoteModal}/>
+              { this.renderPastNotes(pastNotes) }
             </View>
           </View>
         </TouchableWithoutFeedback>

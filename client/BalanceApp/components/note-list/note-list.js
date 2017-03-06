@@ -9,13 +9,6 @@ import { Styles } from './note-list-style';
 function NoteList ({ notes, onEdit }) {
 
   function renderNotes () {
-    if (notes.length === 0) {
-      return (
-        <Text style={Styles.emptyText}>
-          Tap 'To do next' to add a new entry.
-        </Text>
-      );
-    }
 
     return notes.map(note => {
       return (
@@ -24,6 +17,7 @@ function NoteList ({ notes, onEdit }) {
         </View>
       );
     });
+    
   }
    
   return (
@@ -36,7 +30,7 @@ function NoteList ({ notes, onEdit }) {
 
 NoteList.propTypes = {
   notes: PropTypes.array.isRequired,
-  onEdit: PropTypes.func.isRequired
+  onEdit: PropTypes.func
 };
 
 export default NoteList;

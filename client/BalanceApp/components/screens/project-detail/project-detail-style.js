@@ -21,6 +21,11 @@ export const Styles = StyleSheet.create ({
     flex: 1
   },
 
+  emptyText: {
+    alignSelf: 'center',
+    color: '#3D3F3E'
+  },
+
   updateButtonContainer: {
     flexDirection: 'row',
     marginBottom: 10

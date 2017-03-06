@@ -5,7 +5,7 @@ export default {
    */
   RECEIVE_NOTES (state, { notes }) {
     return Object.assign({}, state, {
-      notes: { ...state.notes, notes }
+      notes: { ...state.notes, ...notes }
     });
   }
 
