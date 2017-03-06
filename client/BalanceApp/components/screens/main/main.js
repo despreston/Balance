@@ -20,7 +20,7 @@ import { fetchProjects, fetchUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
-    loggedInUser: state.loggedInUser
+    loggedInUser: state.users[state.loggedInUser]
   }
 }
 

@@ -157,7 +157,7 @@ export function requestNotesForProject (project, noteType) {
 };
 
 /**
- * Fetch user info for logged in user
+ * Fetch user 
  * @param {string} userId of user
  */
 export function fetchUser (user, loggedIn) {
@@ -214,5 +214,5 @@ export function resetCurrentUser () {
  * @param {string} userId
  */
 export function fetchFriendsForUser (userId) {
-  return apiDispatch(`users/${userId}/friends`, receiveUsers, )
+  return apiDispatch(`users/${userId}/friends`, receiveUsers);
 }

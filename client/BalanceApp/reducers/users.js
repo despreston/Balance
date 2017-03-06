@@ -1,22 +1,21 @@
 export default {
 
   /**
-   * Set state property `current_user`
-   */
-  // RECEIVE_CURRENT_USER (state, { loggedInUser }) {
-  //   return Object.assign({}, state, { loggedInUser });
-  // },
-
-  /**
-   * Set `loggedInUser`
+   * Set `loggedInUser` and add to `users`
    */
   LOGGED_IN_USER (state, { loggedInUser }) {
-    return Object.assign({}, state, { loggedInUser });
+    const users = {
+      ...state.users,
+      [loggedInUser.userId]: loggedInUser
+    };
+
+    const loggedInUser = loggedInUser.userId;
+
+    return Object.assign({}, state, { loggedInUser, users });
   },
 
   RESET_CURRENT_USER (state) {
     return Object.assign({}, state, { loggedInUser: null });
   }
-
 
 };
