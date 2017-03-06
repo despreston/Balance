@@ -3,13 +3,13 @@ export default {
   /**
    * Set `loggedInUser` and add to `users`
    */
-  LOGGED_IN_USER (state, { loggedInUser }) {
+  LOGGED_IN_USER (state, { user }) {
     const users = {
       ...state.users,
-      [loggedInUser.userId]: loggedInUser
+      [user.userId]: user
     };
 
-    const loggedInUser = loggedInUser.userId;
+    const loggedInUser = user.userId;
 
     return Object.assign({}, state, { loggedInUser, users });
   },

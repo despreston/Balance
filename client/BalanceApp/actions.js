@@ -20,8 +20,8 @@ export const RECEIVE_NOTES = 'RECEIVE_NOTES';
  * @param {object} user
  * @return {action}
  */
-export function setLoggedInUser (loggedInUser) {
-  return { type: LOGGED_IN_USER, loggedInUser };
+export function setLoggedInUser (user) {
+  return { type: LOGGED_IN_USER, user };
 };
 
 /**
@@ -30,21 +30,13 @@ export function setLoggedInUser (loggedInUser) {
  * @return {action}
  */
 export function receiveProjects (json) {
+  if (!Array.isArray(json)) {
+    json = [json];
+  }
+
   return {
     type: RECEIVE_PROJECTS,
     projects: arrayToObj(json, '_id')
-  };
-};
-
-/**
- * Create action for receiving a single project
- * @param {object} project
- * @return {action}
- */
-export function receiveProject (project) {
-  return {
-    type: RECEIVE_PROJECT,
-    project
   };
 };
 
@@ -67,25 +59,17 @@ export function invalidate (collection) {
 
 /**
  * Create action for receiving new list of notes
- * @param {object} notes
+ * @param {object} notes (single) OR {array} notes (multiple)
  * @param {action}
  */
 export function receiveNotes (notes) {
+  if (!Array.isArray(notes)) {
+    notes = [notes];
+  }
+
   return {
     type: RECEIVE_NOTES,
     notes: arrayToObj(notes, '_id')
-  };
-};
-
-/**
- * Create action for receiving a single note
- * @param {object} note
- * @return {action}
- */
-export function receiveNote (note) {
-  return {
-    type: RECEIVE_NOTE,
-    note
   };
 };
 
@@ -127,7 +111,7 @@ export function saveNote (note) {
     method = 'PUT';
     url += `/${note._id}`;
   }
-  return apiDispatch(url, receiveNote, { method, body: note });
+  return apiDispatch(url, receiveNotes, { method, body: note });
 };
 
 /**
@@ -136,14 +120,14 @@ export function saveNote (note) {
  * @return {Promise}
  */
 export function fetchProject (project) {
-  return apiDispatch(`projects/${project._id}`, receiveProject);
+  return apiDispatch(`projects/${project._id}`, receiveProjects);
 };
 
 /**
  * Fetches projects
  * @return {Promise}
  */
-export function fetchProjects (userId) {
+export function fetchProjectsForUser (userId) {
   return apiDispatch(`projects?user=${userId}`, receiveProjects);
 };
 

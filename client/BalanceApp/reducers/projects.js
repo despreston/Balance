@@ -6,7 +6,7 @@ export default {
    * add those notes to the store
    */
   RECEIVE_PROJECTS (state, { projects }) {
-    let notes = {};
+    let notes = {...state.notes};
     
     Object.keys(projects).forEach(id => {
       let project = projects[id];

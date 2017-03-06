@@ -16,7 +16,7 @@ import { styles } from '../../navigation/navigation-styles';
 import { isLoggedIn, parseToken } from '../../../utils/auth';
 
 // actions
-import { fetchProjects, fetchUser } from '../../../actions';
+import { fetchUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -26,15 +26,13 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchCurrentUser: (userId) => dispatch(fetchUser(userId)),
-    fetchProjects: (userId) => dispatch(fetchProjects(userId))
+    fetchCurrentUser: (userId) => dispatch(fetchUser(userId))
   };
 }
 
 class MainScene extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-    fetchProjects: PropTypes.func.isRequired,
     fetchCurrentUser: PropTypes.func.isRequired,
     loggedInUser: PropTypes.object
   };
