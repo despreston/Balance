@@ -14,14 +14,17 @@ import { requestNotes } from '../../actions';
 import Styles from './profile-styles';
 
 function mapStateToProps (state, ownProps) {
-  const latestNotes = Object.keys(state.notes).filter(note => {
-    return note.user === ownProps.userId;
-  });
+  
+  // latest notes for user
+  const latestNotes = Object.keys(state.notes)
+    .map(id => state.notes[id])
+    .filter(note => note.user === ownProps.userId);
 
   return {
     user: state.users[ownProps.userId],
     latestNotes
   };
+
 }
 
 function mapDispatchToState (dispatch) {
@@ -57,7 +60,12 @@ class UserProfile extends Component {
         <View style={Styles.profileInfo}>
           <ProfileInfo user={this.props.user} hideProjects={true} />
         </View>
-        <NoteList notes={this.props.latestNotes} />
+        <View style={Styles.latestNotes}>
+          <NoteList
+            notes={this.props.latestNotes}
+            showType={true}
+            showProject={true} />
+        </View>
         <Logout />
       </View>
     );

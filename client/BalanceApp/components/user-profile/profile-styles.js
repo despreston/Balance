@@ -5,7 +5,15 @@ export default StyleSheet.create ({
   profile: {
     marginVertical: 50,
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'flex-start'
+  },
+
+  profileInfo: {
+    marginBottom: 25
+  },
+
+  latestNotes: {
+    padding: 5
   }
 
 });

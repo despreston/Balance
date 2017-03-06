@@ -17,7 +17,7 @@ export default class EditNote extends Component {
     note: PropTypes.shape({
       content: PropTypes.string,
       type: PropTypes.string,
-      project: PropTypes.string
+      project: PropTypes.object
     }).isRequired,
     onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,

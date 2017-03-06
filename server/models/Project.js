@@ -29,7 +29,7 @@ Project.statics.queryWithNotes = function (query) {
   function getLatestNotesForProjects (notes, projects) {
     notes.forEach(note => {
       const index = projects.findIndex(project => {
-        return note.project.equals(project._id);
+        return note.project._id.equals(project._id);
       });
 
       if (index > -1) {
@@ -49,7 +49,8 @@ Project.statics.queryWithNotes = function (query) {
       .sort('-createdAt')
       .lean()
       .then(notes => {
-        return getLatestNotesForProjects(notes, projects);
+        notes = Note.augmentWithProjectInfo(projects, notes);
+        return getLatestNotesForProjects(notes, projects)
       });
   });
 };

@@ -3,6 +3,7 @@ import { arrayToObj } from './utils/helpers';
 import formatQueryParams from './utils/query-params';
 import Auth0Lock from 'react-native-lock';
 import { saveToken } from './utils/auth';
+import convertDates from './utils/convert-dates';
 
 /*
  * action types

@@ -30,11 +30,10 @@ import {
 } from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
-
   // notes for selected project
   const notes = Object.keys(state.notes)
     .map(id => state.notes[id])
-    .filter(note => note.project === navigation.state.params.project);
+    .filter(note => note.project._id === navigation.state.params.project);
 
   return {
     project: state.projects[navigation.state.params.project],
@@ -135,8 +134,6 @@ class ProjectDetail extends Component {
   notesForType (type) {
     return this.props.notes.filter(note => note.type === type);
   }
-
-
 
   // Handle any form validation before saving
   saveProject () {
