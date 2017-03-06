@@ -1,12 +1,14 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 
 // components
 import NoteListItem from '../note-list-item/note-list-item';
 import { Styles } from './note-list-style';
 
-function NoteList ({ notes, onEdit = null, showProject = false, showType = false }) {
+function NoteList ({ notes, onEdit = null, showContext = false }) {
+
+  notes.sort((a,b) => b.createdAt - a.createdAt);
 
   function renderNotes () {
 
@@ -16,8 +18,7 @@ function NoteList ({ notes, onEdit = null, showProject = false, showType = false
           <NoteListItem
             note={note}
             onEdit={onEdit}
-            showProject={showProject}
-            showType={showType} />
+            showContext={showContext} />
         </View>
       );
     });
@@ -25,9 +26,9 @@ function NoteList ({ notes, onEdit = null, showProject = false, showType = false
   }
    
   return (
-    <View>
+    <ScrollView>
       { renderNotes() }
-    </View>
+    </ScrollView>
   );
 
 }
@@ -35,8 +36,7 @@ function NoteList ({ notes, onEdit = null, showProject = false, showType = false
 NoteList.propTypes = {
   notes: PropTypes.array.isRequired,
   onEdit: PropTypes.func,
-  showProject: PropTypes.bool,
-  showType: PropTypes.bool
+  showContext: PropTypes.bool
 };
 
 export default NoteList;

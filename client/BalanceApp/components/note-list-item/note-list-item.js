@@ -11,33 +11,28 @@ import { formatDate } from '../../utils/helpers';
 // components
 import EditButton from '../edit-button/edit-button';
 
-function NoteListItem ({ note, onEdit, showProject, showType }) {
+function NoteListItem ({ note, onEdit, showContext }) {
 
   function renderHeader () {
-    let header = ''; 
-    
-    if (showType) {
-      header += `${note.type === 'Past' ? 'Added to-do ' : 'Did work '}`;
+    if (!showContext) { return; }
 
-      if (showProject) {
-        header += `for ${showProject} at `;
-      } else {
-        header += 'at ';
-      }
-    } else if (showProject) {
-      header += `${showProject} at `;
-    }
+    let typeText = `${note.type === 'Past' ? 'Added to-do ' : 'Did work '}`;
 
-    header += formatDate(note.createdAt);
-
-    return header;
+    return (
+      <Text>
+        <Text style={Styles.darker}>{ typeText }</Text>
+        <Text style={Styles.dark}>for </Text>
+        <Text style={Styles.darker}>{ note.project.name } </Text>
+      </Text>
+    );
   }
-  
+
   return (
     <View style={Styles.container}>
       <View style={Styles.top}>
         <Text style={Styles.createdAt}>
           { renderHeader() }
+          { formatDate(note.createdAt) }
         </Text>
         {
           onEdit && 
@@ -57,8 +52,7 @@ NoteListItem.propTypes = {
     createdAt: PropTypes.instanceOf(Date).isRequired
   }).isRequired,
   onEdit: PropTypes.func,
-  showProject: PropTypes.bool,
-  showType: PropTypes.bool
+  showContext: PropTypes.bool
 };
 
 export default NoteListItem;

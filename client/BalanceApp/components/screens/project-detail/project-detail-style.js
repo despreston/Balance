@@ -52,15 +52,15 @@ export const Styles = StyleSheet.create ({
   },
 
   pastNotesView: {
-    marginTop: 15,
-    padding: 5
+    marginTop: 15
   },
 
   finishedTitleText: {
     color: '#3D3F3E',
     fontSize: 15,
     fontWeight: 'bold',
-    marginBottom: 15
+    marginBottom: 15,
+    padding: 5
   }
   
 });

@@ -14,7 +14,7 @@ module.exports = server => {
   server.get(
     'notes', (req, res) => {
       Note
-      .find(req.params).sort({'lastUpdated': -1}).lean()
+      .find(req.params).sort({'createdAt': -1}).lean()
       .then(notes => {
         /**
          * Get the project name for each note

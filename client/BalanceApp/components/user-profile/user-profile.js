@@ -63,8 +63,7 @@ class UserProfile extends Component {
         <View style={Styles.latestNotes}>
           <NoteList
             notes={this.props.latestNotes}
-            showType={true}
-            showProject={true} />
+            showContext={true} />
         </View>
         <Logout />
       </View>

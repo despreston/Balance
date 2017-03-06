@@ -38,7 +38,7 @@ export default StyleSheet.create  ({
   },
 
   stats: {
-    marginTop: 15,
+    marginTop: 25,
     flex: 1,
     textAlign: 'center',
     justifyContent: 'space-between',
