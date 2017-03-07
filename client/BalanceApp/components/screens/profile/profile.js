@@ -22,7 +22,7 @@ class Profile extends Component {
       
       right: (
         <NavBtn
-          onPress={() => null}
+          onPress={() => navigate('UserSettings')}
           title="Edit"
         />
       )

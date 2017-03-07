@@ -9,7 +9,8 @@ import {
   EditProjectContainer,
   Activity,
   Notifications,
-  Profile
+  Profile,
+  UserSettings
 } from '../screens';
 
 // Default header for all stack navs
@@ -37,7 +38,8 @@ const NotificationsStack = StackNavigator({
 }, { navigationOptions });
 
 const ProfileStack = StackNavigator({
-  Profile: { screen: Profile }
+  Profile: { screen: Profile },
+  UserSettings: { screen: UserSettings }
 }, { navigationOptions });
 
 const routes = {
