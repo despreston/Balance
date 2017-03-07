@@ -6,10 +6,11 @@ import Styles from './user-list-item-styles';
 
 function UserListItem ({ user }) {
   return (
-    <View>
+    <View style={Styles.userListItem} >
       <Image source={{ uri: user.picture }} style={Styles.picture} />
-      <View>
-        <Text>{user.name}</Text>
+      <View style={Styles.right} >
+        <Text style={Styles.text} >{user.name}</Text>
+        <Text style={[ Styles.text, Styles.displayName ]} >@fake-display-name</Text>
       </View>
     </View>
   );

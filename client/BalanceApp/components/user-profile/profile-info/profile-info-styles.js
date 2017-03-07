@@ -12,7 +12,7 @@ export default StyleSheet.create  ({
   },
 
   image: {
-    borderRadius: 25,
+    borderRadius: 30,
     height: 60,
     width: 60  
   },
