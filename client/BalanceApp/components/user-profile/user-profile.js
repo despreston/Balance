@@ -16,6 +16,7 @@ import Styles from './profile-styles';
 function mapStateToProps (state, ownProps) {
   
   const user = state.users[ownProps.userId];
+  delete ownProps.userId;
 
   // latest notes for user
   const latestNotes = Object.keys(state.notes)
@@ -44,7 +45,6 @@ function mapDispatchToState (dispatch) {
 class UserProfile extends Component {
   
   static propTypes = {
-    userId: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
     latestNotes: PropTypes.array.isRequired,
     friends: PropTypes.array.isRequired,
@@ -60,15 +60,16 @@ class UserProfile extends Component {
   }
 
   fetchFriendsList () {
-    this.props.fetchFriendsForUser(this.props.userId).then(() => {
+    this.props.fetchFriendsForUser(this.props.user.userId).then(() => {
       this.setState({ loadingContext: false });
     });
   }
 
   fetchLatestList () {
-    this.props.requestLatestNotes([ { user: this.props.userId } ]).then(() => {
-      this.setState({ loadingContext: false });
-    });
+    this.props.requestLatestNotes([{ user: this.props.user.userId }])
+      .then(() => { 
+        this.setState({ loadingContext: false });
+      });
   }
 
   renderBody () {
