@@ -7,7 +7,7 @@ export default StyleSheet.create  ({
     borderBottomColor: '#E8E8EA',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 5,
+    padding: 10,
     paddingVertical: 15
   },
 
@@ -33,6 +33,10 @@ export default StyleSheet.create  ({
   displayName: {
     color: '#2E92E1',
     fontSize: 12
+  },
+
+  lighter: {
+    color: '#B8B8BA',
   }
   
 });

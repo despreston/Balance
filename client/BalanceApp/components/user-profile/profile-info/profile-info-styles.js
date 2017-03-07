@@ -25,7 +25,7 @@ export default StyleSheet.create  ({
   displayName: {
     color: '#3D3F3E',
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center'
   },
 
