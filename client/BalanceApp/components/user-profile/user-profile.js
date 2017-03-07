@@ -3,7 +3,6 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
-import Logout from '../signon/logout';
 import ProfileInfo from './profile-info/profile-info';
 import NoteList from '../note-list/note-list';
 import UserList from '../user-list/user-list';
@@ -57,6 +56,7 @@ class UserProfile extends Component {
     super(props);
 
     this.state = { context: 'latest', loadingContext: false };
+    this.fetchLatestList();
   }
 
   fetchFriendsList () {
@@ -113,7 +113,6 @@ class UserProfile extends Component {
         <View>
           { this.renderBody() }
         </View>
-        <Logout />
       </View>
     );
   }
