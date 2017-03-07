@@ -16,6 +16,21 @@ module.exports = (server) => {
         });
       });
     });
+
+  server.get(
+    "users/:userId/friends", (req, res) => {
+      User
+      .findOne(req.params)
+      .select('friends')
+      .lean()
+      .then(user => {
+        return User
+          .find({ userId: { $in: user.friends } })
+          .select('name userId picture')
+          .lean()
+          .then(friends => res.send(200, friends));
+      });
+    });
   
   server.post(
     "users", ({ params, body }, res) => {

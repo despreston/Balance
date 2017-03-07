@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { View, Text } from 'react-native';
 
 // Components
-import StatusIcon from '../status-icon/StatusIcon';
+import StatusIcon from '../../status-icon/StatusIcon';
 import { Style } from './project-list-item-style';
 
 function ProjectListItem ({ project }) {

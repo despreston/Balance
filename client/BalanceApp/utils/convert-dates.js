@@ -35,13 +35,14 @@ export default function convertDates (json) {
 
     Object.keys(nestedObj).forEach(prop => {
       if (typeof nestedObj[prop] === 'object') {
+        let oldPath = path;
         if (path !== '') {
           path += `.${prop}`;  
         } else {
           path = prop
         }
         traverse(path);
-        path = '';
+        path = oldPath;
       }
 
       if (dateProps.indexOf(prop) !== -1) {

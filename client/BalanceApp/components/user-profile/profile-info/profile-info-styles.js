@@ -24,22 +24,30 @@ export default StyleSheet.create  ({
 
   displayName: {
     color: '#3D3F3E',
-    justifyContent: 'center',
     flex: 1,
-    fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18,
+    textAlign: 'center'
   },
 
   name: {
+    fontWeight: 'bold',
     color: '#3D3F3E',
     flex: 1,
-    fontSize: 18
+    fontSize: 18,
+    textAlign: 'center'
   },
 
-  stats: {
-    marginTop: 15,
-    marginRight: 10,
-    color: '#3D3F3E'
+  contextOption: {
+    marginTop: 25,
+    flex: 1,
+    justifyContent: 'space-between'
+  },
+
+  contextOptionText: {
+    color: '#3D3F3E',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 
 });
