@@ -41,6 +41,7 @@ function mapStateToProps (state, ownProps) {
     .map(id => state.notes[id])
     .filter(note => note.user === user.userId);
 
+  // friends of user
   const friends = Object.keys(state.users)
     .map(id => state.users[id])
     .filter(userToFilter => user.friends.indexOf(userToFilter.userId) > -1);

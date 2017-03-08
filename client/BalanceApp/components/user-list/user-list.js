@@ -1,6 +1,6 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
@@ -33,7 +33,6 @@ class UserList extends Component {
 
   constructor (props) {
     super(props);
-
   }
 
   renderUsers () {
