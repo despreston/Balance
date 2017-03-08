@@ -150,4 +150,3 @@ class UserProfile extends Component {
 }
 
 export default connect(mapStateToProps, mapDispatchToState)(UserProfile);
-
