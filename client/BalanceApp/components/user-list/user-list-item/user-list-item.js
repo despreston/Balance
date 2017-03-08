@@ -38,14 +38,14 @@ class UserListItem extends Component {
 
     if (user.userId === loggedInUser) {
       return 'You!';
-    } else if (isFriend) {
+    }
+    if (isFriend) {
       return 'Remove';
     }
     return 'Add';
   }
 
   render () {
-    console.log("RENDERING THE USER LIST ITEM")
     const { user, loggedInUser, isFriend } = this.props;
     return (
       <View style={Styles.userListItem} >
