@@ -3,7 +3,15 @@ const mongoose = require("mongoose");
 
 let User = new mongoose.Schema({
 
-  name: String,
+  name: {
+    type: String,
+    index: true
+  },
+
+  displayName: {
+    type: String,
+    index: true
+  },
 
   userId: {
     required: true,
