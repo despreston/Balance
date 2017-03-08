@@ -1,30 +1,11 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
 
 // components
 import UserListItem from './user-list-item/user-list-item';
 
-function mapStateToProps (state, ownProps) {
-
-  let loggedInUser = state.users[state.loggedInUser];
-
-  // augment each user in `ownProps.users` with `isFriend` flag
-  // true if the user is a friend of the logged in user
-  users = ownProps.users.map(user => {
-    if (loggedInUser.friends.indexOf(user.userId) < 0) {
-      user.isFriend = false;
-    } else {
-      user.isFriend = true;
-    }
-    return user;
-  });
-
-  return { users };
-}
-
-class UserList extends Component {
+export default class UserList extends Component {
 
   static propTypes = {
     users: PropTypes.array.isRequired,
@@ -41,9 +22,7 @@ class UserList extends Component {
         <TouchableOpacity
           key={user.userId}
           onPress={ () => this.props.onUserSelect(user.userId) }>
-          <UserListItem
-            user={user}
-            isFriend={user.isFriend} />
+          <UserListItem user={user} />
         </TouchableOpacity>
       );
     });
@@ -58,5 +37,3 @@ class UserList extends Component {
   }
 
 }
-
-export default connect(mapStateToProps)(UserList);
