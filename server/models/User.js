@@ -52,11 +52,21 @@ User.statics.areFriends = function (userA, userB) {
 };
 
 User.pre('save', function(next) {
+
+  if (!this.createdAt) {
+    this.createdAt = new Date();
+  } else {
+    delete this.createdAt;
+  }
+  
   // Keep user from changing these properties indirectly
-  const excludedProperties = ['lastUpdated', 'userId', 'createdAt'];
+  const excludedProperties = ['lastUpdated', 'userId'];
   excludedProperties.forEach(prop => delete this[prop]);
+
   this.lastUpdated = new Date();
+
   next();
+
 });
 
 module.exports = mongoose.model("user", User);

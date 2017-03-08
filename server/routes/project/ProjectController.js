@@ -93,12 +93,8 @@ module.exports = (server) => {
     });
 
   server.post(
-    'projects', (req, res) => {
-      let body = JSON.parse(req.body);
-
-      if (!body.createdAt) {
-        body.createdAt = new Date()
-      }
+    'projects', ({ body }, res) => {
+      body = JSON.parse(body);
       
       Project.create(body).then(newProject => {
 
@@ -125,13 +121,13 @@ module.exports = (server) => {
     });
 
   server.put(
-    'projects/:_id', (req, res) => {
-      req.body = JSON.parse(req.body);
+    'projects/:_id', ({ params, body }, res) => {
+      body = JSON.parse(body);
 
       Project
-      .findOne({_id: req.params._id})
+      .findOne({_id: params._id})
       .then(project => {
-        project = Object.assign(project, req.body);
+        project = Object.assign(project, body);
         project.save();
         res.send(200, project);
       });
@@ -141,9 +137,7 @@ module.exports = (server) => {
     'projects/:_id', (req, res) => {
       Project
       .remove({ _id: req.params._id })
-      .then(() => {
-        res.send(200, []);
-      });
+      .then(() => res.send(200, []));
     });
 
 };

@@ -19,6 +19,8 @@ class Profile extends Component {
     header: ({ state, navigate, dispatch }, defaultHeader) => ({
       
       ...defaultHeader,
+
+      title: 'Profile',
       
       right: (
         <NavBtn

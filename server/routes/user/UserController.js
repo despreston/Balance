@@ -36,10 +36,6 @@ module.exports = (server) => {
     "users", ({ params, body }, res) => {
       body = JSON.parse(body);
 
-      if (!body.createdAt) {
-        body.createdAt = new Date()
-      }
-
       User.findOneAndUpdate(
         { userId: body.userId },
         body,

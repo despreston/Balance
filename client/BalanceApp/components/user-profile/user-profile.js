@@ -89,7 +89,7 @@ class UserProfile extends Component {
 
   fetchLatestList () {
     this.props.requestLatestNotes([{ user: this.props.user.userId }])
-      .then(() => { 
+      .then(() => {
         this.setState({ loadingContext: false });
       });
   }
@@ -125,7 +125,7 @@ class UserProfile extends Component {
               onUserSelect={ this.onUserSelect.bind(this) } />
           );
         }
-        return <EmptyMessage message={`No friends yet.`} />;
+        return <EmptyMessage message='No friends yet.' />;
     }
   }
 
