@@ -30,9 +30,11 @@ class Profile extends Component {
   };
   
   render () {
+    const { navigate } = this.props.navigation;
+
     if (!this.props.loggedInUser) { return null; }
 
-    return <UserProfile userId={this.props.loggedInUser} />;
+    return <UserProfile userId={this.props.loggedInUser} nav={navigate} />;
   }
 
 };

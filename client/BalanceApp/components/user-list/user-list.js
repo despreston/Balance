@@ -1,6 +1,6 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
@@ -27,19 +27,25 @@ function mapStateToProps (state, ownProps) {
 class UserList extends Component {
 
   static propTypes = {
-    users: PropTypes.array.isRequired
+    users: PropTypes.array.isRequired,
+    onUserSelect: PropTypes.func.isRequired
   };
 
   constructor (props) {
     super(props);
+
   }
 
   renderUsers () {
     return this.props.users.map(user => {
       return (
-        <View key={user.userId}>
-          <UserListItem user={user} isFriend={user.isFriend} />
-        </View>
+        <TouchableOpacity
+          key={user.userId}
+          onPress={ () => this.props.onUserSelect(user.userId) }>
+          <UserListItem
+            user={user}
+            isFriend={user.isFriend} />
+        </TouchableOpacity>
       );
     });
   }

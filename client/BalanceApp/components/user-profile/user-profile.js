@@ -14,23 +14,42 @@ import { fetchFriendsForUser, requestNotes } from '../../actions';
 import Styles from './profile-styles';
 
 function mapStateToProps (state, ownProps) {
+
+  let user;
+
+  /**
+   * if nav'ing directly thru react-navigator, the userId is passed as
+   * ownProps.navigation.state.params.userId
+   *
+   * TODO: when initialRouteParams is fixed, Profile component can be replaced
+   * with this UserProfile component and the tab nav can go directly to this
+   * component with the initialRouteParam set to the logged in user.
+   */
+  if (ownProps.navigation) {
+    nav = ownProps.navigation.navigate;
+    user = state.users[ownProps.navigation.state.params.userId];
+    delete ownProps.navigation;
+  } else {
+    nav = ownProps.nav;
+    user = state.users[ownProps.userId];
+  }
   
-  const user = state.users[ownProps.userId];
   delete ownProps.userId;
 
   // latest notes for user
   const latestNotes = Object.keys(state.notes)
     .map(id => state.notes[id])
-    .filter(note => note.user === ownProps.userId);
+    .filter(note => note.user === user.userId);
 
   const friends = Object.keys(state.users)
     .map(id => state.users[id])
     .filter(userToFilter => user.friends.indexOf(userToFilter.userId) > -1);
 
   return {
-    user: state.users[ownProps.userId],
+    user,
     latestNotes,
-    friends
+    friends,
+    nav
   };
 
 }
@@ -46,6 +65,7 @@ class UserProfile extends Component {
   
   static propTypes = {
     user: PropTypes.object.isRequired,
+    nav: PropTypes.func.isRequired,
     latestNotes: PropTypes.array.isRequired,
     friends: PropTypes.array.isRequired,
     requestLatestNotes: PropTypes.func.isRequired,
@@ -72,6 +92,10 @@ class UserProfile extends Component {
       });
   }
 
+  onUserSelect (userId) {
+    this.props.nav('UserProfile', { userId });
+  }
+
   renderBody () {
     if (this.state.loadingContext) {
       return <Text>loading...</Text>;
@@ -85,7 +109,11 @@ class UserProfile extends Component {
             showContext={true} />
         );
       case 'friends':
-        return <UserList users={this.props.friends} />;
+        return (
+          <UserList
+            users={this.props.friends}
+            onUserSelect={ this.onUserSelect.bind(this) } />
+        );
     }
   }
 

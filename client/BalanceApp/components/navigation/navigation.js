@@ -10,7 +10,8 @@ import {
   Activity,
   Notifications,
   Profile,
-  UserSettings
+  UserSettings,
+  UserProfile
 } from '../screens';
 
 // Default header for all stack navs
@@ -23,24 +24,33 @@ const navigationOptions = {
   }
 };
 
+// screens included in all nav stacks
+const defaultScreens = {
+  UserProfile: { screen: UserProfile }
+};
+
 const ProjectsStack = StackNavigator({
+  ...defaultScreens,
   Home: { screen: MainScene },
   Project: { screen: ProjectDetail },
   EditProject: { screen: EditProjectContainer }
 }, { navigationOptions, initialRouteName: 'Home' });
 
 const ActivityStack = StackNavigator({
+  ...defaultScreens,
   Activity: { screen: Activity }
-}, { navigationOptions });
+}, { navigationOptions, initialRouteName: 'Activity' });
 
 const NotificationsStack = StackNavigator({
+  ...defaultScreens,
   Notifications: { screen: Notifications }
-}, { navigationOptions });
+}, { navigationOptions, initialRouteName: 'Notifications' });
 
 const ProfileStack = StackNavigator({
+  ...defaultScreens,
   Profile: { screen: Profile },
   UserSettings: { screen: UserSettings }
-}, { navigationOptions });
+}, { navigationOptions, initialRouteName: 'Profile' });
 
 const routes = {
   Projects: { screen: ProjectsStack },

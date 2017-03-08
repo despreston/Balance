@@ -26,7 +26,7 @@ module.exports = (server) => {
       .then(user => {
         return User
           .find({ userId: { $in: user.friends } })
-          .select('name userId picture')
+          .select('name userId picture friends')
           .lean()
           .then(friends => res.send(200, friends));
       });
