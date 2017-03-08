@@ -23,10 +23,10 @@ module.exports = (server) => {
       .findOne(req.params)
       .select('friends')
       .lean()
-      .then(friendsList => {
+      .then(user => {
         return User
-          .find({ userId: { $in: friendsList } })
-          .select('name userId picture')
+          .find({ userId: { $in: user.friends } })
+          .select('name userId picture friends')
           .lean()
           .then(friends => res.send(200, friends));
       });

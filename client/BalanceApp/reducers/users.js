@@ -16,6 +16,15 @@ export default {
 
   RESET_CURRENT_USER (state) {
     return Object.assign({}, state, { loggedInUser: null });
+  },
+
+  /**
+   * add to `users`
+   */
+  RECEIVE_USERS (state, { users }) {
+    return Object.assign({}, state, {
+      users: { ...state.users, ...users }
+    });
   }
 
 };

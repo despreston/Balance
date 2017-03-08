@@ -10,6 +10,7 @@ import convertDates from './utils/convert-dates';
  */
 export const LOGGED_IN_USER = 'LOGGED_IN_USER';
 export const RESET_CURRENT_USER = 'RESET_CURRENT_USER';
+export const RECEIVE_USERS = 'RECEIVE_USERS';
 
 export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
@@ -22,6 +23,22 @@ export const RECEIVE_NOTES = 'RECEIVE_NOTES';
  */
 export function setLoggedInUser (user) {
   return { type: LOGGED_IN_USER, user };
+};
+
+/**
+ * creates action for receiving users
+ * @param {object} users (single) OR {array} users (multiple)
+ * @return {action}
+ */
+export function receiveUsers (users) {
+  if (!Array.isArray(users)) {
+    users = [users];
+  }
+
+  return {
+    type: RECEIVE_USERS,
+    users: arrayToObj(users, 'userId')
+  };
 };
 
 /**

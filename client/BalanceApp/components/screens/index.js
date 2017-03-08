@@ -9,6 +9,8 @@ import Activity from './activity/activity';
 import Help from './help/help';
 import Profile from './profile/profile';
 import Notifications from './notifications/notifications';
+import UserSettings from './user-settings/user-settings';
+import UserProfile from '../user-profile/user-profile';
 
 export {
   MainScene,
@@ -17,5 +19,7 @@ export {
   Activity,
   Help,
   Notifications,
-  Profile
+  Profile,
+  UserSettings,
+  UserProfile
 };

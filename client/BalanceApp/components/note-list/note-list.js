@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 
 // components
-import NoteListItem from '../note-list-item/note-list-item';
+import NoteListItem from './note-list-item/note-list-item';
 import { Styles } from './note-list-style';
 
 function NoteList ({ notes, onEdit = null, showContext = false }) {
