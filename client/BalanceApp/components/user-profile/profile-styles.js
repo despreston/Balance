@@ -11,6 +11,10 @@ export default StyleSheet.create ({
 
   profileInfo: {
     marginBottom: 25
+  },
+
+  body: {
+    flex: 1
   }
 
 });

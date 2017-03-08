@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import ProfileInfo from './profile-info/profile-info';
 import NoteList from '../note-list/note-list';
 import UserList from '../user-list/user-list';
+import EmptyMessage from './empty-message/empty-message';
 
 // actions
 import { fetchFriendsForUser, requestNotes } from '../../actions';
@@ -104,17 +105,27 @@ class UserProfile extends Component {
 
     switch (this.state.context) {
       case 'latest':
+        if (this.props.latestNotes.length > 0) {
+          return (
+            <NoteList
+              notes={ this.props.latestNotes }
+              showContext={true} />
+          );
+        }
         return (
-          <NoteList
-            notes={this.props.latestNotes}
-            showContext={true} />
+          <EmptyMessage
+            message={`${this.props.user.name} hasn't started any projects yet.`}
+          />
         );
       case 'friends':
-        return (
-          <UserList
-            users={this.props.friends}
-            onUserSelect={ this.onUserSelect.bind(this) } />
-        );
+        if (this.props.friends.length > 0) {
+          return (
+            <UserList
+              users={ this.props.friends }
+              onUserSelect={ this.onUserSelect.bind(this) } />
+          );
+        }
+        return <EmptyMessage message={`No friends yet.`} />;
     }
   }
 
@@ -140,7 +151,7 @@ class UserProfile extends Component {
             hideProjects={true}
             switchContext={ (context) => this.switchContext(context) }/>
         </View>
-        <View>
+        <View style={ Styles.body }>
           { this.renderBody() }
         </View>
       </View>
