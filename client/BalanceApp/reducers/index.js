@@ -5,10 +5,10 @@ import notes from './notes';
 const initialState = {
   // Users key'd by _id
   users: {},
-  
+
   // Logged in user. If value is null, we know there is no one logged in
   // This is the userId from Auth0, not the ObjectID
-  current_user: null,
+  loggedInUser: null,
 
   // Projects key'd by _id
   projects: {},
@@ -17,10 +17,8 @@ const initialState = {
   projects_invalidated: false,
   
   // Notes key'd by _id
-  notes: {},
+  notes: {}
   
-  // Current project being viewed in project detail
-  open_project: null
 };
 
 export default function reducer (state = initialState, action) {

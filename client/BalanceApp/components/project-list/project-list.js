@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, ListView, TouchableOpacity } from 'react-native';
 
 // Components
-import ProjectListItem from '../project-list-item/project-list-item';
+import ProjectListItem from './project-list-item/project-list-item';
 import { Style } from './project-list-style';
 
 export default class ProjectList extends Component {

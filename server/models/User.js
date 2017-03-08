@@ -25,9 +25,7 @@ let User = new mongoose.Schema({
   // url for picture
   picture: String,
 
-  createdAt: Date,
-
-  lastLogin: Date
+  createdAt: Date
 
 });
 

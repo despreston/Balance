@@ -27,6 +27,25 @@ let Note = new mongoose.Schema({
   
 });
 
+/**
+ * Adds project name and _id to notes
+ * @param {array} projects Should contain all projects for the notes array
+ * @param {array} notes
+ */
+Note.statics.augmentWithProjectInfo = function (projects, notes) {
+  return notes.map(note => {
+    let match = projects.find(project => project._id.equals(note.project));
+
+    if (match) {
+      note.project = {
+        _id: match._id,
+        name: match.title
+      };
+    }
+    return note;
+  });
+};
+
 Note.pre('save', function(next) {
   // Keep user from changing these properties indirectly
   const excludedProperties = ['lastUpdated', 'user', 'createdAt'];

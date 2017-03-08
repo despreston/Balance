@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 // Components
 import ProjectList from './project-list';
-import { fetchProjects } from '../../actions';
+import { fetchProjectsForUser } from '../../actions';
 
 class ProjectListContainer extends Component {
   static propTypes = {
@@ -20,13 +20,13 @@ class ProjectListContainer extends Component {
 
   componentWillReceiveProps ({ projectsInvalidated, user, dispatch }) {
     if (projectsInvalidated) {
-      dispatch(fetchProjects(user));
+      dispatch(fetchProjectsForUser(user));
     }
   }
 
   componentWillMount (nextProps) {
     if (this.props.user) {
-      this.props.dispatch(fetchProjects(this.props.user));
+      this.props.dispatch(fetchProjectsForUser(this.props.user));
     }
   }
 

@@ -26,7 +26,17 @@ export const Styles = StyleSheet.create  ({
   content: {
     color: '#3D3F3E',
     fontSize: 14,
-    paddingBottom: 5
+    paddingVertical: 8
+  },
+
+  dark: {
+    color: '#3D3F3E',
+    fontWeight: '400'
+  },
+
+  darker: {
+    color: '#3D3F3E',
+    fontWeight: '600' 
   }
   
 });

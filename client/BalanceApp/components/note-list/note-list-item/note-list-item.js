@@ -6,10 +6,10 @@ import { View, Text } from 'react-native';
 import { Styles } from './note-list-item-style';
 
 // tools
-import { formatDate } from '../../utils/helpers';
+import { formatDate } from '../../../utils/helpers';
 
 // components
-import EditButton from '../edit-button/edit-button';
+import EditButton from '../../edit-button/edit-button';
 
 function NoteListItem ({ note, onEdit, showContext }) {
 
