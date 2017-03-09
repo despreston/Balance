@@ -19,6 +19,7 @@ export default StyleSheet.create  ({
   inputRow: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     paddingVertical: 10
   },
 
