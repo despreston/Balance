@@ -5,12 +5,17 @@ let User = new mongoose.Schema({
 
   name: {
     type: String,
-    index: true
+    index: true,
+    required: true,
+    trim: true,
+    minLength: [ 2, 'The value of `{PATH}` (`{VALUE}`) does not meet the minimum length ({MINLENGTH}).']
   },
 
-  displayName: {
+  username: {
     type: String,
-    index: true
+    index: true,
+    trim: true,
+    minLength: [ 2, 'The value of `{PATH}` (`{VALUE}`) does not meet the minimum length ({MINLENGTH}).']
   },
 
   userId: {
@@ -26,7 +31,7 @@ let User = new mongoose.Schema({
     type: String
   },
 
-  friends: [ mongoose.Schema.Types.ObjectId ],
+  friends: [ String ],
 
   lastUpdated: Date,
 
@@ -60,6 +65,10 @@ User.statics.areFriends = function (userA, userB) {
 };
 
 User.pre('save', function(next) {
+
+  if (!this.username) {
+    this.username = this.name;
+  }
 
   if (!this.createdAt) {
     this.createdAt = new Date();

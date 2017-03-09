@@ -24,8 +24,12 @@ function ProfileInfo ({ user, hideProjects = false, switchContext }) {
           source={{ uri: user.picture }}
         />
         <View style={Styles.info}>
-          <Text adjustsFontSizeToFit={true} style={Styles.name}>{user.name}</Text>
-          <Text adjustsFontSizeToFit={true} style={Styles.displayName}>@fake-user-name</Text>
+          <Text adjustsFontSizeToFit={true} style={Styles.name}>
+            {user.name}
+          </Text>
+          <Text adjustsFontSizeToFit={true} style={Styles.username}>
+            @{user.username}
+          </Text>
         </View>
       </View>
       <View style={Styles.row}>

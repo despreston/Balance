@@ -22,7 +22,7 @@ export default StyleSheet.create  ({
     width: 170
   },
 
-  displayName: {
+  username: {
     color: '#3D3F3E',
     flex: 1,
     fontSize: 16,

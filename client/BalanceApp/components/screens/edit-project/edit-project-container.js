@@ -50,8 +50,6 @@ class EditProjectContainer extends Component {
         ? 'Edit Project'
         : 'New Project';
 
-      const tintColor = '#FFFFFF';
-
       const left = (
         <NavBtn
           title='Cancel'
@@ -66,7 +64,7 @@ class EditProjectContainer extends Component {
         />
       );
 
-      return { ...defaultHeader, left, right, title, tintColor };
+      return { ...defaultHeader, left, right, title };
     }
   };
   
@@ -74,10 +72,7 @@ class EditProjectContainer extends Component {
   constructor (props) {
     super();
 
-    this.state = {
-      project: props.project,
-      invalid: false
-    };
+    this.state = { project: props.project };
   }
 
   componentDidMount () {
@@ -99,7 +94,6 @@ class EditProjectContainer extends Component {
   saveProject () {
     // Empty project title
     if (!this.state.project.title || this.state.project.title === '') {
-      this.setState({ invalid: true });
       return;
     }
 
