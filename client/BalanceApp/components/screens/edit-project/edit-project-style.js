@@ -27,14 +27,14 @@ export default StyleSheet.create  ({
   rowLabel: {
     color: '#3D3F3E',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 15,
     paddingLeft: 10,
     flex: 1
   },
 
   rowInput: {
     color: '#77778A',
-    fontSize: 16,
+    fontSize: 15,
     paddingLeft: 10,
     flex: 2
   },

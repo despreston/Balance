@@ -90,14 +90,6 @@ class UserSettings extends Component {
       <View style={ Styles.editProject }>
         <View style={ Styles.formContainer }>
           <View style={ Styles.inputRow }>
-            <Text style={ Styles.rowLabel }>Name</Text>
-            <TextInput
-              value={ user.name }
-              style={ Styles.rowInput }
-              placeholder="name (required)"
-              onChangeText={ value => this.onEdit('name', value) } />
-          </View>
-          <View style={ Styles.inputRow }>
             <Text style={ Styles.rowLabel }>Username</Text>
             <TextInput
               value={ user.username }
@@ -114,7 +106,9 @@ class UserSettings extends Component {
               onChangeText={ value => this.onEdit('email', value) } />
           </View>
           <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-            <Text>Other users can search for you by name or user name.</Text>
+            <Text>
+              Other users can search for you by name, email, or username.
+            </Text>
           </View>
           <Logout beforeLogoutHook={ () => this.beforeLogout() }/>
         </View>
