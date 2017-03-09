@@ -9,9 +9,9 @@ module.exports = (server) => {
     User
     .find({ $or: [ 
       { name: new RegExp(`^${params.q}`, 'i') },
-      { displayName: new RegExp(`^${params.q}`, 'i') }
+      { username: new RegExp(`^${params.q}`, 'i') }
     ]})
-    .select('name userId picture friends')
+    .select('name userId picture friends username')
     .lean()
     .then(users => res.send(200, users));
   });
@@ -38,7 +38,7 @@ module.exports = (server) => {
       .then(user => {
         return User
           .find({ userId: { $in: user.friends } })
-          .select('name userId picture friends')
+          .select('name userId picture friends username')
           .lean()
           .then(friends => res.send(200, friends));
       });
@@ -48,21 +48,34 @@ module.exports = (server) => {
     "users", ({ params, body }, res) => {
       body = JSON.parse(body);
 
-      User.findOneAndUpdate(
-        { userId: body.userId },
-        body,
-        { upsert: true, new: true, setDefaultsOnInsert: true },
-        (err, user) => {
-
-          if (err) {
-            return res.send(500, 'Failed ' + err);
-          }
-
-          return Project.projectCountForUser(user.userId).then(project_count => {
-            res.send(201, Object.assign({}, user.toObject(), { project_count }));
-          });
-
+      /**
+       * - If the user does not exist, create it.
+       * - Get the project count for the user.
+       * - send the user with 201 status
+       */
+      User.findOne({ userId: body.userId })
+        .then(user => user ? Object.assign(user, body) : new User(user))
+        .then(user => user.save())
+        .then(user => {
+          return Project.projectCountForUser(user.userId)
+            .then(project_count => {
+              res.send(201, Object.assign({}, user.toObject(), { project_count }));
+            })
+            .catch(err => res.send(500, err));
         });
+      });
+
+  server.put(
+    'users/:userId', ({ params, body }, res) => {
+      body = JSON.parse(body);
+
+      User
+      .findOne({ userId: params.userId })
+      .then(user => {
+        user = Object.assign(user, body);
+        user.save();
+        res.send(200, user);
+      });
     });
 
 };

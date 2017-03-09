@@ -12,27 +12,29 @@ export default StyleSheet.create  ({
 
   formContainer: {
     backgroundColor: '#F5F6FA',
-    flex: 1,
-    paddingVertical: 20
+    flex: 1
   },
 
   inputRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingVertical: 10
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8E8EA'
   },
 
   rowLabel: {
     color: '#3D3F3E',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 15,
     paddingLeft: 10,
     flex: 1
   },
 
   rowInput: {
     color: '#77778A',
-    fontSize: 16,
+    fontSize: 15,
     paddingLeft: 10,
     flex: 2
   },
@@ -42,9 +44,7 @@ export default StyleSheet.create  ({
   },
 
   removeButtonText: {
-    color: '#B86D6F',
-    fontWeight: 'bold',
-    fontSize: 18
+    color: '#B86D6F'
   }
 
 });

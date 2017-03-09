@@ -52,8 +52,8 @@ class UserListItem extends Component {
         <Image source={{ uri: user.picture }} style={Styles.picture} />
         <View style={Styles.right} >
           <Text style={Styles.text} >{user.name}</Text>
-          <Text style={[ Styles.text, Styles.displayName ]} >
-            @fake-display-name
+          <Text style={[ Styles.text, Styles.username ]} >
+            @{user.username}
           </Text>
         </View>
         <TouchableOpacity>

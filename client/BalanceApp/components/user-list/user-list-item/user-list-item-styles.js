@@ -30,7 +30,7 @@ export default StyleSheet.create  ({
     marginBottom: 5
   },
 
-  displayName: {
+  username: {
     color: '#2E92E1',
     fontSize: 12
   },

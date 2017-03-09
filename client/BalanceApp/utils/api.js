@@ -6,8 +6,9 @@ import { getToken } from './auth';
  * @param {string} url
  * @param {function} action Action to dispatch with json after the fetch
  * @param {object} properties Fetch properties. (Method, body, etc) Body should be regular JS object
+ * @param {Bool} externalUrl True if the URL needs to point to something outside of Balance host
  */
-export function api (url, properties = {}) {
+export function api (url, properties = {}, externalUrl = false) {
   if (properties.body) {
     properties.body = JSON.stringify(properties.body);
   }
@@ -15,7 +16,12 @@ export function api (url, properties = {}) {
     .then(token => new Headers({ authorization: `Bearer ${token}` }) )
     .then(headers => {
       properties.headers = headers;
-      return fetch(`${CONFIG.apiUrl}${url}`, properties)
+
+      if (!externalUrl) {
+        url = CONFIG.apiUrl + url;
+      }
+
+      return fetch(url, properties)
         .then(response => response.json())
         .then(json => json)
         .catch(err => console.log("ERROR ", err));
