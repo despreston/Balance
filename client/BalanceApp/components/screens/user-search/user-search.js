@@ -6,6 +6,9 @@ import { api } from '../../../utils/api';
 // components 
 import UserList from '../../user-list/user-list';
 
+// styles
+import Styles from './user-search-styles';
+
 export default class UserSearch extends Component {
 
   constructor (props) {
@@ -41,13 +44,15 @@ export default class UserSearch extends Component {
     const { navigate } = this.props.navigation;
 
     return (
-      <View>
-        <TextInput
-          style={{ height: 40, borderBottomWidth: 1 }}
-          placeholder="Search for users"
-          onChangeText={ this.onTextChange.bind(this) }
-          value={ this.state.query }
-        />
+      <View style={ Styles.container }>
+        <View style={ Styles.searchContainer }>
+          <TextInput
+            style={ Styles.searchBox }
+            placeholder="Search for users"
+            onChangeText={ this.onTextChange.bind(this) }
+            value={ this.state.query }
+          />
+        </View>
         <UserList
           users={this.state.users}
           onTextChange={ this.onTextChange.bind(this) }
