@@ -10,9 +10,18 @@ import NavBtn from '../../navigation/nav-btn';
 // styles
 import Styles from '../edit-project/edit-project-style';
 
+// actions
+import { saveUser} from '../../../actions';
+
 function mapStateToProps (state) {
   return {
     user: state.users[state.loggedInUser]
+  };
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    saveUser: user => dispatch(saveUser(user))
   };
 }
 
@@ -30,14 +39,14 @@ class UserSettings extends Component {
       const left = (
         <NavBtn
           title='Cancel'
-          onPress={() => goBack()}
+          onPress={ () => goBack() }
         />
       );
 
       const right = (
         <NavBtn
           title='Save'
-          onPress={() => null}
+          onPress={ () => state.params.save() }
         />
       );
 
@@ -47,14 +56,36 @@ class UserSettings extends Component {
   
   constructor (props) {
     super(props);
+
+    this.state = { user: props.user };
+  }
+
+  componentDidMount () {
+    setTimeout(() => this.props.navigation.setParams({
+      save: () => this.save()
+    }), 500);
   }
 
   beforeLogout () {
     this.props.navigation.navigate('Home');
   }
 
+  onEdit (property, value) {
+    this.setState({ 
+      user: {
+        ...this.state.user,
+        [property]: value 
+      }
+    });
+  }
+
+  save () {
+    this.props.navigation.navigate('Profile');
+    this.props.saveUser(this.state.user);
+  }
+
   render () {
-    const { user } = this.props;
+    const { user } = this.state;
     return (
       <View style={ Styles.editProject }>
         <View style={ Styles.formContainer }>
@@ -63,19 +94,27 @@ class UserSettings extends Component {
             <TextInput
               value={ user.name }
               style={ Styles.rowInput }
-              placeholder="Name (required)"
-              onChangeText={ value => null } />
+              placeholder="name (required)"
+              onChangeText={ value => this.onEdit('name', value) } />
           </View>
           <View style={ Styles.inputRow }>
-            <Text style={ Styles.rowLabel }>Display Name</Text>
+            <Text style={ Styles.rowLabel }>Username</Text>
             <TextInput
-              value={ user.displayName || null }
+              value={ user.username }
               style={ Styles.rowInput }
-              placeholder="@Display Name"
-              onChangeText={ value => null } />
+              placeholder="@username"
+              onChangeText={ value => this.onEdit('username', value) } />
+          </View>
+          <View style={ Styles.inputRow }>
+            <Text style={ Styles.rowLabel }>Email</Text>
+            <TextInput
+              value={ user.email }
+              style={ Styles.rowInput }
+              placeholder="email address"
+              onChangeText={ value => this.onEdit('email', value) } />
           </View>
           <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-            <Text>Other users can search for you by name or display name.</Text>
+            <Text>Other users can search for you by name or user name.</Text>
           </View>
           <Logout beforeLogoutHook={ () => this.beforeLogout() }/>
         </View>
@@ -85,4 +124,4 @@ class UserSettings extends Component {
 
 };
 
-export default connect(mapStateToProps)(UserSettings);
+export default connect(mapStateToProps, mapDispatchToProps)(UserSettings);

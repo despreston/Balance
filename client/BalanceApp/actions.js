@@ -132,6 +132,39 @@ export function saveNote (note) {
 };
 
 /**
+ * Save a user
+ * Updates the user in Auth0 and on success it updates the user in Balance DB
+ * Properly handles POST or PUT determination based on _new flag in note
+ * @param {object} user
+ * @return {Promise}
+ */
+export function saveUser (user) {
+  let method, url = 'users';
+
+  if (user._new) {
+    method = 'POST';
+    delete user._new;
+  } else {
+    method = 'PUT';
+    url += `/${user.userId}`;
+  }
+
+  return dispatch => {
+    const encodedUserId = encodeURI(user.userId);
+    const auth0url = `https://balanceapp.auth0.com/api/v2/users/${encodedUserId}`;
+
+    let fields = (({ username, email }) => ({ username, email }))(user);
+
+    fields.client_id = CONFIG.clientId;
+
+    return api(auth0url, fields, true)
+      .then(updatedUser => api(url, { method, body: user }))
+      .then(user => dispatch(receiveUsers(user)))
+      .catch(err => console.log('could not save user ', err));
+  };
+};
+
+/**
  * Fetches single project from server
  * @param {string} project Project ID
  * @return {Promise}
