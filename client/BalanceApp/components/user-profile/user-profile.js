@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import ProfileInfo from './profile-info/profile-info';
 import NoteList from '../note-list/note-list';
 import UserList from '../user-list/user-list';
+import EmptyMessage from './empty-message/empty-message';
 
 // actions
 import { fetchFriendsForUser, requestNotes } from '../../actions';
@@ -76,8 +77,17 @@ class UserProfile extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { context: 'latest', loadingContext: false };
+    this.state = {
+      context: 'latest',
+      loadingContext: false,
+      friends: []
+    };
+
     this.fetchLatestList();
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({ friends: nextProps.friends });
   }
 
   fetchFriendsList () {
@@ -88,13 +98,41 @@ class UserProfile extends Component {
 
   fetchLatestList () {
     this.props.requestLatestNotes([{ user: this.props.user.userId }])
-      .then(() => { 
+      .then(() => {
         this.setState({ loadingContext: false });
       });
   }
 
   onUserSelect (userId) {
     this.props.nav('UserProfile', { userId });
+  }
+
+  renderLatest () {
+    if (this.props.latestNotes.length > 0) {
+      return (
+        <NoteList
+          notes={ this.props.latestNotes }
+          showContext={true} />
+      );
+    }
+    return (
+      <EmptyMessage
+        message={ `${this.props.user.name} hasn't started any projects yet.` }
+      />
+    );
+  }
+
+  renderFriends () {
+    if (this.state.friends.length > 0) {
+      return (
+        <View>
+          <UserList
+            users={ this.state.friends }
+            onUserSelect={ this.onUserSelect.bind(this) } />
+        </View>
+      );
+    }
+    return <EmptyMessage message='No friends yet.' />;
   }
 
   renderBody () {
@@ -104,17 +142,9 @@ class UserProfile extends Component {
 
     switch (this.state.context) {
       case 'latest':
-        return (
-          <NoteList
-            notes={this.props.latestNotes}
-            showContext={true} />
-        );
+        return this.renderLatest();
       case 'friends':
-        return (
-          <UserList
-            users={this.props.friends}
-            onUserSelect={ this.onUserSelect.bind(this) } />
-        );
+        return this.renderFriends();
     }
   }
 
@@ -140,7 +170,7 @@ class UserProfile extends Component {
             hideProjects={true}
             switchContext={ (context) => this.switchContext(context) }/>
         </View>
-        <View>
+        <View style={ Styles.body }>
           { this.renderBody() }
         </View>
       </View>

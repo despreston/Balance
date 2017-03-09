@@ -4,17 +4,17 @@ const Project = require('../../models/Project');
 module.exports = server => {
 
   server.get(
-    'notes/:_id', (req, res) => {
+    'notes/:_id', ({ params }, res) => {
       Note
-      .findOne(req.params)
+      .findOne(params)
       .lean()
       .then(note => res.send(200, note));
     });
 
   server.get(
-    'notes', (req, res) => {
+    'notes', ({ params }, res) => {
       Note
-      .find(req.params).sort({'createdAt': -1}).lean()
+      .find(params).sort({'createdAt': -1}).lean()
       .then(notes => {
         /**
          * Get the project name for each note
@@ -32,15 +32,15 @@ module.exports = server => {
     });
 
   server.post(
-    'notes', (req, res) => {
-      req.body = JSON.parse(req.body);
+    'notes', ({ body }, res) => {
+      body = JSON.parse(body);
 
-      if (!req.body.createdAt) {
-        req.body.createdAt = new Date()
+      if (!body.createdAt) {
+        body.createdAt = new Date()
       }
 
       Note
-      .create(req.body)
+      .create(body)
       .then((newNote, err) => {
         if (err) {
           res.send(500, err);
@@ -61,17 +61,18 @@ module.exports = server => {
     });
 
   server.put(
-    'notes/:_id', (req, res) => {
-      req.body = JSON.parse(req.body);
+    'notes/:_id', ({ body, params }, res) => {
+      body = JSON.parse(body);
 
       Note
-      .findOne({_id: req.params._id})
+      .findOne({_id: params._id})
       .then(note => {
-        note = Object.assign(note, req.body);
+        note = Object.assign(note, body);
         note.save();
 
         // Add properly formatted project object back to the note
-        note = Object.assign(note.toObject(), { project: req.body.project });
+        note = Object.assign(note.toObject(), { project: body.project });
+
         res.send(200, note);
       })
       .catch(err => res.send(500, err));

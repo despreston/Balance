@@ -11,6 +11,7 @@ import Profile from './profile/profile';
 import Notifications from './notifications/notifications';
 import UserSettings from './user-settings/user-settings';
 import UserProfile from '../user-profile/user-profile';
+import UserSearch from './user-search/user-search';
 
 export {
   MainScene,
@@ -21,5 +22,6 @@ export {
   Notifications,
   Profile,
   UserSettings,
-  UserProfile
+  UserProfile,
+  UserSearch
 };

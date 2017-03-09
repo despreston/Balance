@@ -11,7 +11,8 @@ import {
   Notifications,
   Profile,
   UserSettings,
-  UserProfile
+  UserProfile,
+  UserSearch
 } from '../screens';
 
 // Default header for all stack navs
@@ -49,7 +50,8 @@ const NotificationsStack = StackNavigator({
 const ProfileStack = StackNavigator({
   ...defaultScreens,
   Profile: { screen: Profile },
-  UserSettings: { screen: UserSettings }
+  UserSettings: { screen: UserSettings },
+  UserSearch: { screen: UserSearch }
 }, { navigationOptions, initialRouteName: 'Profile' });
 
 const routes = {
