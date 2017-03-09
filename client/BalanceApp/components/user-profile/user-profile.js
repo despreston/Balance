@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
@@ -126,9 +126,6 @@ class UserProfile extends Component {
     if (this.state.friends.length > 0) {
       return (
         <View>
-          <TouchableOpacity onPress={ () => nav('UserSearch') }>
-            <Text style={ Styles.userSearch }>Search for users</Text>
-          </TouchableOpacity>
           <UserList
             users={ this.state.friends }
             onUserSelect={ this.onUserSelect.bind(this) } />

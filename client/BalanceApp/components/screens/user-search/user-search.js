@@ -38,6 +38,8 @@ export default class UserSearch extends Component {
   }
  
   render () {
+    const { navigate } = this.props.navigation;
+
     return (
       <View>
         <TextInput
@@ -49,6 +51,7 @@ export default class UserSearch extends Component {
         <UserList
           users={this.state.users}
           onTextChange={ this.onTextChange.bind(this) }
+          onUserSelect={ userId => navigate('UserProfile', { userId }) }
         />
       </View>
     )
