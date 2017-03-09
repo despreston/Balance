@@ -5,8 +5,8 @@ A platform for managing and sharing personal progress.
 
 ### First Install
 #### Requires:
-NodeJS v6.9.x
-Xcode (latest)
+- NodeJS v6.10.x
+- Xcode (latest)
 
 #### Db
 1. `brew install mongodb`

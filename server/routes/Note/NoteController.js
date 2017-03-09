@@ -72,6 +72,7 @@ module.exports = server => {
 
         // Add properly formatted project object back to the note
         note = Object.assign(note.toObject(), { project: body.project });
+
         res.send(200, note);
       })
       .catch(err => res.send(500, err));
