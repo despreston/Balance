@@ -36,7 +36,7 @@ export default class EditProject extends Component {
     
     if (this.state.confirmDelete) {
       return (
-        <View style={Styles.inputRow}>
+        <View style={[Styles.inputRow, { borderBottomWidth: 0 }]}>
           <Text style={Styles.rowLabel, { padding: 10 }}>Are you sure?</Text>
           <TouchableOpacity
             style={Styles.removeButton}
@@ -53,7 +53,7 @@ export default class EditProject extends Component {
     }
 
     return (
-      <View style={Styles.inputRow}>
+      <View style={[Styles.inputRow, { borderBottomWidth: 0 }]}>
         <TouchableOpacity
           style={Styles.removeButton}
           onPress={() => this.setState({ confirmDelete: true })}>

@@ -12,15 +12,16 @@ export default StyleSheet.create  ({
 
   formContainer: {
     backgroundColor: '#F5F6FA',
-    flex: 1,
-    paddingVertical: 20
+    flex: 1
   },
 
   inputRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8E8EA'
   },
 
   rowLabel: {
