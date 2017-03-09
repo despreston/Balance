@@ -50,8 +50,6 @@ class EditProjectContainer extends Component {
         ? 'Edit Project'
         : 'New Project';
 
-      const tintColor = '#FFFFFF';
-
       const left = (
         <NavBtn
           title='Cancel'
@@ -66,7 +64,7 @@ class EditProjectContainer extends Component {
         />
       );
 
-      return { ...defaultHeader, left, right, title, tintColor };
+      return { ...defaultHeader, left, right, title };
     }
   };
   

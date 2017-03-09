@@ -5,7 +5,8 @@ let User = new mongoose.Schema({
 
   name: {
     type: String,
-    index: true
+    index: true,
+    required: true
   },
 
   displayName: {
@@ -26,7 +27,7 @@ let User = new mongoose.Schema({
     type: String
   },
 
-  friends: [ mongoose.Schema.Types.ObjectId ],
+  friends: [ String ],
 
   lastUpdated: Date,
 
@@ -60,6 +61,10 @@ User.statics.areFriends = function (userA, userB) {
 };
 
 User.pre('save', function(next) {
+
+  if (!this.displayName) {
+    this.displayName = this.name;
+  }
 
   if (!this.createdAt) {
     this.createdAt = new Date();

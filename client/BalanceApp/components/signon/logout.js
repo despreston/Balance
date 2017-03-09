@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { resetCurrentUser } from '../../actions';
@@ -12,11 +12,19 @@ function mapDispatchToProps (dispatch) {
 
 class Logout extends Component {
 
+  static propTypes = {
+    beforeLogoutHook: PropTypes.func
+  };
+
   constructor (props) {
-    super();
+    super(props);
   }
 
   logout = () => {
+    if (this.props.beforeLogoutHook) {
+      this.props.beforeLogoutHook();
+    }
+    
     removeToken().then( err => {  
       if (err) {
         throw "Could not log out";

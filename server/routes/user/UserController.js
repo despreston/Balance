@@ -48,21 +48,21 @@ module.exports = (server) => {
     "users", ({ params, body }, res) => {
       body = JSON.parse(body);
 
-      User.findOneAndUpdate(
-        { userId: body.userId },
-        body,
-        { upsert: true, new: true, setDefaultsOnInsert: true },
-        (err, user) => {
-
-          if (err) {
-            return res.send(500, 'Failed ' + err);
-          }
-
-          return Project.projectCountForUser(user.userId).then(project_count => {
-            res.send(201, Object.assign({}, user.toObject(), { project_count }));
-          });
-
+      /**
+       * - If the user does not exist, create it.
+       * - Get the project count for the user.
+       * - send the user with 201 status
+       */
+      User.findOne({ userId: body.userId })
+        .then(user => user ? Object.assign(user, body) : new User(user))
+        .then(user => user.save())
+        .then(user => {
+          return Project.projectCountForUser(user.userId)
+            .then(project_count => {
+              res.send(201, Object.assign({}, user.toObject(), { project_count }));
+            })
+            .catch(err => res.send(500, err));
         });
-    });
+      });
 
 };
