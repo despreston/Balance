@@ -43,9 +43,7 @@ export default StyleSheet.create  ({
   },
 
   removeButtonText: {
-    color: '#B86D6F',
-    fontWeight: 'bold',
-    fontSize: 18
+    color: '#B86D6F'
   }
 
 });

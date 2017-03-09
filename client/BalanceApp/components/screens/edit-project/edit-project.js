@@ -41,7 +41,7 @@ export default class EditProject extends Component {
           <TouchableOpacity
             style={Styles.removeButton}
             onPress={this.props.onRemove}>
-            <Text style={Styles.removeButtonText}>Delete</Text>
+            <Text style={[Styles.rowLabel, Styles.removeButtonText]}>Delete</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={Styles.removeButton}
