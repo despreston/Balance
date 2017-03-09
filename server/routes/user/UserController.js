@@ -5,6 +5,18 @@ const Project = require('../../models/Project');
 module.exports = (server) => {
 
   server.get(
+  "users/search", ({ params }, res) => {
+    User
+    .find({ $or: [ 
+      { name: new RegExp(`^${params.q}`, 'i') },
+      { displayName: new RegExp(`^${params.q}`, 'i') }
+    ]})
+    .select('name userId picture friends')
+    .lean()
+    .then(users => res.send(200, users));
+  });
+
+  server.get(
     "users/:userId", (req, res) => {
       User
       .findOne(req.params)

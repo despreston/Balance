@@ -21,11 +21,18 @@ class Profile extends Component {
       ...defaultHeader,
 
       title: 'Profile',
+
+      left: (
+        <NavBtn
+          onPress={ () => navigate('UserSearch') }
+          title="Find Users"
+        />  
+      ),
       
       right: (
         <NavBtn
-          onPress={() => navigate('UserSettings')}
-          title="Edit"
+          onPress={ () => navigate('UserSettings') }
+          title="Settings"
         />
       )
     })
@@ -36,7 +43,7 @@ class Profile extends Component {
 
     if (!this.props.loggedInUser) { return null; }
 
-    return <UserProfile userId={this.props.loggedInUser} nav={navigate} />;
+    return <UserProfile userId={ this.props.loggedInUser } nav={ navigate } />;
   }
 
 };

@@ -7,7 +7,7 @@ import { getToken } from './auth';
  * @param {function} action Action to dispatch with json after the fetch
  * @param {object} properties Fetch properties. (Method, body, etc) Body should be regular JS object
  */
-export function api (url, properties) {
+export function api (url, properties = {}) {
   if (properties.body) {
     properties.body = JSON.stringify(properties.body);
   }

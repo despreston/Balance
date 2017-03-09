@@ -77,8 +77,17 @@ class UserProfile extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { context: 'latest', loadingContext: false };
+    this.state = {
+      context: 'latest',
+      loadingContext: false,
+      friends: []
+    };
+
     this.fetchLatestList();
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({ friends: nextProps.friends });
   }
 
   fetchFriendsList () {
@@ -98,6 +107,34 @@ class UserProfile extends Component {
     this.props.nav('UserProfile', { userId });
   }
 
+  renderLatest () {
+    if (this.props.latestNotes.length > 0) {
+      return (
+        <NoteList
+          notes={ this.props.latestNotes }
+          showContext={true} />
+      );
+    }
+    return (
+      <EmptyMessage
+        message={ `${this.props.user.name} hasn't started any projects yet.` }
+      />
+    );
+  }
+
+  renderFriends () {
+    if (this.state.friends.length > 0) {
+      return (
+        <View>
+          <UserList
+            users={ this.state.friends }
+            onUserSelect={ this.onUserSelect.bind(this) } />
+        </View>
+      );
+    }
+    return <EmptyMessage message='No friends yet.' />;
+  }
+
   renderBody () {
     if (this.state.loadingContext) {
       return <Text>loading...</Text>;
@@ -105,27 +142,9 @@ class UserProfile extends Component {
 
     switch (this.state.context) {
       case 'latest':
-        if (this.props.latestNotes.length > 0) {
-          return (
-            <NoteList
-              notes={ this.props.latestNotes }
-              showContext={true} />
-          );
-        }
-        return (
-          <EmptyMessage
-            message={`${this.props.user.name} hasn't started any projects yet.`}
-          />
-        );
+        return this.renderLatest();
       case 'friends':
-        if (this.props.friends.length > 0) {
-          return (
-            <UserList
-              users={ this.props.friends }
-              onUserSelect={ this.onUserSelect.bind(this) } />
-          );
-        }
-        return <EmptyMessage message='No friends yet.' />;
+        return this.renderFriends();
     }
   }
 

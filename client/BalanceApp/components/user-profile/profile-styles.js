@@ -15,6 +15,13 @@ export default StyleSheet.create ({
 
   body: {
     flex: 1
+  },
+
+  userSearch: {
+    fontWeight: 'bold',
+    color: '#3D3F3E',
+    textAlign: 'center',
+    paddingVertical: 5
   }
 
 });
