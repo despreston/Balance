@@ -17,6 +17,17 @@ export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
 
+export const RESET = 'RESET';
+
+/**
+ * resets redux to the initial state
+ */
+export function reset () {
+  return {
+    type: RESET
+  };
+};
+
 /**
  * @param {object} user
  * @return {action}
@@ -232,15 +243,6 @@ export function login () {
         .then(user => dispatch(setLoggedInUser(user)));
     });
   }
-};
-
-/**
- * resets the current_user
- */
-export function resetCurrentUser () {
-  return {
-    type: RESET_CURRENT_USER
-  };
 };
 
 /**
