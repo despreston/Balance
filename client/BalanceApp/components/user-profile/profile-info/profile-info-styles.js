@@ -45,7 +45,7 @@ export default StyleSheet.create  ({
 
   contextOptionText: {
     color: '#77778A',
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center'
   },
 
