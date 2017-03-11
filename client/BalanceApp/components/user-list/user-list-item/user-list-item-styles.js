@@ -7,7 +7,8 @@ export default StyleSheet.create  ({
     borderBottomColor: '#E8E8EA',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    marginHorizontal: 5,
+    paddingHorizontal: 5,
     paddingVertical: 15
   },
 

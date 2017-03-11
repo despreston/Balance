@@ -126,11 +126,9 @@ class UserProfile extends Component {
   renderFriends () {
     if (this.state.friends.length > 0) {
       return (
-        <View>
-          <UserList
-            users={ this.state.friends }
-            onUserSelect={ this.onUserSelect.bind(this) } />
-        </View>
+        <UserList
+          users={ this.state.friends }
+          onUserSelect={ this.onUserSelect.bind(this) } />
       );
     }
     return <EmptyMessage message='No friends yet.' />;
