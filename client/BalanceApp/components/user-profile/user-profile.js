@@ -7,6 +7,7 @@ import ProfileInfo from './profile-info/profile-info';
 import NoteList from '../note-list/note-list';
 import UserList from '../user-list/user-list';
 import EmptyMessage from './empty-message/empty-message';
+import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 
 // actions
 import { fetchFriendsForUser, requestNotes } from '../../actions';
@@ -165,10 +166,12 @@ class UserProfile extends Component {
     return (
       <View style={ Styles.profile }>
         <View style={ Styles.profileInfo }>
-          <ProfileInfo
+          <ProfileInfo user={ this.props.user } />
+          <UserProfileSwitch
             user={ this.props.user }
-            hideProjects={true}
-            switchContext={ (context) => this.switchContext(context) }/>
+            hideProjects={ true }
+            selectedContext={ this.state.context }
+            switchContext={ (context) => this.switchContext(context) } />
         </View>
         <View style={ Styles.body }>
           { this.renderBody() }

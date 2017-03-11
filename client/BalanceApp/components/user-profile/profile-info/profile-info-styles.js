@@ -44,10 +44,14 @@ export default StyleSheet.create  ({
   },
 
   contextOptionText: {
-    color: '#3D3F3E',
+    color: '#77778A',
     fontSize: 14,
-    fontWeight: 'bold',
     textAlign: 'center'
+  },
+
+  selectedContext: {
+    color: '#3D3F3E',
+    fontWeight: 'bold'
   }
 
 });
