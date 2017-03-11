@@ -14,19 +14,10 @@ module.exports = server => {
   server.get(
     'notes', ({ params }, res) => {
       Note
-      .find(params).sort({'createdAt': -1}).lean()
-      .then(notes => {
-        /**
-         * Get the project name for each note
-         * Transform the project property of the note into the structure:
-         * { _id: <project _id>, name: <project name> }
-         */
-        return Project
-          .find({ _id: { $in: notes.map(note => note.project) } })
-          .select('title')
-          .lean()
-          .then(projects => Note.augmentWithProjectInfo(projects, notes));
-      })
+      .find(params)
+      .sort({'createdAt': -1})
+      .populate('project', 'title privacyLevel')
+      .lean()
       .then(notes => res.send(200, notes))
       .catch(err => res.send(500, err));
     });

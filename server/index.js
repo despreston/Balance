@@ -20,6 +20,10 @@ server.pre(restify.pre.sanitizePath());
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(logging);
+// server.use((req, res, next) => {
+//   console.log(req)
+//   next();
+// });
 server.use(auth);
 
 // load routes
