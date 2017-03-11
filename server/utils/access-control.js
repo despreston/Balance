@@ -14,7 +14,7 @@ module.exports = {
    * @param {String} privacyLevel privacy level for the requested entity
    * @return {Promise} rejects if there is a permissions issue
    */
-  getSingleEntity (owner, requester, privacyLevel) {
+  single (owner, requester, privacyLevel) {
     return new Promise ((resolve, reject) => {
 
       if (owner !== requester && privacyLevel !== 'global') {
@@ -53,7 +53,7 @@ module.exports = {
    * @param {String} requester userId of the user requesting access
    * @return {Promise} resolves with the query
    */
-  getManyEntities (query, requester) {
+  many (query, requester) {
     return new Promise ((resolve, reject) => {
 
       if (query.user === requester) {
@@ -70,7 +70,6 @@ module.exports = {
           if (query.privacyLevel && query.privacyLevel !== 'global') {
             reject('Not friends');
           }
-          // query.privacyLevel = 'global';
           resolve(Object.assign({}, query, { privacyLevel: 'global' }));
         }
 

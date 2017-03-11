@@ -12,7 +12,7 @@ module.exports = (server) => {
         return res.send(400, 'Missing user parameter');
       }
 
-      return AccessControl.getManyEntities(params, user.sub)
+      return AccessControl.many(params, user.sub)
         .then(query => {
           Project
           .queryWithNotes(query)
@@ -28,7 +28,7 @@ module.exports = (server) => {
       Project
       .findOne(params).lean()
       .then(project => {
-        return AccessControl.getSingleEntity(project.user, user.sub, project.privacyLevel)
+        return AccessControl.single(project.user, user.sub, project.privacyLevel)
           .then(() => res.send(200, project))
           .catch(err => res.send(403, err));
       })
