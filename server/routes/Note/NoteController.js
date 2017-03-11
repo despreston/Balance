@@ -1,33 +1,52 @@
 const Note = require('../../models/Note');
 const Project = require('../../models/Project');
+const AccessControl = require('../../utils/access-control');
 
 module.exports = server => {
 
   server.get(
-    'notes/:_id', ({ params }, res) => {
+    'notes/:_id', ({ params, user }, res) => {
       Note
       .findOne(params)
-      .lean()
-      .then(note => res.send(200, note));
-    });
-
-  server.get(
-    'notes', ({ params }, res) => {
-      Note
-      .find(params)
-      .sort({'createdAt': -1})
       .populate('project', 'title privacyLevel')
       .lean()
-      .then(notes => res.send(200, notes))
+      .then(note => {
+        return AccessControl.single(note.user, user.sub, note.project.privacyLevel)
+          .then(() => res.send(200, note))
+          .catch(err => res.send(403, err));
+      })
       .catch(err => res.send(500, err));
     });
 
+  server.get(
+    'notes', ({ params, user }, res) => {
+
+      AccessControl.many(params, user.sub)
+        .then(privacyLevel => {
+
+          Note
+          .find(params)
+          .sort({'createdAt': -1})
+          .populate('project', 'title privacyLevel')
+          .lean()
+          .then(notes => {
+            notes = notes.filter(note => {
+              return privacyLevel.indexOf(note.project.privacyLevel) > -1;
+            });
+            res.send(200, notes);
+          })
+          .catch(err => res.send(500, err));
+
+        })
+        .catch(err => res.send(403, err));
+    });
+
   server.post(
-    'notes', ({ body }, res) => {
+    'notes', ({ body, user }, res) => {
       body = JSON.parse(body);
 
-      if (!body.createdAt) {
-        body.createdAt = new Date()
+      if (body.user && body.user !== user.sub) {
+        return res.send(403);
       }
 
       Note
@@ -46,18 +65,21 @@ module.exports = server => {
             return newNote;
           });
 
-      }).then(newNote => {
-        res.send(200, newNote);
-      });
+      })
+      .then(newNote => res.send(200, newNote));
     });
 
   server.put(
-    'notes/:_id', ({ body, params }, res) => {
+    'notes/:_id', ({ body, params, user }, res) => {
       body = JSON.parse(body);
 
       Note
       .findOne({_id: params._id})
       .then(note => {
+        if (note.user !== user.sub) {
+          return res.send(403);
+        }
+
         note = Object.assign(note, body);
         note.save();
 

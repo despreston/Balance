@@ -12,8 +12,11 @@ module.exports = (server) => {
         return res.send(400, 'Missing user parameter');
       }
 
-      return AccessControl.many(params, user.sub)
-        .then(query => {
+      AccessControl.many(params, user.sub)
+        .then(privacyLevel => {
+          privacyLevel = { privacyLevel: { $in: privacyLevel } };
+          const query = Object.assign({}, params, privacyLevel);
+
           Project
           .queryWithNotes(query)
           .then(projects => res.send(200, projects))

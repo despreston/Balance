@@ -28,6 +28,13 @@ let Note = new mongoose.Schema({
 });
 
 Note.pre('save', function(next) {
+
+  if (!this.createdAt) {
+    this.createdAt = new Date();
+  } else {
+    delete this.createdAt;
+  }
+
   // Keep user from changing these properties indirectly
   const excludedProperties = ['lastUpdated', 'user', 'createdAt'];
   excludedProperties.forEach(prop => delete this[prop]);
@@ -35,6 +42,7 @@ Note.pre('save', function(next) {
   this.lastUpdated = new Date();
 
   next();
+  
 });
 
 module.exports = mongoose.model("note", Note);

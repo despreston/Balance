@@ -13,7 +13,8 @@ module.exports = (server) => {
     ]})
     .select('name userId picture friends username')
     .lean()
-    .then(users => res.send(200, users));
+    .then(users => res.send(200, users))
+    .catch(err => res.send(500, err));
   });
 
   server.get(
@@ -40,8 +41,10 @@ module.exports = (server) => {
           .find({ userId: { $in: user.friends } })
           .select('name userId picture friends username')
           .lean()
-          .then(friends => res.send(200, friends));
-      });
+          .then(friends => res.send(200, friends))
+          .catch(err => res.send(500, err));
+      })
+      .catch(err => res.send(500, err));
     });
   
   server.post(
@@ -59,15 +62,21 @@ module.exports = (server) => {
         .then(user => {
           return Project.projectCountForUser(user.userId)
             .then(project_count => {
-              res.send(201, Object.assign({}, user.toObject(), { project_count }));
+              const obj = Object.assign({}, user.toObject(), { project_count });
+              res.send(201, obj);
             })
             .catch(err => res.send(500, err));
-        });
+        })
+        .catch(err => res.send(500, err));
       });
 
   server.put(
-    'users/:userId', ({ params, body }, res) => {
+    'users/:userId', ({ params, body, user }, res) => {
       body = JSON.parse(body);
+
+      if (params.userId !== user.sub) {
+        res.send(403);
+      }
 
       User
       .findOne({ userId: params.userId })
@@ -75,7 +84,8 @@ module.exports = (server) => {
         user = Object.assign(user, body);
         user.save();
         res.send(200, user);
-      });
+      })
+      .catch(err => res.send(500, err));
     });
 
 };

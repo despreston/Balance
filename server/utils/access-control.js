@@ -15,6 +15,17 @@ module.exports = {
    * @return {Promise} rejects if there is a permissions issue
    */
   single (owner, requester, privacyLevel) {
+
+    if (typeof owner !== 'string') {
+      throw ("owner needs to be a string");
+    }
+    if (typeof requester !== 'string') {
+      throw ("requester needs to be a string");
+    }
+    if (typeof privacyLevel !== 'string') {
+      throw ('privacyLevel needs to be a string');
+    }
+    
     return new Promise ((resolve, reject) => {
 
       if (owner !== requester && privacyLevel !== 'global') {
@@ -51,13 +62,22 @@ module.exports = {
    *
    * @param {Object} query Request query
    * @param {String} requester userId of the user requesting access
-   * @return {Promise} resolves with the query
+   * @return {Promise} resolves with array of accessible privacy levels
    */
   many (query, requester) {
+
+    if (typeof requester !== 'string') {
+      throw ('requestor needs to be a String');
+    }
+
     return new Promise ((resolve, reject) => {
 
       if (query.user === requester) {
-        resolve(query);
+        if (query.privacyLevel) {
+          resolve([query.privacyLevel]);
+        } else {
+          resolve(['global', 'friends', 'private']);
+        }
       }
 
       // requesting private entities that do not belong to logged-in user
@@ -70,11 +90,10 @@ module.exports = {
           if (query.privacyLevel && query.privacyLevel !== 'global') {
             reject('Not friends');
           }
-          resolve(Object.assign({}, query, { privacyLevel: 'global' }));
+          resolve(['global']);
+        } else {
+          resolve(query.privacyLevel ? [query.privacyLevel] : ['friends', 'global']);
         }
-
-        const privacyLevel = { $in: ['friends', 'global'] };
-        resolve(Object.assign({}, query, { privacyLevel }));
       });
 
     });
