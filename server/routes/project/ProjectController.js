@@ -1,7 +1,7 @@
 'use strict';
 const Project = require('../../models/Project');
 const Note = require('../../models/Note');
-const User = require('../../models/User');
+const AccessControl = require('../../utils/access-control');
 
 module.exports = (server) => {
 
@@ -12,47 +12,16 @@ module.exports = (server) => {
         return res.send(400, 'Missing user parameter');
       }
 
-      return new Promise( (resolve, reject) => {
-
-        // projects belong to logged-in user
-        if (params.user === user.sub) {
-          resolve();
-        }
-
-        // projects are private and do not belong to logged-in user
-        if (params.privacyLevel && params.privacyLevel === 'private') {
-          reject("Can't view private projects of another user");
-        }
-
-        /**
-         * If projects dont belong to the logged-in user,
-         * check if the logged-in user is friends with the user.
-         *
-         * If they arent friends and privacyLevel filter is not specified,
-         * send all 'global' projects for the user.
-         *
-         * If the users are not friends and the privacyLevel !== global,
-         * reject the request
-         */
-        User.areFriends(user.sub, params.user).then(isFriend => {
-          if (!isFriend) {
-            if (params.privacyLevel && params.privacyLevel !== 'global') {
-              reject('Not friends');
-            }
-            params.privacyLevel = 'global';
-          }
-
-          resolve();
-        });
-
-      }).then(() => {
+      AccessControl.many(params, user.sub)
+        .then(privacyLevel => {
+          privacyLevel = { privacyLevel: { $in: privacyLevel } };
+          const query = Object.assign({}, params, privacyLevel);
 
           Project
-          .queryWithNotes(params)
+          .queryWithNotes(query)
           .then(projects => res.send(200, projects))
           .catch(err => res.send(500, err));
-
-      }).catch(err => res.send(403, 'Failed: ' + err));
+        }).catch(err => res.send(403, 'Failed: ' + err));
 
     });
 
@@ -62,39 +31,21 @@ module.exports = (server) => {
       Project
       .findOne(params).lean()
       .then(project => {
-
-        /**
-         * If project does not belong to logged-in user and project is not
-         * global, then reject if:
-         * 1. project is private
-         * 2. users are not friends
-         */
-        if (project.user !== user.sub && project.privacyLevel !== 'global') {
-          
-          if (project.privacyLevel === 'private') {
-            return res.send(403, 'Private project');
-          }
-
-          User.areFriends(user.sub, project.user).then(isFriend => {
-            if (!isFriend) {
-              return res.send(403, 'Not friends');
-            }
-            return project;
-          });
-
-        } else {
-          return project;
-        }
-
+        return AccessControl.single(project.user, user.sub, project.privacyLevel)
+          .then(() => res.send(200, project))
+          .catch(err => res.send(403, err));
       })
-      .then(project => res.send(200, project))
       .catch(err => res.send(500, err))
 
     });
 
   server.post(
-    'projects', ({ body }, res) => {
+    'projects', ({ body, user }, res) => {
       body = JSON.parse(body);
+
+      if (body.user && body.user !== user.sub) {
+        return res.send(403);
+      }
       
       Project.create(body).then(newProject => {
 
@@ -113,7 +64,7 @@ module.exports = (server) => {
 
         Promise.all(promises).then(notes => {
           notes.forEach(note => newProject[note.type] = note);
-          res.send(201, newProject);
+          return res.send(201, newProject);
         });
 
       }).catch(err => res.send(500, err));
@@ -121,15 +72,20 @@ module.exports = (server) => {
     });
 
   server.put(
-    'projects/:_id', ({ params, body }, res) => {
+    'projects/:_id', ({ params, body, user }, res) => {
       body = JSON.parse(body);
 
       Project
       .findOne({_id: params._id})
       .then(project => {
+        if (project.user !== user.sub) {
+          return res.send(403);
+        }
+
         project = Object.assign(project, body);
         project.save();
-        res.send(200, project);
+
+        return res.send(200, project);
       });
     });
 
