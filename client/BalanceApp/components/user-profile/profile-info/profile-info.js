@@ -3,18 +3,13 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity
+  Image
 } from 'react-native';
 
 // styles
 import Styles from './profile-info-styles';
 
 function ProfileInfo ({ user }) {
-
-  function handlePlural (singular, count) {
-    return `${count} ${singular}${(count > 1 || count === 0)  ? 's' : ''}`;
-  }
 
   return (
     <View style={Styles.ProfileInfo}>
