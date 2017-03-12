@@ -44,7 +44,7 @@ class UserListItem extends Component {
         case 'requested':
           return 'Accept';
         case 'pending':
-          return 'Cancel';
+          return 'Cancel Request';
         default:
           return 'Remove';
       }

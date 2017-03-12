@@ -11,6 +11,10 @@ import Styles from '../profile-info/profile-info-styles';
 
 function UserProfileSwitch (props) {
   let { user, hideProjects = false, switchContext, selectedContext } = props;
+  
+  const friendCount = user.friends.reduce((count, friend) => {
+    return friend.status === 'accepted' ? count + 1 : count;
+  }, 0);
 
   function handlePlural (singular, count) {
     return `${count} ${singular}${(count > 1 || count === 0)  ? 's' : ''}`;
@@ -43,7 +47,7 @@ function UserProfileSwitch (props) {
           style={ Styles.contextOption }
           onPress={ () => switchContext('friends') }>
           <Text style={ getStyle('friends') }>
-            { handlePlural('Friend', user.friends.length) }
+            { handlePlural('Friend', friendCount) }
           </Text>
         </TouchableOpacity>
       </View>
