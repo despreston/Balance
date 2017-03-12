@@ -41,8 +41,10 @@ module.exports = (server) => {
       .select('friends')
       .lean()
       .then(user => {
+        const friendIds = user.friends.map(f => f.userId);
+
         return User
-          .find({ userId: { $in: user.friends } })
+          .find({ userId: { $in: friendIds } })
           .select('name userId picture friends username')
           .lean()
           .then(friends => res.send(200, friends))
