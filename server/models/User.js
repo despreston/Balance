@@ -44,7 +44,9 @@ let User = new mongoose.Schema({
 });
 
 /**
- * Returns true if the userA is a friend of userB by looking up userA
+ * Returns true if the userA is a friend of userB and the friendship status is 
+ * 'accepted'.
+ *
  * @param {string} userA userId of first user
  * @param {string} userB userId of second user
  * @return {promise} resolve to a boolean
@@ -57,7 +59,9 @@ User.statics.areFriends = function (userA, userB) {
       }
 
       if (result) {
-        resolve(result.friends.findIndex(f => f.userId === userB) !== -1);
+        resolve(result.friends.some(f => {
+          return f.userId === userB && f.status === 'accepted' }
+        ));
       }
 
       resolve(false);

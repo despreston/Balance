@@ -11,7 +11,7 @@ module.exports = (server) => {
     }
 
     User
-    .find({ $or: [ 
+    .find({ $or: [
       { name: new RegExp(`^${params.q}`, 'i') },
       { username: new RegExp(`^${params.q}`, 'i') }
     ]})

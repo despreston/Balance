@@ -7,17 +7,15 @@ import Styles from './user-list-item-styles';
 
 function mapStateToProps (state, ownProps) {
   let fullLoggedInUser = state.users[state.loggedInUser];
-  let isFriend;
 
-  if (fullLoggedInUser.friends.indexOf(ownProps.user.userId) < 0) {
-    isFriend = false;
-  } else {
-    isFriend = true;
-  }
+  let fromFriendList = fullLoggedInUser.friends.find(friend => {
+    return friend.userId === ownProps.user.userId;
+  });
 
   return {
     loggedInUser: state.loggedInUser,
-    isFriend
+    friendStatus: fromFriendList && fromFriendList.status,
+    isFriend: fromFriendList ? true : false
   }
 }
 
@@ -26,6 +24,7 @@ class UserListItem extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
     isFriend: PropTypes.bool.isRequired,
+    friendStatus: PropTypes.string,
     loggedInUser: PropTypes.string.isRequired
   };
 
@@ -34,14 +33,23 @@ class UserListItem extends Component {
   }
 
   friendActionText () {
-    const { user, loggedInUser, isFriend } = this.props;
+    const { friendStatus, user, loggedInUser, isFriend } = this.props;
 
     if (user.userId === loggedInUser) {
       return 'You!';
     }
+
     if (isFriend) {
-      return 'Remove';
+      switch (friendStatus) {
+        case 'requested':
+          return 'Accept';
+        case 'pending':
+          return 'Cancel';
+        default:
+          return 'Remove';
+      }
     }
+    
     return 'Add';
   }
 
