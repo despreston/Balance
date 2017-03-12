@@ -1,5 +1,6 @@
 const bro = require("logbro");
 const mongoose = require("mongoose");
+const friend = require("./shared/friend");
 
 let User = new mongoose.Schema({
 
@@ -31,7 +32,7 @@ let User = new mongoose.Schema({
     type: String
   },
 
-  friends: [ String ],
+  friends: [ friend ],
 
   lastUpdated: Date,
 
@@ -56,12 +57,93 @@ User.statics.areFriends = function (userA, userB) {
       }
 
       if (result) {
-        resolve(result.friends.indexOf(userB) !== -1);
+        resolve(result.friends.findIndex(f => f.userId === userB) !== -1);
       }
 
       resolve(false);
     });
   });
+};
+
+/**
+ * Creates or updates a friendship between two users
+ *
+ * If receiver does not exist in the requester's list of friends,
+ * add the requester to the receiver's friends list w/ status 'requested',
+ * and add the receiver to the requester's friends list w/ status 'pending'. 
+ *
+ * If receiver exists in friends list & status is 'pending', resolve.
+ * 
+ * If receiver exists in friends list & status is 'requested', change status in
+ * both user's friends list to 'accepted'.
+ *
+ * @param {String} requester userId user requesting a friendship
+ * @param {String} receiver userId the requester wants to be friends w/
+ * @return {Promise} 
+ */
+User.statics.createFriendship = function (requester, receiver) {
+  return this
+    .findOne({ userId: requester })
+    .select('friends')
+    .then(user => {
+
+      const friendIdx = user.friends.findIndex(friend => {
+        return friend.userId === receiver;
+      });
+
+      // users do not appear in each other's friends lists
+      if (friendIdx < 0) {
+
+        user.friends.push({ userId: receiver, status: 'pending' });
+        user.save();
+
+        return this
+          .findOne({ userId: receiver })
+          .select('friends')
+          .then(requestedFriend => {
+            requestedFriend.friends.push({
+              userId: requester,
+              status: 'requested'
+            });
+            requestedFriend.save();
+          });
+
+      }
+      else {
+
+        // Friend request has already been sent
+        if (user.friends[friendIdx].status === 'pending') {
+          return;
+        }
+
+        // requested user had already sent a request. So accept it! 
+        else if (user.friends[friendIdx].status === 'requested') {
+
+          // update the requester's friend list
+          user.friends.set(friendIdx, { userId: receiver, status: 'accepted' });
+          
+          user.save();
+
+          // update the receiver's friend list
+          return this
+            .findOne({ userId: receiver })
+            .select('friends')
+            .then(requestedFriend => {
+
+              const friendIdx = requestedFriend.friends.findIndex(friend => {
+                return friend.userId === requester;
+              });
+
+              requestedFriend.friends.set(friendIdx, {
+                userId: requester,
+                status: 'accepted'
+              });
+              
+              requestedFriend.save();
+            });
+        }
+      }
+    });
 };
 
 User.pre('save', function(next) {
@@ -81,7 +163,7 @@ User.pre('save', function(next) {
   excludedProperties.forEach(prop => delete this[prop]);
 
   this.lastUpdated = new Date();
-
+  
   next();
 
 });
