@@ -68,6 +68,18 @@ module.exports = (server) => {
       .catch(err => res.send(500, err));
 
     });
+
+  server.del(
+    "users/:userId/friends/:friend", ({ params, user }, res) => {
+
+      if (params.userId !== user.sub) {
+        return res.send(403);
+      }
+
+      User.removeFriendship(params.userId, params.friend)
+      .then(() => res.send(204))
+      .catch(err => res.send(500, err));
+    })
   
   server.post(
     "users", ({ params, body }, res) => {
