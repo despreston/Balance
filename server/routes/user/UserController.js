@@ -93,7 +93,7 @@ module.exports = (server) => {
        * - send the user with 201 status
        */
       User.findOne({ userId: body.userId })
-      .then(user => user ? Object.assign(user, body) : new User(user))
+      .then(user => user ? Object.assign(user, body) : new User(body))
       .then(user => user.save())
       .then(user => {
         return Project.projectCountForUser(user.userId)

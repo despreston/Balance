@@ -188,10 +188,6 @@ User.pre('save', function (next) {
   } else {
     delete this.createdAt;
   }
-  
-  // Keep user from changing these properties indirectly
-  const excludedProperties = ['lastUpdated', 'userId'];
-  excludedProperties.forEach(prop => delete this[prop]);
 
   this.lastUpdated = new Date();
   

@@ -54,9 +54,7 @@ NoteListItem.propTypes = {
   note: PropTypes.shape({
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.instanceOf(Date).isRequired,
-    project: PropTypes.shape({
-      title: PropTypes.string.isRequired
-    })
+    project: PropTypes.oneOfType([ PropTypes.object, PropTypes.string ])
   }).isRequired,
   onEdit: PropTypes.func,
   showContext: PropTypes.bool
