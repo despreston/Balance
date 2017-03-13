@@ -2,5 +2,6 @@
 *.DS_Store
 data/
 **/config/development.js
+**/utils/set-config.js
 **/Pods
 config.json
