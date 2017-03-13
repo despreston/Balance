@@ -16,13 +16,12 @@ function NoteListItem ({ note, onEdit, showContext }) {
   function renderHeader () {
     if (!showContext) { return formatDate(note.createdAt); }
 
-    let typeText = `${note.type === 'Past' ? 'Added todo ' : 'Did work '}`;
+    let typeText = `${note.type === 'Past' ? 'Added todo' : 'Did work'}`;
 
     return (
       <Text>
-        <Text style={Styles.darker}>{ typeText }</Text>
-        <Text style={Styles.dark}>for </Text>
-        <Text style={Styles.darker}>{ note.project.name } </Text>
+        <Text style={Styles.dark}>{ typeText } for </Text>
+        <Text style={Styles.darker}>{ note.project.title } </Text>
         { formatDate(note.createdAt) }
       </Text>
     );
@@ -54,7 +53,10 @@ function NoteListItem ({ note, onEdit, showContext }) {
 NoteListItem.propTypes = {
   note: PropTypes.shape({
     content: PropTypes.string.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired
+    createdAt: PropTypes.instanceOf(Date).isRequired,
+    project: PropTypes.shape({
+      title: PropTypes.string.isRequired
+    })
   }).isRequired,
   onEdit: PropTypes.func,
   showContext: PropTypes.bool

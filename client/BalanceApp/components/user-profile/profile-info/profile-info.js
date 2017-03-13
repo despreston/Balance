@@ -3,18 +3,13 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity
+  Image
 } from 'react-native';
 
 // styles
 import Styles from './profile-info-styles';
 
-function ProfileInfo ({ user, hideProjects = false, switchContext }) {
-
-  function handlePlural (singular, count) {
-    return `${count} ${singular}${(count > 1 || count === 0)  ? 's' : ''}`;
-  }
+function ProfileInfo ({ user }) {
 
   return (
     <View style={Styles.ProfileInfo}>
@@ -32,39 +27,13 @@ function ProfileInfo ({ user, hideProjects = false, switchContext }) {
           </Text>
         </View>
       </View>
-      <View style={Styles.row}>
-        <TouchableOpacity
-          style={Styles.contextOption}
-          onPress={() => switchContext('latest')}>
-          <Text style={Styles.contextOptionText}>Latest</Text>
-        </TouchableOpacity>
-        {
-          !hideProjects && 
-          <TouchableOpacity
-            style={Styles.contextOption}
-            onPress={() => switchContext('projects')}>
-            <Text style={Styles.contextOptionText}>
-              { handlePlural('Project', user.project_count) }
-            </Text>
-          </TouchableOpacity>
-        }
-        <TouchableOpacity
-          style={Styles.contextOption}
-          onPress={() => switchContext('friends')}>
-          <Text style={Styles.contextOptionText}>
-            { handlePlural('Friend', user.friends.length) }
-          </Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 
 }
 
 ProfileInfo.propTypes = {
-  user: PropTypes.object.isRequired,
-  hideProjects: PropTypes.bool,
-  switchContext: PropTypes.func.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default ProfileInfo;

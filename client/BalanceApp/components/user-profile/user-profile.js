@@ -7,6 +7,7 @@ import ProfileInfo from './profile-info/profile-info';
 import NoteList from '../note-list/note-list';
 import UserList from '../user-list/user-list';
 import EmptyMessage from './empty-message/empty-message';
+import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 
 // actions
 import { fetchFriendsForUser, requestNotes } from '../../actions';
@@ -45,7 +46,12 @@ function mapStateToProps (state, ownProps) {
   // friends of user
   const friends = Object.keys(state.users)
     .map(id => state.users[id])
-    .filter(userToFilter => user.friends.indexOf(userToFilter.userId) > -1);
+    .filter(userToFilter => {
+      return user.friends.some(friend => {
+        return friend.userId === userToFilter.userId && 
+          friend.status === 'accepted';
+      });
+    });
 
   return {
     user,
@@ -125,11 +131,9 @@ class UserProfile extends Component {
   renderFriends () {
     if (this.state.friends.length > 0) {
       return (
-        <View>
-          <UserList
-            users={ this.state.friends }
-            onUserSelect={ this.onUserSelect.bind(this) } />
-        </View>
+        <UserList
+          users={ this.state.friends }
+          onUserSelect={ this.onUserSelect.bind(this) } />
       );
     }
     return <EmptyMessage message='No friends yet.' />;
@@ -165,10 +169,12 @@ class UserProfile extends Component {
     return (
       <View style={ Styles.profile }>
         <View style={ Styles.profileInfo }>
-          <ProfileInfo
+          <ProfileInfo user={ this.props.user } />
+          <UserProfileSwitch
             user={ this.props.user }
-            hideProjects={true}
-            switchContext={ (context) => this.switchContext(context) }/>
+            hideProjects={ true }
+            selectedContext={ this.state.context }
+            switchContext={ (context) => this.switchContext(context) } />
         </View>
         <View style={ Styles.body }>
           { this.renderBody() }

@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
-import { resetCurrentUser } from '../../actions';
+import { reset } from '../../actions';
 import { removeToken } from '../../utils/auth';
 
 function mapDispatchToProps (dispatch) {
   return {
-    resetCurrentUser: () => dispatch(resetCurrentUser(null))
+    reset: () => dispatch(reset(null))
   };
 }
 
@@ -30,7 +30,7 @@ class Logout extends Component {
         throw "Could not log out";
       }
 
-      this.props.resetCurrentUser();
+      this.props.reset();
     });
   }
 

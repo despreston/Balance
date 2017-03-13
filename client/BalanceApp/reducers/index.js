@@ -24,6 +24,10 @@ const initialState = {
 export default function reducer (state = initialState, action) {
 
   let handlers = Object.assign({}, projects, notes, users);
+
+  if (action.type === 'RESET') {
+    return Object.assign({}, initialState);
+  }
   
   if (!handlers[action.type]) {
     return state;

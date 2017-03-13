@@ -47,11 +47,9 @@ Project.statics.queryWithNotes = function (query) {
     return Note
       .find({ project: { $in: projectIds } })
       .sort('-createdAt')
+      .populate('project', 'title privacyLevel')
       .lean()
-      .then(notes => {
-        notes = Note.augmentWithProjectInfo(projects, notes);
-        return getLatestNotesForProjects(notes, projects)
-      });
+      .then(notes => getLatestNotesForProjects(notes, projects));
   });
 };
 
