@@ -171,27 +171,23 @@ class UserProfile extends Component {
     }
   }
 
-  renderHeader () {
+  render () {
+    console.log("FUCK FUCK FUCK", this.state.loading);
     if (this.state.loading) {
       return null;
     }
-    return (
-      <View>
-        <ProfileInfo user={ this.props.user } />
-        <UserProfileSwitch
-          user={ this.props.user }
-          hideProjects={ true }
-          selectedContext={ this.state.context }
-          switchContext={ (context) => this.switchContext(context) } />
-      </View>
-    );
-  }
 
-  render () {
     return (
       <View style={ Styles.profile }>
         <View style={ Styles.profileInfo }>
-          { this.renderHeader() }
+           <View>
+            <ProfileInfo user={ this.props.user } />
+            <UserProfileSwitch
+              user={ this.props.user }
+              hideProjects={ true }
+              selectedContext={ this.state.context }
+              switchContext={ (context) => this.switchContext(context) } />
+          </View>
         </View>
         <View style={ Styles.body }>
           { this.renderBody() }
