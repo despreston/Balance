@@ -10,14 +10,14 @@ import EmptyMessage from './empty-message/empty-message';
 import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 
 // actions
-import { fetchFriendsForUser, requestNotes } from '../../actions';
+import { fetchFriendsForUser, requestNotes, requestUser } from '../../actions';
 
 // styles
 import Styles from './profile-styles';
 
 function mapStateToProps (state, ownProps) {
 
-  let user;
+  let user, userId, latestNotes = [], friends = [];
 
   /**
    * if nav'ing directly thru react-navigator, the userId is passed as
@@ -29,32 +29,35 @@ function mapStateToProps (state, ownProps) {
    */
   if (ownProps.navigation) {
     nav = ownProps.navigation.navigate;
-    user = state.users[ownProps.navigation.state.params.userId];
+    userId = ownProps.navigation.state.params.userId;
+    user = state.users[userId];
     delete ownProps.navigation;
   } else {
     nav = ownProps.nav;
-    user = state.users[ownProps.userId];
+    userId = ownProps.userId,
+    user = state.users[userId];
   }
-  
-  delete ownProps.userId;
 
-  // latest notes for user
-  const latestNotes = Object.keys(state.notes)
-    .map(id => state.notes[id])
-    .filter(note => note.user === user.userId);
+  if (user) {
+    // latest notes for user
+    latestNotes = Object.keys(state.notes)
+      .map(id => state.notes[id])
+      .filter(note => note.user === userId);
 
-  // friends of user
-  const friends = Object.keys(state.users)
-    .map(id => state.users[id])
-    .filter(userToFilter => {
-      return user.friends.some(friend => {
-        return friend.userId === userToFilter.userId && 
-          friend.status === 'accepted';
+    // friends of user
+    friends = Object.keys(state.users)
+      .map(id => state.users[id])
+      .filter(userToFilter => {
+        return user.friends.some(friend => {
+          return friend.userId === userToFilter.userId && 
+            friend.status === 'accepted';
+        });
       });
-    });
+  }
 
   return {
-    user,
+    userId,
+    user: user || {},
     latestNotes,
     friends,
     nav
@@ -65,14 +68,16 @@ function mapStateToProps (state, ownProps) {
 function mapDispatchToState (dispatch) {
   return {
     requestLatestNotes: params => dispatch(requestNotes(params)),
-    fetchFriendsForUser: id => dispatch(fetchFriendsForUser(id))
+    fetchFriendsForUser: id => dispatch(fetchFriendsForUser(id)),
+    requestUser: id => dispatch(requestUser(id, false))
   };
 }
 
 class UserProfile extends Component {
   
   static propTypes = {
-    user: PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
+    user: PropTypes.object,
     nav: PropTypes.func.isRequired,
     latestNotes: PropTypes.array.isRequired,
     friends: PropTypes.array.isRequired,
@@ -84,12 +89,13 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
+      loading: true,
       context: 'latest',
       loadingContext: false,
       friends: []
     };
 
-    this.fetchLatestList();
+    props.requestUser(props.userId).then(() => this.fetchLatestList());
   }
 
   componentWillReceiveProps (nextProps) {
@@ -98,14 +104,14 @@ class UserProfile extends Component {
 
   fetchFriendsList () {
     this.props.fetchFriendsForUser(this.props.user.userId).then(() => {
-      this.setState({ loadingContext: false });
+      this.setState({ loadingContext: false, loading: false });
     });
   }
 
   fetchLatestList () {
     this.props.requestLatestNotes([{ user: this.props.user.userId }])
       .then(() => {
-        this.setState({ loadingContext: false });
+        this.setState({ loadingContext: false, loading: false });
       });
   }
 
@@ -165,16 +171,27 @@ class UserProfile extends Component {
     }
   }
 
+  renderHeader () {
+    if (this.state.loading) {
+      return null;
+    }
+    return (
+      <View>
+        <ProfileInfo user={ this.props.user } />
+        <UserProfileSwitch
+          user={ this.props.user }
+          hideProjects={ true }
+          selectedContext={ this.state.context }
+          switchContext={ (context) => this.switchContext(context) } />
+      </View>
+    );
+  }
+
   render () {
     return (
       <View style={ Styles.profile }>
         <View style={ Styles.profileInfo }>
-          <ProfileInfo user={ this.props.user } />
-          <UserProfileSwitch
-            user={ this.props.user }
-            hideProjects={ true }
-            selectedContext={ this.state.context }
-            switchContext={ (context) => this.switchContext(context) } />
+          { this.renderHeader() }
         </View>
         <View style={ Styles.body }>
           { this.renderBody() }

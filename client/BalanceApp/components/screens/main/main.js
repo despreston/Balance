@@ -26,7 +26,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchCurrentUser: (userId) => dispatch(requestUser(userId))
+    fetchCurrentUser: (userId) => dispatch(requestUser(userId, true))
   };
 }
 

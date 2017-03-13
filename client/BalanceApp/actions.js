@@ -206,7 +206,7 @@ export function requestNotes (params) {
  * @param {string} userId of user
  */
 export function requestUser (user, loggedIn) {
-  return apiDispatch(`users/${user}`, setLoggedInUser);
+  return apiDispatch(`users/${user}`, loggedIn ? setLoggedInUser : receiveUsers);
 };
 
 /**

@@ -38,9 +38,7 @@ function UserProfileSwitch (props) {
           <TouchableOpacity
             style={ Styles.contextOption }
             onPress={() => switchContext('projects')}>
-            <Text style={ getStyle('projects') }>
-              { handlePlural('Project', user.project_count) }
-            </Text>
+            <Text style={ getStyle('projects') }>Projects</Text>
           </TouchableOpacity>
         }
         <TouchableOpacity
@@ -56,7 +54,9 @@ function UserProfileSwitch (props) {
 }
 
 UserProfileSwitch.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    friends: PropTypes.array.isRequired
+  }).isRequired,
   hideProjects: PropTypes.bool,
   switchContext: PropTypes.func.isRequired,
   selectedContext: PropTypes.string.isRequired
