@@ -17,49 +17,24 @@ import Styles from './profile-styles';
 
 function mapStateToProps (state, ownProps) {
 
-  let user, userId, latestNotes = [], friends = [];
+  let userId, nav;
 
   /**
    * if nav'ing directly thru react-navigator, the userId is passed as
    * ownProps.navigation.state.params.userId
-   *
-   * TODO: when initialRouteParams is fixed, Profile component can be replaced
-   * with this UserProfile component and the tab nav can go directly to this
-   * component with the initialRouteParam set to the logged in user.
    */
   if (ownProps.navigation) {
     nav = ownProps.navigation.navigate;
     userId = ownProps.navigation.state.params.userId;
-    user = state.users[userId];
-    delete ownProps.navigation;
   } else {
     nav = ownProps.nav;
-    userId = ownProps.userId,
-    user = state.users[userId];
-  }
-
-  if (user) {
-    // latest notes for user
-    latestNotes = Object.keys(state.notes)
-      .map(id => state.notes[id])
-      .filter(note => note.user === userId);
-
-    // friends of user
-    friends = Object.keys(state.users)
-      .map(id => state.users[id])
-      .filter(userToFilter => {
-        return user.friends.some(friend => {
-          return friend.userId === userToFilter.userId && 
-            friend.status === 'accepted';
-        });
-      });
+    userId = ownProps.userId;
   }
 
   return {
     userId,
-    user: user || {},
-    latestNotes,
-    friends,
+    users: state.users,
+    notes: state.notes,
     nav
   };
 
@@ -77,10 +52,9 @@ class UserProfile extends Component {
   
   static propTypes = {
     userId: PropTypes.string.isRequired,
-    user: PropTypes.object,
+    users: PropTypes.object,
+    notes: PropTypes.object,
     nav: PropTypes.func.isRequired,
-    latestNotes: PropTypes.array.isRequired,
-    friends: PropTypes.array.isRequired,
     requestLatestNotes: PropTypes.func.isRequired,
     fetchFriendsForUser: PropTypes.func.isRequired
   };
@@ -89,29 +63,61 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
-      loading: true,
       context: 'latest',
       loadingContext: false,
-      friends: []
+      latestNotes: [],
+      friends: [],
+      user: null
     };
 
-    props.requestUser(props.userId).then(() => this.fetchLatestList());
-  }
-
-  componentWillReceiveProps (nextProps) {
-    this.setState({ friends: nextProps.friends });
-  }
-
-  fetchFriendsList () {
-    this.props.fetchFriendsForUser(this.props.user.userId).then(() => {
-      this.setState({ loadingContext: false, loading: false });
+    props.requestUser(props.userId).then(() => {
+      this.fetchLatestList();
     });
   }
 
-  fetchLatestList () {
-    this.props.requestLatestNotes([{ user: this.props.user.userId }])
+  componentWillReceiveProps (nextProps) {
+    const user = nextProps.users[nextProps.userId];
+
+    if (user) {
+      this.setState({ user });
+    }
+  }
+
+  latestNotes () {
+    // latest notes for user
+    return Object.keys(this.props.notes)
+      .map(id => this.props.notes[id])
+      .filter(note => note.user === this.props.userId);
+  }
+
+  friends () {
+    // friends of user
+    const user = this.props.users[this.props.userId];
+
+    return Object.keys(this.props.users)
+      .map(id => this.props.users[id])
+      .filter(userToFilter => {
+        return user.friends.some(friend => {
+          return friend.userId === userToFilter.userId && 
+            friend.status === 'accepted';
+        });
+      });
+  }
+
+  fetchFriendsList () {
+    return this.props.fetchFriendsForUser(this.props.userId)
       .then(() => {
-        this.setState({ loadingContext: false, loading: false });
+        this.setState({ loadingContext: false, friends: this.friends() });
+      });
+  }
+
+  fetchLatestList () {
+    return this.props.requestLatestNotes([{ user: this.props.userId }])
+      .then(() => {
+        this.setState({
+          loadingContext: false,
+          latestNotes: this.latestNotes()
+        });
       });
   }
 
@@ -120,16 +126,16 @@ class UserProfile extends Component {
   }
 
   renderLatest () {
-    if (this.props.latestNotes.length > 0) {
+    if (this.state.latestNotes.length > 0) {
       return (
         <NoteList
-          notes={ this.props.latestNotes }
+          notes={ this.state.latestNotes }
           showContext={true} />
       );
     }
     return (
       <EmptyMessage
-        message={ `${this.props.user.name} hasn't started any projects yet.` }
+        message={ `${this.state.user.name} hasn't started any projects yet.` }
       />
     );
   }
@@ -172,18 +178,17 @@ class UserProfile extends Component {
   }
 
   render () {
-    console.log("FUCK FUCK FUCK", this.state.loading);
-    if (this.state.loading) {
-      return null;
+    if (!this.state.user) {
+      return <Text>Loading...</Text>;
     }
 
     return (
       <View style={ Styles.profile }>
         <View style={ Styles.profileInfo }>
            <View>
-            <ProfileInfo user={ this.props.user } />
+            <ProfileInfo user={ this.state.user } />
             <UserProfileSwitch
-              user={ this.props.user }
+              user={ this.state.user }
               hideProjects={ true }
               selectedContext={ this.state.context }
               switchContext={ (context) => this.switchContext(context) } />

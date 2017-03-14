@@ -107,7 +107,7 @@ class UserSettings extends Component {
           </View>
           <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
             <Text>
-              Other users can search for you by name, email, or username.
+              Other users can search for you by name or username.
             </Text>
           </View>
           <Logout beforeLogoutHook={ () => this.beforeLogout() }/>

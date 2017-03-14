@@ -53,6 +53,19 @@ class UserListItem extends Component {
     return 'Add';
   }
 
+  renderUsername () {
+    const { user } = this.props;
+    if (!user.username) {
+      return null;
+    }
+
+    return (
+      <Text style={[ Styles.text, Styles.username ]} >
+        @{user.username}
+      </Text>
+    );
+  }
+
   render () {
     const { user, loggedInUser, isFriend } = this.props;
     return (
@@ -60,9 +73,7 @@ class UserListItem extends Component {
         <Image source={{ uri: user.picture }} style={Styles.picture} />
         <View style={Styles.right} >
           <Text style={Styles.text} >{user.name}</Text>
-          <Text style={[ Styles.text, Styles.username ]} >
-            @{user.username}
-          </Text>
+          { this.renderUsername() }
         </View>
         <TouchableOpacity>
           <Text style={Styles.lighter}>{ this.friendActionText() }</Text>

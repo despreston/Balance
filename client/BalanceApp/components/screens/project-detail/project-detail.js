@@ -31,9 +31,12 @@ import {
 
 function mapStateToProps (state, { navigation }) {
   // notes for selected project
+  console.log(state.notes)
   const notes = Object.keys(state.notes)
     .map(id => state.notes[id])
-    .filter(note => note.project._id === navigation.state.params.project);
+    .filter(note => {
+      return note.project._id === navigation.state.params.project;
+    });
 
   return {
     project: state.projects[navigation.state.params.project],

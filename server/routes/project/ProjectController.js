@@ -1,6 +1,5 @@
 'use strict';
 const Project = require('../../models/Project');
-const Note = require('../../models/Note');
 const AccessControl = require('../../utils/access-control');
 
 module.exports = (server) => {
@@ -47,27 +46,10 @@ module.exports = (server) => {
         return res.send(403);
       }
       
-      Project.create(body).then(newProject => {
-
-        let promises = [];
-
-        // Create any notes that were added to the new project
-        if (body.Past) {
-          body.Past.project = newProject._id;
-          promises.push(Note.create(body.Past));
-        }
-
-        if (body.Future) {
-          body.Future.project = newProject._id;
-          promises.push(Note.create(body.Future));
-        }
-
-        Promise.all(promises).then(notes => {
-          notes.forEach(note => newProject[note.type] = note);
-          return res.send(201, newProject);
-        });
-
-      }).catch(err => res.send(500, err));
+      Project
+      .create(body)
+      .then(newProject => res.send(201, newProject))
+      .catch(err => res.send(500, err));
       
     });
 
@@ -92,8 +74,10 @@ module.exports = (server) => {
   server.del(
     'projects/:_id', (req, res) => {
       Project
-      .remove({ _id: req.params._id })
-      .then(() => res.send(200, []));
+      .findOne({ _id: req.params._id })
+      .then(project => project.remove())
+      .then(() => res.send(200, []))
+      .catch(err => res.send(500, err));
     });
 
 };

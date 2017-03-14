@@ -62,7 +62,7 @@ Project.statics.projectCountForUser = function (userId) {
   });
 };
 
-Project.pre('save', function(next) {
+Project.pre('save', function (next) {
 
   if (!this.createdAt) {
     this.createdAt = new Date();
@@ -75,6 +75,17 @@ Project.pre('save', function(next) {
   excludedProperties.forEach(prop => delete this[prop]);
   
   this.lastUpdated = new Date();
+  
+  next();
+
+});
+
+Project.pre('remove', function (next) {
+
+  // remove all notes for project
+  Note
+  .find({ project: this._id })
+  .then(notes => notes.forEach(note => note.remove()));
   
   next();
 

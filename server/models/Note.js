@@ -14,7 +14,8 @@ let Note = new mongoose.Schema({
 
   project: {
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'project'
+    ref: 'project',
+    required: true
   },
 
   user: String,
