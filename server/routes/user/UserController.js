@@ -54,7 +54,7 @@ module.exports = (server) => {
     });
 
   server.post(
-    "users/:userId/friends", ({ params, user }, res) => {
+    "users/:userId/friends/:friend", ({ params, user }, res) => {
 
       if (params.userId !== user.sub) {
         return res.send(403);
@@ -64,9 +64,9 @@ module.exports = (server) => {
       if (params.friend === user.sub) {
         return res.send(403);
       }
-      
+
       User.createFriendship(params.userId, params.friend)
-      .then(() => res.send(201))
+      .then(updatedUsers => res.send(201, updatedUsers))
       .catch(err => res.send(500, err));
 
     });
@@ -79,7 +79,7 @@ module.exports = (server) => {
       }
 
       User.removeFriendship(params.userId, params.friend)
-      .then(() => res.send(204))
+      .then(updatedUsers => res.send(200, updatedUsers))
       .catch(err => res.send(500, err));
     })
   

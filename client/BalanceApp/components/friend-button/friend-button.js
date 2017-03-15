@@ -1,6 +1,13 @@
+// vendors
 import React, { Component, PropTypes } from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
+
+// styles
+import Styles from './friend-button-style';
+
+// actions
+import { createFriendship, removeFriendship } from '../../actions';
 
 function mapStateToProps (state, ownProps) {
   let fullLoggedInUser = state.users[state.loggedInUser];
@@ -12,6 +19,17 @@ function mapStateToProps (state, ownProps) {
   return {
     status: fromFriendList ? fromFriendList.status : 'none',
     loggedInUser: state.loggedInUser
+  };
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    createFriendship: (userId, friend) => {
+      return dispatch(createFriendship(userId, friend));
+    },
+    removeFriendship: (userId, friend) => {
+      return dispatch(removeFriendship(userId, friend));
+    }
   };
 }
 
@@ -27,33 +45,61 @@ class FriendButton extends Component {
     super(props);
   }
 
-  friendActionText () {
-    const { status, userId, loggedInUser } = this.props;
+  handleStatus () {
+    let actionText;
+    let textStyles = [Styles.text];
+    let buttonStyles = [Styles.container, Styles.button];
+    let pressAction = this.create.bind(this);
 
-    if (userId === loggedInUser) {
-      return 'You!';
-    }
-
-    switch (status) {
+    switch (this.props.status) {
       case 'accepted':
-        return 'Remove';
+        actionText = 'Remove';
+        pressAction = this.remove.bind(this);
+        break;
       case 'requested':
-        return 'Accept';
+        actionText = 'Accept';
+        break;
       case 'pending':
-        return 'Cancel Request';
+        actionText = 'Cancel';
+        pressAction = this.remove.bind(this);
+        break;
       default:
-        return 'Add';
+        buttonStyles.push(Styles.add);
+        textStyles.push(Styles.addText);
+        actionText = 'Add';
+        break;
     }
+
+    return { actionText, buttonStyles, textStyles, pressAction };
+  }
+
+  create () {
+    const { userId, loggedInUser, createFriendship } = this.props;
+    createFriendship(loggedInUser, userId);
+  }
+
+  remove () {
+    const { userId, loggedInUser, removeFriendship } = this.props;
+    removeFriendship(loggedInUser, userId);
   }
 
   render () {
+    const { userId, loggedInUser, createFriendship } = this.props;
+    const { actionText, buttonStyles, textStyles, pressAction } = this.handleStatus();
+
+    if (userId === loggedInUser) {
+      return <View style={ Styles.container }><Text>You!</Text></View>;
+    }
+
     return (
-      <TouchableOpacity onPress={ () => null } >
-        <Text>{ this.friendActionText() }</Text>
+      <TouchableOpacity
+        style={ buttonStyles }
+        onPress={ () => pressAction() } >
+        <Text style={ textStyles }>{ actionText }</Text>
       </TouchableOpacity>
     );
   }
 
 }
 
-export default connect(mapStateToProps)(FriendButton);
+export default connect(mapStateToProps, mapDispatchToProps)(FriendButton);

@@ -251,4 +251,22 @@ export function login () {
  */
 export function fetchFriendsForUser (userId) {
   return apiDispatch(`users/${userId}/friends`, receiveUsers);
+};
+
+/**
+ * Create a friend request. Server will figure out what the status should be.
+ * @param {String} userId User requesting a friendship
+ * @param {String} friend Target user
+ */
+export function createFriendship (userId, friend) {
+  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, { method: 'POST' });
+};
+
+/**
+ * Remove a friendship
+ * @param {String} userId User requesting to remove the friendship
+ * @param {String} friend Target user to remove
+ */
+export function removeFriendship (userId, friend) {
+  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, { method: 'DELETE' });
 }
