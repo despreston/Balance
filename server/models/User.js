@@ -83,12 +83,13 @@ User.statics.areFriends = function (userA, userB) {
  *
  * @param {String} requester userId user requesting a friendship
  * @param {String} receiver userId the requester wants to be friends w/
- * @return {Promise} 
+ * @return {Promise} resolves with an array containing both updated users.
  */
 User.statics.createFriendship = function (requester, receiver) {
+
   return this
     .findOne({ userId: requester })
-    .select('friends')
+    .select('name userId picture friends username')
     .then(user => {
 
       const friendIdx = user.friends.findIndex(friend => {
@@ -103,13 +104,16 @@ User.statics.createFriendship = function (requester, receiver) {
 
         return this
           .findOne({ userId: receiver })
-          .select('friends')
+          .select('name userId picture friends username')
           .then(requestedFriend => {
             requestedFriend.friends.push({
               userId: requester,
               status: 'requested'
             });
-            requestedFriend.save();
+
+            return requestedFriend.save()
+              .then(updatedRequestedUser => [user, updatedRequestedUser])
+              .catch(err => err);
           });
 
       }
@@ -130,7 +134,7 @@ User.statics.createFriendship = function (requester, receiver) {
         // update the receiver's friend list
         return this
           .findOne({ userId: receiver })
-          .select('friends')
+          .select('name userId picture friends username')
           .then(requestedFriend => {
 
             const friendIdx = requestedFriend.friends.findIndex(friend => {
@@ -142,7 +146,9 @@ User.statics.createFriendship = function (requester, receiver) {
               status: 'accepted'
             });
             
-            requestedFriend.save();
+            return requestedFriend.save()
+              .then(updatedRequestedUser => [user, updatedRequestedUser])
+              .catch(err => err);
           });
       }
     });
@@ -158,21 +164,23 @@ User.statics.removeFriendship = function (userA, userB) {
 
   return this
     .find({ userId: { $in: [ userA, userB ] } })
+    .select('name userId picture friends username')
     .then(users => {
       let [userA, userB] = users;
-      let userBIndex = userA.friends.findIndex(f => f.userId === userB);
-      let userAIndex = userB.friends.findIndex(f => f.userId === userA);
+      let userBIndex = userA.friends.findIndex(f => f.userId === userB.userId);
+      let userAIndex = userB.friends.findIndex(f => f.userId === userA.userId);
 
       // Users are not friends. Don't do anything
       if (userBIndex < 0 || userAIndex < 0) {
-        return;
-      } 
+        Promise.reject('Users are not friends');
+      }
 
       userA.friends.splice(userBIndex);
       userB.friends.splice(userAIndex);
 
-      userA.save();
-      userB.save();
+      return Promise.all([ userA.save(), userB.save() ])
+        .then(users => users)
+        .catch(err => err);
     });
 
 };

@@ -34,10 +34,6 @@ export default StyleSheet.create  ({
   username: {
     color: '#2E92E1',
     fontSize: 12
-  },
-
-  lighter: {
-    color: '#B8B8BA',
   }
   
 });
