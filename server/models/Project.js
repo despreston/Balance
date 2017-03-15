@@ -16,7 +16,14 @@ let Project = new mongoose.Schema({
 
   createdAt: Date,
 
-  privacyLevel: privacyLevel
+  privacyLevel: privacyLevel,
+
+  status: {
+    required: true,
+    type: String,
+    default: 'active',
+    enum: ['active', 'finished']
+  }
   
 });
 

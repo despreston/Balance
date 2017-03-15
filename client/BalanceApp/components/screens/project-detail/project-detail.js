@@ -7,10 +7,9 @@ import {
   Button,
   Modal,
   TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback } from 'react-native';
+  TouchableOpacity
+} from 'react-native';
 import { connect } from 'react-redux';
-import dismissKeyboard from 'dismissKeyboard';
 
 // styles
 import { Styles } from './project-detail-style';
@@ -24,14 +23,12 @@ import NavBtn from '../../navigation/nav-btn';
 // actions
 import {
   saveNote,
-  saveProject,
   requestNotes,
   invalidate
 } from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
   // notes for selected project
-  console.log(state.notes)
   const notes = Object.keys(state.notes)
     .map(id => state.notes[id])
     .filter(note => {
@@ -48,7 +45,6 @@ function mapStateToProps (state, { navigation }) {
 function mapDispatchToProps (dispatch) {
   return {
     updateNote: note => dispatch(saveNote(note)),
-    updateProject: project => dispatch(saveProject(project)),
     requestNotes: params => dispatch(requestNotes(params)),
     invalidateProjects: () => dispatch(invalidate('projects'))
   };
@@ -58,7 +54,6 @@ class ProjectDetail extends Component {
 
   static propTypes = {
     updateNote: PropTypes.func.isRequired,
-    updateProject: PropTypes.func.isRequired,
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
     }),
@@ -73,9 +68,9 @@ class ProjectDetail extends Component {
       const right = (
         <NavBtn
           title='Edit'
-          onPress={() => {
+          onPress={ () => {
             navigate('EditProject', { project: state.params.project })
-          }}
+          } }
         />
       );
 
@@ -89,24 +84,17 @@ class ProjectDetail extends Component {
     this.state = {
       editModalVisible: false,
       note: {},
-      projectTitle: props.project.title,
       invalid: false
     };
   }
 
   componentDidMount () {
-    // Set focus to project title when its a new project
     if (this.props.project._id) {
       this.props.requestNotes([
         { project: this.props.project._id },
         { type: 'Past' }
       ]);
     }
-
-    // https://github.com/react-community/react-navigation/issues/160#issuecomment-277349900
-    setTimeout(() => this.props.navigation.setParams({
-      saveProject: () => this.saveProject()
-    }), 500);
   }
 
   toggleEditNoteModal = (note) => {
@@ -138,32 +126,15 @@ class ProjectDetail extends Component {
     return this.props.notes.filter(note => note.type === type);
   }
 
-  // Handle any form validation before saving
-  saveProject () {
-    this.props.project.title = this.state.projectTitle;
-    
-    // Empty project title
-    if (!this.props.project.title || this.props.project.title === '') {
-      this.setState({ invalid: true });
-      this.projectTitle.focus();
-      return;
-    }
-
-    this.props.updateProject(this.props.project).then(() => {
-      this.props.invalidateProjects();
-      this.props.navigation.goBack();
-    });
-  }
-
   renderPastNotes (notes) {
     if (notes.length === 0) {
       return (
-        <Text style={Styles.emptyText}>
+        <Text style={ Styles.emptyText }>
           Tap 'I did work' to add a new entry.
         </Text>
       );
     }
-    return <NoteList notes={notes} onEdit={this.toggleEditNoteModal}/>;
+    return <NoteList notes={ notes } onEdit={ this.toggleEditNoteModal }/>;
   }
 
   render () {
@@ -188,35 +159,33 @@ class ProjectDetail extends Component {
     }
 
     return (
-      <ScrollView style={Styles.projectDetail}>
-        <Text style={Styles.title} >{project.title}</Text>
-        <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-          <View style={Styles.container}>
-            <View style={Styles.updateButtonContainer}>
-              <TouchableOpacity
-                onPress={() => this.toggleEditNoteModal(this.emptyNote('Past'))}
-                style={Styles.updateButton}>
-                <Text style={Styles.updateButtonText}>I did work</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => this.toggleEditNoteModal(this.emptyNote('Future'))}
-                style={Styles.updateButton}>
-                <Text style={Styles.updateButtonText}>To do next</Text>
-              </TouchableOpacity>
-            </View>
-            <FutureNote note={futureNote}/>
-            <View style={Styles.pastNotesView}>
-              <Text style={Styles.finishedTitleText}>Completed</Text>
-              { this.renderPastNotes(pastNotes) }
-            </View>
+      <ScrollView style={ Styles.projectDetail }>
+        <Text style={ Styles.title }>{ project.title }</Text>
+        <View style={ Styles.container }>
+          <View style={ Styles.updateButtonContainer }>
+            <TouchableOpacity
+              onPress={ () => this.toggleEditNoteModal(this.emptyNote('Past')) }
+              style={ Styles.updateButton }>
+              <Text style={ Styles.updateButtonText }>I did work</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={ () => this.toggleEditNoteModal(this.emptyNote('Future')) }
+              style={ Styles.updateButton }>
+              <Text style={ Styles.updateButtonText }>To do next</Text>
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
+          <FutureNote note={ futureNote }/>
+          <View style={ Styles.pastNotesView }>
+            <Text style={ Styles.finishedTitleText }>Completed</Text>
+            { this.renderPastNotes(pastNotes) }
+          </View>
+        </View>
         <EditNote
-          style={Styles.editNoteModal}
-          visible={this.state.editModalVisible}
-          onSave={this.saveNote.bind(this)}
-          onClose={() => this.toggleEditNoteModal({})}
-          note={this.state.note} />
+          style={ Styles.editNoteModal }
+          visible={ this.state.editModalVisible }
+          onSave={ this.saveNote.bind(this) }
+          onClose={ () => this.toggleEditNoteModal({}) }
+          note={ this.state.note } />
       </ScrollView>
     );
   }
