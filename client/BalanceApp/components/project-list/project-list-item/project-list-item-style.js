@@ -63,7 +63,7 @@ export const Style = StyleSheet.create({
     opacity: 0.8
   },
 
-  empty: {
+  center: {
     alignSelf: 'center',
     justifyContent: 'center'
   }

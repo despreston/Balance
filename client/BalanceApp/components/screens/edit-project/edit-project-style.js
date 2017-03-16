@@ -44,7 +44,18 @@ export default StyleSheet.create  ({
   },
 
   removeButtonText: {
-    color: '#B86D6F'
+    color: '#B86D6F',
+    fontWeight: '600'
+  },
+
+  statusContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 5
+  },
+
+  markStatus: {
+    color: '#2E92E1',
+    fontWeight: '600'
   }
 
 });
