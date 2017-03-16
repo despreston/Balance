@@ -105,7 +105,7 @@ module.exports = (server) => {
         return Project.projectCountForUser(user.userId)
           .then(project_count => {
             const obj = Object.assign({}, user.toObject(), { project_count });
-            res.send(201, obj);
+            return res.send(201, obj);
           })
           .catch(err => res.send(500, err));
       })
@@ -117,7 +117,7 @@ module.exports = (server) => {
       body = JSON.parse(body);
 
       if (params.userId !== user.sub) {
-        res.send(403);
+        return res.send(403);
       }
 
       User
@@ -126,7 +126,7 @@ module.exports = (server) => {
         if (!user) {
           return res.send(404);
         }
-        
+
         user = Object.assign(user, body);
         user.save();
         return res.send(200, user);
