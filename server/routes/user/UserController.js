@@ -27,11 +27,17 @@ module.exports = (server) => {
       .findOne(req.params)
       .lean()
       .then(user => {
-        return Project.projectCountForUser(user.userId).then(projectCount => {
-          user.project_count = projectCount;
-          res.send(200, user);
-        });
-      });
+        if (!user) {
+          return res.send(404);
+        }
+
+        return Project.projectCountForUser(user.userId)
+          .then(projectCount => {
+            user.project_count = projectCount;
+            return res.send(200, user);
+          });
+      })
+      .catch(err => res.send(500, err));
     });
 
   server.get(
@@ -117,9 +123,13 @@ module.exports = (server) => {
       User
       .findOne({ userId: params.userId })
       .then(user => {
+        if (!user) {
+          return res.send(404);
+        }
+        
         user = Object.assign(user, body);
         user.save();
-        res.send(200, user);
+        return res.send(200, user);
       })
       .catch(err => res.send(500, err));
     });

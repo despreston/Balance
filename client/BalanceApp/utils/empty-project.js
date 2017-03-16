@@ -3,6 +3,7 @@ export default function emptyProject (userId) {
     _new: true,
     title: '',
     user: userId,
-    privacyLevel: 'global'
+    privacyLevel: 'global',
+    status: 'active'
   };
 };
