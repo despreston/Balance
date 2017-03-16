@@ -4,9 +4,7 @@ import {
   ScrollView,
   View,
   Text,
-  Button,
   Modal,
-  TextInput,
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -21,11 +19,7 @@ import NoteList from '../../note-list/note-list';
 import NavBtn from '../../navigation/nav-btn';
 
 // actions
-import {
-  saveNote,
-  requestNotes,
-  invalidate
-} from '../../../actions';
+import { saveNote, requestNotes, invalidate } from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
   // notes for selected project
@@ -134,7 +128,42 @@ class ProjectDetail extends Component {
         </Text>
       );
     }
-    return <NoteList notes={ notes } onEdit={ this.toggleEditNoteModal }/>;
+
+    // hide edit buttons if project is Finished
+    if (this.props.project.status === 'finished') {
+      return <NoteList notes={ notes } />;
+    }
+
+    return <NoteList notes={ notes } onEdit={ this.toggleEditNoteModal } />;
+  }
+
+  renderUpdateButtons () {
+    const { project } = this.props;
+
+    if (project.status === 'finished') {
+      return (
+        <View style={ Styles.updateButtonContainer }>
+          <Text style={ Styles.finishedProjectText }>
+            This project has been marked as finished. {"\n"} Nice job! 🎉
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={ Styles.updateButtonContainer }>
+        <TouchableOpacity
+          onPress={ () => this.toggleEditNoteModal(this.emptyNote('Past')) }
+          style={ Styles.updateButton }>
+          <Text style={ Styles.updateButtonText }>I did work</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={ () => this.toggleEditNoteModal(this.emptyNote('Future')) }
+          style={ Styles.updateButton }>
+          <Text style={ Styles.updateButtonText }>To do next</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   render () {
@@ -162,19 +191,8 @@ class ProjectDetail extends Component {
       <ScrollView style={ Styles.projectDetail }>
         <Text style={ Styles.title }>{ project.title }</Text>
         <View style={ Styles.container }>
-          <View style={ Styles.updateButtonContainer }>
-            <TouchableOpacity
-              onPress={ () => this.toggleEditNoteModal(this.emptyNote('Past')) }
-              style={ Styles.updateButton }>
-              <Text style={ Styles.updateButtonText }>I did work</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={ () => this.toggleEditNoteModal(this.emptyNote('Future')) }
-              style={ Styles.updateButton }>
-              <Text style={ Styles.updateButtonText }>To do next</Text>
-            </TouchableOpacity>
-          </View>
-          <FutureNote note={ futureNote }/>
+          { this.renderUpdateButtons() }
+          { project.status === 'active' && <FutureNote note={ futureNote }/> }
           <View style={ Styles.pastNotesView }>
             <Text style={ Styles.finishedTitleText }>Completed</Text>
             { this.renderPastNotes(pastNotes) }
