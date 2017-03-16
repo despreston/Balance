@@ -16,7 +16,14 @@ let Project = new mongoose.Schema({
 
   createdAt: Date,
 
-  privacyLevel: privacyLevel
+  privacyLevel: privacyLevel,
+
+  status: {
+    required: true,
+    type: String,
+    default: 'active',
+    enum: ['active', 'finished']
+  }
   
 });
 
@@ -54,11 +61,12 @@ Project.statics.queryWithNotes = function (query) {
 };
 
 Project.statics.projectCountForUser = function (userId) {
-  return this.count({ user: userId }, (err, count) => {
+  return this.count({ user: userId, status: 'active' }, (err, count) => {
     if (err) {
       return Promise.reject('Could not get projects for user, ', userId);
     }
-    return count.length;
+    
+    return count;
   });
 };
 

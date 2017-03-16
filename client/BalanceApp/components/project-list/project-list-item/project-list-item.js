@@ -7,7 +7,7 @@ import StatusIcon from '../../status-icon/StatusIcon';
 import { Style } from './project-list-item-style';
 
 function ProjectListItem ({ project }) {
-  const { Past, Future } = project;
+  const { Past, Future, status } = project;
   let lastUpdated;
 
     if (Past && Future) {
@@ -21,7 +21,7 @@ function ProjectListItem ({ project }) {
 
   function getEmptyNotesMessage () {
     return !(Past || Future)
-      ? (<Text style={[Style.noteContent, Style.empty]}>Nothing yet. 😕</Text>)
+      ? (<Text style={[Style.noteContent, Style.center]}>Nothing yet. 😕</Text>)
       : null;
   }
 
@@ -33,35 +33,54 @@ function ProjectListItem ({ project }) {
       default:        return '';
     };
   }
+
+  function renderNotes () {
+    if (status === 'finished') {
+      return (
+        <View style={ Style.notes }>
+          <Text style={ [Style.center, Style.noteContent] }>
+            You finished this project. Hooray!
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={ Style.notes }>
+        {
+          Past && <Text style={ Style.noteContent }>
+            <Text style={ Style.noteType }>Last: </Text>
+            { Past.content }
+          </Text>
+        }
+        {
+          Future && <Text style={ Style.noteContent }>
+            <Text style={ Style.noteType }>Next: </Text>
+            { Future.content }
+          </Text>
+        }
+        { getEmptyNotesMessage() }
+      </View>
+    );
+  }
   
   return (
-    <View style={Style.projectListItem}>
-      <View style={Style.header}>
-        <Text style={Style.title}>{project.title}</Text>
-        {lastUpdated && <StatusIcon lastUpdated={lastUpdated} />}
-      </View>
-      <View style={Style.notes}>
-        {
-          Past && <Text style={Style.noteContent}>
-            <Text style={Style.noteType}>Last: </Text>
-            {Past.content}
-          </Text>
+    <View style={ Style.projectListItem }>
+      <View style={ Style.header }>
+        <Text style={ Style.title }>{ project.title }</Text>
+        { 
+          lastUpdated && status === 'active' &&
+          <StatusIcon lastUpdated={ lastUpdated } />
         }
-        {
-          Future && <Text style={Style.noteContent}>
-            <Text style={Style.noteType}>Next: </Text>
-            {Future.content}
-          </Text>
-        }
-        {getEmptyNotesMessage()}
       </View>
-      <View style={Style.footer}>
-        <Text style={[Style.footerText, Style.privacyIcon]}>
-          {privacyLevelIcon(project.privacyLevel)}
+      { renderNotes() }
+      <View style={ Style.footer }>
+        <Text style={ [Style.footerText, Style.privacyIcon] }>
+          { privacyLevelIcon(project.privacyLevel) }
         </Text>
         {
-          lastUpdated && <Text style={Style.footerText}>
-            Last Updated: {lastUpdated.toLocaleString()}
+          lastUpdated && <Text style={ Style.footerText }>
+            Last Updated: { lastUpdated.toLocaleString() }
           </Text>
         }
       </View>

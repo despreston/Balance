@@ -36,29 +36,59 @@ export default class EditProject extends Component {
     
     if (this.state.confirmDelete) {
       return (
-        <View style={[Styles.inputRow, { borderBottomWidth: 0 }]}>
-          <Text style={Styles.rowLabel, { padding: 10 }}>Are you sure?</Text>
+        <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+          <Text style={ Styles.rowLabel, { padding: 10 } }>Are you sure?</Text>
           <TouchableOpacity
-            style={Styles.removeButton}
-            onPress={this.props.onRemove}>
-            <Text style={[Styles.rowLabel, Styles.removeButtonText]}>Delete</Text>
+            style={ Styles.removeButton }
+            onPress={ this.props.onRemove }>
+            <Text style={ [Styles.rowLabel, Styles.removeButtonText] }>
+              Delete
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={Styles.removeButton}
-            onPress={() => this.setState({ confirmDelete: false })}>
-            <Text style={Styles.rowLabel}>Cancel</Text>
+            style={ Styles.removeButton }
+            onPress={ () => this.setState({ confirmDelete: false }) }>
+            <Text style={ Styles.rowLabel }>Cancel</Text>
           </TouchableOpacity>
         </View>
       );
     }
 
     return (
-      <View style={[Styles.inputRow, { borderBottomWidth: 0 }]}>
+      <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
         <TouchableOpacity
-          style={Styles.removeButton}
-          onPress={() => this.setState({ confirmDelete: true })}>
-          <Text style={Styles.removeButtonText}>Remove Project</Text>
+          style={ Styles.removeButton }
+          onPress={ () => this.setState({ confirmDelete: true }) }>
+          <Text style={ Styles.removeButtonText }>Remove Project</Text>
         </TouchableOpacity>
+      </View>
+    );
+  }
+
+  renderProjectStatus () {
+    const { project, onEdit } = this.props;
+    let text, statusOption;
+
+    if (project.status === 'active') {
+      text = 'Mark as Finished';
+      statusOption = 'finished';
+    } else {
+      text = 'Mark as Active';
+      statusOption = 'active';
+    }
+
+    return (
+      <View style={ Styles.statusContainer }>
+        <Text>
+          Marking a project as finished makes the project read-only.
+          You can always reopen the project any time.
+        </Text>
+        <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+          <TouchableOpacity
+            onPress={ () => onEdit('status', statusOption) }>
+            <Text style={ Styles.markStatus }>{ text }</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -67,24 +97,25 @@ export default class EditProject extends Component {
     const { project, onEdit } = this.props;
 
     return (
-      <View style={Styles.editProject}>
-        <View style={Styles.formContainer}>
-          <View style={Styles.inputRow}>
-            <Text style={Styles.rowLabel}>Title</Text>
+      <View style={ Styles.editProject }>
+        <View style={ Styles.formContainer }>
+          <View style={ Styles.inputRow }>
+            <Text style={ Styles.rowLabel }>Title</Text>
             <TextInput
-              value={project.title}
-              style={Styles.rowInput}
+              value={ project.title }
+              style={ Styles.rowInput }
               placeholder="Project Title (required)"
-              onChangeText={value => onEdit('title', value)} />
+              onChangeText={ value => onEdit('title', value) } />
           </View>
-          <View style={Styles.inputRow}>
-            <Text style={Styles.rowLabel}>Share with</Text>
+          <View style={ Styles.inputRow }>
+            <Text style={ Styles.rowLabel }>Share with</Text>
             <PrivacyPicker
-              textStyle={Styles.rowInput}
-              initLevel={project.privacyLevel}
-              onChange={val => onEdit('privacyLevel', val)} />
+              textStyle={ Styles.rowInput }
+              initLevel={ project.privacyLevel }
+              onChange={ val => onEdit('privacyLevel', val) } />
           </View>
-          <View style={{ height: 30 }} />
+          <View style={ { height: 30 } } />
+          { this.renderProjectStatus() }
           { this.renderRemoveButton() }
         </View>
       </View>

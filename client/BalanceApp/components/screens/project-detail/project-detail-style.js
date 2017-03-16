@@ -61,6 +61,15 @@ export const Styles = StyleSheet.create ({
     fontWeight: 'bold',
     marginBottom: 15,
     padding: 5
+  },
+
+  finishedProjectText: {
+    color: '#3D3F3E',
+    fontSize: 16,
+    flex: 1,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    textAlign: 'center'
   }
   
 });
