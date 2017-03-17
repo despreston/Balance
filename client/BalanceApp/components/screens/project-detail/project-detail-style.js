@@ -13,7 +13,7 @@ export const Styles = StyleSheet.create ({
     fontWeight: '500',
     textAlign: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 20
+    paddingVertical: 30
   },
 
   container: {
@@ -27,7 +27,7 @@ export const Styles = StyleSheet.create ({
 
   updateButtonContainer: {
     flexDirection: 'row',
-    marginBottom: 10
+    paddingBottom: 25
   },
 
   updateButton: {

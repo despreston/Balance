@@ -45,9 +45,9 @@ module.exports = (server) => {
       Project
       .findOne(params._id)
       .then(project => {
-        const hasNudgeFromUser = project.nudges.findIndex(nudge => {
+        const hasNudgeFromUser = project.nudges.some(nudge => {
           return nudge.userId === user.sub;
-        }) > -1;
+        });
 
         // avoid multiple nudges from the same user
         if (hasNudgeFromUser) {
