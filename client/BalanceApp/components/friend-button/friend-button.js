@@ -38,7 +38,8 @@ class FriendButton extends Component {
   static propTypes = {
     userId: PropTypes.string.isRequired,
     loggedInUser: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired
+    status: PropTypes.string.isRequired,
+    hideIfLoggedInUser: PropTypes.bool
   };
 
   constructor (props) {
@@ -84,10 +85,13 @@ class FriendButton extends Component {
   }
 
   render () {
-    const { userId, loggedInUser, createFriendship } = this.props;
+    const { hideIfLoggedInUser, userId, loggedInUser, createFriendship } = this.props;
     const { actionText, buttonStyles, textStyles, pressAction } = this.handleStatus();
 
     if (userId === loggedInUser) {
+      if (hideIfLoggedInUser) {
+        return null;
+      }
       return <View style={ Styles.container }><Text>You!</Text></View>;
     }
 

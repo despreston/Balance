@@ -157,10 +157,8 @@ class UserProfile extends Component {
     }
 
     switch (this.state.context) {
-      case 'latest':
-        return this.renderLatest();
-      case 'friends':
-        return this.renderFriends();
+      case 'latest': return this.renderLatest();
+      case 'friends': return this.renderFriends();
     }
   }
 
@@ -168,12 +166,8 @@ class UserProfile extends Component {
     this.setState({ loadingContext: true, context });
 
     switch (context) {
-      case 'latest':
-        this.fetchLatestList();
-        break;
-      case 'friends':
-        this.fetchFriendsList();
-        break;
+      case 'latest': return this.fetchLatestList();
+      case 'friends': return this.fetchFriendsList();
     }
   }
 

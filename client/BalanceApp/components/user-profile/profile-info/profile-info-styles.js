@@ -19,7 +19,9 @@ export default StyleSheet.create  ({
 
   info: {
     marginLeft: 25,
-    width: 170
+    width: 170,
+    height: 80,
+    flexDirection: 'column'
   },
 
   username: {
@@ -35,6 +37,13 @@ export default StyleSheet.create  ({
     flex: 1,
     fontSize: 18,
     textAlign: 'center'
+  },
+
+  friendButton: {
+    marginTop: 10,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   contextOption: {
