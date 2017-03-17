@@ -121,14 +121,11 @@ class UserProfile extends Component {
       });
   }
 
-  onUserSelect (userId) {
-    this.props.nav('UserProfile', { userId });
-  }
-
   renderLatest () {
     if (this.state.latestNotes.length > 0) {
       return (
         <NoteList
+          onSelect={ id => this.props.nav('Note', { id })}
           notes={ this.state.latestNotes }
           showContext={true} />
       );
@@ -145,7 +142,7 @@ class UserProfile extends Component {
       return (
         <UserList
           users={ this.state.friends }
-          onUserSelect={ this.onUserSelect.bind(this) } />
+          onUserSelect={ userId => this.props.nav('UserProfile', { userId }) } />
       );
     }
     return <EmptyMessage message='No friends yet.' />;

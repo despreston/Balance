@@ -129,12 +129,19 @@ class ProjectDetail extends Component {
       );
     }
 
+    const nav = this.props.navigation.navigate;
+
     // hide edit buttons if project is Finished
     if (this.props.project.status === 'finished') {
-      return <NoteList notes={ notes } />;
+      return <NoteList notes={ notes } onSelect={ id => nav('Note', { id }) } />;
     }
 
-    return <NoteList notes={ notes } onEdit={ this.toggleEditNoteModal } />;
+    return (
+      <NoteList
+        onSelect={ id => nav('Note', { id }) }
+        notes={ notes }
+        onEdit={ this.toggleEditNoteModal } />
+    );
   }
 
   renderUpdateButtons () {

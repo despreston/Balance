@@ -176,15 +176,6 @@ export function saveUser (user) {
 };
 
 /**
- * Fetches single project from server
- * @param {string} project Project ID
- * @return {Promise}
- */
-export function fetchProject (project) {
-  return apiDispatch(`projects/${project._id}`, receiveProjects);
-};
-
-/**
  * Fetches projects
  * @return {Promise}
  */
@@ -199,6 +190,15 @@ export function fetchProjectsForUser (userId) {
  */
 export function requestNotes (params) {
   return apiDispatch(`notes${formatQueryParams(params)}`, receiveNotes);
+};
+
+/**
+ * Fetch single note
+ * @param {String} id Note ID
+ * @return {Promise}
+ */
+export function fetchNote (id) {
+  return apiDispatch(`notes/${id}`, receiveNotes);
 };
 
 /**

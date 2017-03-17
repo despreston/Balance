@@ -12,7 +12,8 @@ import {
   Profile,
   UserSettings,
   UserProfile,
-  UserSearch
+  UserSearch,
+  Note
 } from '../screens';
 
 // Default header for all stack navs
@@ -27,7 +28,8 @@ const navigationOptions = {
 
 // screens included in all nav stacks
 const defaultScreens = {
-  UserProfile: { screen: UserProfile }
+  UserProfile: { screen: UserProfile },
+  Note: { screen: Note }
 };
 
 const ProjectsStack = StackNavigator({
