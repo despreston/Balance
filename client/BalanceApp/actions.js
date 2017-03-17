@@ -218,6 +218,15 @@ export function deleteProject (id) {
 };
 
 /**
+ * Send a nudge to a user for a project
+ * @param {String} project project ID
+ */
+export function nudgeProject (project) {
+  let config = { method: 'POST' };
+  return apiDispatch(`projects/${project}/nudges`, receiveProjects, config);
+};
+
+/**
  * prompt for log-in and send new user to server
  */
 export function login () {

@@ -23,7 +23,15 @@ let Project = new mongoose.Schema({
     type: String,
     default: 'active',
     enum: ['active', 'finished']
-  }
+  },
+
+  nudges: [{
+    userId: {
+      type: String,
+      required: true  
+    },
+    sentAt: Date
+  }]
   
 });
 

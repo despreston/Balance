@@ -39,6 +39,28 @@ module.exports = (server) => {
     });
 
   server.post(
+    'projects/:_id/nudges', ({ params, user }, res) => {
+      Project
+      .findOne(params._id)
+      .then(project => {
+        const hasNudgeFromUser = project.nudges.findIndex(nudge => {
+          return nudge.userId === user.sub;
+        }) > -1;
+
+        // avoid multiple nudges from the same user
+        if (hasNudgeFromUser) {
+          return res.send(201);
+        }
+
+        project.nudges.push({ userId: user.sub });
+        project.save();
+        
+        return res.send(200, project);
+      })
+      .catch(err => res.send(500, err));
+    });
+
+  server.post(
     'projects', ({ body, user }, res) => {
       body = JSON.parse(body);
 
