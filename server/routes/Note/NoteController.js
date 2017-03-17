@@ -59,8 +59,11 @@ module.exports = server => {
         return Project
           .findOne({ _id: newNote.project })
           .select('title')
-          .lean()
           .then(project => {
+            // reset nudges
+            project.nudges = [];
+            project.save();
+            
             newNote.project = { _id: project._id, name: project.title };
             return newNote;
           });

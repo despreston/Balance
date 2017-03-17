@@ -28,7 +28,9 @@ module.exports = (server) => {
     'projects/:_id', ({ params, user }, res) => {
 
       Project
-      .findOne(params).lean()
+      .findOne(params)
+      .populate('nudgeUsers', 'userId username')
+      .lean()
       .then(project => {
         return AccessControl.single(project.user, user.sub, project.privacyLevel)
           .then(() => res.send(200, project))
@@ -36,6 +38,28 @@ module.exports = (server) => {
       })
       .catch(err => res.send(500, err))
 
+    });
+
+  server.post(
+    'projects/:_id/nudges', ({ params, user }, res) => {
+      Project
+      .findOne(params._id)
+      .then(project => {
+        const hasNudgeFromUser = project.nudges.some(nudge => {
+          return nudge.userId === user.sub;
+        });
+
+        // avoid multiple nudges from the same user
+        if (hasNudgeFromUser) {
+          return res.send(201);
+        }
+
+        project.nudges.push({ userId: user.sub, sentAt: new Date() });
+        project.save();
+        
+        return res.send(200, project);
+      })
+      .catch(err => res.send(500, err));
     });
 
   server.post(

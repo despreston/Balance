@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
@@ -157,10 +157,8 @@ class UserProfile extends Component {
     }
 
     switch (this.state.context) {
-      case 'latest':
-        return this.renderLatest();
-      case 'friends':
-        return this.renderFriends();
+      case 'latest': return this.renderLatest();
+      case 'friends': return this.renderFriends();
     }
   }
 
@@ -168,12 +166,8 @@ class UserProfile extends Component {
     this.setState({ loadingContext: true, context });
 
     switch (context) {
-      case 'latest':
-        this.fetchLatestList();
-        break;
-      case 'friends':
-        this.fetchFriendsList();
-        break;
+      case 'latest': return this.fetchLatestList();
+      case 'friends': return this.fetchFriendsList();
     }
   }
 
@@ -183,7 +177,7 @@ class UserProfile extends Component {
     }
 
     return (
-      <View style={ Styles.profile }>
+      <ScrollView style={ Styles.profile }>
         <View style={ Styles.profileInfo }>
            <View>
             <ProfileInfo user={ this.state.user } />
@@ -197,7 +191,7 @@ class UserProfile extends Component {
         <View style={ Styles.body }>
           { this.renderBody() }
         </View>
-      </View>
+      </ScrollView>
     );
   }
 

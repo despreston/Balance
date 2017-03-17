@@ -5,7 +5,6 @@ export default StyleSheet.create ({
   profile: {
     backgroundColor: '#FFFFFF',
     flex: 1,
-    justifyContent: 'flex-start',
     paddingTop: 50
   },
 
