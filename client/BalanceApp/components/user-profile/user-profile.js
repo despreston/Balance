@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
@@ -177,7 +177,7 @@ class UserProfile extends Component {
     }
 
     return (
-      <View style={ Styles.profile }>
+      <ScrollView style={ Styles.profile }>
         <View style={ Styles.profileInfo }>
            <View>
             <ProfileInfo user={ this.state.user } />
@@ -191,7 +191,7 @@ class UserProfile extends Component {
         <View style={ Styles.body }>
           { this.renderBody() }
         </View>
-      </View>
+      </ScrollView>
     );
   }
 
