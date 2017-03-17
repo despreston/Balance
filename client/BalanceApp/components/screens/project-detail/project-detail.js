@@ -171,19 +171,31 @@ class ProjectDetail extends Component {
   }
 
   renderNudges () {
-    const nudges = this.props.project.nudges;
-    const names = this.props.project.nudgeUsers.map(user => user.username);
+    const { navigate } = this.props.navigation;
+    const { nudges, nudgeUsers } = this.props.project;
 
-    if (nudges.length > 0) {
+    if (nudges.length === 0) { return null; }
+
+    const names = nudgeUsers.map((user, idx) => {
+      const text = idx < nudgeUsers.length - 1 
+        ? `${user.username},`
+        : user.username;
+      
       return (
-        <Text style={ Styles.nudgedText }>
-          <Text style={ Styles.bold }>{ names.join(',') } </Text>
-          nudged you for an update
+        <Text
+          key={ idx }
+          onPress={ () => navigate('UserProfile', { userId: user.userId }) }
+          style={ Styles.bold }>
+          { text }
         </Text>
       );
-    }
+    });
 
-    return null;
+    return (
+      <Text style={ Styles.nudgedText }>
+        { names } nudged you for an update
+      </Text>
+    );
   }
 
   render () {
