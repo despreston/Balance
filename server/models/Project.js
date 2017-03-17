@@ -28,11 +28,23 @@ let Project = new mongoose.Schema({
   nudges: [{
     userId: {
       type: String,
-      required: true  
+      required: true
     },
-    sentAt: Date
+    sentAt: {
+      type: Date,
+      required: true
+    }
   }]
   
+});
+
+/**
+ * Ref to users that have nudged the project
+ */
+Project.virtual('nudgeUsers', {
+  ref: 'user',
+  localField: 'nudges.userId',
+  foreignField: 'userId'
 });
 
 /**
@@ -56,16 +68,19 @@ Project.statics.queryWithNotes = function (query) {
     return projects;
   }
 
-  return this.find(query).lean().then(projects => {
-    const projectIds = projects.map(project => project._id);
-    
-    return Note
-      .find({ project: { $in: projectIds } })
-      .sort('-createdAt')
-      .populate('project', 'title privacyLevel')
-      .lean()
-      .then(notes => getLatestNotesForProjects(notes, projects));
-  });
+  return this
+    .find(query)
+    .populate('nudgeUsers', 'userId username')
+    .lean().then(projects => {
+      const projectIds = projects.map(project => project._id);
+      
+      return Note
+        .find({ project: { $in: projectIds } })
+        .sort('-createdAt')
+        .populate('project', 'title privacyLevel')
+        .lean()
+        .then(notes => getLatestNotesForProjects(notes, projects));
+    });
 };
 
 Project.statics.projectCountForUser = function (userId) {

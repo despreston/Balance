@@ -8,10 +8,9 @@ export const Styles = StyleSheet.create ({
   },
 
   title: {
-    color: '#2E92E1',
-    fontFamily: 'Helvetica Neue',
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: '#3D3F3E',
+    fontSize: 26,
+    fontWeight: '500',
     textAlign: 'center',
     paddingHorizontal: 10,
     paddingVertical: 20
@@ -47,8 +46,7 @@ export const Styles = StyleSheet.create ({
   updateButtonText: {
     alignSelf: 'center',
     color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 16
   },
 
   pastNotesView: {
@@ -58,7 +56,6 @@ export const Styles = StyleSheet.create ({
   finishedTitleText: {
     color: '#3D3F3E',
     fontSize: 15,
-    fontWeight: 'bold',
     marginBottom: 15,
     padding: 5
   },
@@ -67,9 +64,19 @@ export const Styles = StyleSheet.create ({
     color: '#3D3F3E',
     fontSize: 16,
     flex: 1,
-    fontWeight: 'bold',
     marginBottom: 15,
     textAlign: 'center'
+  },
+
+  nudgedText: {
+    color: '#3D3F3E',
+    textAlign: 'center',
+    fontSize: 13,
+    paddingBottom: 20
+  },
+
+  bold: {
+    fontWeight: 'bold'
   }
   
 });

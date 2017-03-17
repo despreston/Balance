@@ -143,7 +143,7 @@ class ProjectDetail extends Component {
     if (project.status === 'finished') {
       return (
         <View style={ Styles.updateButtonContainer }>
-          <Text style={ Styles.finishedProjectText }>
+          <Text style={ [Styles.finishedProjectText, Styles.bold] }>
             This project has been marked as finished. {"\n"} Nice job! 🎉
           </Text>
         </View>
@@ -155,15 +155,35 @@ class ProjectDetail extends Component {
         <TouchableOpacity
           onPress={ () => this.toggleEditNoteModal(this.emptyNote('Past')) }
           style={ Styles.updateButton }>
-          <Text style={ Styles.updateButtonText }>I did work</Text>
+          <Text style={ [Styles.updateButtonText, Styles.bold] }>
+            I did work
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={ () => this.toggleEditNoteModal(this.emptyNote('Future')) }
           style={ Styles.updateButton }>
-          <Text style={ Styles.updateButtonText }>To do next</Text>
+          <Text style={ [Styles.updateButtonText, Styles.bold] }>
+            To do next
+          </Text>
         </TouchableOpacity>
       </View>
     );
+  }
+
+  renderNudges () {
+    const nudges = this.props.project.nudges;
+    const names = this.props.project.nudgeUsers.map(user => user.username);
+
+    if (nudges.length > 0) {
+      return (
+        <Text style={ Styles.nudgedText }>
+          <Text style={ Styles.bold }>{ names.join(',') } </Text>
+          nudged you for an update
+        </Text>
+      );
+    }
+
+    return null;
   }
 
   render () {
@@ -190,11 +210,14 @@ class ProjectDetail extends Component {
     return (
       <ScrollView style={ Styles.projectDetail }>
         <Text style={ Styles.title }>{ project.title }</Text>
+        { project.status === 'active' && this.renderNudges() }
         <View style={ Styles.container }>
           { this.renderUpdateButtons() }
           { project.status === 'active' && <FutureNote note={ futureNote }/> }
           <View style={ Styles.pastNotesView }>
-            <Text style={ Styles.finishedTitleText }>Completed</Text>
+            <Text style={ [Styles.finishedTitleText, Styles.bold] }>
+              Completed
+            </Text>
             { this.renderPastNotes(pastNotes) }
           </View>
         </View>

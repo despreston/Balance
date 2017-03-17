@@ -28,7 +28,9 @@ module.exports = (server) => {
     'projects/:_id', ({ params, user }, res) => {
 
       Project
-      .findOne(params).lean()
+      .findOne(params)
+      .populate('nudgeUsers')
+      .lean()
       .then(project => {
         return AccessControl.single(project.user, user.sub, project.privacyLevel)
           .then(() => res.send(200, project))
@@ -52,7 +54,7 @@ module.exports = (server) => {
           return res.send(201);
         }
 
-        project.nudges.push({ userId: user.sub });
+        project.nudges.push({ userId: user.sub, sentAt: new Date() });
         project.save();
         
         return res.send(200, project);
