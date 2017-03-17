@@ -20,8 +20,8 @@ function NoteListItem ({ note, onEdit, showContext }) {
 
     return (
       <Text>
-        <Text style={Styles.dark}>{ typeText } for </Text>
-        <Text style={Styles.darker}>{ note.project.title } </Text>
+        <Text style={ Styles.dark }>{ typeText } for </Text>
+        <Text style={ Styles.darker }>{ note.project.title } </Text>
         { formatDate(note.createdAt) }
       </Text>
     );
@@ -32,20 +32,20 @@ function NoteListItem ({ note, onEdit, showContext }) {
 
     return (
       <EditButton
-        onEdit={onEdit.bind(this, note)}
-        style={Styles.editButton} />
+        onEdit={ onEdit.bind(this, note) }
+        style={ Styles.editButton } />
     );
   }
 
   return (
-    <View style={Styles.container}>
-      <View style={Styles.top}>
-        <Text style={Styles.createdAt}>
+    <View style={ Styles.container }>
+      <View style={ Styles.top }>
+        <Text style={ Styles.createdAt }>
           { renderHeader() }
         </Text>
         { renderEditButton() }
       </View>
-      <Text style={Styles.content}>{note.content}</Text>
+      <Text style={ Styles.content }>{ note.content }</Text>
     </View>
   );
 }
@@ -53,8 +53,7 @@ function NoteListItem ({ note, onEdit, showContext }) {
 NoteListItem.propTypes = {
   note: PropTypes.shape({
     content: PropTypes.string.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired,
-    project: PropTypes.oneOfType([ PropTypes.object, PropTypes.string ])
+    createdAt: PropTypes.instanceOf(Date).isRequired
   }).isRequired,
   onEdit: PropTypes.func,
   showContext: PropTypes.bool
