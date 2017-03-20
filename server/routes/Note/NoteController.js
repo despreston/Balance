@@ -21,24 +21,30 @@ module.exports = server => {
   server.get(
     'notes', ({ params, user }, res) => {
 
-      AccessControl.many(params, user.sub)
-        .then(privacyLevel => {
+      /**
+       * Note access control is a bit difference since the privacyLevel needs to
+       * come from the project associated with the note.
+       * Get the list of notes requested, look at the first note received to get
+       * project info, and use that with the AccessControl stuff.
+       */
+      Note
+      .find(params)
+      .sort({'createdAt': -1})
+      .populate('project', 'title privacyLevel')
+      .lean()
+      .then(notes => {
+        if (!notes) {
+          return res.send(200, notes);
+        }
+        
+        const owner = notes[0].user;
+        const privacyLevel = notes[0].project.privacyLevel;
 
-          Note
-          .find(params)
-          .sort({'createdAt': -1})
-          .populate('project', 'title privacyLevel')
-          .lean()
-          .then(notes => {
-            notes = notes.filter(note => {
-              return privacyLevel.indexOf(note.project.privacyLevel) > -1;
-            });
-            res.send(200, notes);
-          })
-          .catch(err => res.send(500, err));
-
-        })
-        .catch(err => res.send(403, err));
+        return AccessControl.single(owner, user.sub, privacyLevel)
+          .then(() => res.send(200, notes))
+          .catch(err => res.send(403, err));
+      })
+      .catch(err => res.send(500, err));
     });
 
   server.post(
