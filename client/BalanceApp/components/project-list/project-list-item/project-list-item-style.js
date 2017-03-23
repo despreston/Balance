@@ -5,7 +5,7 @@ export const Style = StyleSheet.create({
 
   projectListItem: {
     borderRadius: 4,
-    height: 140,
+    height: 150,
     borderColor: Colors.white,
     backgroundColor: Colors.white,
     flexDirection: 'row'
@@ -28,7 +28,7 @@ export const Style = StyleSheet.create({
     fontStyle: 'italic',
     fontSize: 14,
     color: Colors.gray.tundora,
-    paddingVertical: 20
+    paddingVertical: 25
   },
 
   text: {
@@ -41,6 +41,12 @@ export const Style = StyleSheet.create({
     paddingTop: 15,
     fontSize: 14,
     color: Colors.gray.tundora
+  },
+
+  footer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
   
 });

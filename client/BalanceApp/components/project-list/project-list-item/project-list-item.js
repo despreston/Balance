@@ -5,6 +5,7 @@ import { View, Text } from 'react-native';
 // Components
 import StatusIcon from '../../status-icon/StatusIcon';
 import Nudges from '../../nudges/nudges';
+import NudgeBtn from '../../nudges/nudge-button/nudge-button';
 
 // styles
 import { Style } from './project-list-item-style';
@@ -65,7 +66,13 @@ function ProjectListItem ({ project }) {
             </Text>
           }
           { renderNote() }
-          { renderNudgeUsers() }
+          <View style={ Style.footer }>
+            { renderNudgeUsers() }
+            { 
+              lastUpdated && status === 'active' &&
+              <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />
+            }
+          </View>
       </View>
       {
         lastUpdated && status === 'active' &&
