@@ -16,7 +16,7 @@ export default class Nudges extends Component {
     this.state = { nudgers: props.nudgeUsers };
 
     this.numOfNudgers = this.state.nudgers.length;
-    
+
     this.textPos = this.numOfNudgers > 5 ? -30: (this.numOfNudgers * -8) + 10;
   }
 
@@ -43,11 +43,11 @@ export default class Nudges extends Component {
 
   renderText () {
     switch (true) {
-      case (this.numOfNudgers === 1): return 'wants an update';
-      case (this.numOfNudgers < 6): return 'want an update';
+      case (this.numOfNudgers === 1): return 'wants an ';
+      case (this.numOfNudgers < 6): return 'want an ';
       case (this.numOfNudgers > 6): 
         let remaining = this.numOfNudgers - 5;
-        return `and ${remaining} others want an update`;
+        return `and ${remaining} others want an `;
       default: return null;
     }
   }
@@ -58,6 +58,7 @@ export default class Nudges extends Component {
         { this.renderPictures() } 
         <Text style={ [Style.text, { left: this.textPos }] }>
           { this.renderText() }
+          <Text style={ Style.bold }>update</Text>
         </Text>
       </View>
     );

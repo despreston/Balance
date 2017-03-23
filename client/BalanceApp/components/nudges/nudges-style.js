@@ -16,6 +16,10 @@ export default StyleSheet.create({
     borderColor: Colors.gray.silver
   },
 
+  bold: {
+    fontWeight: '800'
+  },
+
   text: {
     alignSelf: 'center',
     color: Colors.gray.silver,
