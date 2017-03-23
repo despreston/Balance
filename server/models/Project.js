@@ -70,7 +70,7 @@ Project.statics.queryWithNotes = function (query) {
 
   return this
     .find(query)
-    .populate('nudgeUsers', 'userId username')
+    .populate('nudgeUsers', 'userId username picture')
     .lean().then(projects => {
       const projectIds = projects.map(project => project._id);
       

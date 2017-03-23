@@ -29,7 +29,7 @@ module.exports = (server) => {
 
       Project
       .findOne(params)
-      .populate('nudgeUsers', 'userId username')
+      .populate('nudgeUsers', 'userId username picture')
       .lean()
       .then(project => {
         return AccessControl.single(project.user, user.sub, project.privacyLevel)

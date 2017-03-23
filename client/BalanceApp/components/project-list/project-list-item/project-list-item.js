@@ -4,13 +4,16 @@ import { View, Text } from 'react-native';
 
 // Components
 import StatusIcon from '../../status-icon/StatusIcon';
+import Nudges from '../../nudges/nudges';
+
+// styles
 import { Style } from './project-list-item-style';
 
 // utils
 import { formatDate } from '../../../utils/helpers';
 
 function ProjectListItem ({ project }) {
-  const { Past, Future, status } = project;
+  const { Past, Future, status, nudgeUsers } = project;
   let lastUpdated;
 
   if (Past && Future) {
@@ -43,19 +46,26 @@ function ProjectListItem ({ project }) {
       </Text>
     );
   }
+
+  function renderNudgeUsers () {
+    if (nudgeUsers && nudgeUsers.length > 0) {
+      return <Nudges nudgeUsers={ nudgeUsers } />
+    }
+
+    return null;
+  }
   
   return (
     <View style={ Style.projectListItem }>
       <View style={ Style.content }>
-        <View style={ Style.header }>
           <Text style={ Style.title }>{ project.title }</Text>
-        </View>
           {
             lastUpdated && <Text style={ Style.text }>
               Updated { formatDate(lastUpdated) }
             </Text>
           }
           { renderNote() }
+          { renderNudgeUsers() }
       </View>
       {
         lastUpdated && status === 'active' &&
