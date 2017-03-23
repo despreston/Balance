@@ -15,11 +15,13 @@ import {
   UserSearch
 } from '../screens';
 
+import Colors from '../colors';
+
 // Default header for all stack navs
 const navigationOptions = {
   header: ({ navigate }) => {
     const tintColor = '#FFFFFF';
-    const style = { backgroundColor: '#333' };
+    const style = { backgroundColor: Colors.purple };
 
     return { tintColor, style };
   }

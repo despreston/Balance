@@ -6,85 +6,61 @@ import { View, Text } from 'react-native';
 import StatusIcon from '../../status-icon/StatusIcon';
 import { Style } from './project-list-item-style';
 
+// utils
+import { formatDate } from '../../../utils/helpers';
+
 function ProjectListItem ({ project }) {
   const { Past, Future, status } = project;
   let lastUpdated;
 
-    if (Past && Future) {
-      lastUpdated = Past.lastUpdated.getTime() > Future.lastUpdated.getTime() ?
-      Past.lastUpdated : Future.lastUpdated;
-    } else if (Past) {
-      lastUpdated = Past.lastUpdated;
-    } else if (Future) {
-      lastUpdated = Future.lastUpdated; 
-    }
-
-  function getEmptyNotesMessage () {
-    return !(Past || Future)
-      ? (<Text style={[Style.noteContent, Style.center]}>Nothing yet. 😕</Text>)
-      : null;
+  if (Past && Future) {
+    lastUpdated = Past.lastUpdated.getTime() > Future.lastUpdated.getTime() ?
+    Past.lastUpdated : Future.lastUpdated;
+  } else if (Past) {
+    lastUpdated = Past.lastUpdated;
+  } else if (Future) {
+    lastUpdated = Future.lastUpdated; 
   }
 
-  function privacyLevelIcon (level) {
-    switch (level) {
-      case 'global':  return '🌎';
-      case 'friends': return '👥';
-      case 'private': return '🔒';
-      default:        return '';
-    };
-  }
-
-  function renderNotes () {
+  function renderNote () {
     if (status === 'finished') {
       return (
-        <View style={ Style.notes }>
-          <Text style={ [Style.center, Style.noteContent] }>
-            You finished this project. Hooray!
-          </Text>
-        </View>
+        <Text style={ [Style.text, Style.finished] }>
+          This project is finished!
+        </Text>
       );
+    } else if (Past) {
+      return (
+        <Text style={ Style.note } numberOfLines={ 1 }>
+          { Past.content }
+        </Text>
+      )
     }
 
     return (
-      <View style={ Style.notes }>
-        {
-          Past && <Text style={ Style.noteContent }>
-            <Text style={ Style.noteType }>Last: </Text>
-            { Past.content }
-          </Text>
-        }
-        {
-          Future && <Text style={ Style.noteContent }>
-            <Text style={ Style.noteType }>Next: </Text>
-            { Future.content }
-          </Text>
-        }
-        { getEmptyNotesMessage() }
-      </View>
+      <Text style={ Style.finished }>
+        Nothing done for this yet. 😕
+      </Text>
     );
   }
   
   return (
     <View style={ Style.projectListItem }>
-      <View style={ Style.header }>
-        <Text style={ Style.title }>{ project.title }</Text>
-        { 
-          lastUpdated && status === 'active' &&
-          <StatusIcon lastUpdated={ lastUpdated } />
-        }
+      <View style={ Style.content }>
+        <View style={ Style.header }>
+          <Text style={ Style.title }>{ project.title }</Text>
+        </View>
+          {
+            lastUpdated && <Text style={ Style.text }>
+              Updated { formatDate(lastUpdated) }
+            </Text>
+          }
+          { renderNote() }
       </View>
-      { renderNotes() }
-      <View style={ Style.footer }>
-        <Text style={ [Style.footerText, Style.privacyIcon] }>
-          { privacyLevelIcon(project.privacyLevel) }
-        </Text>
-        {
-          lastUpdated && <Text style={ Style.footerText }>
-            Last Updated: { lastUpdated.toLocaleString() }
-          </Text>
-        }
-      </View>
-
+      {
+        lastUpdated && status === 'active' &&
+        <StatusIcon lastUpdated={ lastUpdated } />
+      }
     </View>
   );
 }

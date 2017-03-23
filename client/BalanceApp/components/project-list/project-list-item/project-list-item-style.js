@@ -1,71 +1,53 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../colors';
 
 export const Style = StyleSheet.create({
 
   projectListItem: {
-    backgroundColor: '#F5F6FA',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#E8E8EA',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0.5, height: 0.5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5
+    borderRadius: 4,
+    height: 130,
+    borderColor: Colors.white,
+    backgroundColor: Colors.white,
+    flexDirection: 'row'
   },
 
   header: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEF0EF',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 40,
-    paddingHorizontal: 10
-  },
-
-  footer: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row-reverse'
+    height: 40
   },
 
   title: {
-    color: '#2E92E1',
+    color: Colors.gray.tundora,
     fontSize: 18,
     fontWeight: 'bold'
   },
 
-  notes: {
-    height: 100,
-    paddingVertical: 10,
-    paddingHorizontal: 10
-  },
-
-  noteType: {
-    color: '#3D3F3E',
-    fontWeight: 'bold'
-  },
-
-  noteContent: {
-    color: '#77778A',
-    height: 40,
-    fontSize: 14
-  },
-
-  footerText: {
-    color: '#CFD0D4',
-    fontSize: 12,
+  content: {
+    flex: 1,
     paddingBottom: 8,
     paddingHorizontal: 10
   },
 
-  privacyIcon: {
-    opacity: 0.8
+  note: {
+    fontStyle: 'italic',
+    fontSize: 14,
+    color: Colors.gray.tundora,
+    paddingTop: 15
   },
 
-  center: {
-    alignSelf: 'center',
-    justifyContent: 'center'
+  text: {
+    color: Colors.gray.silver,
+    fontSize: 12,
+    paddingBottom: 8
+  },
+
+  finished: {
+    textAlign: 'center',
+    paddingTop: 15,
+    fontSize: 14,
+    color: Colors.gray.tundora
   }
   
 });
