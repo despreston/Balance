@@ -4,87 +4,80 @@ import { View, Text } from 'react-native';
 
 // Components
 import StatusIcon from '../../status-icon/StatusIcon';
+import Nudges from '../../nudges/nudges';
+import NudgeBtn from '../../nudges/nudge-button/nudge-button';
+
+// styles
 import { Style } from './project-list-item-style';
 
+// utils
+import { formatDate } from '../../../utils/helpers';
+
 function ProjectListItem ({ project }) {
-  const { Past, Future, status } = project;
+  const { Past, Future, status, nudgeUsers } = project;
   let lastUpdated;
 
-    if (Past && Future) {
-      lastUpdated = Past.lastUpdated.getTime() > Future.lastUpdated.getTime() ?
-      Past.lastUpdated : Future.lastUpdated;
-    } else if (Past) {
-      lastUpdated = Past.lastUpdated;
-    } else if (Future) {
-      lastUpdated = Future.lastUpdated; 
-    }
-
-  function getEmptyNotesMessage () {
-    return !(Past || Future)
-      ? (<Text style={[Style.noteContent, Style.center]}>Nothing yet. 😕</Text>)
-      : null;
+  if (Past && Future) {
+    lastUpdated = Past.lastUpdated.getTime() > Future.lastUpdated.getTime() ?
+    Past.lastUpdated : Future.lastUpdated;
+  } else if (Past) {
+    lastUpdated = Past.lastUpdated;
+  } else if (Future) {
+    lastUpdated = Future.lastUpdated; 
   }
 
-  function privacyLevelIcon (level) {
-    switch (level) {
-      case 'global':  return '🌎';
-      case 'friends': return '👥';
-      case 'private': return '🔒';
-      default:        return '';
-    };
-  }
-
-  function renderNotes () {
+  function renderNote () {
     if (status === 'finished') {
       return (
-        <View style={ Style.notes }>
-          <Text style={ [Style.center, Style.noteContent] }>
-            You finished this project. Hooray!
-          </Text>
-        </View>
+        <Text style={ Style.message }>
+          This project is finished!
+        </Text>
       );
+    } else if (Past) {
+      return (
+        <Text style={ Style.note } numberOfLines={ 1 }>
+          { Past.content }
+        </Text>
+      )
     }
 
     return (
-      <View style={ Style.notes }>
-        {
-          Past && <Text style={ Style.noteContent }>
-            <Text style={ Style.noteType }>Last: </Text>
-            { Past.content }
-          </Text>
-        }
-        {
-          Future && <Text style={ Style.noteContent }>
-            <Text style={ Style.noteType }>Next: </Text>
-            { Future.content }
-          </Text>
-        }
-        { getEmptyNotesMessage() }
-      </View>
+      <Text style={ Style.message }>
+        Nothing done for this yet. 😕
+      </Text>
     );
+  }
+
+  function renderNudgeUsers () {
+    if (nudgeUsers && nudgeUsers.length > 0) {
+      return <Nudges nudgeUsers={ nudgeUsers } />
+    }
+
+    return null;
   }
   
   return (
     <View style={ Style.projectListItem }>
-      <View style={ Style.header }>
-        <Text style={ Style.title }>{ project.title }</Text>
-        { 
-          lastUpdated && status === 'active' &&
-          <StatusIcon lastUpdated={ lastUpdated } />
-        }
+      <View style={ Style.content }>
+          <Text style={ Style.title }>{ project.title }</Text>
+          {
+            lastUpdated && <Text style={ Style.text }>
+              Updated { formatDate(lastUpdated) }
+            </Text>
+          }
+          { renderNote() }
+          <View style={ Style.footer }>
+            { renderNudgeUsers() }
+            { 
+              lastUpdated && status === 'active' &&
+              <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />
+            }
+          </View>
       </View>
-      { renderNotes() }
-      <View style={ Style.footer }>
-        <Text style={ [Style.footerText, Style.privacyIcon] }>
-          { privacyLevelIcon(project.privacyLevel) }
-        </Text>
-        {
-          lastUpdated && <Text style={ Style.footerText }>
-            Last Updated: { lastUpdated.toLocaleString() }
-          </Text>
-        }
-      </View>
-
+      {
+        lastUpdated && status === 'active' &&
+        <StatusIcon lastUpdated={ lastUpdated } />
+      }
     </View>
   );
 }

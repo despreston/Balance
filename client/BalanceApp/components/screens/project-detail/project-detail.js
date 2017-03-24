@@ -179,9 +179,9 @@ class ProjectDetail extends Component {
 
   renderNudges () {
     const { navigate } = this.props.navigation;
-    const { nudges, nudgeUsers } = this.props.project;
+    const { nudgeUsers } = this.props.project;
 
-    if (nudges.length === 0 || !nudgeUsers) { return null; }
+    if (!nudgeUsers || nudgeUsers.length === 0) { return null; }
 
     const names = nudgeUsers.map((user, idx) => {
       const text = idx < nudgeUsers.length - 1 

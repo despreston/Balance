@@ -36,6 +36,8 @@ let Project = new mongoose.Schema({
     }
   }]
   
+}, { 
+  toObject: { virtuals: true }
 });
 
 /**
@@ -70,9 +72,12 @@ Project.statics.queryWithNotes = function (query) {
 
   return this
     .find(query)
-    .populate('nudgeUsers', 'userId username')
+    .populate('nudgeUsers', 'userId username picture')
     .lean().then(projects => {
       const projectIds = projects.map(project => project._id);
+
+      // unneeded since we get nudgeUsers
+      projects.forEach(project => delete project.nudges);
       
       return Note
         .find({ project: { $in: projectIds } })
