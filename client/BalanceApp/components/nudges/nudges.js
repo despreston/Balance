@@ -8,7 +8,8 @@ export default class Nudges extends Component {
 
   static propTypes = {
     nudgeUsers: PropTypes.array.isRequired,
-    linkToUpdate: PropTypes.bool
+    linkToUpdate: PropTypes.bool,
+    imageSize: PropTypes.number
   };
 
   constructor (props) {
@@ -37,7 +38,15 @@ export default class Nudges extends Component {
 
   renderPictures () {
     let { nudgers, numOfNudgers } = this.state;
-    let key = 0;
+    let key = 0, size = null;
+
+    if (this.props.imageSize) {
+      size = {
+        height: this.props.imageSize,
+        width: this.props.imageSize,
+        borderRadius: this.props.imageSize / 2
+      };
+    }
 
     if (numOfNudgers > 5) {
       nudgers = nudgers.slice(0, 5);
@@ -49,7 +58,7 @@ export default class Nudges extends Component {
         <Image
           key={ key }
           source={{ uri: user.picture }}
-          style={ [Style.picture, { left: -8 * key }] } />
+          style={ [Style.picture, { left: -8 * key }, size] } />
       );
     });
   }

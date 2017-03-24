@@ -183,7 +183,7 @@ class ProjectDetail extends Component {
 
     if (!nudgeUsers || nudgeUsers.length === 0) { return null; }
 
-    return <Nudges nudgeUsers={ nudgeUsers } />;
+    return <Nudges nudgeUsers={ nudgeUsers } imageSize={ 30 } />;
   }
 
   render () {
