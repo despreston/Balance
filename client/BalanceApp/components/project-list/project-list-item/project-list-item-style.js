@@ -5,7 +5,7 @@ export const Style = StyleSheet.create({
 
   projectListItem: {
     borderRadius: 4,
-    height: 150,
+    height: 160,
     borderColor: Colors.white,
     backgroundColor: Colors.white,
     flexDirection: 'row'
@@ -37,7 +37,7 @@ export const Style = StyleSheet.create({
     fontSize: 12
   },
 
-  finished: {
+  message: {
     textAlign: 'center',
     paddingTop: 15,
     fontSize: 14,

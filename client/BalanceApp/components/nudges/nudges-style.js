@@ -5,7 +5,8 @@ export default StyleSheet.create({
 
   nudges: {
     paddingLeft: 8,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
 
   picture: {
@@ -21,7 +22,6 @@ export default StyleSheet.create({
   },
 
   text: {
-    alignSelf: 'center',
     color: Colors.gray.silver,
     fontSize: 12
   }

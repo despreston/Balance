@@ -29,7 +29,7 @@ function ProjectListItem ({ project }) {
   function renderNote () {
     if (status === 'finished') {
       return (
-        <Text style={ [Style.text, Style.finished] }>
+        <Text style={ Style.message }>
           This project is finished!
         </Text>
       );
@@ -42,7 +42,7 @@ function ProjectListItem ({ project }) {
     }
 
     return (
-      <Text style={ Style.finished }>
+      <Text style={ Style.message }>
         Nothing done for this yet. 😕
       </Text>
     );
