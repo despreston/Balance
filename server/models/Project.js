@@ -50,44 +50,46 @@ Project.virtual('nudgeUsers', {
 });
 
 /**
- * Finds projects and includes latest future and past notes for each project
- * @param {object} query Search query
- * @return {Promise}
+ * Ref to latest Past note for Project
  */
-Project.statics.queryWithNotes = function (query) {
-  function getLatestNotesForProjects (notes, projects) {
-    notes.forEach(note => {
-      const index = projects.findIndex(project => {
-        return note.project._id.equals(project._id);
-      });
+Project.virtual('Past', {
+  ref: 'note',
+  localField: '_id',
+  foreignField: 'project'
+});
 
-      if (index > -1) {
-        if (!projects[index][note.type]) {
-          projects[index][note.type] = note;
-        }
-      }
-    });
-    return projects;
-  }
+/**
+ * Ref to latest Future note for Project
+ */
+Project.virtual('Future', {
+  ref: 'note',
+  localField: '_id',
+  foreignField: 'project'
+});
 
-  return this
-    .find(query)
-    .populate('nudgeUsers', 'userId username picture')
-    .lean().then(projects => {
-      const projectIds = projects.map(project => project._id);
-
-      // unneeded since we get nudgeUsers
-      projects.forEach(project => delete project.nudges);
-      
-      return Note
-        .find({ project: { $in: projectIds } })
-        .sort('-createdAt')
-        .populate('project', 'title privacyLevel')
-        .lean()
-        .then(notes => getLatestNotesForProjects(notes, projects));
-    });
+/**
+ * Mongoose populate query for latest note of type 'Past'
+ */
+Project.statics.latestPastNote = {
+  path: 'Past',
+  match: { type: 'Past' },
+  options: { sort: { createdAt: -1 }, limit: 1 }
 };
 
+/**
+ * Mongoose populate query for latest note of type 'Future'
+ */
+Project.statics.latestFutureNote = {
+  path: 'Future',
+  match: { type: 'Future' },
+  options: { sort: { createdAt: -1 }, limit: 1 }
+};
+
+/**
+ * # of projects that belong to user
+ * @param {String} userId User to get counts for
+ * @return {Promise} resolves with integer
+ */
 Project.statics.projectCountForUser = function (userId) {
   return this.count({ user: userId, status: 'active' }, (err, count) => {
     if (err) {
@@ -97,6 +99,45 @@ Project.statics.projectCountForUser = function (userId) {
     return count;
   });
 };
+
+/**
+ * Transforms the project ID in project.Note and project.Future to a full object
+ * that contains the project title, _id, and privacyLevel.
+ * e.g. { Past: { project: <ID> } } --> 
+ *      { Past: { project: { _id, title, privacyLevel } } }
+ *
+ * @param {Array} or {Object} array of projects or a single project object
+ * @return {Array} or {Object} depending on input 
+ */
+Project.statics.augmentNotesWithProject = function (projects) {
+
+  function transform (p) {
+    let fullObject = { 
+      _id: p._id,
+      title: p.title,
+      privacyLevel: p.privacyLevel
+    };
+
+    p.Past = p.Past.length > 0 ? p.Past[0] : null;
+    p.Future = p.Future.length > 0 ? p.Future[0] : null;
+
+    if (p.Past) {
+      p.Past.project = fullObject;
+    }
+
+    if (p.Future) {
+      p.Future.project = fullObject;
+    }
+
+    return p;
+  }
+
+  if (Array.isArray(projects)) {
+    return projects.map(transform);
+  }
+
+  return transform(projects);
+}
 
 Project.pre('save', function (next) {
 

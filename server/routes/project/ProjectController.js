@@ -17,11 +17,15 @@ module.exports = (server) => {
           const query = Object.assign({}, params, privacyLevel);
 
           Project
-          .queryWithNotes(query)
-          .then(projects => {
-            return res.send(200, projects);
-          })
-          .catch(err => res.send(500, err));
+          .find(query)
+          .populate('nudgeUsers', 'userId username picture')
+          .populate(Project.latestPastNote)
+          .populate(Project.latestFutureNote)
+          .lean()
+          .then(projects => Project.augmentNotesWithProject(projects))
+          .then(projects => res.send(200, projects))
+          .catch(() => res.send(500));
+
         }).catch(err => res.send(403, 'Failed: ' + err));
 
     });
