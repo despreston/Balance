@@ -7,7 +7,8 @@ import Style from './nudges-style';
 export default class Nudges extends Component {
 
   static propTypes = {
-    nudgeUsers: PropTypes.array.isRequired
+    nudgeUsers: PropTypes.array.isRequired,
+    linkToUpdate: PropTypes.bool
   };
 
   constructor (props) {
@@ -18,7 +19,8 @@ export default class Nudges extends Component {
       numOfNudgers: props.nudgeUsers.length,
       textPos: this.calcTextPos(props.nudgeUsers.length)
     };
-    
+
+    this.linkToUpdate = props.linkToUpdate;
   }
 
   componentWillReceiveProps (nextProps) {
@@ -71,11 +73,10 @@ export default class Nudges extends Component {
         { this.renderPictures() }
         <Text style={ [Style.text, { left: this.state.textPos }] }>
           { this.renderText() }
-          <Text style={ Style.bold }>update</Text>
+          <Text style={ this.linkToUpdate && Style.bold }>update</Text>
         </Text>
       </View>
     );
-
   }
 
 }

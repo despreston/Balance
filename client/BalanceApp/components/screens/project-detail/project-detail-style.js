@@ -11,7 +11,6 @@ export const Styles = StyleSheet.create ({
     color: '#3D3F3E',
     fontSize: 26,
     fontWeight: '500',
-    textAlign: 'center',
     paddingHorizontal: 10,
     paddingVertical: 30
   },
@@ -68,10 +67,9 @@ export const Styles = StyleSheet.create ({
     textAlign: 'center'
   },
 
-  nudgedText: {
-    color: '#3D3F3E',
-    textAlign: 'center',
-    fontSize: 13,
+  info: {
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingBottom: 20
   },
 

@@ -17,6 +17,7 @@ import EditNote from '../../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
 import NoteList from '../../note-list/note-list';
 import NavBtn from '../../navigation/nav-btn';
+import Nudges from '../../nudges/nudges';
 
 // actions
 import { saveNote, requestNotes, invalidate } from '../../../actions';
@@ -178,31 +179,11 @@ class ProjectDetail extends Component {
   }
 
   renderNudges () {
-    const { navigate } = this.props.navigation;
     const { nudgeUsers } = this.props.project;
 
     if (!nudgeUsers || nudgeUsers.length === 0) { return null; }
 
-    const names = nudgeUsers.map((user, idx) => {
-      const text = idx < nudgeUsers.length - 1 
-        ? `${user.username},`
-        : user.username;
-      
-      return (
-        <Text
-          key={ idx }
-          onPress={ () => navigate('UserProfile', { userId: user.userId }) }
-          style={ Styles.bold }>
-          { text }
-        </Text>
-      );
-    });
-
-    return (
-      <Text style={ Styles.nudgedText }>
-        { names } nudged you for an update
-      </Text>
-    );
+    return <Nudges nudgeUsers={ nudgeUsers } />;
   }
 
   render () {
@@ -228,8 +209,10 @@ class ProjectDetail extends Component {
 
     return (
       <ScrollView style={ Styles.projectDetail }>
-        <Text style={ Styles.title }>{ project.title }</Text>
-        { project.status === 'active' && this.renderNudges() }
+        <View style={ Styles.info }>
+          <Text style={ Styles.title }>{ project.title }</Text>
+          { project.status === 'active' && this.renderNudges() }
+        </View>
         <View style={ Styles.container }>
           { this.renderUpdateButtons() }
           { project.status === 'active' && <FutureNote note={ futureNote }/> }

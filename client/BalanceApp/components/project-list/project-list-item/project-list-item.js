@@ -50,7 +50,7 @@ function ProjectListItem ({ project }) {
 
   function renderNudgeUsers () {
     if (nudgeUsers && nudgeUsers.length > 0) {
-      return <Nudges nudgeUsers={ nudgeUsers } />
+      return <Nudges nudgeUsers={ nudgeUsers } linkToUpdate={ true }/>
     }
 
     return null;
