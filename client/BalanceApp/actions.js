@@ -201,7 +201,6 @@ export function nudge (project) {
  * @return {Promise}
  */
 export function removeNudge (project, user) {
-  console.log(arguments)
   const opts = { method: 'DELETE' };
   return apiDispatch(`projects/${project}/nudges/${user}`, receiveProjects, opts);
 };
