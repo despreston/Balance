@@ -20,7 +20,8 @@ export const Style = StyleSheet.create({
 
   content: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingLeft: 15,
+    paddingRight: 10,
     paddingVertical: 10
   },
 
