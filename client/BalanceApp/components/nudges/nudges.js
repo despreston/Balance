@@ -14,14 +14,18 @@ export default class Nudges extends Component {
     super(props);
 
     this.state = { nudgers: props.nudgeUsers };
-
-    this.numOfNudgers = this.state.nudgers.length;
-
-    this.textPos = this.numOfNudgers > 5 ? -30: (this.numOfNudgers * -8) + 10;
+    
+    this.init();
   }
 
   componentWillReceiveProps (nextProps) {
     this.setState({ nudgers: nextProps.nudgeUsers });
+    this.init();
+  }
+
+  init () {
+    this.numOfNudgers = this.state.nudgers.length;
+    this.textPos = this.numOfNudgers > 5 ? -30: (this.numOfNudgers * -8) + 10;
   }
 
   renderPictures () {
