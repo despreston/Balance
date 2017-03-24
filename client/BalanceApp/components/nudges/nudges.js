@@ -13,26 +13,31 @@ export default class Nudges extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { nudgers: props.nudgeUsers };
+    this.state = {
+      nudgers: props.nudgeUsers,
+      numOfNudgers: props.nudgeUsers.length,
+      textPos: this.calcTextPos(props.nudgeUsers.length)
+    };
     
-    this.init();
   }
 
   componentWillReceiveProps (nextProps) {
-    this.setState({ nudgers: nextProps.nudgeUsers });
-    this.init();
+    this.setState({
+      nudgers: nextProps.nudgeUsers,
+      numOfNudgers: nextProps.nudgeUsers.length,
+      textPos: this.calcTextPos(nextProps.nudgeUsers.length)
+    });
   }
 
-  init () {
-    this.numOfNudgers = this.state.nudgers.length;
-    this.textPos = this.numOfNudgers > 5 ? -30: (this.numOfNudgers * -8) + 10;
+  calcTextPos (numOfNudgers) {
+    return numOfNudgers > 5 ? -30: (numOfNudgers * -8) + 10;
   }
 
   renderPictures () {
-    let { nudgers } = this.state;
+    let { nudgers, numOfNudgers } = this.state;
     let key = 0;
 
-    if (this.numOfNudgers > 5) {
+    if (numOfNudgers > 5) {
       nudgers = nudgers.slice(0, 5);
     }
 
@@ -46,11 +51,13 @@ export default class Nudges extends Component {
   }
 
   renderText () {
+    const { numOfNudgers } = this.state;
+
     switch (true) {
-      case (this.numOfNudgers === 1): return 'wants an ';
-      case (this.numOfNudgers < 6): return 'want an ';
-      case (this.numOfNudgers > 6): 
-        let remaining = this.numOfNudgers - 5;
+      case (numOfNudgers === 1): return 'wants an ';
+      case (numOfNudgers < 6): return 'want an ';
+      case (numOfNudgers > 6):
+        let remaining = numOfNudgers - 5;
         return `and ${remaining} others want an `;
       default: return null;
     }
@@ -59,8 +66,8 @@ export default class Nudges extends Component {
   render () {
     return (
       <View style={ Style.nudges }>
-        { this.renderPictures() } 
-        <Text style={ [Style.text, { left: this.textPos }] }>
+        { this.renderPictures() }
+        <Text style={ [Style.text, { left: this.state.textPos }] }>
           { this.renderText() }
           <Text style={ Style.bold }>update</Text>
         </Text>

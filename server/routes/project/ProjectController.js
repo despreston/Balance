@@ -51,6 +51,9 @@ module.exports = (server) => {
       Project
       .findOne(params)
       .populate('nudgeUsers', 'userId username picture')
+      .populate(Project.latestPastNote)
+      .populate(Project.latestFutureNote)
+      .then(project => Project.augmentNotesWithProject(project))
       .then(project => {
         const hasNudgeFromUser = project.nudges.some(nudge => {
           return nudge.userId === user.sub;
@@ -78,6 +81,9 @@ module.exports = (server) => {
       Project
       .findOne({ '_id': params.project })
       .populate('nudgeUsers', 'userId username picture')
+      .populate(Project.latestPastNote)
+      .populate(Project.latestFutureNote)
+      .then(project => Project.augmentNotesWithProject(project))
       .then(project => {
         const nudgeIdx = project.nudges.findIndex(n => n.userId === params.user);
 
@@ -120,6 +126,10 @@ module.exports = (server) => {
 
       Project
       .findOne({_id: params._id})
+      .populate('nudgeUsers', 'userId username picture')
+      .populate(Project.latestPastNote)
+      .populate(Project.latestFutureNote)
+      .then(project => Project.augmentNotesWithProject(project))
       .then(project => {
         if (project.user !== user.sub) {
           return res.send(403);
