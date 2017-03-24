@@ -18,7 +18,9 @@ module.exports = (server) => {
 
           Project
           .queryWithNotes(query)
-          .then(projects => res.send(200, projects))
+          .then(projects => {
+            return res.send(200, projects);
+          })
           .catch(err => res.send(500, err));
         }).catch(err => res.send(403, 'Failed: ' + err));
 
@@ -43,7 +45,8 @@ module.exports = (server) => {
   server.post(
     'projects/:_id/nudges', ({ params, user }, res) => {
       Project
-      .findOne(params._id)
+      .findOne(params)
+      .populate('nudgeUsers', 'userId username picture')
       .then(project => {
         const hasNudgeFromUser = project.nudges.some(nudge => {
           return nudge.userId === user.sub;
@@ -56,10 +59,40 @@ module.exports = (server) => {
 
         project.nudges.push({ userId: user.sub, sentAt: new Date() });
         project.save();
-        
+
         return res.send(200, project);
       })
       .catch(err => res.send(500, err));
+    });
+
+  server.del(
+    'projects/:project/nudges/:user', ({ params, user }, res) => {
+      if (params.user !== user.sub) {
+        return res.send(403);
+      }
+
+      Project
+      .findOne({ '_id': params.project })
+      .populate('nudgeUsers', 'userId username picture')
+      .then(project => {
+        const nudgeIdx = project.nudges.findIndex(n => n.userId === params.user);
+
+        if (nudgeIdx < 0) {
+          return res.send(404);
+        }
+
+        project.nudges.splice(nudgeIdx);
+        project.save();
+        project = project.toObject();
+        delete project.nudges;
+
+        // need to remove from nudgeUsers since its outdated now
+        project.nudgeUsers.splice(
+          project.nudgeUsers.findIndex(u => u.userId === params.user)
+        );
+
+        return res.send(200, project);
+      });
     });
 
   server.post(
