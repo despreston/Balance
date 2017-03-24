@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
-import { Style } from './status-icon-style';
+
+import Styles from './status-icon-style';
+import Colors from '../colors';
 
 function StatusIcon ({ lastUpdated }) {
   function iconColor () {
@@ -11,21 +13,17 @@ function StatusIcon ({ lastUpdated }) {
     );
 
     if (difference < 1) {
-      return '#B0D391';
+      return Colors.green;
     } else if (difference <= 7) {
-      return '#DDDDDD';
+      return Colors.yellow;
     } else if (difference <= 14) {
-      return '#FACA9C';
+      return Colors.orange;
     }
     
-    return '#B86D6F';
+    return Colors.red;
   }
 
-  const color = iconColor();
-
-  return (
-    <View style={[Style.Icon, { backgroundColor: color, shadowColor: color }]} />
-  );
+  return <View style={ [Styles.icon, { backgroundColor: iconColor() }] } />;
 };
 
 StatusIcon.propTypes = {
