@@ -13,6 +13,7 @@ module.exports = (server) => {
 
       AccessControl.many(params, user.sub)
         .then(privacyLevel => {
+
           privacyLevel = { privacyLevel: { $in: privacyLevel } };
           const query = Object.assign({}, params, privacyLevel);
 
@@ -50,7 +51,6 @@ module.exports = (server) => {
     'projects/:_id/nudges', ({ params, user }, res) => {
       Project
       .findOne(params)
-      .populate('nudgeUsers', 'userId username picture')
       .populate(Project.latestPastNote)
       .populate(Project.latestFutureNote)
       .then(project => Project.augmentNotesWithProject(project))
@@ -65,9 +65,18 @@ module.exports = (server) => {
         }
 
         project.nudges.push({ userId: user.sub, sentAt: new Date() });
-        project.save();
 
-        return res.send(200, project);
+        project.save(err => {
+          if (err) { return res.send(500); }
+
+          // Get the updated list of nudgeUsers
+          project
+          .populate('nudgeUsers', 'userId username picture', err => {
+            if (err) { return res.send(500); }
+
+            return res.send(200, project.toObject());
+          });
+        });
       })
       .catch(err => res.send(500, err));
     });
@@ -138,7 +147,7 @@ module.exports = (server) => {
         project = Object.assign(project, body);
         project.save();
 
-        return res.send(200, project);
+        return res.send(200, project.toObject());
       });
     });
 

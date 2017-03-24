@@ -43,10 +43,12 @@ export default class Nudges extends Component {
 
     return nudgers.map(user => {
       key++;
-      return <Image
-        key={ key }
-        source={{ uri: user.picture }}
-        style={ [Style.picture, { left: -8 * key }] } />
+      return (
+        <Image
+          key={ key }
+          source={{ uri: user.picture }}
+          style={ [Style.picture, { left: -8 * key }] } />
+      );
     });
   }
 
