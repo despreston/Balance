@@ -223,6 +223,15 @@ export function requestNotes (params) {
 };
 
 /**
+ * Fetch single note
+ * @param {String} id Note ID
+ * @return {Promise}
+ */
+export function fetchNote (id) {
+  return apiDispatch(`notes/${id}`, receiveNotes);
+};
+
+/**
  * Fetch user 
  * @param {string} userId of user
  */

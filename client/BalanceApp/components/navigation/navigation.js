@@ -13,7 +13,8 @@ import {
   Profile,
   UserSettings,
   UserProfile,
-  UserSearch
+  UserSearch,
+  Note
 } from '../screens';
 
 import Colors from '../colors';
@@ -30,7 +31,8 @@ const navigationOptions = {
 
 // screens included in all nav stacks
 const defaultScreens = {
-  UserProfile: { screen: UserProfile }
+  UserProfile: { screen: UserProfile },
+  Note: { screen: Note }
 };
 
 function icon (path) {
