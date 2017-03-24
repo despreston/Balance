@@ -12,11 +12,7 @@ function mapStateToProps (state, ownProps) {
   };
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    fetchNote: id => dispatch(fetchNote(id))
-  };
-}
+const mapDispatchToProps = { fetchNote };
 
 class Note extends Component {
   

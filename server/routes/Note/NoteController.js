@@ -38,7 +38,7 @@ module.exports = server => {
         }
         
         const owner = notes[0].user;
-        const privacyLevel = notes[0].project.privacyLevel;
+        const { privacyLevel } = notes[0].project;
 
         return AccessControl.single(owner, user.sub, privacyLevel)
           .then(() => res.send(200, notes))
