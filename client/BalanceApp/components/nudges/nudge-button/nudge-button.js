@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity, Text, Image } from 'react-native';
 import { connect } from 'react-redux';
 
 // actions
@@ -36,7 +36,8 @@ class NudgeBtn extends Component {
     isSelected: PropTypes.bool.isRequired,
     project: PropTypes.string.isRequired,
     removeNudge: PropTypes.func.isRequired,
-    nudge: PropTypes.func.isRequired
+    nudge: PropTypes.func.isRequired,
+    useWhite: PropTypes.bool
   };
 
   constructor (props) {
@@ -50,9 +51,15 @@ class NudgeBtn extends Component {
   }
 
   renderButton () {
-    let image = this.state.isSelected
-      ? require('../../../assets/icons/nudge-filled.png')
-      : require('../../../assets/icons/nudge.png');
+    let image;
+
+    if (this.state.isSelected) {
+      image = require('../../../assets/icons/nudge-filled.png');
+    } else {
+      image = this.props.useWhite
+        ? require('../../../assets/icons/nudge-white.png')
+        : require('../../../assets/icons/nudge.png');
+    }
 
     return <Image source={ image } style={ Style.image } />;
   }
@@ -69,13 +76,26 @@ class NudgeBtn extends Component {
     this.setState({ isSelected: !this.state.isSelected });
   }
 
+  renderText () {
+    if (this.props.showText) {
+      return this.state.isSelected
+        ? <Text style={ Style.text }>You nudged for an update!</Text>
+        : <Text style={ Style.text }>Send a nudge to encourage an update</Text>
+    }
+
+    return null;
+  }
+
   render () {
     return (
-      <TouchableOpacity
-        onPress={ () => this.toggleNudge() }
-        style={ Style.touchable }>
-          { this.renderButton() }
-      </TouchableOpacity>
+      <View style={ Style.container }>
+        { this.renderText() }
+        <TouchableOpacity
+          onPress={ () => this.toggleNudge() }
+          style={ Style.touchable }>
+            { this.renderButton() }
+        </TouchableOpacity>
+      </View>
     );
   }
 

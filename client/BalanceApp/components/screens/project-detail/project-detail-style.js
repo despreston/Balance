@@ -35,7 +35,7 @@ export const Styles = StyleSheet.create ({
   updateButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 25,
+    paddingTop: 25,
     paddingHorizontal: 20
   },
 
@@ -79,11 +79,16 @@ export const Styles = StyleSheet.create ({
   info: {
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 25,
     backgroundColor: Colors.purple,
   },
 
   bold: {
     fontWeight: 'bold'
+  },
+
+  nudgeStuff: {
+    alignItems: 'center'
   }
   
 });

@@ -134,7 +134,7 @@ class ProjectDetail extends Component {
     );
   }
 
-  renderUpdateButtons () {
+  renderUpdateButton () {
     const { project } = this.props;
 
     if (project.status === 'finished') {
@@ -163,9 +163,22 @@ class ProjectDetail extends Component {
     );
   }
 
-  renderNudges () {
-    const { nudgeUsers } = this.props.project;
+  renderNudgeStuff () {
+    const { project } = this.props;
 
+    if (project.status !== 'active') {
+      return null;
+    }
+
+    return (
+      <View style={ Styles.nudgeStuff }>
+        { this.renderNudgeButton(project._id) }
+        { this.renderNudges(project.nudgeUsers) }
+      </View>
+    );
+  }
+
+  renderNudges (nudgeUsers) {
     if (!nudgeUsers || nudgeUsers.length === 0) { return null; }
 
     return (
@@ -174,6 +187,10 @@ class ProjectDetail extends Component {
         imageSize={ 30 }
         textStyle={ Styles.whiteText } />
     );
+  }
+
+  renderNudgeButton (id) {
+    return <NudgeBtn project={ id } useWhite={ true } showText={ true }/>;
   }
 
   render () {
@@ -207,8 +224,8 @@ class ProjectDetail extends Component {
             Started by
             <Text style={ Styles.bold }> { project.owner[0].username }</Text>
           </Text>
-          { project.status === 'active' && this.renderNudges() }
-          { this.renderUpdateButtons() }
+          { this.renderNudgeStuff() }
+          { this.renderUpdateButton() }
         </View>
         <View style={ Styles.container }>
           { project.status === 'active' && <FutureNote note={ futureNote }/> }
