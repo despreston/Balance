@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 
 // styles
 import { Styles } from './project-detail-style';
-import { Styles as NavStyles } from '../../navigation/navigation-styles';
 
 // Components
 import EditNote from '../../edit-note/edit-note';
