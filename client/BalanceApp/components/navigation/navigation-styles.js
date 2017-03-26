@@ -1,19 +1,11 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../colors';
 
 export const styles = StyleSheet.create  ({
-
-  view: {
-    backgroundColor: "#333333"
-  },
 
   mainTitle: {
     letterSpacing: 5,
     fontWeight: 'bold'
-  },
-
-  title: {
-    fontFamily: "Helvetica Neue",
-    textAlign: 'center'
   },
 
   button: {
@@ -21,9 +13,9 @@ export const styles = StyleSheet.create  ({
   },
 
   text: {
-    color: "#FFFFFF",
+    color: Colors.white,
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: '600'
   },
 
   touchable: {

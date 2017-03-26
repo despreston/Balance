@@ -29,7 +29,7 @@ export const Styles = StyleSheet.create ({
 
   emptyText: {
     alignSelf: 'center',
-    color: '#3D3F3E'
+    color: Colors.gray.tundora
   },
 
   updateButtonContainer: {
