@@ -146,7 +146,7 @@ Project.statics.augmentNotesWithProject = function (projects) {
 
 Project.pre('find', function () {
 
-  this.populate('owner', 'userId username picture');
+  this.populate('owner', 'userId username');
   this.populate(latestPastNote);
   this.populate(latestFutureNote);
 
@@ -161,7 +161,7 @@ Project.post('find', function (results) {
 
 Project.pre('findOne', function () {
 
-  this.populate('owner', 'userId username picture');
+  this.populate('owner', 'userId username');
   this.populate(latestPastNote);
   this.populate(latestFutureNote);
 
