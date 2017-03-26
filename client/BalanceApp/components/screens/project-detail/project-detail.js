@@ -17,6 +17,7 @@ import EditNote from '../../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
 import NoteList from '../../note-list/note-list';
 import Nudges from '../../nudges/nudges';
+import NudgeBtn from '../../nudges/nudge-button/nudge-button';
 import Icon from '../../navigation/icon';
 
 // utils
@@ -204,7 +205,7 @@ class ProjectDetail extends Component {
           </Text>
           <Text style={ [Styles.author, Styles.whiteText] }>
             Started by
-            <Text style={ Styles.bold }> Des</Text>
+            <Text style={ Styles.bold }> { project.owner[0].username }</Text>
           </Text>
           { project.status === 'active' && this.renderNudges() }
           { this.renderUpdateButtons() }

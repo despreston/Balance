@@ -30,7 +30,7 @@ module.exports = ({ get, post, put }) => {
     .populate('project', 'title privacyLevel')
     .lean()
     .then(notes => {
-      if (!notes) {
+      if (notes.length === 0) {
         return res.send(200, notes);
       }
       

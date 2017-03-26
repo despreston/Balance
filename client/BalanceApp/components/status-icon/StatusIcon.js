@@ -8,19 +8,16 @@ function StatusIcon ({ lastUpdated }) {
   function iconColor () {
     const dayMilliseconds = 24*60*60*1000;
     const today = new Date();
-    const difference = Math.round(
+    const daysSinceUpdate = Math.round(
       Math.abs((lastUpdated.getTime() - today)) / dayMilliseconds
     );
 
-    if (difference < 1) {
-      return Colors.green;
-    } else if (difference <= 7) {
-      return Colors.yellow;
-    } else if (difference <= 14) {
-      return Colors.orange;
+    switch (true) {
+      case (daysSinceUpdate < 2)   : return Colors.green;
+      case (daysSinceUpdate <= 7)  : return Colors.yellow;
+      case (daysSinceUpdate <= 14) : return Colors.orange;
+      default                      : return Colors.red;
     }
-    
-    return Colors.red;
   }
 
   return <View style={ [Styles.icon, { backgroundColor: iconColor() }] } />;
