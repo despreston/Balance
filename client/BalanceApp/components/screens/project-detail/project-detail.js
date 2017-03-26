@@ -27,6 +27,9 @@ import emptyNote from '../../../utils/empty-note';
 import { saveNote, requestNotes, invalidate } from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
+
+  const project = state.projects[navigation.state.params.project];
+
   // notes for selected project
   const notes = Object.keys(state.notes)
     .map(id => state.notes[id])
@@ -34,10 +37,10 @@ function mapStateToProps (state, { navigation }) {
       return note.project._id === navigation.state.params.project;
     });
 
-  return {
-    project: state.projects[navigation.state.params.project],
-    notes
-  };
+  // Logged-in user is the owner of the project
+  const userIsOwner = project.owner[0].userId === state.loggedInUser;
+
+  return { userIsOwner, project, notes };
 
 }
 
@@ -54,7 +57,8 @@ class ProjectDetail extends Component {
   static propTypes = {
     saveNote: PropTypes.func.isRequired,
     project: PropTypes.shape({
-      title: PropTypes.string.isRequired
+      title: PropTypes.string.isRequired,
+      status: PropTypes.string.isRequired
     }),
     notes: PropTypes.array,
     requestNotes: PropTypes.func.isRequired,
@@ -62,15 +66,18 @@ class ProjectDetail extends Component {
   };
 
   static navigationOptions = {
-    header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
+    header: ({ state, navigate }, defaultHeader) => {
+      let right = null;
 
-      const right = (
-        <Icon
-          imagePath={ require('../../../assets/icons/edit-white.png') }
-          onPress={ () => {
-            navigate('EditProject', { project: state.params.project })
-          }} />
-      );
+      if (state.params.showEdit) {
+        right = (
+          <Icon
+            imagePath={ require('../../../assets/icons/edit-white.png') }
+            onPress={ () => {
+              navigate('EditProject', { project: state.params.project })
+            }} />
+        );
+      }
 
       return { ...defaultHeader, right };
     }
@@ -84,6 +91,10 @@ class ProjectDetail extends Component {
       note: {},
       invalid: false
     };
+  }
+
+  componentWillMount () {
+    this.props.navigation.setParams({ showEdit: this.props.userIsOwner });
   }
 
   componentDidMount () {
@@ -119,10 +130,10 @@ class ProjectDetail extends Component {
       );
     }
 
-    const nav = this.props.navigation.navigate;
+    const { navigation: { navigate: nav }, status, userIsOwner } = this.props;
 
-    // hide edit buttons if project is Finished
-    if (this.props.project.status === 'finished') {
+    // hide edit buttons if project is Finished OR user is not the owner
+    if (status === 'finished' || !userIsOwner) {
       return <NoteList notes={ notes } onSelect={ id => nav('Note', { id }) } />;
     }
 
@@ -135,7 +146,9 @@ class ProjectDetail extends Component {
   }
 
   renderUpdateButton () {
-    const { project } = this.props;
+    const { project, userIsOwner } = this.props;
+
+    if (!userIsOwner) { return null; }
 
     if (project.status === 'finished') {
       return (
@@ -164,7 +177,7 @@ class ProjectDetail extends Component {
   }
 
   renderNudgeStuff () {
-    const { project } = this.props;
+    const { project, userIsOwner } = this.props;
 
     if (project.status !== 'active') {
       return null;
@@ -172,7 +185,7 @@ class ProjectDetail extends Component {
 
     return (
       <View style={ Styles.nudgeStuff }>
-        { this.renderNudgeButton(project._id) }
+        { !userIsOwner && this.renderNudgeButton(project._id) }
         { this.renderNudges(project.nudgeUsers) }
       </View>
     );
