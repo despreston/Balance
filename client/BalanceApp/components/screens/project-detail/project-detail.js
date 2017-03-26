@@ -19,6 +19,9 @@ import NoteList from '../../note-list/note-list';
 import Nudges from '../../nudges/nudges';
 import Icon from '../../navigation/icon';
 
+// utils
+import emptyNote from '../../../utils/empty-note';
+
 // actions
 import { saveNote, requestNotes, invalidate } from '../../../actions';
 
@@ -39,7 +42,7 @@ function mapStateToProps (state, { navigation }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateNote: note => dispatch(saveNote(note)),
+    saveNote: note => dispatch(saveNote(note)),
     requestNotes: params => dispatch(requestNotes(params)),
     invalidateProjects: () => dispatch(invalidate('projects'))
   };
@@ -48,7 +51,7 @@ function mapDispatchToProps (dispatch) {
 class ProjectDetail extends Component {
 
   static propTypes = {
-    updateNote: PropTypes.func.isRequired,
+    saveNote: PropTypes.func.isRequired,
     project: PropTypes.shape({
       title: PropTypes.string.isRequired
     }),
@@ -98,18 +101,8 @@ class ProjectDetail extends Component {
     });
   }
 
-  saveNote (note) {
-    this.props.updateNote(note).then(() => this.props.invalidateProjects());
-  }
-
-  emptyNote (type) {
-    return {
-      _new: true,
-      user: this.props.project.user,
-      project: this.props.project._id,
-      content: '',
-      type
-    };
+  saveNoteAndInvalidate (note) {
+    this.props.saveNote(note).then(() => this.props.invalidateProjects());
   }
 
   notesForType (type) {
@@ -156,7 +149,9 @@ class ProjectDetail extends Component {
     return (
       <View style={ Styles.updateButtonContainer }>
         <TouchableOpacity
-          onPress={ () => this.toggleEditNoteModal(this.emptyNote('Future')) }
+          onPress={ () => {
+            return this.toggleEditNoteModal(emptyNote(project, 'Future')) }
+          }
           style={ Styles.updateButton }>
           <Text
             style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
@@ -198,7 +193,7 @@ class ProjectDetail extends Component {
     } else if (project.Future) {
       futureNote = project.Future;
     } else {
-      futureNote = this.emptyNote('Future');
+      futureNote = emptyNote(project, 'Future');
     }
 
     return (
@@ -226,7 +221,7 @@ class ProjectDetail extends Component {
         <EditNote
           style={ Styles.editNoteModal }
           visible={ this.state.editModalVisible }
-          onSave={ this.saveNote.bind(this) }
+          onSave={ this.saveNoteAndInvalidate.bind(this) }
           onClose={ () => this.toggleEditNoteModal({}) }
           note={ this.state.note } />
       </ScrollView>
