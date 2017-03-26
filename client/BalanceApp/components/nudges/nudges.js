@@ -9,7 +9,8 @@ export default class Nudges extends Component {
   static propTypes = {
     nudgeUsers: PropTypes.array.isRequired,
     linkToUpdate: PropTypes.bool,
-    imageSize: PropTypes.number
+    imageSize: PropTypes.number,
+    textStyle: PropTypes.number
   };
 
   constructor (props) {
@@ -77,10 +78,12 @@ export default class Nudges extends Component {
   }
 
   render () {
+    const { textStyle } = this.props;
+
     return (
       <View style={ Style.nudges }>
         { this.renderPictures() }
-        <Text style={ [Style.text, { left: this.state.textPos }] }>
+        <Text style={ [Style.text, { left: this.state.textPos }, textStyle] }>
           { this.renderText() }
           <Text style={ this.linkToUpdate && Style.bold }>update</Text>
         </Text>

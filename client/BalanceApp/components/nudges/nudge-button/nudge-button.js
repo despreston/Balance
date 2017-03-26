@@ -11,9 +11,17 @@ import Style from './nudge-button-style';
 function mapStateToProps (state, ownProps) {
   let fullProj = state.projects[ownProps.project];
 
+  function getIsSelected () {
+    if (fullProj.nudgeUsers) {
+      return fullProj.nudgeUsers.some(u => u.userId === state.loggedInUser);
+    }
+    
+    return false;
+  }
+
   return {
     user: state.loggedInUser,
-    isSelected: fullProj.nudgeUsers.some(u => u.userId === state.loggedInUser)
+    isSelected: getIsSelected()
   };
 }
 

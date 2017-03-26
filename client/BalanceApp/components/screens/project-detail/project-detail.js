@@ -11,13 +11,14 @@ import { connect } from 'react-redux';
 
 // styles
 import { Styles } from './project-detail-style';
+import { Styles as NavStyles } from '../../navigation/navigation-styles';
 
 // Components
 import EditNote from '../../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
 import NoteList from '../../note-list/note-list';
-import NavBtn from '../../navigation/nav-btn';
 import Nudges from '../../nudges/nudges';
+import Icon from '../../navigation/icon';
 
 // actions
 import { saveNote, requestNotes, invalidate } from '../../../actions';
@@ -61,15 +62,14 @@ class ProjectDetail extends Component {
     header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
 
       const right = (
-        <NavBtn
-          title='Edit'
+        <Icon
+          imagePath={ require('../../../assets/icons/edit-white.png') }
           onPress={ () => {
             navigate('EditProject', { project: state.params.project })
-          } }
-        />
+          }} />
       );
 
-      return { right, ...defaultHeader };
+      return { ...defaultHeader, right };
     }
   };
 
@@ -100,11 +100,7 @@ class ProjectDetail extends Component {
   }
 
   saveNote (note) {
-    // If the project is new, dont save the note because then it won't be tied to
-    // any project id. For now, the backend will handle saving new notes for new projects
-    if (!this.props.project._new) {
-      this.props.updateNote(note).then(() => this.props.invalidateProjects());
-    }
+    this.props.updateNote(note).then(() => this.props.invalidateProjects());
   }
 
   emptyNote (type) {
@@ -125,7 +121,7 @@ class ProjectDetail extends Component {
     if (notes.length === 0) {
       return (
         <Text style={ Styles.emptyText }>
-          Tap 'I did work' to add a new entry.
+          Nothing has been done for this project.
         </Text>
       );
     }
@@ -151,7 +147,7 @@ class ProjectDetail extends Component {
     if (project.status === 'finished') {
       return (
         <View style={ Styles.updateButtonContainer }>
-          <Text style={ [Styles.finishedProjectText, Styles.bold] }>
+          <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
             This project has been marked as finished. {"\n"} Nice job! 🎉
           </Text>
         </View>
@@ -161,17 +157,11 @@ class ProjectDetail extends Component {
     return (
       <View style={ Styles.updateButtonContainer }>
         <TouchableOpacity
-          onPress={ () => this.toggleEditNoteModal(this.emptyNote('Past')) }
-          style={ Styles.updateButton }>
-          <Text style={ [Styles.updateButtonText, Styles.bold] }>
-            I did work
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
           onPress={ () => this.toggleEditNoteModal(this.emptyNote('Future')) }
           style={ Styles.updateButton }>
-          <Text style={ [Styles.updateButtonText, Styles.bold] }>
-            To do next
+          <Text
+            style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
+            Add an update
           </Text>
         </TouchableOpacity>
       </View>
@@ -183,7 +173,12 @@ class ProjectDetail extends Component {
 
     if (!nudgeUsers || nudgeUsers.length === 0) { return null; }
 
-    return <Nudges nudgeUsers={ nudgeUsers } imageSize={ 30 } />;
+    return (
+      <Nudges
+        nudgeUsers={ nudgeUsers }
+        imageSize={ 30 }
+        textStyle={ Styles.whiteText } />
+    );
   }
 
   render () {
@@ -208,13 +203,19 @@ class ProjectDetail extends Component {
     }
 
     return (
-      <ScrollView style={ Styles.projectDetail }>
+      <ScrollView style={ Styles.projectDetail } >
         <View style={ Styles.info }>
-          <Text style={ Styles.title }>{ project.title }</Text>
+          <Text style={ [Styles.title, Styles.whiteText] }>
+            { project.title }
+          </Text>
+          <Text style={ [Styles.author, Styles.whiteText] }>
+            Started by
+            <Text style={ Styles.bold }> Des</Text>
+          </Text>
           { project.status === 'active' && this.renderNudges() }
+          { this.renderUpdateButtons() }
         </View>
         <View style={ Styles.container }>
-          { this.renderUpdateButtons() }
           { project.status === 'active' && <FutureNote note={ futureNote }/> }
           <View style={ Styles.pastNotesView }>
             <Text style={ [Styles.finishedTitleText, Styles.bold] }>

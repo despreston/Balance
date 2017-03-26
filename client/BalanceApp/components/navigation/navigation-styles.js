@@ -24,6 +24,18 @@ export const styles = StyleSheet.create  ({
     color: "#FFFFFF",
     fontSize: 18,
     fontWeight: 'bold'
+  },
+
+  touchable: {
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  icon: {
+    height: 25,
+    width: 25
   }
 
 });

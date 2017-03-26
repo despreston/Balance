@@ -4,7 +4,8 @@ export default StyleSheet.create({
 
   touchable: {
     height: 30,
-    width: 30
+    width: 30,
+    justifyContent: 'center'
   },
   
   image: {
