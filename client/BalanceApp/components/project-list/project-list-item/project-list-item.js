@@ -67,11 +67,11 @@ function ProjectListItem ({ project }) {
           }
           { renderNote() }
           <View style={ Style.footer }>
-            { renderNudgeUsers() }
             { 
               lastUpdated && status === 'active' &&
               <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />
             }
+            { renderNudgeUsers() }
           </View>
       </View>
       {
