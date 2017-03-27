@@ -19,11 +19,7 @@ function mapStateToProps (state) {
   };
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    saveUser: user => dispatch(saveUser(user))
-  };
-}
+const mapDispatchToProps = { saveUser };
 
 class UserSettings extends Component {
 
@@ -32,7 +28,7 @@ class UserSettings extends Component {
   };
 
   static navigationOptions = {
-    header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
+    header: ({ goBack, state }, defaultHeader) => {
 
       const title = 'Settings';
 
@@ -90,18 +86,18 @@ class UserSettings extends Component {
       <View style={ Styles.editProject }>
         <View style={ Styles.formContainer }>
           <View style={ Styles.inputRow }>
-            <Text style={ Styles.rowLabel }>Username</Text>
+            <Text style={ [Styles.text, Styles.rowLabel] }>Username</Text>
             <TextInput
               value={ user.username }
-              style={ Styles.rowInput }
+              style={ [Styles.text, Styles.rowInput] }
               placeholder="@username"
               onChangeText={ value => this.onEdit('username', value) } />
           </View>
           <View style={ Styles.inputRow }>
-            <Text style={ Styles.rowLabel }>Email</Text>
+            <Text style={ [Styles.text, Styles.rowLabel] }>Email</Text>
             <TextInput
               value={ user.email }
-              style={ Styles.rowInput }
+              style={ [Styles.text, Styles.rowInput] }
               placeholder="email address"
               onChangeText={ value => this.onEdit('email', value) } />
           </View>
