@@ -86,11 +86,7 @@ class ProjectDetail extends Component {
   constructor (props) {
     super(props);
 
-    this.state = {
-      editModalVisible: false,
-      note: {},
-      invalid: false
-    };
+    this.state = { editModalVisible: false, note: {}, invalid: false };
   }
 
   componentWillMount () {

@@ -79,7 +79,7 @@ class NudgeBtn extends Component {
   renderText () {
     if (this.props.showText) {
       return this.state.isSelected
-        ? <Text style={ Style.text }>You nudged for an update!</Text>
+        ? <Text style={ Style.text }>You nudged for an update</Text>
         : <Text style={ Style.text }>Send a nudge to encourage an update</Text>
     }
 
