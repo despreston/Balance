@@ -95,7 +95,7 @@ Project.virtual('Future', {
  * @return {Promise} resolves with integer
  */
 Project.statics.projectCountForUser = function (userId) {
-  return this.count({ user: userId, status: 'active' }, (err, count) => {
+  return this.count({ user: userId }, (err, count) => {
     if (err) {
       return Promise.reject('Could not get projects for user, ', userId);
     }

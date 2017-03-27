@@ -9,7 +9,7 @@ import { Style } from './project-list-style';
 export default class ProjectList extends Component {
   static propTypes = {
     onProjectTap: PropTypes.func.isRequired,
-    projects: PropTypes.object.isRequired
+    projects: PropTypes.array.isRequired
   }
 
   constructor (props) {

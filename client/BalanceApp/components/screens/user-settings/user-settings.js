@@ -101,6 +101,14 @@ class UserSettings extends Component {
               placeholder="email address"
               onChangeText={ value => this.onEdit('email', value) } />
           </View>
+          <View style={ Styles.inputRow }>
+            <Text style={ [Styles.text, Styles.rowLabel] }>Bio</Text>
+            <TextInput
+              value={ user.bio }
+              style={ [Styles.text, Styles.rowInput] }
+              placeholder="A short bio"
+              onChangeText={ value => this.onEdit('bio', value) } />
+          </View>
           <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
             <Text>
               Other users can search for you by name or username.

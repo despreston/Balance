@@ -54,7 +54,7 @@ class FriendButton extends Component {
 
     switch (this.props.status) {
       case 'accepted':
-        actionText = 'Remove';
+        actionText = 'Friends';
         pressAction = this.remove.bind(this);
         break;
       case 'requested':

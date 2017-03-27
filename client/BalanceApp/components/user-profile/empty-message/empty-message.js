@@ -4,11 +4,7 @@ import { View, Text } from 'react-native';
 import Styles from './empty-message-styles';
 
 function EmptyMessage ({ message }) {
-  return (
-    <View style={ Styles.container }>
-      <Text style={ Styles.message }>{ message }</Text>
-    </View>
-  );
+  return <Text style={ Styles.message }>{ message }</Text>;
 }
 
 EmptyMessage.propTypes = {

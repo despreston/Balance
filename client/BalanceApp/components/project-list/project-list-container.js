@@ -9,7 +9,7 @@ import { fetchProjectsForUser } from '../../actions';
 class ProjectListContainer extends Component {
   static propTypes = {
     user: PropTypes.string.isRequired,
-    projects: PropTypes.object.isRequired,
+    projects: PropTypes.array.isRequired,
     onProjectTap: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired
   }
@@ -33,16 +33,20 @@ class ProjectListContainer extends Component {
   render () {
     return (
       <ProjectList
-        onProjectTap={this.props.onProjectTap}
-        projects={this.props.projects} />
+        onProjectTap={ this.props.onProjectTap }
+        projects={ this.props.projects } />
     );
   }
 }
 
 function mapStateToProps (state) {
+  const projects = Object.keys(state.projects)
+    .map(id => state.projects[id])
+    .filter(id => id.owner[0].userId === state.loggedInUser);
+
   return {
     projectsInvalidated: state.projects_invalidated,
-    projects: state.projects
+    projects
   };
 }
 

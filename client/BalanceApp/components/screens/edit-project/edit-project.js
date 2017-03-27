@@ -84,8 +84,7 @@ export default class EditProject extends Component {
           You can always reopen the project any time.
         </Text>
         <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-          <TouchableOpacity
-            onPress={ () => onEdit('status', statusOption) }>
+          <TouchableOpacity onPress={ () => onEdit('status', statusOption) }>
             <Text style={ Styles.markStatus }>{ text }</Text>
           </TouchableOpacity>
         </View>
