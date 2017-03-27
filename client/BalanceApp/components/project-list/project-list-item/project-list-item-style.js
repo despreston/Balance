@@ -46,7 +46,7 @@ export const Style = StyleSheet.create({
 
   footer: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     justifyContent: 'space-between'
   }
   

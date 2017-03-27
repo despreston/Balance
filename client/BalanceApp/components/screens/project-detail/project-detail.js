@@ -16,13 +16,20 @@ import { Styles } from './project-detail-style';
 import EditNote from '../../edit-note/edit-note';
 import FutureNote from './future-note/future-note';
 import NoteList from '../../note-list/note-list';
-import NavBtn from '../../navigation/nav-btn';
 import Nudges from '../../nudges/nudges';
+import NudgeBtn from '../../nudges/nudge-button/nudge-button';
+import Icon from '../../navigation/icon';
+
+// utils
+import emptyNote from '../../../utils/empty-note';
 
 // actions
 import { saveNote, requestNotes, invalidate } from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
+
+  const project = state.projects[navigation.state.params.project];
+
   // notes for selected project
   const notes = Object.keys(state.notes)
     .map(id => state.notes[id])
@@ -30,16 +37,16 @@ function mapStateToProps (state, { navigation }) {
       return note.project._id === navigation.state.params.project;
     });
 
-  return {
-    project: state.projects[navigation.state.params.project],
-    notes
-  };
+  // Logged-in user is the owner of the project
+  const userIsOwner = project.owner[0].userId === state.loggedInUser;
+
+  return { userIsOwner, project, notes };
 
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateNote: note => dispatch(saveNote(note)),
+    saveNote: note => dispatch(saveNote(note)),
     requestNotes: params => dispatch(requestNotes(params)),
     invalidateProjects: () => dispatch(invalidate('projects'))
   };
@@ -48,9 +55,10 @@ function mapDispatchToProps (dispatch) {
 class ProjectDetail extends Component {
 
   static propTypes = {
-    updateNote: PropTypes.func.isRequired,
+    saveNote: PropTypes.func.isRequired,
     project: PropTypes.shape({
-      title: PropTypes.string.isRequired
+      title: PropTypes.string.isRequired,
+      status: PropTypes.string.isRequired
     }),
     notes: PropTypes.array,
     requestNotes: PropTypes.func.isRequired,
@@ -58,29 +66,31 @@ class ProjectDetail extends Component {
   };
 
   static navigationOptions = {
-    header: ({ goBack, dispatch, state, navigate }, defaultHeader) => {
+    header: ({ state, navigate }, defaultHeader) => {
+      let right = null;
 
-      const right = (
-        <NavBtn
-          title='Edit'
-          onPress={ () => {
-            navigate('EditProject', { project: state.params.project })
-          } }
-        />
-      );
+      if (state.params.showEdit) {
+        right = (
+          <Icon
+            imagePath={ require('../../../assets/icons/edit-white.png') }
+            onPress={ () => {
+              navigate('EditProject', { project: state.params.project })
+            }} />
+        );
+      }
 
-      return { right, ...defaultHeader };
+      return { ...defaultHeader, right };
     }
   };
 
   constructor (props) {
     super(props);
 
-    this.state = {
-      editModalVisible: false,
-      note: {},
-      invalid: false
-    };
+    this.state = { editModalVisible: false, note: {}, invalid: false };
+  }
+
+  componentWillMount () {
+    this.props.navigation.setParams({ showEdit: this.props.userIsOwner });
   }
 
   componentDidMount () {
@@ -99,22 +109,8 @@ class ProjectDetail extends Component {
     });
   }
 
-  saveNote (note) {
-    // If the project is new, dont save the note because then it won't be tied to
-    // any project id. For now, the backend will handle saving new notes for new projects
-    if (!this.props.project._new) {
-      this.props.updateNote(note).then(() => this.props.invalidateProjects());
-    }
-  }
-
-  emptyNote (type) {
-    return {
-      _new: true,
-      user: this.props.project.user,
-      project: this.props.project._id,
-      content: '',
-      type
-    };
+  saveNoteAndInvalidate (note) {
+    this.props.saveNote(note).then(() => this.props.invalidateProjects());
   }
 
   notesForType (type) {
@@ -125,15 +121,15 @@ class ProjectDetail extends Component {
     if (notes.length === 0) {
       return (
         <Text style={ Styles.emptyText }>
-          Tap 'I did work' to add a new entry.
+          Nothing has been done for this project.
         </Text>
       );
     }
 
-    const nav = this.props.navigation.navigate;
+    const { navigation: { navigate: nav }, status, userIsOwner } = this.props;
 
-    // hide edit buttons if project is Finished
-    if (this.props.project.status === 'finished') {
+    // hide edit buttons if project is Finished OR user is not the owner
+    if (status === 'finished' || !userIsOwner) {
       return <NoteList notes={ notes } onSelect={ id => nav('Note', { id }) } />;
     }
 
@@ -145,13 +141,15 @@ class ProjectDetail extends Component {
     );
   }
 
-  renderUpdateButtons () {
-    const { project } = this.props;
+  renderUpdateButton () {
+    const { project, userIsOwner } = this.props;
+
+    if (!userIsOwner) { return null; }
 
     if (project.status === 'finished') {
       return (
         <View style={ Styles.updateButtonContainer }>
-          <Text style={ [Styles.finishedProjectText, Styles.bold] }>
+          <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
             This project has been marked as finished. {"\n"} Nice job! 🎉
           </Text>
         </View>
@@ -161,29 +159,47 @@ class ProjectDetail extends Component {
     return (
       <View style={ Styles.updateButtonContainer }>
         <TouchableOpacity
-          onPress={ () => this.toggleEditNoteModal(this.emptyNote('Past')) }
+          onPress={ () => {
+            return this.toggleEditNoteModal(emptyNote(project, 'Future')) }
+          }
           style={ Styles.updateButton }>
-          <Text style={ [Styles.updateButtonText, Styles.bold] }>
-            I did work
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={ () => this.toggleEditNoteModal(this.emptyNote('Future')) }
-          style={ Styles.updateButton }>
-          <Text style={ [Styles.updateButtonText, Styles.bold] }>
-            To do next
+          <Text
+            style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
+            Add an update
           </Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  renderNudges () {
-    const { nudgeUsers } = this.props.project;
+  renderNudgeStuff () {
+    const { project, userIsOwner } = this.props;
 
+    if (project.status !== 'active') {
+      return null;
+    }
+
+    return (
+      <View style={ Styles.nudgeStuff }>
+        { !userIsOwner && this.renderNudgeButton(project._id) }
+        { this.renderNudges(project.nudgeUsers) }
+      </View>
+    );
+  }
+
+  renderNudges (nudgeUsers) {
     if (!nudgeUsers || nudgeUsers.length === 0) { return null; }
 
-    return <Nudges nudgeUsers={ nudgeUsers } imageSize={ 30 } />;
+    return (
+      <Nudges
+        nudgeUsers={ nudgeUsers }
+        imageSize={ 30 }
+        textStyle={ Styles.whiteText } />
+    );
+  }
+
+  renderNudgeButton (id) {
+    return <NudgeBtn project={ id } useWhite={ true } showText={ true }/>;
   }
 
   render () {
@@ -204,17 +220,23 @@ class ProjectDetail extends Component {
     } else if (project.Future) {
       futureNote = project.Future;
     } else {
-      futureNote = this.emptyNote('Future');
+      futureNote = emptyNote(project, 'Future');
     }
 
     return (
-      <ScrollView style={ Styles.projectDetail }>
+      <ScrollView style={ Styles.projectDetail } >
         <View style={ Styles.info }>
-          <Text style={ Styles.title }>{ project.title }</Text>
-          { project.status === 'active' && this.renderNudges() }
+          <Text style={ [Styles.title, Styles.whiteText] }>
+            { project.title }
+          </Text>
+          <Text style={ [Styles.author, Styles.whiteText] }>
+            Started by
+            <Text style={ Styles.bold }> { project.owner[0].username }</Text>
+          </Text>
+          { this.renderNudgeStuff() }
+          { this.renderUpdateButton() }
         </View>
         <View style={ Styles.container }>
-          { this.renderUpdateButtons() }
           { project.status === 'active' && <FutureNote note={ futureNote }/> }
           <View style={ Styles.pastNotesView }>
             <Text style={ [Styles.finishedTitleText, Styles.bold] }>
@@ -226,7 +248,7 @@ class ProjectDetail extends Component {
         <EditNote
           style={ Styles.editNoteModal }
           visible={ this.state.editModalVisible }
-          onSave={ this.saveNote.bind(this) }
+          onSave={ this.saveNoteAndInvalidate.bind(this) }
           onClose={ () => this.toggleEditNoteModal({}) }
           note={ this.state.note } />
       </ScrollView>

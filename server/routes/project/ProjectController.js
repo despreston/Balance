@@ -5,7 +5,6 @@ const AccessControl = require('../../utils/access-control');
 module.exports = ({ get, post, del, put }) => {
 
   get('projects', ({ params, user }, res) => {
-
     if (!params.user) {
       return res.send(400, 'Missing user parameter');
     }
@@ -19,19 +18,18 @@ module.exports = ({ get, post, del, put }) => {
         Project
         .find(query)
         .populate('nudgeUsers', 'userId username picture')
-        .populate(Project.latestPastNote)
-        .populate(Project.latestFutureNote)
         .lean()
         .then(projects => Project.augmentNotesWithProject(projects))
-        .then(projects => res.send(200, projects))
+        .then(projects => {
+          projects.forEach(p => delete p.nudges);
+          return res.send(200, projects)
+        })
         .catch(() => res.send(500));
 
       }).catch(err => res.send(403, 'Failed: ' + err));
-
   });
 
   get('projects/:_id', ({ params, user }, res) => {
-
     Project
     .findOne(params)
     .populate('nudgeUsers', 'userId username picture')
@@ -42,25 +40,13 @@ module.exports = ({ get, post, del, put }) => {
         .catch(err => res.send(403, err));
     })
     .catch(err => res.send(500, err))
-
   });
 
   post('projects/:_id/nudges', ({ params, user }, res) => {
     Project
     .findOne(params)
-    .populate(Project.latestPastNote)
-    .populate(Project.latestFutureNote)
     .then(project => Project.augmentNotesWithProject(project))
     .then(project => {
-      const hasNudgeFromUser = project.nudges.some(nudge => {
-        return nudge.userId === user.sub;
-      });
-
-      // avoid multiple nudges from the same user
-      if (hasNudgeFromUser) {
-        return res.send(201);
-      }
-
       project.nudges.push({ userId: user.sub, sentAt: new Date() });
 
       project.save(err => {
@@ -71,7 +57,10 @@ module.exports = ({ get, post, del, put }) => {
         .populate('nudgeUsers', 'userId username picture', err => {
           if (err) { return res.send(500); }
 
-          return res.send(200, project.toObject());
+          project = project.toObject();
+          delete project.nudges;
+
+          return res.send(200, project);
         });
       });
     })
@@ -86,8 +75,6 @@ module.exports = ({ get, post, del, put }) => {
     Project
     .findOne({ '_id': params.project })
     .populate('nudgeUsers', 'userId username picture')
-    .populate(Project.latestPastNote)
-    .populate(Project.latestFutureNote)
     .then(project => Project.augmentNotesWithProject(project))
     .then(project => {
       const nudgeIdx = project.nudges.findIndex(n => n.userId === params.user);
@@ -99,7 +86,6 @@ module.exports = ({ get, post, del, put }) => {
       project.nudges.splice(nudgeIdx);
       project.save();
       project = project.toObject();
-      delete project.nudges;
 
       // need to remove from nudgeUsers since its outdated now
       project.nudgeUsers.splice(
@@ -121,7 +107,6 @@ module.exports = ({ get, post, del, put }) => {
     .create(body)
     .then(newProject => res.send(201, newProject))
     .catch(err => res.send(500, err));
-    
   });
 
   put('projects/:_id', ({ params, body, user }, res) => {
@@ -130,8 +115,6 @@ module.exports = ({ get, post, del, put }) => {
     Project
     .findOne({_id: params._id})
     .populate('nudgeUsers', 'userId username picture')
-    .populate(Project.latestPastNote)
-    .populate(Project.latestFutureNote)
     .then(project => Project.augmentNotesWithProject(project))
     .then(project => {
       if (project.user !== user.sub) {

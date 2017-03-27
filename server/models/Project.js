@@ -3,6 +3,18 @@ const mongoose = require("mongoose");
 const Note = require("./Note");
 const privacyLevel = require('./shared/privacy-level');
 
+const latestFutureNote = {
+  path: 'Future',
+  match: { type: 'Future' },
+  options: { sort: { createdAt: -1 }, limit: 1 }
+};
+
+const latestPastNote = {
+  path: 'Past',
+  match: { type: 'Past' },
+  options: { sort: { createdAt: -1 }, limit: 1 }
+};
+
 let Project = new mongoose.Schema({
 
   title: {
@@ -28,7 +40,8 @@ let Project = new mongoose.Schema({
   nudges: [{
     userId: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     sentAt: {
       type: Date,
@@ -38,6 +51,15 @@ let Project = new mongoose.Schema({
   
 }, { 
   toObject: { virtuals: true }
+});
+
+/**
+ * Ref to project owner
+ */
+Project.virtual('owner', {
+  ref: 'user',
+  localField: 'user',
+  foreignField: 'userId'
 });
 
 /**
@@ -66,24 +88,6 @@ Project.virtual('Future', {
   localField: '_id',
   foreignField: 'project'
 });
-
-/**
- * Mongoose populate query for latest note of type 'Past'
- */
-Project.statics.latestPastNote = {
-  path: 'Past',
-  match: { type: 'Past' },
-  options: { sort: { createdAt: -1 }, limit: 1 }
-};
-
-/**
- * Mongoose populate query for latest note of type 'Future'
- */
-Project.statics.latestFutureNote = {
-  path: 'Future',
-  match: { type: 'Future' },
-  options: { sort: { createdAt: -1 }, limit: 1 }
-};
 
 /**
  * # of projects that belong to user
@@ -137,7 +141,38 @@ Project.statics.augmentNotesWithProject = function (projects) {
   }
 
   return transform(projects);
-}
+
+};
+
+Project.pre('find', function () {
+
+  this.populate('owner', 'userId username');
+  this.populate(latestPastNote);
+  this.populate(latestFutureNote);
+
+});
+
+Project.post('find', function (results) {
+
+  // 'owner' gets populated on every find and findOne so 'user' is unneeded
+  results.forEach(result => delete result.user);
+
+});
+
+Project.pre('findOne', function () {
+
+  this.populate('owner', 'userId username');
+  this.populate(latestPastNote);
+  this.populate(latestFutureNote);
+
+});
+
+Project.post('findOne', function (result) {
+
+  // 'owner' gets populated on every find and findOne so 'user' is unneeded
+  delete result.user;
+  
+});
 
 Project.pre('save', function (next) {
 

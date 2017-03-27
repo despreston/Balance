@@ -18,7 +18,7 @@ function FutureNote ({ note }) {
     }
     return (
       <Text style={[Style.content, Style.center]}>
-        Tap 'To do next' to add a new entry.
+        No reminders for this project
       </Text> 
     );
   }
@@ -26,7 +26,7 @@ function FutureNote ({ note }) {
   return (
     <View style={Style.container}>
       <View style={Style.top}>
-        <Text style={Style.title}>Up next</Text>
+        <Text style={Style.title}>Reminder</Text>
         {
           note.lastUpdated &&
           <Text style={Style.date}>Added {formatDate(note.lastUpdated)}</Text>

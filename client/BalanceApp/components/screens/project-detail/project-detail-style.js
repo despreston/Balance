@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../colors';
 
 export const Styles = StyleSheet.create ({
 
@@ -8,43 +9,47 @@ export const Styles = StyleSheet.create ({
   },
 
   title: {
-    color: '#3D3F3E',
     fontSize: 26,
-    fontWeight: '500',
+    fontWeight: '300',
     paddingHorizontal: 10,
-    paddingVertical: 30
+    letterSpacing: 0.8,
+    paddingBottom: 10,
+  },
+
+  author: {
+    fontSize: 12,
+    paddingBottom: 30,
+    opacity: 0.9
   },
 
   container: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10
   },
 
   emptyText: {
     alignSelf: 'center',
-    color: '#3D3F3E'
+    color: Colors.gray.tundora
   },
 
   updateButtonContainer: {
     flexDirection: 'row',
-    paddingBottom: 25
+    justifyContent: 'space-between',
+    paddingTop: 25,
+    paddingHorizontal: 20
   },
 
   updateButton: {
-    backgroundColor: '#2E92E1',
+    backgroundColor: Colors.blue,
     borderRadius: 5,
     flex: 1,
     justifyContent: 'center',
     height: 40,
-    marginHorizontal: 10,
-    shadowColor: '#000000',
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 1
+    marginHorizontal: 5
   },
 
   updateButtonText: {
     alignSelf: 'center',
-    color: '#FFFFFF',
     fontSize: 16
   },
 
@@ -55,12 +60,16 @@ export const Styles = StyleSheet.create ({
   finishedTitleText: {
     color: '#3D3F3E',
     fontSize: 15,
-    marginBottom: 15,
-    padding: 5
+    padding: 5,
+    paddingTop: 10
+  },
+
+  whiteText: {
+    color: Colors.white
   },
 
   finishedProjectText: {
-    color: '#3D3F3E',
+    color: Colors.gray.tundora,
     fontSize: 16,
     flex: 1,
     marginBottom: 15,
@@ -70,11 +79,16 @@ export const Styles = StyleSheet.create ({
   info: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 20
+    paddingBottom: 25,
+    backgroundColor: Colors.purple,
   },
 
   bold: {
     fontWeight: 'bold'
+  },
+
+  nudgeStuff: {
+    alignItems: 'center'
   }
   
 });
