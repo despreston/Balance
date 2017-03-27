@@ -48,7 +48,7 @@ const ProjectsStack = StackNavigator({
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
-        return focused 
+        return focused
           ? icon(require('../../assets/icons/projects-tabbar-selected.png'))
           : icon(require('../../assets/icons/projects-tabbar.png'));
       }

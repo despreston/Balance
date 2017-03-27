@@ -5,35 +5,33 @@ import { connect } from 'react-redux';
 // components
 import NavBtn from '../../navigation/nav-btn';
 import UserProfile from '../../user-profile/user-profile';
-
+import Icon from '../../navigation/icon';
 
 function mapStateToProps (state) {
-  return {
-    loggedInUser: state.loggedInUser
-  };
+  return { loggedInUser: state.loggedInUser };
 }
 
 class Profile extends Component {
 
   static navigationOptions = {
-    header: ({ state, navigate, dispatch }, defaultHeader) => ({
+    header: ({ state, navigate: nav, dispatch }, defaultHeader) => ({
       
       ...defaultHeader,
 
       title: 'Profile',
 
       left: (
-        <NavBtn
-          onPress={ () => navigate('UserSearch') }
-          title="Find Users"
-        />  
+        <Icon
+          imagePath={ require('../../../assets/icons/users.png') }
+          onPress={ () => nav('UserSearch') }
+         />
       ),
       
       right: (
-        <NavBtn
-          onPress={ () => navigate('UserSettings') }
-          title="Settings"
-        />
+        <Icon
+          imagePath={ require('../../../assets/icons/settings.png') }
+          onPress={ () => nav('UserSettings') }
+         />
       )
     })
   };

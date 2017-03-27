@@ -39,7 +39,9 @@ let User = new mongoose.Schema({
   // url for picture
   picture: String,
 
-  createdAt: Date
+  createdAt: Date,
+
+  bio: String
 
 });
 
