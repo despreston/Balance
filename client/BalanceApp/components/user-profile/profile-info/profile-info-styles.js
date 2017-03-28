@@ -1,9 +1,15 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../colors';
+
+const shared = {
+  color: Colors.gray.tundora
+};
 
 export default StyleSheet.create  ({
 
   ProfileInfo: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    height: 140
   },
 
   row: {
@@ -14,34 +20,39 @@ export default StyleSheet.create  ({
   image: {
     borderRadius: 30,
     height: 60,
-    width: 60  
+    width: 60
   },
 
   info: {
     marginLeft: 25,
-    width: 170,
-    height: 80,
-    flexDirection: 'column'
+    height: 60,
+    marginBottom: 20,
+    justifyContent: 'center'
   },
 
   username: {
-    color: '#3D3F3E',
-    flex: 1,
-    fontSize: 16,
+    ...shared,
+    fontSize: 14,
+    fontWeight: 'normal',
     textAlign: 'center'
   },
 
   name: {
+    ...shared,
     fontWeight: 'bold',
-    color: '#3D3F3E',
-    flex: 1,
-    fontSize: 18,
+    fontSize: 20,
+    textAlign: 'center'
+  },
+
+  bio: {
+    ...shared,
+    paddingBottom: 20,
+    paddingHorizontal: 30,
+    opacity: 0.8,
     textAlign: 'center'
   },
 
   friendButton: {
-    marginTop: 10,
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -49,18 +60,26 @@ export default StyleSheet.create  ({
   contextOption: {
     marginTop: 25,
     flex: 1,
+    paddingHorizontal: 15,
     justifyContent: 'space-between'
   },
 
   contextOptionText: {
-    color: '#77778A',
-    fontSize: 16,
-    textAlign: 'center'
+    ...shared,
+    fontSize: 14,
+    textAlign: 'center',
+    paddingBottom: 5
   },
 
   selectedContext: {
-    color: '#3D3F3E',
+    ...shared,
+    color: Colors.purple,
     fontWeight: 'bold'
+  },
+
+  border: {
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.purple
   }
 
 });

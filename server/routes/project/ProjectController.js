@@ -17,11 +17,17 @@ module.exports = ({ get, post, del, put }) => {
 
         Project
         .find(query)
-        .populate('nudgeUsers', 'userId username picture')
+        .populate(Project.latestPastNote)
+        .populate(Project.latestFutureNote)
+        .populate('nudgeUsers', 'userId picture')
         .lean()
         .then(projects => Project.augmentNotesWithProject(projects))
         .then(projects => {
-          projects.forEach(p => delete p.nudges);
+          projects.forEach(p => {
+            delete p.user;
+            delete p.nudges;
+          });
+
           return res.send(200, projects)
         })
         .catch(() => res.send(500));
@@ -32,7 +38,9 @@ module.exports = ({ get, post, del, put }) => {
   get('projects/:_id', ({ params, user }, res) => {
     Project
     .findOne(params)
-    .populate('nudgeUsers', 'userId username picture')
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
+    .populate('nudgeUsers', 'userId picture')
     .lean()
     .then(project => {
       return AccessControl.single(project.user, user.sub, project.privacyLevel)
@@ -45,25 +53,14 @@ module.exports = ({ get, post, del, put }) => {
   post('projects/:_id/nudges', ({ params, user }, res) => {
     Project
     .findOne(params)
-    .then(project => Project.augmentNotesWithProject(project))
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
+    .then(project => project.addNudge(user.sub))
     .then(project => {
-      project.nudges.push({ userId: user.sub, sentAt: new Date() });
-
-      project.save(err => {
-        if (err) { return res.send(500); }
-
-        // Get the updated list of nudgeUsers
-        project
-        .populate('nudgeUsers', 'userId username picture', err => {
-          if (err) { return res.send(500); }
-
-          project = project.toObject();
-          delete project.nudges;
-
-          return res.send(200, project);
-        });
-      });
+      delete project.user;
+      return Project.augmentNotesWithProject(project.toObject());
     })
+    .then(project => res.send(200, project))
     .catch(err => res.send(500, err));
   });
 
@@ -74,26 +71,16 @@ module.exports = ({ get, post, del, put }) => {
 
     Project
     .findOne({ '_id': params.project })
-    .populate('nudgeUsers', 'userId username picture')
-    .then(project => Project.augmentNotesWithProject(project))
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
+    .populate('nudgeUsers', 'userId picture')
+    .then(project => project.removeNudge(user.sub))
     .then(project => {
-      const nudgeIdx = project.nudges.findIndex(n => n.userId === params.user);
-
-      if (nudgeIdx < 0) {
-        return res.send(404);
-      }
-
-      project.nudges.splice(nudgeIdx);
-      project.save();
-      project = project.toObject();
-
-      // need to remove from nudgeUsers since its outdated now
-      project.nudgeUsers.splice(
-        project.nudgeUsers.findIndex(u => u.userId === params.user)
-      );
-
-      return res.send(200, project);
-    });
+      delete project.user;
+      return Project.augmentNotesWithProject(project.toObject());
+    })
+    .then(project => res.send(200, project))
+    .catch(() => res.send(500));
   });
 
   post('projects', ({ body, user }, res) => {
@@ -114,7 +101,9 @@ module.exports = ({ get, post, del, put }) => {
 
     Project
     .findOne({_id: params._id})
-    .populate('nudgeUsers', 'userId username picture')
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
+    .populate('nudgeUsers', 'userId picture')
     .then(project => Project.augmentNotesWithProject(project))
     .then(project => {
       if (project.user !== user.sub) {
@@ -123,8 +112,11 @@ module.exports = ({ get, post, del, put }) => {
 
       project = Object.assign(project, body);
       project.save();
+      project = project.toObject();
+      delete project.nudges;
+      delete project.user;
 
-      return res.send(200, project.toObject());
+      return res.send(200, project);
     });
   });
 

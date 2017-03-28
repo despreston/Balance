@@ -14,7 +14,7 @@ module.exports = ({ get, post, del, put }) => {
       { name: new RegExp(`^${params.q}`, 'i') },
       { username: new RegExp(`^${params.q}`, 'i') }
     ]})
-    .select('name userId picture friends username')
+    .select('name userId picture friends username bio')
     .lean()
     .then(users => res.send(200, users))
     .catch(err => res.send(500, err));
@@ -48,7 +48,7 @@ module.exports = ({ get, post, del, put }) => {
 
       return User
         .find({ userId: { $in: friendIds } })
-        .select('name userId picture friends username')
+        .select('name userId picture friends username bio')
         .lean()
         .then(friends => res.send(200, friends))
         .catch(err => res.send(500, err));

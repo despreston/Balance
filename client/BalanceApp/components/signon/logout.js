@@ -3,6 +3,7 @@ import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { reset } from '../../actions';
 import { removeToken } from '../../utils/auth';
+import Colors from '../colors';
 
 function mapDispatchToProps (dispatch) {
   return {
@@ -37,6 +38,7 @@ class Logout extends Component {
   render () {
     return (
       <Button
+        color={ Colors.blue }
         title='Logout'
         onPress={this.logout}
       />  

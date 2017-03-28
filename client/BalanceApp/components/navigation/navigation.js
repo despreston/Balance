@@ -32,7 +32,8 @@ const navigationOptions = {
 // screens included in all nav stacks
 const defaultScreens = {
   UserProfile: { screen: UserProfile },
-  Note: { screen: Note }
+  Note: { screen: Note },
+  Project: { screen: ProjectDetail }
 };
 
 function icon (path) {
@@ -42,13 +43,12 @@ function icon (path) {
 const ProjectsStack = StackNavigator({
   ...defaultScreens,
   Home: { screen: MainScene },
-  Project: { screen: ProjectDetail },
   EditProject: { screen: EditProjectContainer }
 }, { 
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
-        return focused 
+        return focused
           ? icon(require('../../assets/icons/projects-tabbar-selected.png'))
           : icon(require('../../assets/icons/projects-tabbar.png'));
       }

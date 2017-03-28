@@ -33,9 +33,7 @@ function mapStateToProps (state, { navigation }) {
   // notes for selected project
   const notes = Object.keys(state.notes)
     .map(id => state.notes[id])
-    .filter(note => {
-      return note.project._id === navigation.state.params.project;
-    });
+    .filter(note => note.project._id === navigation.state.params.project);
 
   // Logged-in user is the owner of the project
   const userIsOwner = project.owner[0].userId === state.loggedInUser;

@@ -3,18 +3,6 @@ const mongoose = require("mongoose");
 const Note = require("./Note");
 const privacyLevel = require('./shared/privacy-level');
 
-const latestFutureNote = {
-  path: 'Future',
-  match: { type: 'Future' },
-  options: { sort: { createdAt: -1 }, limit: 1 }
-};
-
-const latestPastNote = {
-  path: 'Past',
-  match: { type: 'Past' },
-  options: { sort: { createdAt: -1 }, limit: 1 }
-};
-
 let Project = new mongoose.Schema({
 
   title: {
@@ -89,13 +77,25 @@ Project.virtual('Future', {
   foreignField: 'project'
 });
 
+Project.statics.latestFutureNote = {
+  path: 'Future',
+  match: { type: 'Future' },
+  options: { sort: { createdAt: -1 }, limit: 1 }
+};
+
+Project.statics.latestPastNote = {
+  path: 'Past',
+  match: { type: 'Past' },
+  options: { sort: { createdAt: -1 }, limit: 1 }
+};
+
 /**
  * # of projects that belong to user
  * @param {String} userId User to get counts for
  * @return {Promise} resolves with integer
  */
 Project.statics.projectCountForUser = function (userId) {
-  return this.count({ user: userId, status: 'active' }, (err, count) => {
+  return this.count({ user: userId }, (err, count) => {
     if (err) {
       return Promise.reject('Could not get projects for user, ', userId);
     }
@@ -140,38 +140,80 @@ Project.statics.augmentNotesWithProject = function (projects) {
     return projects.map(transform);
   }
 
-  return transform(projects);
+ return transform(projects);
+
+};
+
+/**
+ * Adds a nudge to the project
+ * @param {String} userId the userId of user that is nudging the project
+ * @return {Promise} resolves with updated project
+ */
+Project.methods.addNudge = function (userId) {
+
+  return new Promise((resolve, reject) => {
+    this.nudges.push({ userId, sentAt: new Date() });
+
+    this.save(err => {
+      if (err) {
+        reject('Could not add nudge');
+      }
+
+      // Get the updated list of nudgeUsers
+      this.populate('nudgeUsers', 'userId picture', err => {
+        if (err) {
+          reject('Could not add nudge');
+        }
+
+        delete this.nudges;
+
+        resolve(this);
+      });
+    });
+  });
+
+};
+
+/**
+ * Removes nudge from project
+ * @param {String} userId the userId of the user who's nudge to remove
+ * @return {Promise} resolves with updated project
+ */
+Project.methods.removeNudge = function (userId) {
+
+  return new Promise((resolve, reject) => {
+    const nudgeIdx = this.nudges.findIndex(n => n.userId === userId);
+
+    if (nudgeIdx < 0) {
+      reject('No nudge exists for that user');
+    }
+
+    this.nudges.splice(nudgeIdx);
+
+    this.save(err => {
+      if (err) {
+        reject("Could not save project");
+      }
+
+      delete this.nudges;
+
+      // need to remove from nudgeUsers since its outdated now
+      this.nudgeUsers.splice(
+        this.nudgeUsers.findIndex(u => u.userId === userId)
+      );
+
+      resolve(this);
+    });
+  });
 
 };
 
 Project.pre('find', function () {
-
   this.populate('owner', 'userId username');
-  this.populate(latestPastNote);
-  this.populate(latestFutureNote);
-
-});
-
-Project.post('find', function (results) {
-
-  // 'owner' gets populated on every find and findOne so 'user' is unneeded
-  results.forEach(result => delete result.user);
-
 });
 
 Project.pre('findOne', function () {
-
   this.populate('owner', 'userId username');
-  this.populate(latestPastNote);
-  this.populate(latestFutureNote);
-
-});
-
-Project.post('findOne', function (result) {
-
-  // 'owner' gets populated on every find and findOne so 'user' is unneeded
-  delete result.user;
-  
 });
 
 Project.pre('save', function (next) {
