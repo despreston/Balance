@@ -1,15 +1,11 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../colors';
 
 export default StyleSheet.create ({
 
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    paddingTop: 50
-  },
-
   message: {
-    color: '#3D3F3E',
+    paddingTop: 50,
+    color: Colors.gray.tundora,
     fontSize: 15,
     textAlign: 'center'
   }

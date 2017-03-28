@@ -12,6 +12,7 @@ import Notifications from './notifications/notifications';
 import UserSettings from './user-settings/user-settings';
 import UserProfile from '../user-profile/user-profile';
 import UserSearch from './user-search/user-search';
+import Note from './note/note';
 
 export {
   MainScene,
@@ -23,5 +24,6 @@ export {
   Profile,
   UserSettings,
   UserProfile,
-  UserSearch
+  UserSearch,
+  Note
 };

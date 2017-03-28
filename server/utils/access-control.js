@@ -65,7 +65,6 @@ module.exports = {
    * @return {Promise} resolves with array of accessible privacy levels
    */
   many (query, requester) {
-
     if (typeof requester !== 'string') {
       throw ('requestor needs to be a String');
     }

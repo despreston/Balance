@@ -185,6 +185,27 @@ export function fetchProject (project) {
 };
 
 /**
+ * Adds a nudge to the project
+ * @param {String} project Project ID
+ * @return {Promise}
+ */
+export function nudge (project) {
+  const opts = { method: 'POST' };
+  return apiDispatch(`projects/${project}/nudges/`, receiveProjects, opts);
+};
+
+/**
+ * Adds a nudge to the project
+ * @param {String} project Project ID
+ * @param {String} user User ID of nudger
+ * @return {Promise}
+ */
+export function removeNudge (project, user) {
+  const opts = { method: 'DELETE' };
+  return apiDispatch(`projects/${project}/nudges/${user}`, receiveProjects, opts);
+};
+
+/**
  * Fetches projects
  * @return {Promise}
  */
@@ -199,6 +220,15 @@ export function fetchProjectsForUser (userId) {
  */
 export function requestNotes (params) {
   return apiDispatch(`notes${formatQueryParams(params)}`, receiveNotes);
+};
+
+/**
+ * Fetch single note
+ * @param {String} id Note ID
+ * @return {Promise}
+ */
+export function fetchNote (id) {
+  return apiDispatch(`notes/${id}`, receiveNotes);
 };
 
 /**

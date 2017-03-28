@@ -24,8 +24,15 @@ server.use(auth);
 
 // load routes
 recursive('./routes', (err, files) => {
+  let methods = {
+    get: server.get.bind(server),
+    put: server.put.bind(server),
+    post: server.post.bind(server),
+    del: server.del.bind(server)
+  };
+
   files.forEach(file => {
-    require('./'+file)(server);
+    require('./'+file)(methods);
   });
 });
 

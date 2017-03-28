@@ -16,7 +16,7 @@ function NoteListItem ({ note, onEdit, showContext }) {
   function renderHeader () {
     if (!showContext) { return formatDate(note.createdAt); }
 
-    let typeText = `${note.type === 'Past' ? 'Added todo' : 'Did work'}`;
+    let typeText = `${note.type === 'Future' ? 'Reminder' : 'Did work'}`;
 
     return (
       <Text>
@@ -52,6 +52,7 @@ function NoteListItem ({ note, onEdit, showContext }) {
 
 NoteListItem.propTypes = {
   note: PropTypes.shape({
+    type: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.instanceOf(Date).isRequired
   }).isRequired,

@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../colors';
 
 export default StyleSheet.create  ({
 
   button: {
     borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#B8B8BA'
+    backgroundColor: Colors.blue
   },
 
   container: {
@@ -15,17 +15,14 @@ export default StyleSheet.create  ({
     alignItems: 'center'
   },
 
-  add: {
-    borderWidth: 0,
-    backgroundColor: '#2E92E1'
-  },
-
   addText: {
-    color: '#FFFFFF'
+    color: Colors.white
   },
 
   text: {
-    color: '#3D3F3E'
+    fontSize: 12,
+    fontWeight: '600',
+    color: Colors.white
   }
   
 });

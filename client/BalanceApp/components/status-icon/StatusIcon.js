@@ -1,31 +1,26 @@
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
-import { Style } from './status-icon-style';
+
+import Styles from './status-icon-style';
+import Colors from '../colors';
 
 function StatusIcon ({ lastUpdated }) {
   function iconColor () {
     const dayMilliseconds = 24*60*60*1000;
     const today = new Date();
-    const difference = Math.round(
+    const daysSinceUpdate = Math.round(
       Math.abs((lastUpdated.getTime() - today)) / dayMilliseconds
     );
 
-    if (difference < 1) {
-      return '#B0D391';
-    } else if (difference <= 7) {
-      return '#DDDDDD';
-    } else if (difference <= 14) {
-      return '#FACA9C';
+    switch (true) {
+      case (daysSinceUpdate < 2)   : return Colors.green;
+      case (daysSinceUpdate <= 7)  : return Colors.yellow;
+      case (daysSinceUpdate <= 14) : return Colors.orange;
+      default                      : return Colors.red;
     }
-    
-    return '#B86D6F';
   }
 
-  const color = iconColor();
-
-  return (
-    <View style={[Style.Icon, { backgroundColor: color, shadowColor: color }]} />
-  );
+  return <View style={ [Styles.icon, { backgroundColor: iconColor() }] } />;
 };
 
 StatusIcon.propTypes = {

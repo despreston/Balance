@@ -48,7 +48,7 @@ export default class EditProject extends Component {
           <TouchableOpacity
             style={ Styles.removeButton }
             onPress={ () => this.setState({ confirmDelete: false }) }>
-            <Text style={ Styles.rowLabel }>Cancel</Text>
+            <Text style={ [Styles.text, Styles.rowLabel] }>Cancel</Text>
           </TouchableOpacity>
         </View>
       );
@@ -66,6 +66,10 @@ export default class EditProject extends Component {
   }
 
   renderProjectStatus () {
+    if (this.props.project._new) {
+      return null;
+    }
+
     const { project, onEdit } = this.props;
     let text, statusOption;
 
@@ -84,8 +88,7 @@ export default class EditProject extends Component {
           You can always reopen the project any time.
         </Text>
         <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-          <TouchableOpacity
-            onPress={ () => onEdit('status', statusOption) }>
+          <TouchableOpacity onPress={ () => onEdit('status', statusOption) }>
             <Text style={ Styles.markStatus }>{ text }</Text>
           </TouchableOpacity>
         </View>
@@ -100,17 +103,17 @@ export default class EditProject extends Component {
       <View style={ Styles.editProject }>
         <View style={ Styles.formContainer }>
           <View style={ Styles.inputRow }>
-            <Text style={ Styles.rowLabel }>Title</Text>
+            <Text style={ [Styles.text, Styles.rowLabel] }>Title</Text>
             <TextInput
               value={ project.title }
-              style={ Styles.rowInput }
+              style={ [Styles.text, Styles.rowInput] }
               placeholder="Project Title (required)"
               onChangeText={ value => onEdit('title', value) } />
           </View>
           <View style={ Styles.inputRow }>
-            <Text style={ Styles.rowLabel }>Share with</Text>
+            <Text style={ [Styles.text, Styles.rowLabel] }>Share with</Text>
             <PrivacyPicker
-              textStyle={ Styles.rowInput }
+              textStyle={ [Styles.text, Styles.rowInput] }
               initLevel={ project.privacyLevel }
               onChange={ val => onEdit('privacyLevel', val) } />
           </View>

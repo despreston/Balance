@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../colors';
 
 export default StyleSheet.create  ({
 
   editProject: {
-    backgroundColor: '#E9E9EF',
+    backgroundColor: Colors.gray.porcelain,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -11,7 +12,7 @@ export default StyleSheet.create  ({
   },
 
   formContainer: {
-    backgroundColor: '#F5F6FA',
+    backgroundColor: Colors.white,
     flex: 1
   },
 
@@ -21,21 +22,21 @@ export default StyleSheet.create  ({
     alignItems: 'center',
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#E8E8EA'
+    borderBottomColor: Colors.gray.porcelain
   },
 
   rowLabel: {
-    color: '#3D3F3E',
     fontWeight: 'bold',
-    fontSize: 15,
-    paddingLeft: 10,
     flex: 1
   },
 
-  rowInput: {
-    color: '#77778A',
-    fontSize: 15,
+  text: {
+    color: Colors.gray.tundora,
     paddingLeft: 10,
+    fontSize: 15
+  },
+
+  rowInput: {
     flex: 2
   },
 
@@ -44,8 +45,8 @@ export default StyleSheet.create  ({
   },
 
   removeButtonText: {
-    color: '#B86D6F',
-    fontWeight: '600'
+    color: Colors.red,
+    fontWeight: 'bold'
   },
 
   statusContainer: {
@@ -54,8 +55,8 @@ export default StyleSheet.create  ({
   },
 
   markStatus: {
-    color: '#2E92E1',
-    fontWeight: '600'
+    color: Colors.blue,
+    fontWeight: 'bold'
   }
 
 });
