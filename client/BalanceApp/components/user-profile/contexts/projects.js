@@ -13,6 +13,7 @@ function Projects ({ projects, nav }) {
   }
 
   return <EmptyMessage message='No projects yet.' />;
+  
 };
 
 Projects.propTypes = {

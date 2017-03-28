@@ -43,16 +43,12 @@ function mapStateToProps (state, ownProps) {
     userId = ownProps.userId;
   }
 
-  projects = Object.keys(state.projects)
-    .map(id => state.projects[id])
-    .filter(p => p.owner[0].userId === userId);
-
   return {
     userId,
     isLoggedInUser: (state.loggedInUser === userId),
     users: state.users,
     notes: state.notes,
-    projects,
+    projects: state.projects,
     nav
   };
 
@@ -74,7 +70,7 @@ class UserProfile extends Component {
     userId: PropTypes.string.isRequired,
     users: PropTypes.object,
     notes: PropTypes.object,
-    projects: PropTypes.array,
+    projects: PropTypes.object,
     nav: PropTypes.func.isRequired,
     requestLatestNotes: PropTypes.func.isRequired,
     fetchFriendsForUser: PropTypes.func.isRequired,
@@ -112,6 +108,12 @@ class UserProfile extends Component {
       .filter(note => note.user === this.props.userId);
   }
 
+  projectsForUser () {
+    return Object.keys(this.props.projects)
+      .map(id => this.props.projects[id])
+      .filter(p => p.owner[0].userId === this.props.userId);
+  }
+
   friends () {
     // friends of user
     const user = this.props.users[this.props.userId];
@@ -146,7 +148,10 @@ class UserProfile extends Component {
   fetchProjectsList () {
     return this.props.fetchProjectsForUser(this.props.userId)
       .then(() => {
-        this.setState({ loadingContext: false, projects: this.props.projects });
+        this.setState({
+          loadingContext: false,
+          projects: this.projectsForUser()
+        });
       });
   }
 

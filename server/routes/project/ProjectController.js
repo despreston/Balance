@@ -19,7 +19,7 @@ module.exports = ({ get, post, del, put }) => {
         .find(query)
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
-        .populate('nudgeUsers', 'userId username picture')
+        .populate('nudgeUsers', 'userId picture')
         .lean()
         .then(projects => Project.augmentNotesWithProject(projects))
         .then(projects => {
@@ -40,7 +40,7 @@ module.exports = ({ get, post, del, put }) => {
     .findOne(params)
     .populate(Project.latestPastNote)
     .populate(Project.latestFutureNote)
-    .populate('nudgeUsers', 'userId username picture')
+    .populate('nudgeUsers', 'userId picture')
     .lean()
     .then(project => {
       return AccessControl.single(project.user, user.sub, project.privacyLevel)
@@ -63,7 +63,7 @@ module.exports = ({ get, post, del, put }) => {
 
         // Get the updated list of nudgeUsers
         project
-        .populate('nudgeUsers', 'userId username picture', err => {
+        .populate('nudgeUsers', 'userId picture', err => {
           if (err) { return res.send(500); }
 
           project = Project.augmentNotesWithProject(project.toObject());
@@ -86,7 +86,7 @@ module.exports = ({ get, post, del, put }) => {
     .findOne({ '_id': params.project })
     .populate(Project.latestPastNote)
     .populate(Project.latestFutureNote)
-    .populate('nudgeUsers', 'userId username picture')
+    .populate('nudgeUsers', 'userId picture')
     .then(project => {
       const nudgeIdx = project.nudges.findIndex(n => n.userId === params.user);
 
@@ -129,7 +129,7 @@ module.exports = ({ get, post, del, put }) => {
     .findOne({_id: params._id})
     .populate(Project.latestPastNote)
     .populate(Project.latestFutureNote)
-    .populate('nudgeUsers', 'userId username picture')
+    .populate('nudgeUsers', 'userId picture')
     .then(project => Project.augmentNotesWithProject(project))
     .then(project => {
       if (project.user !== user.sub) {

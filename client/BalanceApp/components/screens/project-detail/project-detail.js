@@ -30,8 +30,6 @@ function mapStateToProps (state, { navigation }) {
 
   const project = state.projects[navigation.state.params.project];
 
-console.log(navigation.state.params.project)
-console.log(state.notes)
   // notes for selected project
   const notes = Object.keys(state.notes)
     .map(id => state.notes[id])
