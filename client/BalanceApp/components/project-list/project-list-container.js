@@ -42,7 +42,7 @@ class ProjectListContainer extends Component {
 function mapStateToProps (state) {
   const projects = Object.keys(state.projects)
     .map(id => state.projects[id])
-    .filter(id => id.owner[0].userId === state.loggedInUser);
+    .filter(project => project.owner[0].userId === state.loggedInUser);
 
   return {
     projectsInvalidated: state.projects_invalidated,

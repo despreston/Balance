@@ -92,10 +92,13 @@ Project.statics.latestPastNote = {
 /**
  * # of projects that belong to user
  * @param {String} userId User to get counts for
+ * @param {array} privacyLevels Limit search to valid privacy levels
  * @return {Promise} resolves with integer
  */
-Project.statics.projectCountForUser = function (userId) {
-  return this.count({ user: userId }, (err, count) => {
+Project.statics.projectCountForUser = function (userId, privacyLevels) {
+  const query = { user: userId, privacyLevel: { $in: privacyLevels } };
+
+  return this.count(query, (err, count) => {
     if (err) {
       return Promise.reject('Could not get projects for user, ', userId);
     }

@@ -1,6 +1,7 @@
 'use strict';
 const User = require('../../models/User');
 const Project = require('../../models/Project');
+const AccessControl = require('../../utils/access-control');
 
 module.exports = ({ get, post, del, put }) => {
 
@@ -20,19 +21,20 @@ module.exports = ({ get, post, del, put }) => {
     .catch(err => res.send(500, err));
   });
 
-  get("users/:userId", (req, res) => {
+  get("users/:userId", ({ params, user}, res) => {
     User
-    .findOne(req.params)
+    .findOne(params)
     .lean()
-    .then(user => {
-      if (!user) {
+    .then(result => {
+      if (!result) {
         return res.send(404);
       }
 
-      return Project.projectCountForUser(user.userId)
-        .then(projectCount => {
-          user.project_count = projectCount;
-          return res.send(200, user);
+      AccessControl.many({ user: params.userId }, user.sub)
+        .then(privacyLevel => {
+          return Project.projectCountForUser(result.userId, privacyLevel)
+            .then(project_count => Object.assign(result, { project_count }))
+            .then(user => res.send(200, user));
         });
     })
     .catch(err => res.send(500, err));
