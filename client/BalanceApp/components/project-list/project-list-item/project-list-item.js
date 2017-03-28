@@ -13,7 +13,7 @@ import { Style } from './project-list-item-style';
 // utils
 import { formatDate } from '../../../utils/helpers';
 
-function ProjectListItem ({ project }) {
+function ProjectListItem ({ project, hideNudgeBtn = false }) {
   const { Past, Future, status, nudgeUsers } = project;
   let lastUpdated;
 
@@ -41,11 +41,7 @@ function ProjectListItem ({ project }) {
       )
     }
 
-    return (
-      <Text style={ Style.message }>
-        Nothing done for this yet. 😕
-      </Text>
-    );
+    return <Text style={ Style.message }>Nothing done for this yet. 😕</Text>;
   }
 
   function renderNudgeUsers () {
@@ -59,20 +55,23 @@ function ProjectListItem ({ project }) {
   return (
     <View style={ Style.projectListItem }>
       <View style={ Style.content }>
+        <View>
           <Text style={ Style.title }>{ project.title }</Text>
           {
-            lastUpdated && <Text style={ Style.text }>
+            lastUpdated && 
+            <Text style={ Style.text }>
               Updated { formatDate(lastUpdated) }
             </Text>
           }
-          { renderNote() }
-          <View style={ Style.footer }>
-            { 
-              lastUpdated && status === 'active' &&
-              <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />
-            }
-            { renderNudgeUsers() }
-          </View>
+        </View>
+        { renderNote() }
+        <View style={ Style.footer }>
+          { 
+            lastUpdated && status === 'active' &&
+            <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />
+          }
+          { renderNudgeUsers() }
+        </View>
       </View>
       {
         lastUpdated && status === 'active' &&
@@ -83,7 +82,8 @@ function ProjectListItem ({ project }) {
 }
 
 ProjectListItem.propTypes = {
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  hideNudgeBtn: PropTypes.bool
 };
 
 export default ProjectListItem;

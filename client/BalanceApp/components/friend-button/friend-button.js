@@ -44,39 +44,70 @@ class FriendButton extends Component {
 
   constructor (props) {
     super(props);
+
+    this.state = {
+      actionText: null,
+      textStyles: null,
+      pressAction: null,
+      buttonStyles: null,
+      status: props.status
+    };
   }
 
-  handleStatus () {
+  componentWillReceiveProps (nextProps) {
+    this.handleStatus(nextProps.status);
+  }
+
+  componentWillMount () {
+    this.handleStatus(this.props.status);
+  }
+
+  handleStatus (newStatus) {
     let actionText;
     let textStyles = [Styles.text];
     let buttonStyles = [Styles.container, Styles.button];
     let pressAction = this.create.bind(this);
 
-    switch (this.props.status) {
+    switch (newStatus) {
       case 'accepted':
         actionText = 'Friends';
+        buttonStyles.push(Styles.friends);
+        pressAction = this.removePending.bind(this);
+        break;
+      case 'removePending':
+        actionText = 'Remove?';
+        buttonStyles.push(Styles.removePending);
         pressAction = this.remove.bind(this);
         break;
       case 'requested':
         actionText = 'Accept';
         break;
       case 'pending':
-        actionText = 'Cancel';
+        actionText = 'Requested';
         pressAction = this.remove.bind(this);
         break;
       default:
-        buttonStyles.push(Styles.add);
         textStyles.push(Styles.addText);
-        actionText = 'Add';
+        actionText = 'Add Friend';
         break;
     }
 
-    return { actionText, buttonStyles, textStyles, pressAction };
+    this.setState({
+      status: newStatus,
+      actionText,
+      buttonStyles,
+      textStyles,
+      pressAction
+    });
   }
 
   create () {
     const { userId, loggedInUser, createFriendship } = this.props;
     createFriendship(loggedInUser, userId);
+  }
+
+  removePending () {
+    this.handleStatus('removePending');
   }
 
   remove () {
@@ -86,7 +117,7 @@ class FriendButton extends Component {
 
   render () {
     const { hideIfLoggedInUser, userId, loggedInUser, createFriendship } = this.props;
-    const { actionText, buttonStyles, textStyles, pressAction } = this.handleStatus();
+    const { actionText, buttonStyles, textStyles, pressAction } = this.state;
 
     if (userId === loggedInUser) {
       if (hideIfLoggedInUser) {

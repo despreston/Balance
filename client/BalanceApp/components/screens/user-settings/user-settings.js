@@ -100,11 +100,16 @@ class UserSettings extends Component {
               onChangeText={ value => this.onEdit('bio', value) } />
           </View>
           <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-            <Text>
+            <Text style={{ textAlign: 'center' }}>
               Other users can search for you by name or username.
             </Text>
           </View>
           <Logout beforeLogoutHook={ () => this.beforeLogout() }/>
+          <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+            <Text style={ [Styles.text, Styles.help] }>
+              What is this app?
+            </Text>
+          </View>
         </View>
       </View>
     );

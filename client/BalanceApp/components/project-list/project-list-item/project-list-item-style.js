@@ -22,7 +22,8 @@ export const Style = StyleSheet.create({
     flex: 1,
     paddingLeft: 15,
     paddingRight: 10,
-    paddingVertical: 10
+    paddingVertical: 10,
+    justifyContent: 'space-between'
   },
 
   note: {
@@ -39,13 +40,11 @@ export const Style = StyleSheet.create({
 
   message: {
     textAlign: 'center',
-    paddingTop: 15,
     fontSize: 14,
     color: Colors.gray.tundora
   },
 
   footer: {
-    flex: 1,
     flexDirection: 'row-reverse',
     justifyContent: 'space-between'
   }

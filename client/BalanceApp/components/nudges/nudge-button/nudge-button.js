@@ -8,27 +8,21 @@ import { nudge, removeNudge } from '../../../actions';
 // styles
 import Style from './nudge-button-style';
 
-function mapStateToProps (state, ownProps) {
-  let fullProj = state.projects[ownProps.project];
+function mapStateToProps ({ projects, loggedInUser }, ownProps) {
+  let fullProj = projects[ownProps.project];
 
   function getIsSelected () {
     if (fullProj.nudgeUsers) {
-      return fullProj.nudgeUsers.some(u => u.userId === state.loggedInUser);
+      return fullProj.nudgeUsers.some(u => u.userId === loggedInUser);
     }
     
     return false;
   }
 
-  return {
-    user: state.loggedInUser,
-    isSelected: getIsSelected()
-  };
+  return { user: loggedInUser, isSelected: getIsSelected() };
 }
 
-const mapDispatchToProps = {
-  nudge,
-  removeNudge
-};
+const mapDispatchToProps = { nudge, removeNudge };
 
 class NudgeBtn extends Component {
 

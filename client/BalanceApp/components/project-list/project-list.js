@@ -1,15 +1,22 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
 import { View, ListView, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 
 // Components
 import ProjectListItem from './project-list-item/project-list-item';
 import { Style } from './project-list-style';
 
-export default class ProjectList extends Component {
+function mapStateToProps (state) {
+  return { loggedInUser: state.loggedInUser };
+}
+
+class ProjectList extends Component {
+
   static propTypes = {
     onProjectTap: PropTypes.func.isRequired,
-    projects: PropTypes.array.isRequired
+    projects: PropTypes.array.isRequired,
+    loggedInUser: PropTypes.string.isRequired
   }
 
   constructor (props) {
@@ -23,12 +30,14 @@ export default class ProjectList extends Component {
   }
 
   _renderRow (rowData) {
+    const hideNudgeBtn = rowData.owner[0].userId === this.props.loggedInUser;
+
     return (
       <TouchableOpacity
-        onPress={this.props.onProjectTap.bind(this,rowData)}
-        style={Style.project}>
-        <View ref={component => this._root = component}>
-          <ProjectListItem project={rowData} />
+        onPress={ this.props.onProjectTap.bind(this, rowData) }
+        style={ Style.project }>
+        <View ref={ component => this._root = component }>
+          <ProjectListItem project={ rowData } hideNudgeBtn={ hideNudgeBtn }/>
         </View>
       </TouchableOpacity>
     );    
@@ -47,3 +56,5 @@ export default class ProjectList extends Component {
     );    
   }
 }
+
+export default connect(mapStateToProps)(ProjectList);
