@@ -3,18 +3,6 @@ const mongoose = require("mongoose");
 const Note = require("./Note");
 const privacyLevel = require('./shared/privacy-level');
 
-const latestFutureNote = {
-  path: 'Future',
-  match: { type: 'Future' },
-  options: { sort: { createdAt: -1 }, limit: 1 }
-};
-
-const latestPastNote = {
-  path: 'Past',
-  match: { type: 'Past' },
-  options: { sort: { createdAt: -1 }, limit: 1 }
-};
-
 let Project = new mongoose.Schema({
 
   title: {
@@ -89,6 +77,18 @@ Project.virtual('Future', {
   foreignField: 'project'
 });
 
+Project.statics.latestFutureNote = {
+  path: 'Future',
+  match: { type: 'Future' },
+  options: { sort: { createdAt: -1 }, limit: 1 }
+};
+
+Project.statics.latestPastNote = {
+  path: 'Past',
+  match: { type: 'Past' },
+  options: { sort: { createdAt: -1 }, limit: 1 }
+};
+
 /**
  * # of projects that belong to user
  * @param {String} userId User to get counts for
@@ -140,38 +140,16 @@ Project.statics.augmentNotesWithProject = function (projects) {
     return projects.map(transform);
   }
 
-  return transform(projects);
+ return transform(projects);
 
 };
 
 Project.pre('find', function () {
-
   this.populate('owner', 'userId username');
-  this.populate(latestPastNote);
-  this.populate(latestFutureNote);
-
-});
-
-Project.post('find', function (results) {
-
-  // 'owner' gets populated on every find and findOne so 'user' is unneeded
-  results.forEach(result => delete result.user);
-
 });
 
 Project.pre('findOne', function () {
-
   this.populate('owner', 'userId username');
-  this.populate(latestPastNote);
-  this.populate(latestFutureNote);
-
-});
-
-Project.post('findOne', function (result) {
-
-  // 'owner' gets populated on every find and findOne so 'user' is unneeded
-  delete result.user;
-  
 });
 
 Project.pre('save', function (next) {

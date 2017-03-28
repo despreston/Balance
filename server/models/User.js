@@ -91,7 +91,7 @@ User.statics.createFriendship = function (requester, receiver) {
 
   return this
     .findOne({ userId: requester })
-    .select('name userId picture friends username')
+    .select('name userId picture friends username bio')
     .then(user => {
 
       const friendIdx = user.friends.findIndex(friend => {
@@ -106,7 +106,7 @@ User.statics.createFriendship = function (requester, receiver) {
 
         return this
           .findOne({ userId: receiver })
-          .select('name userId picture friends username')
+          .select('name userId picture friends username bio')
           .then(requestedFriend => {
             requestedFriend.friends.push({
               userId: requester,
@@ -136,7 +136,7 @@ User.statics.createFriendship = function (requester, receiver) {
         // update the receiver's friend list
         return this
           .findOne({ userId: receiver })
-          .select('name userId picture friends username')
+          .select('name userId picture friends username bio')
           .then(requestedFriend => {
 
             const friendIdx = requestedFriend.friends.findIndex(friend => {
@@ -166,7 +166,7 @@ User.statics.removeFriendship = function (userA, userB) {
 
   return this
     .find({ userId: { $in: [ userA, userB ] } })
-    .select('name userId picture friends username')
+    .select('name userId picture friends username bio')
     .then(users => {
       let [userA, userB] = users;
       let userBIndex = userA.friends.findIndex(f => f.userId === userB.userId);

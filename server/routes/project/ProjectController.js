@@ -17,11 +17,17 @@ module.exports = ({ get, post, del, put }) => {
 
         Project
         .find(query)
+        .populate(Project.latestPastNote)
+        .populate(Project.latestFutureNote)
         .populate('nudgeUsers', 'userId username picture')
         .lean()
         .then(projects => Project.augmentNotesWithProject(projects))
         .then(projects => {
-          projects.forEach(p => delete p.nudges);
+          projects.forEach(p => {
+            delete p.user;
+            delete p.nudges;
+          });
+
           return res.send(200, projects)
         })
         .catch(() => res.send(500));
@@ -32,6 +38,8 @@ module.exports = ({ get, post, del, put }) => {
   get('projects/:_id', ({ params, user }, res) => {
     Project
     .findOne(params)
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
     .populate('nudgeUsers', 'userId username picture')
     .lean()
     .then(project => {
@@ -45,7 +53,8 @@ module.exports = ({ get, post, del, put }) => {
   post('projects/:_id/nudges', ({ params, user }, res) => {
     Project
     .findOne(params)
-    .then(project => Project.augmentNotesWithProject(project))
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
     .then(project => {
       project.nudges.push({ userId: user.sub, sentAt: new Date() });
 
@@ -57,8 +66,9 @@ module.exports = ({ get, post, del, put }) => {
         .populate('nudgeUsers', 'userId username picture', err => {
           if (err) { return res.send(500); }
 
-          project = project.toObject();
+          project = Project.augmentNotesWithProject(project.toObject());
           delete project.nudges;
+          delete project.user;
 
           return res.send(200, project);
         });
@@ -74,8 +84,9 @@ module.exports = ({ get, post, del, put }) => {
 
     Project
     .findOne({ '_id': params.project })
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
     .populate('nudgeUsers', 'userId username picture')
-    .then(project => Project.augmentNotesWithProject(project))
     .then(project => {
       const nudgeIdx = project.nudges.findIndex(n => n.userId === params.user);
 
@@ -85,7 +96,9 @@ module.exports = ({ get, post, del, put }) => {
 
       project.nudges.splice(nudgeIdx);
       project.save();
-      project = project.toObject();
+      project = Project.augmentNotesWithProject(project.toObject());
+      delete project.nudges;
+      delete project.user;
 
       // need to remove from nudgeUsers since its outdated now
       project.nudgeUsers.splice(
@@ -114,6 +127,8 @@ module.exports = ({ get, post, del, put }) => {
 
     Project
     .findOne({_id: params._id})
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
     .populate('nudgeUsers', 'userId username picture')
     .then(project => Project.augmentNotesWithProject(project))
     .then(project => {
@@ -123,8 +138,11 @@ module.exports = ({ get, post, del, put }) => {
 
       project = Object.assign(project, body);
       project.save();
+      project = project.toObject();
+      delete project.nudges;
+      delete project.user;
 
-      return res.send(200, project.toObject());
+      return res.send(200, project);
     });
   });
 
