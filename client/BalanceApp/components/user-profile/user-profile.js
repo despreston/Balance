@@ -24,9 +24,6 @@ import {
 // styles
 import Styles from './profile-styles';
 
-// utils
-import { arrayToObj } from '../../utils/helpers';
-
 function mapStateToProps (state, ownProps) {
 
   let userId, nav, projects;

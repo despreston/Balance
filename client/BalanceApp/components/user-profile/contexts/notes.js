@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import NoteList from '../../note-list/note-list';
 import EmptyMessage from '../empty-message/empty-message';
-import { arrayToObj } from '../../../utils/helpers';
 
 function Notes ({ notes, nav, name }) {
 
