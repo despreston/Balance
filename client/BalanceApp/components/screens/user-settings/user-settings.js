@@ -11,7 +11,7 @@ import NavBtn from '../../navigation/nav-btn';
 import Styles from '../edit-project/edit-project-style';
 
 // actions
-import { saveUser} from '../../../actions';
+import { saveUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -32,19 +32,9 @@ class UserSettings extends Component {
 
       const title = 'Settings';
 
-      const left = (
-        <NavBtn
-          title='Cancel'
-          onPress={ () => goBack() }
-        />
-      );
+      const left = <NavBtn title='Cancel' onPress={ () => goBack() }/>;
 
-      const right = (
-        <NavBtn
-          title='Save'
-          onPress={ () => state.params.save() }
-        />
-      );
+      const right = <NavBtn title='Save' onPress={ () => state.params.save() }/>;
 
       return { ...defaultHeader, left, right, title };
     }

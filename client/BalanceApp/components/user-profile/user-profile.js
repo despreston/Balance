@@ -82,6 +82,7 @@ class UserProfile extends Component {
       loadingContext: false,
       latestNotes: [],
       friends: [],
+      projects: [],
       user: null
     };
 
@@ -164,15 +165,11 @@ class UserProfile extends Component {
   }
 
   renderFriends () {
-    return (
-      <Friends friends={ this.state.friends } nav={ this.props.nav } />
-    );
+    return <Friends friends={ this.state.friends } nav={ this.props.nav } />;
   }
 
   renderProjects () {
-   return (
-      <Projects projects={ this.state.projects } nav={ this.props.nav } />
-    ); 
+    return <Projects projects={ this.state.projects } nav={ this.props.nav } />;
   }
 
   renderBody () {
