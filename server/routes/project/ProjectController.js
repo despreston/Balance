@@ -92,8 +92,18 @@ module.exports = ({ get, post, del, put }) => {
     
     Project
     .create(body)
-    .then(newProject => res.send(201, newProject))
-    .catch(err => res.send(500, err));
+    .then(newProject => {
+      Project.findOne({ _id: newProject._id })
+      .populate('nudgeUsers', 'userId picture')
+      .then(project => {
+        project.Past = null;
+        project.Future = null;
+        delete project.user;
+        delete project.nudges;
+        return res.send(201, project.toObject());
+      });
+    })
+    .catch(() => res.send(500));
   });
 
   put('projects/:_id', ({ params, body, user }, res) => {

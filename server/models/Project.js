@@ -28,8 +28,7 @@ let Project = new mongoose.Schema({
   nudges: [{
     userId: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     sentAt: {
       type: Date,
@@ -125,8 +124,8 @@ Project.statics.augmentNotesWithProject = function (projects) {
       privacyLevel: p.privacyLevel
     };
 
-    p.Past = p.Past.length > 0 ? p.Past[0] : null;
-    p.Future = p.Future.length > 0 ? p.Future[0] : null;
+    p.Past = (p.Past && p.Past.length) > 0 ? p.Past[0] : null;
+    p.Future = (p.Future && p.Future.length) > 0 ? p.Future[0] : null;
 
     if (p.Past) {
       p.Past.project = fullObject;

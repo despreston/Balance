@@ -99,7 +99,6 @@ class UserProfile extends Component {
   }
 
   latestNotes () {
-    // latest notes for user
     return Object.keys(this.props.notes)
       .map(id => this.props.notes[id])
       .filter(note => note.user === this.props.userId);
@@ -112,7 +111,6 @@ class UserProfile extends Component {
   }
 
   friends () {
-    // friends of user
     const user = this.props.users[this.props.userId];
 
     return Object.keys(this.props.users)
@@ -128,7 +126,10 @@ class UserProfile extends Component {
   fetchFriendsList () {
     return this.props.fetchFriendsForUser(this.props.userId)
       .then(() => {
-        this.setState({ loadingContext: false, friends: this.friends() });
+        this.setState({
+          loadingContext: false,
+          friends: this.friends()
+        });
       });
   }
 
@@ -164,19 +165,13 @@ class UserProfile extends Component {
 
   renderFriends () {
     return (
-      <Friends
-        friends={ this.state.friends }
-        nav={ this.props.nav }
-      />
+      <Friends friends={ this.state.friends } nav={ this.props.nav } />
     );
   }
 
   renderProjects () {
    return (
-      <Projects
-        projects={ this.state.projects }
-        nav={ this.props.nav }
-      />
+      <Projects projects={ this.state.projects } nav={ this.props.nav } />
     ); 
   }
 

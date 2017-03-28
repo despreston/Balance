@@ -66,6 +66,10 @@ export default class EditProject extends Component {
   }
 
   renderProjectStatus () {
+    if (this.props.project._new) {
+      return null;
+    }
+
     const { project, onEdit } = this.props;
     let text, statusOption;
 
