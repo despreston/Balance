@@ -55,25 +55,12 @@ module.exports = ({ get, post, del, put }) => {
     .findOne(params)
     .populate(Project.latestPastNote)
     .populate(Project.latestFutureNote)
+    .then(project => project.addNudge(user.sub))
     .then(project => {
-      project.nudges.push({ userId: user.sub, sentAt: new Date() });
-
-      project.save(err => {
-        if (err) { return res.send(500); }
-
-        // Get the updated list of nudgeUsers
-        project
-        .populate('nudgeUsers', 'userId picture', err => {
-          if (err) { return res.send(500); }
-
-          project = Project.augmentNotesWithProject(project.toObject());
-          delete project.nudges;
-          delete project.user;
-
-          return res.send(200, project);
-        });
-      });
+      delete project.user;
+      return Project.augmentNotesWithProject(project.toObject());
     })
+    .then(project => res.send(200, project))
     .catch(err => res.send(500, err));
   });
 
@@ -87,26 +74,13 @@ module.exports = ({ get, post, del, put }) => {
     .populate(Project.latestPastNote)
     .populate(Project.latestFutureNote)
     .populate('nudgeUsers', 'userId picture')
+    .then(project => project.removeNudge(user.sub))
     .then(project => {
-      const nudgeIdx = project.nudges.findIndex(n => n.userId === params.user);
-
-      if (nudgeIdx < 0) {
-        return res.send(404);
-      }
-
-      project.nudges.splice(nudgeIdx);
-      project.save();
-      project = Project.augmentNotesWithProject(project.toObject());
-      delete project.nudges;
       delete project.user;
-
-      // need to remove from nudgeUsers since its outdated now
-      project.nudgeUsers.splice(
-        project.nudgeUsers.findIndex(u => u.userId === params.user)
-      );
-
-      return res.send(200, project);
-    });
+      return Project.augmentNotesWithProject(project.toObject());
+    })
+    .then(project => res.send(200, project))
+    .catch(() => res.send(500));
   });
 
   post('projects', ({ body, user }, res) => {

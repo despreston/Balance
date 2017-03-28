@@ -144,6 +144,70 @@ Project.statics.augmentNotesWithProject = function (projects) {
 
 };
 
+/**
+ * Adds a nudge to the project
+ * @param {String} userId the userId of user that is nudging the project
+ * @return {Promise} resolves with updated project
+ */
+Project.methods.addNudge = function (userId) {
+
+  return new Promise((resolve, reject) => {
+    this.nudges.push({ userId, sentAt: new Date() });
+
+    this.save(err => {
+      if (err) {
+        reject('Could not add nudge');
+      }
+
+      // Get the updated list of nudgeUsers
+      this.populate('nudgeUsers', 'userId picture', err => {
+        if (err) {
+          reject('Could not add nudge');
+        }
+
+        delete this.nudges;
+
+        resolve(this);
+      });
+    });
+  });
+
+};
+
+/**
+ * Removes nudge from project
+ * @param {String} userId the userId of the user who's nudge to remove
+ * @return {Promise} resolves with updated project
+ */
+Project.methods.removeNudge = function (userId) {
+
+  return new Promise((resolve, reject) => {
+    const nudgeIdx = this.nudges.findIndex(n => n.userId === userId);
+
+    if (nudgeIdx < 0) {
+      reject('No nudge exists for that user');
+    }
+
+    this.nudges.splice(nudgeIdx);
+
+    this.save(err => {
+      if (err) {
+        reject("Could not save project");
+      }
+
+      delete this.nudges;
+
+      // need to remove from nudgeUsers since its outdated now
+      this.nudgeUsers.splice(
+        this.nudgeUsers.findIndex(u => u.userId === userId)
+      );
+
+      resolve(this);
+    });
+  });
+
+};
+
 Project.pre('find', function () {
   this.populate('owner', 'userId username');
 });
