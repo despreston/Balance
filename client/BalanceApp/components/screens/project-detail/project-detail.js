@@ -4,7 +4,6 @@ import {
   ScrollView,
   View,
   Text,
-  Modal,
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
