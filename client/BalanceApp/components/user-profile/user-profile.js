@@ -128,8 +128,8 @@ class UserProfile extends Component {
   switchContext (context) {
     this.setState({ loadingContext: true, context });
 
-    switch (context) {
-      case 'friends': return this.fetchFriendsList();
+    if (context === 'friends') {
+      this.fetchFriendsList();
     }
   }
 
