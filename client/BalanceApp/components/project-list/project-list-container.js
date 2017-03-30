@@ -6,27 +6,38 @@ import { connect } from 'react-redux';
 import ProjectList from './project-list';
 import { fetchProjectsForUser } from '../../actions';
 
+function mapStateToProps (state, ownProps) {
+  const projects = Object.keys(state.projects)
+    .map(id => state.projects[id])
+    .filter(project => project.owner[0].userId === ownProps.user);
+
+  return {
+    projectsInvalidated: state.projects_invalidated,
+    loggedInUser: state.loggedInUser,
+    projects
+  };
+}
+
+const mapDispatchToProps = { fetchProjectsForUser };
+
 class ProjectListContainer extends Component {
+
   static propTypes = {
     user: PropTypes.string.isRequired,
     projects: PropTypes.array.isRequired,
     onProjectTap: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired
+    fetchProjectsForUser: PropTypes.func.isRequired
   }
 
   constructor (props) {
     super(props);
+
+    props.fetchProjectsForUser(props.user);
   }
 
-  componentWillReceiveProps ({ projectsInvalidated, user, dispatch }) {
+  componentWillReceiveProps ({ projectsInvalidated, user, fetchProjectsForUser }) {
     if (projectsInvalidated) {
-      dispatch(fetchProjectsForUser(user));
-    }
-  }
-
-  componentWillMount (nextProps) {
-    if (this.props.user) {
-      this.props.dispatch(fetchProjectsForUser(this.props.user));
+      fetchProjectsForUser(user);
     }
   }
 
@@ -38,18 +49,7 @@ class ProjectListContainer extends Component {
         projects={ this.props.projects } />
     );
   }
+
 }
 
-function mapStateToProps (state) {
-  const projects = Object.keys(state.projects)
-    .map(id => state.projects[id])
-    .filter(project => project.owner[0].userId === state.loggedInUser);
-
-  return {
-    projectsInvalidated: state.projects_invalidated,
-    projects,
-    loggedInUser: state.loggedInUser
-  };
-}
-
-export default connect(mapStateToProps)(ProjectListContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectListContainer);

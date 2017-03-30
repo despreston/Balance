@@ -6,19 +6,17 @@ import { connect } from 'react-redux';
 import ProfileInfo from './profile-info/profile-info';
 import NoteList from '../note-list/note-list';
 import UserList from '../user-list/user-list';
-import ProjectList from '../project-list/project-list';
+import ProjectListContainer from '../project-list/project-list-container';
 import EmptyMessage from './empty-message/empty-message';
 import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 import Friends from './contexts/friends';
-import Projects from './contexts/projects';
 import Notes from './contexts/notes';
 
 // actions
 import {
   fetchFriendsForUser,
   requestNotes,
-  requestUser,
-  fetchProjectsForUser
+  requestUser
 } from '../../actions';
 
 // styles
@@ -26,7 +24,7 @@ import Styles from './profile-styles';
 
 function mapStateToProps (state, ownProps) {
 
-  let userId, nav, projects;
+  let userId, nav;
 
   /**
    * if nav'ing directly thru react-navigator, the userId is passed as
@@ -40,13 +38,26 @@ function mapStateToProps (state, ownProps) {
     userId = ownProps.userId;
   }
 
+  const user = state.users[userId];
+
+  const notes = Object.keys(state.notes)
+    .map(id => state.notes[id])
+    .filter(note => note.user === userId);
+
+  const friends = Object.keys(state.users)
+    .map(id => state.users[id])
+    .filter(userToFilter => {
+      return user.friends.some(friend => {
+        return friend.userId === userToFilter.userId && 
+          friend.status === 'accepted';
+      });
+    });
+
   return {
     loggedInUser: state.loggedInUser,
-    userId,
-    isLoggedInUser: (state.loggedInUser === userId),
-    users: state.users,
-    notes: state.notes,
-    projects: state.projects,
+    user,
+    notes,
+    friends,
     nav
   };
 
@@ -54,7 +65,6 @@ function mapStateToProps (state, ownProps) {
 
 function mapDispatchToState (dispatch) {
   return {
-    fetchProjectsForUser: id => dispatch(fetchProjectsForUser(id)),
     requestLatestNotes: params => dispatch(requestNotes(params)),
     fetchFriendsForUser: id => dispatch(fetchFriendsForUser(id)),
     requestUser: id => dispatch(requestUser(id, false))
@@ -65,15 +75,12 @@ class UserProfile extends Component {
   
   static propTypes = {
     loggedInUser: PropTypes.string.isRequired,
-    isLoggedInUser: PropTypes.bool.isRequired,
-    userId: PropTypes.string.isRequired,
-    users: PropTypes.object,
-    notes: PropTypes.object,
-    projects: PropTypes.object,
+    user: PropTypes.object,
+    notes: PropTypes.array,
+    friends: PropTypes.array,
     nav: PropTypes.func.isRequired,
     requestLatestNotes: PropTypes.func.isRequired,
-    fetchFriendsForUser: PropTypes.func.isRequired,
-    fetchProjectsForUser: PropTypes.func.isRequired
+    fetchFriendsForUser: PropTypes.func.isRequired
   };
 
   constructor (props) {
@@ -81,109 +88,48 @@ class UserProfile extends Component {
 
     this.state = {
       context: 'latest',
-      loadingContext: false,
-      latestNotes: [],
-      friends: [],
-      projects: [],
-      user: null
+      loadingContext: false
     };
 
-    props.requestUser(props.userId).then(() => {
-      this.fetchLatestList();
-    });
-  }
-
-  componentWillReceiveProps (nextProps) {
-    const user = nextProps.users[nextProps.userId];
-
-    if (user) {
-      this.setState({ user });
-    }
-  }
-
-  latestNotes () {
-    return Object.keys(this.props.notes)
-      .map(id => this.props.notes[id])
-      .filter(note => note.user === this.props.userId);
-  }
-
-  projectsForUser () {
-    return Object.keys(this.props.projects)
-      .map(id => this.props.projects[id])
-      .filter(p => p.owner[0].userId === this.props.userId);
-  }
-
-  friends () {
-    const user = this.props.users[this.props.userId];
-
-    return Object.keys(this.props.users)
-      .map(id => this.props.users[id])
-      .filter(userToFilter => {
-        return user.friends.some(friend => {
-          return friend.userId === userToFilter.userId && 
-            friend.status === 'accepted';
-        });
-      });
+    props.requestUser(props.user.userId).then(() => this.fetchLatestList());
   }
 
   fetchFriendsList () {
-    return this.props.fetchFriendsForUser(this.props.userId)
-      .then(() => {
-        this.setState({
-          loadingContext: false,
-          friends: this.friends()
-        });
-      });
+    return this.props.fetchFriendsForUser(this.props.user.userId)
+      .then(() => this.setState({ loadingContext: false }));
   }
 
   fetchLatestList () {
-    return this.props.requestLatestNotes([{ user: this.props.userId }])
-      .then(() => {
-        this.setState({
-          loadingContext: false,
-          latestNotes: this.latestNotes()
-        });
-      });
-  }
-
-  fetchProjectsList () {
-    return this.props.fetchProjectsForUser(this.props.userId)
-      .then(() => {
-        this.setState({
-          loadingContext: false,
-          projects: this.projectsForUser()
-        });
-      });
+    return this.props.requestLatestNotes([{ user: this.props.user.userId }])
+      .then(() => this.setState({ loadingContext: false }));
   }
 
   renderLatest () {
     return (
       <Notes
-        notes={ this.state.latestNotes }
-        name={ this.state.user.name }
+        notes={ this.props.notes }
+        name={ this.props.user.name }
         nav={ this.props.nav }
       />
     );
   }
 
   renderFriends () {
-    return <Friends friends={ this.state.friends } nav={ this.props.nav } />;
+    return <Friends friends={ this.props.friends } nav={ this.props.nav } />;
   }
 
   renderProjects () {
+    const { nav, user } = this.props;
+
     return (
-      <Projects
-        projects={ this.state.projects }
-        nav={ this.props.nav }
-        loggedInUser={ this.props.loggedInUser }
+      <ProjectListContainer
+        onProjectTap={ project => nav('Project', { project: project._id }) }
+        user={ user.userId }
       />
     );
   }
 
   renderBody () {
-    if (this.state.loadingContext) {
-      return <Text>loading...</Text>;
-    }
 
     switch (this.state.context) {
       case 'latest': return this.renderLatest();
@@ -198,22 +144,21 @@ class UserProfile extends Component {
     switch (context) {
       case 'latest': return this.fetchLatestList();
       case 'friends': return this.fetchFriendsList();
-      case 'projects': return this.fetchProjectsList();
     }
   }
 
   render () {
-    if (!this.state.user) {
+    if (!this.props.user) {
       return <Text>Loading...</Text>;
     }
 
     return (
       <ScrollView style={ Styles.profile }>
         <View style={ Styles.profileInfo }>
-            <ProfileInfo user={ this.state.user } />
+            <ProfileInfo user={ this.props.user } />
             <UserProfileSwitch
-              user={ this.state.user }
-              hideProjects={ this.props.isLoggedInUser }
+              user={ this.props.user }
+              hideProjects={ this.props.user.userId === this.props.loggedInUser }
               selectedContext={ this.state.context }
               switchContext={ (context) => this.switchContext(context) } />
         </View>
