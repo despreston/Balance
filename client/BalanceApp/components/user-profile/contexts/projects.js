@@ -2,13 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import ProjectList from '../../project-list/project-list';
 import EmptyMessage from '../empty-message/empty-message';
 
-function Projects ({ projects, nav }) {
+function Projects ({ projects, nav, loggedInUser }) {
 
   if (projects.length > 0) {
     return (
       <ProjectList
+        loggedInUser={ loggedInUser }
         projects={ projects }
-        onProjectTap={ project => nav('Project', { project: project._id }) } />
+        onProjectTap={ project => nav('Project', { project: project._id }) }
+      />
     );
   }
 
@@ -18,7 +20,8 @@ function Projects ({ projects, nav }) {
 
 Projects.propTypes = {
   projects: PropTypes.array.isRequired,
-  nav: PropTypes.func.isRequired
+  nav: PropTypes.func.isRequired,
+  loggedInUser: PropTypes.string.isRequired
 };
 
 export default Projects;

@@ -22,16 +22,7 @@ function mapStateToProps (state, ownProps) {
   };
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    createFriendship: (userId, friend) => {
-      return dispatch(createFriendship(userId, friend));
-    },
-    removeFriendship: (userId, friend) => {
-      return dispatch(removeFriendship(userId, friend));
-    }
-  };
-}
+const mapDispatchToProps = { createFriendship, removeFriendship };
 
 class FriendButton extends Component {
 

@@ -1,15 +1,10 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
 import { View, ListView, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
 
 // Components
 import ProjectListItem from './project-list-item/project-list-item';
 import { Style } from './project-list-style';
-
-function mapStateToProps (state) {
-  return { loggedInUser: state.loggedInUser };
-}
 
 class ProjectList extends Component {
 
@@ -55,6 +50,7 @@ class ProjectList extends Component {
       />
     );    
   }
+ 
 }
 
-export default connect(mapStateToProps)(ProjectList);
+export default ProjectList;

@@ -33,6 +33,7 @@ class ProjectListContainer extends Component {
   render () {
     return (
       <ProjectList
+        loggedInUser={ this.props.loggedInUser }
         onProjectTap={ this.props.onProjectTap }
         projects={ this.props.projects } />
     );
@@ -46,7 +47,8 @@ function mapStateToProps (state) {
 
   return {
     projectsInvalidated: state.projects_invalidated,
-    projects
+    projects,
+    loggedInUser: state.loggedInUser
   };
 }
 

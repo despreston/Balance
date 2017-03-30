@@ -40,7 +40,7 @@ export default class Help extends Component {
   topic (text, index) {
     return (
       <TouchableOpacity onPress={ () => this.scroll(index * Dimensions.get('window').height) }>
-        <Text style={Styles.topic}>{ text }</Text>
+        <Text style={ Styles.topic }>{ text }</Text>
       </TouchableOpacity>
     );
   }
@@ -51,7 +51,7 @@ export default class Help extends Component {
   }
 
   goToTop () {
-    this.scrollView.scrollTo({ y: 0});
+    this.scrollView.scrollTo({ y: 0 });
     this.setState({ showHideBtn: false }); 
   }
 
@@ -62,7 +62,8 @@ export default class Help extends Component {
       <Modal animationType={ 'slide' } visible={ visible } >
         <ScrollView
           style={ Styles.content }
-          ref={(scrollView) => { this.scrollView = scrollView; }} >
+          ref={(scrollView) => { this.scrollView = scrollView; }}
+        >
           <View style={ Styles.topics }>
             { this.topic('Purpose of this app', 1) }
             { this.topic('Nudges', 2) }

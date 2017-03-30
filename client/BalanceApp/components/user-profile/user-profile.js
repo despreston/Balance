@@ -41,6 +41,7 @@ function mapStateToProps (state, ownProps) {
   }
 
   return {
+    loggedInUser: state.loggedInUser,
     userId,
     isLoggedInUser: (state.loggedInUser === userId),
     users: state.users,
@@ -63,6 +64,7 @@ function mapDispatchToState (dispatch) {
 class UserProfile extends Component {
   
   static propTypes = {
+    loggedInUser: PropTypes.string.isRequired,
     isLoggedInUser: PropTypes.bool.isRequired,
     userId: PropTypes.string.isRequired,
     users: PropTypes.object,
@@ -169,7 +171,13 @@ class UserProfile extends Component {
   }
 
   renderProjects () {
-    return <Projects projects={ this.state.projects } nav={ this.props.nav } />;
+    return (
+      <Projects
+        projects={ this.state.projects }
+        nav={ this.props.nav }
+        loggedInUser={ this.props.loggedInUser }
+      />
+    );
   }
 
   renderBody () {
