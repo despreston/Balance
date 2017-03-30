@@ -8,9 +8,7 @@ import {
   Image
 } from 'react-native';
 import Dimensions from 'Dimensions';
-
 import Styles from './help-styles';
-
 import ProfileInfo from '../user-profile/profile-info/profile-info';
 
 export default class Help extends Component {

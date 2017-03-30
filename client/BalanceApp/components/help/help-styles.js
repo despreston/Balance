@@ -46,8 +46,8 @@ export default StyleSheet.create  ({
   topic: {
     paddingVertical: 5,
     marginBottom: 40,
-    fontSize: 18,
-    color: Colors.orange,
+    fontSize: 20,
+    color: Colors.white,
     fontWeight: 'bold'
   },
 
