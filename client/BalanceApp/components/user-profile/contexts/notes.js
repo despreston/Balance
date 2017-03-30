@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import NoteList from '../../note-list/note-list';
+import NoteList from '../../note-list/note-list-container';
 import EmptyMessage from '../empty-message/empty-message';
 
 function Notes ({ notes, nav, name }) {

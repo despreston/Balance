@@ -3,7 +3,7 @@
  */
 
 import MainScene from './main/main';
-import ProjectDetail from './project-detail/project-detail';
+import ProjectDetailContainer from './project-detail/project-detail-container';
 import EditProjectContainer from './edit-project/edit-project-container';
 import Activity from './activity/activity';
 import Help from './help/help';
@@ -16,7 +16,7 @@ import Note from './note/note';
 
 export {
   MainScene,
-  ProjectDetail,
+  ProjectDetailContainer,
   EditProjectContainer,
   Activity,
   Help,

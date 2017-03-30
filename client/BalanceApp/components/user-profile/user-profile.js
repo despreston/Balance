@@ -4,18 +4,17 @@ import { connect } from 'react-redux';
 
 // components
 import ProfileInfo from './profile-info/profile-info';
-import NoteList from '../note-list/note-list';
 import UserList from '../user-list/user-list';
 import ProjectListContainer from '../project-list/project-list-container';
+import NoteListContainer from '../note-list/note-list-container';
+
 import EmptyMessage from './empty-message/empty-message';
 import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 import Friends from './contexts/friends';
-import Notes from './contexts/notes';
 
 // actions
 import {
   fetchFriendsForUser,
-  requestNotes,
   requestUser
 } from '../../actions';
 
@@ -40,10 +39,6 @@ function mapStateToProps (state, ownProps) {
 
   const user = state.users[userId];
 
-  const notes = Object.keys(state.notes)
-    .map(id => state.notes[id])
-    .filter(note => note.user === userId);
-
   const friends = Object.keys(state.users)
     .map(id => state.users[id])
     .filter(userToFilter => {
@@ -56,30 +51,21 @@ function mapStateToProps (state, ownProps) {
   return {
     loggedInUser: state.loggedInUser,
     user,
-    notes,
     friends,
     nav
   };
 
 }
 
-function mapDispatchToState (dispatch) {
-  return {
-    requestLatestNotes: params => dispatch(requestNotes(params)),
-    fetchFriendsForUser: id => dispatch(fetchFriendsForUser(id)),
-    requestUser: id => dispatch(requestUser(id, false))
-  };
-}
+const mapDispatchToState = { fetchFriendsForUser, requestUser };
 
 class UserProfile extends Component {
   
   static propTypes = {
     loggedInUser: PropTypes.string.isRequired,
     user: PropTypes.object,
-    notes: PropTypes.array,
     friends: PropTypes.array,
     nav: PropTypes.func.isRequired,
-    requestLatestNotes: PropTypes.func.isRequired,
     fetchFriendsForUser: PropTypes.func.isRequired
   };
 
@@ -91,7 +77,7 @@ class UserProfile extends Component {
       loadingContext: false
     };
 
-    props.requestUser(props.user.userId).then(() => this.fetchLatestList());
+    props.requestUser(props.user.userId, false);
   }
 
   fetchFriendsList () {
@@ -99,17 +85,19 @@ class UserProfile extends Component {
       .then(() => this.setState({ loadingContext: false }));
   }
 
-  fetchLatestList () {
-    return this.props.requestLatestNotes([{ user: this.props.user.userId }])
-      .then(() => this.setState({ loadingContext: false }));
-  }
-
   renderLatest () {
+    function selector (notes, user) {
+      return Object.keys(notes)
+        .map(id => notes[id])
+        .filter(note => note.user === user);
+    }
+
     return (
-      <Notes
-        notes={ this.props.notes }
-        name={ this.props.user.name }
-        nav={ this.props.nav }
+      <NoteListContainer
+        onSelect={ id => this.props.nav('Note', { id }) }
+        showContext={ this.props.user.userId === this.props.loggedInUser }
+        query={[{ user: this.props.user.userId }]}
+        selector={ notes => selector(notes, this.props.user.userId) }
       />
     );
   }
@@ -130,7 +118,6 @@ class UserProfile extends Component {
   }
 
   renderBody () {
-
     switch (this.state.context) {
       case 'latest': return this.renderLatest();
       case 'friends': return this.renderFriends();
@@ -142,7 +129,6 @@ class UserProfile extends Component {
     this.setState({ loadingContext: true, context });
 
     switch (context) {
-      case 'latest': return this.fetchLatestList();
       case 'friends': return this.fetchFriendsList();
     }
   }
