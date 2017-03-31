@@ -15,7 +15,7 @@ import FutureNote from './future-note/future-note';
 import NoteListContainer from '../../note-list/note-list-container';
 import Nudges from '../../nudges/nudges';
 import NudgeBtn from '../../nudges/nudge-button/nudge-button';
-import AddUpdate from '../../add-update/add-update';
+import AddUpdateContainer from '../../add-update/add-update-container';
 
 // utils
 import emptyNote from '../../../utils/empty-note';
@@ -169,7 +169,7 @@ class ProjectDetail extends Component {
             { this.renderPastNotes(pastNotes) }
           </View>
         </View>
-        <AddUpdate
+        <AddUpdateContainer
           project={ project }
           visible={ this.state.addUpdateVisible }
           hideFn={ () => this.toggleAddUpdateModal() }

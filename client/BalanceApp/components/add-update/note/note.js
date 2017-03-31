@@ -6,28 +6,26 @@ import Styles from './note-styles';
 export default class Note extends Component {
 
   static propTypes = {
-    placeHolder: PropTypes.string.isRequired
+    placeHolder: PropTypes.string.isRequired,
+    note: PropTypes.string.isRequired,
+    onTextChange: PropTypes.func.isRequired
   }
   
   constructor (props) {
     super(props);
-
-    this.state = { textValue: '' };
-  }
-
-  onTextChange (event) {
-    this.setState({ textValue: event.nativeEvent.text || '' });
   }
 
   render () {
+    const { placeHolder, note, onTextChange } = this.props;
+
     return (
       <TextInput
         blurOnSubmit={ false }
         multiline
         autoFocus
-        placeholder={ this.props.placeHolder }
-        value={ this.state.textValue }
-        onChange={ event => this.onTextChange(event) }
+        placeholder={ placeHolder }
+        value={ note }
+        onChange={ event => onTextChange(event.nativeEvent.text || '') }
         style={ Styles.note }
       />
     )
