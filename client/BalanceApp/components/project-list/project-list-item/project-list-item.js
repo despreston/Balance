@@ -33,7 +33,9 @@ function ProjectListItem ({ project, hideNudgeBtn = false }) {
           This project is finished!
         </Text>
       );
-    } else if (Future) {
+    }
+
+    if (Future) {
       return (
         <Text style={ Style.note } numberOfLines={ 2 }>
           { Future.content }
