@@ -26,7 +26,7 @@ export const Style = StyleSheet.create  ({
   content: {
     color: '#3D3F3E',
     lineHeight: 18,
-    fontSize: 13,
+    fontSize: 14,
     marginTop: 15
   },
 

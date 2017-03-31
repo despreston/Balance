@@ -15,6 +15,7 @@ import FutureNote from './future-note/future-note';
 import NoteListContainer from '../../note-list/note-list-container';
 import Nudges from '../../nudges/nudges';
 import NudgeBtn from '../../nudges/nudge-button/nudge-button';
+import AddUpdate from '../../add-update/add-update';
 
 // utils
 import emptyNote from '../../../utils/empty-note';
@@ -33,10 +34,16 @@ class ProjectDetail extends Component {
 
   constructor (props) {
     super(props);
+
+    this.state = { addUpdateVisible: false };
   }
 
   notesForType (type) {
     return this.props.notes.filter(note => note.type === type);
+  }
+
+  toggleAddUpdateModal () {
+    this.setState({ addUpdateVisible: !this.state.addUpdateVisible });
   }
 
   renderPastNotes (notes) {
@@ -83,7 +90,7 @@ class ProjectDetail extends Component {
     return (
       <View style={ Styles.updateButtonContainer }>
         <TouchableOpacity
-          onPress={ () => null }
+          onPress={ () => this.toggleAddUpdateModal() }
           style={ Styles.updateButton }>
           <Text
             style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
@@ -162,6 +169,11 @@ class ProjectDetail extends Component {
             { this.renderPastNotes(pastNotes) }
           </View>
         </View>
+        <AddUpdate
+          project={ project }
+          visible={ this.state.addUpdateVisible }
+          hideFn={ () => this.toggleAddUpdateModal() }
+        />
       </ScrollView>
     );
   }
