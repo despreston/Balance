@@ -33,10 +33,10 @@ function ProjectListItem ({ project, hideNudgeBtn = false }) {
           This project is finished!
         </Text>
       );
-    } else if (Past) {
+    } else if (Future) {
       return (
-        <Text style={ Style.note } numberOfLines={ 1 }>
-          { Past.content }
+        <Text style={ Style.note } numberOfLines={ 2 }>
+          { Future.content }
         </Text>
       )
     }
@@ -51,32 +51,47 @@ function ProjectListItem ({ project, hideNudgeBtn = false }) {
 
     return null;
   }
+
+  function renderNudgeBtn () {
+    if (hideNudgeBtn || status === 'finished') {
+      return <View />;
+    }
+
+    return <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />;
+  }
+
+  function renderUpdatedAt () {
+    if (!lastUpdated) {
+      return null;
+    }
+
+    return (
+      <Text style={ Style.text }>Updated { formatDate(lastUpdated) }</Text>
+    );
+  }
+
+  function renderStatusIcon () {
+    if (!lastUpdated || status !== 'active') {
+      return null;
+    }
+
+    return <StatusIcon lastUpdated={ lastUpdated } />;
+  }
   
   return (
     <View style={ Style.projectListItem }>
       <View style={ Style.content }>
         <View>
           <Text style={ Style.title }>{ project.title }</Text>
-          {
-            lastUpdated && 
-            <Text style={ Style.text }>
-              Updated { formatDate(lastUpdated) }
-            </Text>
-          }
+          { renderUpdatedAt() }
         </View>
         { renderNote() }
         <View style={ Style.footer }>
-          { 
-            lastUpdated && status === 'active' &&
-            <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />
-          }
+          { renderNudgeBtn() }
           { renderNudgeUsers() }
         </View>
       </View>
-      {
-        lastUpdated && status === 'active' &&
-        <StatusIcon lastUpdated={ lastUpdated } />
-      }
+      { renderStatusIcon() }
     </View>
   );
 }

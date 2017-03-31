@@ -27,15 +27,14 @@ export const Style = StyleSheet.create({
   },
 
   note: {
-    fontStyle: 'italic',
-    fontSize: 14,
-    color: Colors.gray.tundora,
-    paddingVertical: 25
+    lineHeight: 18,
+    fontSize: 13,
+    color: Colors.gray.tundora
   },
 
   text: {
     color: Colors.gray.silver,
-    fontSize: 12
+    fontSize: 11
   },
 
   message: {
