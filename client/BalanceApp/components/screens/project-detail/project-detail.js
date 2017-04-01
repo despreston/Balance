@@ -140,10 +140,18 @@ class ProjectDetail extends Component {
     let futureNote;
 
     if (futureNotes.length > 0) {
-      futureNote = futureNotes[0];
-    } else if (project.Future) {
+      futureNote = futureNotes.reduce((latest, note) => {
+        return note.lastUpdated.getTime() > latest.lastUpdated.getTime()
+          ? note
+          : latest;
+      }, futureNotes[0]);
+    }
+
+    else if (project.Future) {
       futureNote = project.Future;
-    } else {
+    }
+
+    else {
       futureNote = emptyNote(project, 'Future');
     }
 

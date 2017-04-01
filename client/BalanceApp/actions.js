@@ -132,6 +132,7 @@ export function saveProject (project) {
  */
 export function saveNote (note) {
   let method, url = 'notes';
+
   if (note._new) {
     method = 'POST';
     delete note._new;

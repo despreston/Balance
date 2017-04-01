@@ -10,7 +10,6 @@ import Icon from '../../navigation/icon';
 import { requestNotes } from '../../../actions';
 
 function mapStateToProps (state, { navigation }) {
-
   const project = state.projects[navigation.state.params.project];
 
   // notes for selected project
@@ -22,7 +21,6 @@ function mapStateToProps (state, { navigation }) {
   const userIsOwner = project.owner[0].userId === state.loggedInUser;
 
   return { userIsOwner, project, notes };
-
 }
 
 const mapDispatchToProps = { requestNotes };
