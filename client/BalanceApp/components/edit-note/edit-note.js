@@ -7,7 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert } from 'react-native';
+  Alert
+} from 'react-native';
 
 // Components
 import { Styles } from './edit-note-style';
@@ -90,7 +91,7 @@ export default class EditNote extends Component {
                 <TouchableOpacity>
                   <Text
                     style={[Styles.headerText, this.getSaveTextColor() ]}
-                    onPress={() => this.save()}>
+                    onPress={() => this.save(this.props.note)}>
                     Save
                   </Text>
                 </TouchableOpacity>

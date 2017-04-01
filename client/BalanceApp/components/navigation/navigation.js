@@ -6,7 +6,7 @@ import { Image } from 'react-native';
 // Screens
 import {
   MainScene,
-  ProjectDetail,
+  ProjectDetailContainer,
   EditProjectContainer,
   Activity,
   Notifications,
@@ -33,7 +33,7 @@ const navigationOptions = {
 const defaultScreens = {
   UserProfile: { screen: UserProfile },
   Note: { screen: Note },
-  Project: { screen: ProjectDetail }
+  Project: { screen: ProjectDetailContainer }
 };
 
 function icon (path) {

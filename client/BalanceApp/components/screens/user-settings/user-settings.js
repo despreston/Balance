@@ -1,17 +1,18 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
 import Logout from '../../signon/logout';
 import NavBtn from '../../navigation/nav-btn';
+import Help from '../../help/help';
 
 // styles
 import Styles from '../edit-project/edit-project-style';
 
 // actions
-import { saveUser} from '../../../actions';
+import { saveUser } from '../../../actions';
 
 function mapStateToProps (state) {
   return {
@@ -25,35 +26,25 @@ class UserSettings extends Component {
 
   static propTypes = {
     user: PropTypes.object.isRequired
-  };
+  }
 
   static navigationOptions = {
     header: ({ goBack, state }, defaultHeader) => {
 
       const title = 'Settings';
 
-      const left = (
-        <NavBtn
-          title='Cancel'
-          onPress={ () => goBack() }
-        />
-      );
+      const left = <NavBtn title='Cancel' onPress={ () => goBack() }/>;
 
-      const right = (
-        <NavBtn
-          title='Save'
-          onPress={ () => state.params.save() }
-        />
-      );
+      const right = <NavBtn title='Save' onPress={ () => state.params.save() }/>;
 
       return { ...defaultHeader, left, right, title };
     }
-  };
+  }
   
   constructor (props) {
     super(props);
 
-    this.state = { user: props.user };
+    this.state = { user: props.user, helpVisible: false };
   }
 
   componentDidMount () {
@@ -78,6 +69,10 @@ class UserSettings extends Component {
   save () {
     this.props.navigation.navigate('Profile');
     this.props.saveUser(this.state.user);
+  }
+
+  toggleHelp () {
+    this.setState({ helpVisible: !this.state.helpVisible });
   }
 
   render () {
@@ -110,12 +105,23 @@ class UserSettings extends Component {
               onChangeText={ value => this.onEdit('bio', value) } />
           </View>
           <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-            <Text>
+            <Text style={{ textAlign: 'center' }}>
               Other users can search for you by name or username.
             </Text>
           </View>
           <Logout beforeLogoutHook={ () => this.beforeLogout() }/>
+          <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+            <TouchableOpacity onPress={() => this.toggleHelp() }>
+              <Text style={ [Styles.text, Styles.help] }>
+                What is this app?
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
+        <Help
+          visible={ this.state.helpVisible }
+          hideFn={ () => this.toggleHelp() }
+        />
       </View>
     );
   }

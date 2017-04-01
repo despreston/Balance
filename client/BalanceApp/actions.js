@@ -125,13 +125,14 @@ export function saveProject (project) {
 };
 
 /**
- * Save a note to server
+ * Save a note to server and invalidate the projects
  * Properly handles POST or PUT determination based on _new flag in note
  * @param {object} note
  * @return {Promise}
  */
 export function saveNote (note) {
   let method, url = 'notes';
+
   if (note._new) {
     method = 'POST';
     delete note._new;
@@ -139,7 +140,12 @@ export function saveNote (note) {
     method = 'PUT';
     url += `/${note._id}`;
   }
-  return apiDispatch(url, receiveNotes, { method, body: note });
+
+  return dispatch => {
+    dispatch(invalidate('projects'));
+    return api(url, { method, body: note })
+      .then(user => dispatch(receiveNotes));
+  };
 };
 
 /**

@@ -6,10 +6,12 @@ import { View, ListView, TouchableOpacity } from 'react-native';
 import ProjectListItem from './project-list-item/project-list-item';
 import { Style } from './project-list-style';
 
-export default class ProjectList extends Component {
+class ProjectList extends Component {
+
   static propTypes = {
     onProjectTap: PropTypes.func.isRequired,
-    projects: PropTypes.array.isRequired
+    projects: PropTypes.array.isRequired,
+    loggedInUser: PropTypes.string.isRequired
   }
 
   constructor (props) {
@@ -23,12 +25,14 @@ export default class ProjectList extends Component {
   }
 
   _renderRow (rowData) {
+    const hideNudgeBtn = rowData.owner[0].userId === this.props.loggedInUser;
+
     return (
       <TouchableOpacity
-        onPress={this.props.onProjectTap.bind(this,rowData)}
-        style={Style.project}>
-        <View ref={component => this._root = component}>
-          <ProjectListItem project={rowData} />
+        onPress={ this.props.onProjectTap.bind(this, rowData) }
+        style={ Style.project }>
+        <View ref={ component => this._root = component }>
+          <ProjectListItem project={ rowData } hideNudgeBtn={ hideNudgeBtn }/>
         </View>
       </TouchableOpacity>
     );    
@@ -46,4 +50,7 @@ export default class ProjectList extends Component {
       />
     );    
   }
+ 
 }
+
+export default ProjectList;

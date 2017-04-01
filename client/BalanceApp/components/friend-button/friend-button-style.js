@@ -10,7 +10,7 @@ export default StyleSheet.create  ({
 
   container: {
     height: 25,
-    width: 65,
+    width: 75,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -23,6 +23,14 @@ export default StyleSheet.create  ({
     fontSize: 12,
     fontWeight: '600',
     color: Colors.white
+  },
+
+  removePending: {
+    backgroundColor: Colors.red
+  },
+
+  friends: {
+    backgroundColor: Colors.green
   }
   
 });

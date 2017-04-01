@@ -13,7 +13,7 @@ import { Style } from './project-list-item-style';
 // utils
 import { formatDate } from '../../../utils/helpers';
 
-function ProjectListItem ({ project }) {
+function ProjectListItem ({ project, hideNudgeBtn = false }) {
   const { Past, Future, status, nudgeUsers } = project;
   let lastUpdated;
 
@@ -33,19 +33,17 @@ function ProjectListItem ({ project }) {
           This project is finished!
         </Text>
       );
-    } else if (Past) {
+    }
+
+    if (Future) {
       return (
-        <Text style={ Style.note } numberOfLines={ 1 }>
-          { Past.content }
+        <Text style={ Style.note } numberOfLines={ 2 }>
+          { Future.content }
         </Text>
       )
     }
 
-    return (
-      <Text style={ Style.message }>
-        Nothing done for this yet. 😕
-      </Text>
-    );
+    return <Text style={ Style.message }>Nothing done for this yet. 😕</Text>;
   }
 
   function renderNudgeUsers () {
@@ -55,35 +53,54 @@ function ProjectListItem ({ project }) {
 
     return null;
   }
+
+  function renderNudgeBtn () {
+    if (hideNudgeBtn || status === 'finished') {
+      return <View />;
+    }
+
+    return <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />;
+  }
+
+  function renderUpdatedAt () {
+    if (!lastUpdated) {
+      return null;
+    }
+
+    return (
+      <Text style={ Style.text }>Updated { formatDate(lastUpdated) }</Text>
+    );
+  }
+
+  function renderStatusIcon () {
+    if (!lastUpdated || status !== 'active') {
+      return null;
+    }
+
+    return <StatusIcon lastUpdated={ lastUpdated } />;
+  }
   
   return (
     <View style={ Style.projectListItem }>
       <View style={ Style.content }>
+        <View>
           <Text style={ Style.title }>{ project.title }</Text>
-          {
-            lastUpdated && <Text style={ Style.text }>
-              Updated { formatDate(lastUpdated) }
-            </Text>
-          }
-          { renderNote() }
-          <View style={ Style.footer }>
-            { 
-              lastUpdated && status === 'active' &&
-              <NudgeBtn style={ Style.nudgeBtn } project={ project._id } />
-            }
-            { renderNudgeUsers() }
-          </View>
+          { renderUpdatedAt() }
+        </View>
+        { renderNote() }
+        <View style={ Style.footer }>
+          { renderNudgeBtn() }
+          { renderNudgeUsers() }
+        </View>
       </View>
-      {
-        lastUpdated && status === 'active' &&
-        <StatusIcon lastUpdated={ lastUpdated } />
-      }
+      { renderStatusIcon() }
     </View>
   );
 }
 
 ProjectListItem.propTypes = {
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  hideNudgeBtn: PropTypes.bool
 };
 
 export default ProjectListItem;

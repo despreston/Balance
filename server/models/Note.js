@@ -18,7 +18,10 @@ let Note = new mongoose.Schema({
     required: true
   },
 
-  user: String,
+  user: {
+    type: String,
+    required: true
+  },
 
   lastUpdated: Date,
 
