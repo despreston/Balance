@@ -43,6 +43,7 @@ class ProjectList extends Component {
 
     return (
       <ListView
+        keyboardShouldPersistTaps='handled'
         enableEmptySections={true}
         style={Style.projectList}
         dataSource={ds.cloneWithRows(this.props.projects)}

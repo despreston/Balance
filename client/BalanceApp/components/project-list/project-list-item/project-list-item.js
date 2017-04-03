@@ -1,6 +1,6 @@
 // Vendors
 import React, { PropTypes } from 'react';
-import { View, TouchableOpacity, Image, Text } from 'react-native';
+import { View, Text } from 'react-native';
 
 // Components
 import StatusIcon from '../../status-icon/StatusIcon';

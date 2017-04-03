@@ -84,7 +84,7 @@ export default class Nudges extends Component {
       <View style={ Style.nudges }>
         { this.renderPictures() }
         <Text style={ [Style.text, { left: this.state.textPos }, textStyle] }>
-          { `${this.renderText()} update`}
+          { `${this.renderText()} update` }
         </Text>
       </View>
     );

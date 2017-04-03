@@ -40,6 +40,6 @@ export default class UpdateIcon extends Component {
           hideFn={ () => this.toggleAddUpdateModal() }
         />
       </View>
-    )
+    );
   }
 }
