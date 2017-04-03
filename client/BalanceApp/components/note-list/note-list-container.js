@@ -66,6 +66,14 @@ class NoteListContainer extends Component {
     this.setState({ note, editModalVisible: true });
   }
 
+  onEditProp () {
+    if (this.props.showEdit) {
+      return note => this.onEdit(note);
+    }
+
+    return null;
+  }
+
   onClose () {
     this.setState({ note: {}, editModalVisible: false });
   }
@@ -81,8 +89,7 @@ class NoteListContainer extends Component {
     return (
       <View>
         <NoteList
-          showEdit={ showEdit }
-          onEdit={ note => this.onEdit(note) }
+          onEdit={ this.onEditProp() }
           onSelect={ onSelect }
           showContext={ showContext }
           notes={ notes }
