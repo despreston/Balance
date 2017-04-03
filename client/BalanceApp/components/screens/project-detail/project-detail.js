@@ -156,7 +156,10 @@ class ProjectDetail extends Component {
     }
 
     return (
-      <ScrollView style={ Styles.projectDetail } >
+      <ScrollView
+        style={ Styles.projectDetail }
+        keyboardShouldPersistTaps='handled'
+      >
         <View style={ Styles.info }>
           <Text style={ [Styles.title, Styles.whiteText] }>
             { project.title }
