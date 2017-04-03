@@ -9,8 +9,8 @@ export default StyleSheet.create({
   },
 
   image: {
-    height: 20,
-    width: 20
+    height: 17,
+    width: 17
   }
 
 });

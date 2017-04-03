@@ -14,21 +14,22 @@ export default StyleSheet.create  ({
   },
 
   card: {
-    paddingVertical: 50,
+    paddingTop: 50,
+    paddingBottom: 20,
     paddingHorizontal: 15,
     height: Dimensions.get('window').height, 
     width: Dimensions.get('window').width
   },
 
   navButtonContainer: {
-    paddingVertical: 30,
+    paddingVertical: 20,
     alignItems: 'center',
     alignSelf: 'center',
     flexDirection: 'row',
   },
 
   unimportantButton: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderColor: Colors.white,
     backgroundColor: Colors.purple
   },

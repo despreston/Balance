@@ -68,8 +68,8 @@ export default class Nudges extends Component {
     const { numOfNudgers } = this.state;
 
     switch (true) {
-      case (numOfNudgers === 1): return 'wants an ';
-      case (numOfNudgers < 6): return 'want an ';
+      case (numOfNudgers === 1): return 'wants an';
+      case (numOfNudgers < 6): return 'want an';
       case (numOfNudgers > 6):
         let remaining = numOfNudgers - 5;
         return `and ${remaining} others want an`;
