@@ -105,7 +105,7 @@ class UserSettings extends Component {
               onChangeText={ value => this.onEdit('bio', value) } />
           </View>
           <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-            <Text style={{ textAlign: 'center' }}>
+            <Text style={[ Styles.text, { textAlign: 'center' } ]}>
               Other users can search for you by name or username.
             </Text>
           </View>

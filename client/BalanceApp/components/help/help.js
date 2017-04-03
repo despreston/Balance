@@ -68,7 +68,8 @@ export default class Help extends Component {
             { this.topic('Purpose of this app', 1) }
             { this.topic('Nudges', 2) }
             { this.topic('Project colors', 3) }
-            { this.topic('Who made this?', 4) }
+            { this.topic('How can I find other users?', 4) }
+            { this.topic('Who made this?', 5) }
           </View>
 
           <View style={ Styles.answer }>
@@ -92,9 +93,9 @@ export default class Help extends Component {
               of the project a nudge.
             </Text>
             <Text style={ Styles.text }>
-              To nudge someone, look for the
-               " <Image source={ require('../../assets/icons/nudge-white.png') } style={{ width: 20, height: 20}}/> " 
-              icon on the project page. The author of that project will receive 
+              To nudge someone, look for the { }
+              <Image source={ require('../../assets/icons/nudge-white.png') } style={{ width: 20, height: 20}}/>
+              { } icon on the project page. The author of that project will receive
               a notification telling them you want them to update their project.
             </Text>
             <Text style={ Styles.text }>
@@ -110,6 +111,17 @@ export default class Help extends Component {
               The color bar on the right-hand-side in a list of projects 
               corresponds to how long its been since the last update for that 
               project.
+            </Text>
+          </View>
+          <View style={ Styles.answer }>
+            <Text style={ Styles.topic }>
+              How can I find other users?
+            </Text>
+            <Text style={ Styles.text }>
+              You can search for any user by going to your Profile page and
+              tapping the { }
+              <Image source={ require('../../assets/icons/users.png') } style={{ width: 20, height: 20}}/>
+              { } icon in the top left corner.
             </Text>
           </View>
           <View style={ Styles.answer }>
