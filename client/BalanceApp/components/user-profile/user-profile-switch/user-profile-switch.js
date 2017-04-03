@@ -46,7 +46,7 @@ function UserProfileSwitch (props) {
       { renderOption('latest', 'LATEST') }
       { 
         !hideProjects &&
-        renderOption('projects', handlePlural('PROJECT', user.project_count))
+        renderOption('projects', handlePlural('PROJECT', user.project_count || 0))
       }
       { renderOption('friends', handlePlural('FRIEND', friendCount)) }
     </View>
