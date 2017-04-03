@@ -4,10 +4,10 @@ import Colors from '../../colors';
 export default StyleSheet.create  ({
 
   navButton: {
-    marginHorizontal: 10,
+    flex: 1,
     height: 30,
-    width: 100,
     borderRadius: 5,
+    marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center'
   },

@@ -122,7 +122,7 @@ export default class AddUpdate extends Component {
         <ScrollView
           keyboardShouldPersistTaps='handled'
           horizontal
-          scrollEnabled={ false }
+          scrollEnabled={ true }
           style={ Styles.content }
           ref={ scrollView => { this.scrollView = scrollView; } }
         >

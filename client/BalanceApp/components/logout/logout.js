@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { Button } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { reset } from '../../actions';
 import { removeToken } from '../../utils/auth';
-import Colors from '../colors';
+import Styles from './logout-styles';
 
 function mapDispatchToProps (dispatch) {
   return {
@@ -37,11 +37,11 @@ class Logout extends Component {
 
   render () {
     return (
-      <Button
-        color={ Colors.blue }
-        title='Logout'
-        onPress={this.logout}
-      />  
+      <TouchableOpacity onPress={this.logout}>
+        <Text style={ Styles.text }>
+          Logout
+        </Text>
+      </TouchableOpacity>
     );
   }
 }

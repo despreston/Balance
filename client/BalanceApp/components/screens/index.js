@@ -12,6 +12,7 @@ import UserSettings from './user-settings/user-settings';
 import UserProfile from '../user-profile/user-profile';
 import UserSearch from './user-search/user-search';
 import Note from './note/note';
+import Auth from './auth/auth';
 
 export {
   MainScene,
@@ -23,5 +24,6 @@ export {
   UserSettings,
   UserProfile,
   UserSearch,
-  Note
+  Note,
+  Auth
 };

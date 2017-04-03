@@ -31,11 +31,11 @@ module.exports = ({ get, post, del, put }) => {
       }
 
       AccessControl.many({ user: params.userId }, user.sub)
-        .then(privacyLevel => {
-          return Project.projectCountForUser(result.userId, privacyLevel)
-            .then(project_count => Object.assign(result, { project_count }))
-            .then(user => res.send(200, user));
-        });
+      .then(privacyLevel => {
+        return Project.projectCountForUser(result.userId, privacyLevel)
+          .then(project_count => Object.assign(result, { project_count }))
+          .then(user => res.send(200, user));
+      });
     })
     .catch(err => res.send(500, err));
   });
@@ -87,7 +87,7 @@ module.exports = ({ get, post, del, put }) => {
 
   });
   
-  post("users", ({ params, body }, res) => {
+  post("users", ({ params, body, user }, res) => {
     body = JSON.parse(body);
 
     /**
@@ -96,15 +96,22 @@ module.exports = ({ get, post, del, put }) => {
      * - send the user with 201 status
      */
     User.findOne({ userId: body.userId })
-    .then(user => user ? Object.assign(user, body) : new User(body))
-    .then(user => user.save())
-    .then(user => {
-      return Project.projectCountForUser(user.userId)
-        .then(project_count => {
-          const obj = Object.assign({}, user.toObject(), { project_count });
-          return res.send(201, obj);
-        })
-        .catch(err => res.send(500, err));
+    .then(newUser => newUser ? Object.assign(newUser, body) : new User(body))
+    .then(newUser => newUser.save())
+    .then(newUser => {
+
+      /** 
+       * At the moment this includes all privacy levels, but I'd rather it follow
+       * the same pattern as the other routes in case something changes in
+       * access-control
+       */
+      AccessControl.many({ user: body.userId }, user.sub)
+      .then(privacyLevel => {
+        return Project.projectCountForUser(newUser.userId, privacyLevel)
+          .then(project_count => Object.assign(newUser, { project_count }))
+          .then(user => res.send(200, user));
+      })
+      .catch(err => res.send(500, err));
     })
     .catch(err => res.send(500, err));
   });

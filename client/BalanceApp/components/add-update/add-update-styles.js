@@ -15,7 +15,7 @@ export default StyleSheet.create  ({
 
   card: {
     paddingVertical: 50,
-    paddingHorizontal: 30,
+    paddingHorizontal: 15,
     height: Dimensions.get('window').height, 
     width: Dimensions.get('window').width
   },

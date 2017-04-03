@@ -15,11 +15,6 @@ export default StyleSheet.create({
     borderRadius: 12.5,
   },
 
-  bold: {
-    fontWeight: '600',
-    color: Colors.purple
-  },
-
   text: {
     color: Colors.gray.silver,
     fontSize: 12

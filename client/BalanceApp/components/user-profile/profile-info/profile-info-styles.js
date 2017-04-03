@@ -60,13 +60,13 @@ export default StyleSheet.create  ({
   contextOption: {
     marginTop: 25,
     flex: 1,
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
     justifyContent: 'space-between'
   },
 
   contextOptionText: {
     ...shared,
-    fontSize: 14,
+    fontSize: 13,
     textAlign: 'center',
     paddingBottom: 5
   },

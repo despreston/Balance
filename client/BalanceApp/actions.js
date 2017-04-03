@@ -284,7 +284,7 @@ export function login () {
       delete profile.extraInfo;
 
       // send the user to the server
-      return api(`users`, { method: 'POST', body: profile})
+      return api(`users`, { method: 'POST', body: profile })
         .then(user => dispatch(setLoggedInUser(user)));
     });
   }

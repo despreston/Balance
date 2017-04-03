@@ -68,22 +68,21 @@ export default class Help extends Component {
             { this.topic('Purpose of this app', 1) }
             { this.topic('Nudges', 2) }
             { this.topic('Project colors', 3) }
-            { this.topic('Who made this?', 4) }
+            { this.topic('How can I find other users?', 4) }
+            { this.topic('Who made this?', 5) }
           </View>
 
           <View style={ Styles.answer }>
             <Text style={ Styles.topic }>Purpose of this app</Text>
             <Text style={ Styles.text }>
-              Balance keeps track of what you worked on last, and what you need 
-              to work on next time. It was created for those that are juggling 
-              multiple activities, hobbies, projects, etc in their life. The 
-              idea is to get you back into the flow of things no matter how long 
-              of a break you take.
+              Balance was created for those that are juggling multiple activities, 
+              hobbies, or projects. The idea is to get you back 
+              into the flow of things no matter how long of a break you take.
             </Text>
             <Text style={ Styles.text }>
-              To use, answer 2 questions every time you are finished working: 
-              What did you do this time? and What do you want to work on next 
-              time? Next time you return to that activity, you'll know exactly 
+              Answer 2 questions every time you are finished working: 
+              What did you do this time? What do you want to work on next 
+              time? Next time you return to the project, you'll know exactly 
               where you left off.
             </Text>
           </View>
@@ -94,9 +93,9 @@ export default class Help extends Component {
               of the project a nudge.
             </Text>
             <Text style={ Styles.text }>
-              To nudge someone, look for the
-               " <Image source={ require('../../assets/icons/nudge-white.png') } style={{ width: 20, height: 20}}/> " 
-              icon on the project page. The author of that project will receive 
+              To nudge someone, look for the { }
+              <Image source={ require('../../assets/icons/nudge-white.png') } style={{ width: 20, height: 20}}/>
+              { } icon on the project page. The author of that project will receive
               a notification telling them you want them to update their project.
             </Text>
             <Text style={ Styles.text }>
@@ -106,12 +105,23 @@ export default class Help extends Component {
           <View style={ Styles.answer }>
             <Text style={ Styles.topic }>Project colors</Text>
             <Text style={ Styles.text}>
-              <Image source={ require('../../assets/project-status-color.png') } style={{ borderRadius: 4, width: 321, height: 127}}/>
+              <Image source={ require('../../assets/project-status-color.png') } style={{ borderRadius: 4, width: 281, height: 110}}/>
             </Text>
             <Text style={ Styles.text }>
               The color bar on the right-hand-side in a list of projects 
               corresponds to how long its been since the last update for that 
               project.
+            </Text>
+          </View>
+          <View style={ Styles.answer }>
+            <Text style={ Styles.topic }>
+              How can I find other users?
+            </Text>
+            <Text style={ Styles.text }>
+              You can search for any user by going to your Profile page and
+              tapping the { }
+              <Image source={ require('../../assets/icons/users.png') } style={{ width: 20, height: 20}}/>
+              { } icon in the top left corner.
             </Text>
           </View>
           <View style={ Styles.answer }>

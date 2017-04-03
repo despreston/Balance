@@ -72,7 +72,7 @@ export default class Nudges extends Component {
       case (numOfNudgers < 6): return 'want an ';
       case (numOfNudgers > 6):
         let remaining = numOfNudgers - 5;
-        return `and ${remaining} others want an `;
+        return `and ${remaining} others want an`;
       default: return null;
     }
   }
@@ -84,8 +84,7 @@ export default class Nudges extends Component {
       <View style={ Style.nudges }>
         { this.renderPictures() }
         <Text style={ [Style.text, { left: this.state.textPos }, textStyle] }>
-          { this.renderText() }
-          <Text style={ this.linkToUpdate && Style.bold }>update</Text>
+          { `${this.renderText()} update` }
         </Text>
       </View>
     );

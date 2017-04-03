@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
-import Logout from '../../signon/logout';
+import Logout from '../../logout/logout';
 import NavBtn from '../../navigation/nav-btn';
 import Help from '../../help/help';
 
@@ -105,7 +105,7 @@ class UserSettings extends Component {
               onChangeText={ value => this.onEdit('bio', value) } />
           </View>
           <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-            <Text style={{ textAlign: 'center' }}>
+            <Text style={[ Styles.text, { textAlign: 'center' } ]}>
               Other users can search for you by name or username.
             </Text>
           </View>
