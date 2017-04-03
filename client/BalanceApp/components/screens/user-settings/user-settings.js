@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
-import Logout from '../../signon/logout';
+import Logout from '../../logout/logout';
 import NavBtn from '../../navigation/nav-btn';
 import Help from '../../help/help';
 

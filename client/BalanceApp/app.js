@@ -3,16 +3,17 @@
  */
 
 // Vendors
-import React, { Component, AppRegistry } from 'react';
+import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
-// Components
+// utils
 import config from './utils/set-config';
-import MainNavigation from './components/navigation/navigation';
-import { fetchUser } from './actions';
 import reducer from './reducers/index';
+
+// Components
+import MainNavigation from './components/navigation/navigation';
 
 global.CONFIG = config;
 
@@ -22,8 +23,8 @@ export default class BalanceApp extends Component {
   
   render () {
     return (
-      <Provider store={store}>
-        <MainNavigation/>
+      <Provider store={ store }>
+        <MainNavigation />
       </Provider>
     )
   }

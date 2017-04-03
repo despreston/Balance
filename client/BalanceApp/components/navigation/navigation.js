@@ -14,7 +14,8 @@ import {
   UserSettings,
   UserProfile,
   UserSearch,
-  Note
+  Note,
+  Auth
 } from '../screens';
 
 import Colors from '../colors';
@@ -119,6 +120,20 @@ const tabBarOptions = {
   inactiveTintColor: Colors.gray.tundora
 };
 
-const TabBarNav = TabNavigator(routes, { lazyLoad: true, tabBarOptions });
+const App = TabNavigator(routes, {
+  lazyLoad: true,
+  backBehavior: 'none',
+  tabBarOptions
+});
 
-export default TabBarNav;
+const RootNav = StackNavigator({
+  Login: { screen: Auth },
+  App: { screen: App }
+}, {
+  headerMode: 'screen',
+  navigationOptions: {
+    header: { visible: false }
+  }
+});
+
+export default RootNav;

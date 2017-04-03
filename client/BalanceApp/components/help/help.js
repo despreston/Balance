@@ -74,16 +74,14 @@ export default class Help extends Component {
           <View style={ Styles.answer }>
             <Text style={ Styles.topic }>Purpose of this app</Text>
             <Text style={ Styles.text }>
-              Balance keeps track of what you worked on last, and what you need 
-              to work on next time. It was created for those that are juggling 
-              multiple activities, hobbies, projects, etc in their life. The 
-              idea is to get you back into the flow of things no matter how long 
-              of a break you take.
+              Balance was created for those that are juggling multiple activities, 
+              hobbies, or projects. The idea is to get you back 
+              into the flow of things no matter how long of a break you take.
             </Text>
             <Text style={ Styles.text }>
-              To use, answer 2 questions every time you are finished working: 
-              What did you do this time? and What do you want to work on next 
-              time? Next time you return to that activity, you'll know exactly 
+              Answer 2 questions every time you are finished working: 
+              What did you do this time? What do you want to work on next 
+              time? Next time you return to the project, you'll know exactly 
               where you left off.
             </Text>
           </View>
@@ -106,7 +104,7 @@ export default class Help extends Component {
           <View style={ Styles.answer }>
             <Text style={ Styles.topic }>Project colors</Text>
             <Text style={ Styles.text}>
-              <Image source={ require('../../assets/project-status-color.png') } style={{ borderRadius: 4, width: 321, height: 127}}/>
+              <Image source={ require('../../assets/project-status-color.png') } style={{ borderRadius: 4, width: 281, height: 110}}/>
             </Text>
             <Text style={ Styles.text }>
               The color bar on the right-hand-side in a list of projects 
