@@ -1,11 +1,12 @@
 // Vendors
 import React, { PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, TouchableOpacity, Image, Text } from 'react-native';
 
 // Components
 import StatusIcon from '../../status-icon/StatusIcon';
 import Nudges from '../../nudges/nudges';
 import NudgeBtn from '../../nudges/nudge-button/nudge-button';
+import UpdateIcon from './update-icon/update-icon';
 
 // styles
 import { Style } from './project-list-item-style';
@@ -89,7 +90,10 @@ function ProjectListItem ({ project, hideNudgeBtn = false }) {
         </View>
         { renderNote() }
         <View style={ Style.footer }>
-          { renderNudgeBtn() }
+          <View style={ Style.footerIcons }>
+            { renderNudgeBtn() }
+            { hideNudgeBtn && <UpdateIcon project={ project } /> }
+          </View>
           { renderNudgeUsers() }
         </View>
       </View>
