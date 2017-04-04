@@ -31,6 +31,23 @@ let Note = new mongoose.Schema({
   
 });
 
+/**
+ * Ref to note author
+ */
+Note.virtual('author', {
+  ref: 'user',
+  localField: 'user',
+  foreignField: 'userId'
+});
+
+Note.pre('find', function () {
+  this.populate('author', 'userId username picture');
+});
+
+Note.pre('findOne', function () {
+  this.populate('author', 'userId username picture');
+});
+
 Note.pre('save', function(next) {
 
   if (!this.createdAt) {
