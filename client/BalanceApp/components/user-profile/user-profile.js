@@ -23,7 +23,7 @@ import Styles from './profile-styles';
 
 function mapStateToProps (state, ownProps) {
 
-  let userId, nav;
+  let userId, nav, friends;
 
   /**
    * if nav'ing directly thru react-navigator, the userId is passed as
@@ -39,16 +39,30 @@ function mapStateToProps (state, ownProps) {
 
   const user = state.users[userId];
 
-  const friends = Object.keys(state.users)
-    .map(id => state.users[id])
-    .filter(userToFilter => {
-      return user.friends.some(friend => {
-        return friend.userId === userToFilter.userId && 
-          friend.status === 'accepted';
+  if (user) {
+    friends = Object.keys(state.users)
+      .map(id => state.users[id])
+      .filter(userToFilter => {
+        return user.friends.some(friend => {
+          return friend.userId === userToFilter.userId && 
+            friend.status === 'accepted';
+        });
       });
-    });
+  } else {
+    friends = [];
+  }
+
+  // const friends = Object.keys(state.users)
+  //   .map(id => state.users[id])
+  //   .filter(userToFilter => {
+  //     return user.friends.some(friend => {
+  //       return friend.userId === userToFilter.userId && 
+  //         friend.status === 'accepted';
+  //     });
+  //   });
 
   return {
+    userId,
     loggedInUser: state.loggedInUser,
     user,
     friends,
@@ -64,6 +78,7 @@ class UserProfile extends Component {
   static propTypes = {
     loggedInUser: PropTypes.string.isRequired,
     user: PropTypes.object,
+    userId: PropTypes.string.isRequired,
     friends: PropTypes.array,
     nav: PropTypes.func.isRequired,
     fetchFriendsForUser: PropTypes.func.isRequired
@@ -77,11 +92,11 @@ class UserProfile extends Component {
       loadingContext: false
     };
 
-    props.requestUser(props.user.userId, false);
+    props.requestUser(props.userId, false);
   }
 
   fetchFriendsList () {
-    return this.props.fetchFriendsForUser(this.props.user.userId)
+    return this.props.fetchFriendsForUser(this.props.userId)
       .then(() => this.setState({ loadingContext: false }));
   }
 
@@ -95,9 +110,9 @@ class UserProfile extends Component {
     return (
       <NoteListContainer
         onSelect={ id => this.props.nav('Note', { id }) }
-        showContext={ this.props.user.userId === this.props.loggedInUser }
-        query={[{ user: this.props.user.userId }]}
-        selector={ notes => selector(notes, this.props.user.userId) }
+        showContext={ this.props.userId === this.props.loggedInUser }
+        query={[{ user: this.props.userId }]}
+        selector={ notes => selector(notes, this.props.userId) }
       />
     );
   }
@@ -107,12 +122,12 @@ class UserProfile extends Component {
   }
 
   renderProjects () {
-    const { nav, user } = this.props;
+    const { nav, userId } = this.props;
 
     return (
       <ProjectListContainer
         onProjectTap={ project => nav('Project', { project: project._id }) }
-        user={ user.userId }
+        user={ userId }
       />
     );
   }
@@ -144,7 +159,7 @@ class UserProfile extends Component {
             <ProfileInfo user={ this.props.user } />
             <UserProfileSwitch
               user={ this.props.user }
-              hideProjects={ this.props.user.userId === this.props.loggedInUser }
+              hideProjects={ this.props.userId === this.props.loggedInUser }
               selectedContext={ this.state.context }
               switchContext={ (context) => this.switchContext(context) } />
         </View>
