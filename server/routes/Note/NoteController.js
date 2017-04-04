@@ -1,13 +1,51 @@
 const Note = require('../../models/Note');
 const Project = require('../../models/Project');
 const AccessControl = require('../../utils/access-control');
+const log = require('logbro');
 
-module.exports = ({ get, post, put }) => {
+module.exports = ({ get, post, put, del }) => {
+
+  post('notes/:_id/comments', ({ body, params }, res) => {
+    body = JSON.parse(body);
+
+    Note
+    .findOne(params)
+    .then(note => {
+      if (!note) {
+        return res.send(404);
+      }
+
+      return note.addComment(body);
+    })
+    .then(note => res.send(200, note.toObject()))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
+  });
+
+  del('notes/:_id/comments/:comment', ({ params, user }, res) => {
+    Note
+    .findOne({ _id: params._id })
+    .then(note => {
+      const comment = note.comments.find(c => c._id === params.comment);
+
+      if (!comment || comment.userId !== user.sub) {
+        return res.send(403);
+      }
+
+      return note.removeComment(params.comment);
+    })
+    .then(note => res.send(200, note))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
+  });
 
   get('notes/:_id', ({ params, user }, res) => {
     Note
     .findOne(params)
-    .populate('project', 'title privacyLevel')
     .lean()
     .then(note => {
       return AccessControl.single(note.user, user.sub, note.project.privacyLevel)
