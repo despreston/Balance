@@ -117,7 +117,6 @@ export default class EditProject extends Component {
               initLevel={ project.privacyLevel }
               onChange={ val => onEdit('privacyLevel', val) } />
           </View>
-          <View style={ { height: 30 } } />
           { this.renderProjectStatus() }
           { this.renderRemoveButton() }
         </View>

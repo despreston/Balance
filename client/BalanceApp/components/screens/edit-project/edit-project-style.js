@@ -51,7 +51,8 @@ export default StyleSheet.create  ({
 
   statusContainer: {
     alignItems: 'center',
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
+    paddingTop: 20
   },
 
   markStatus: {
@@ -61,7 +62,8 @@ export default StyleSheet.create  ({
 
   help: {
     fontWeight: 'bold',
-    color: Colors.purple
+    color: Colors.purple,
+    paddingTop: 20
   }
 
 });
