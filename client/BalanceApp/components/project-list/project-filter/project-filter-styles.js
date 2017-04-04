@@ -6,7 +6,7 @@ export default StyleSheet.create({
   container: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: Colors.purple//Colors.gray.porcelain
+    backgroundColor: Colors.purple
   }
 
 });

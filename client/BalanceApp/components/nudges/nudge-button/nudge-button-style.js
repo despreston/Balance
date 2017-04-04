@@ -21,7 +21,7 @@ export default StyleSheet.create({
 
   text: {
     color: Colors.white,
-    fontSize: 10,
+    fontSize: 12,
     paddingHorizontal: 10,
     fontStyle: 'italic'
   }

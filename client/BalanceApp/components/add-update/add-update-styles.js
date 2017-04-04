@@ -14,7 +14,7 @@ export default StyleSheet.create  ({
   },
 
   card: {
-    paddingTop: 50,
+    paddingTop: 35,
     paddingBottom: 20,
     paddingHorizontal: 15,
     height: Dimensions.get('window').height, 
@@ -22,7 +22,7 @@ export default StyleSheet.create  ({
   },
 
   navButtonContainer: {
-    paddingVertical: 20,
+    paddingVertical: 15,
     alignItems: 'center',
     alignSelf: 'center',
     flexDirection: 'row',
@@ -41,13 +41,18 @@ export default StyleSheet.create  ({
   text: {
     ...defaultText,
     paddingBottom: 20,
-    fontSize: 20
+    fontSize: 18,
+    fontWeight: '600'
   },
 
   subText: {
     ...defaultText,
-    paddingBottom: 20,
     fontSize: 14
+  },
+
+  privacy: {
+    fontSize: 12,
+    opacity: 0.9
   }
 
 });
