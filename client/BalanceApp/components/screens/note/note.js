@@ -86,7 +86,7 @@ class Note extends Component {
           </View>
         </View>
         <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
-        <Text style={ Styles.date }>{ formatDate(note.createdAt) }</Text>
+        <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
       </ScrollView>
     );
   }
