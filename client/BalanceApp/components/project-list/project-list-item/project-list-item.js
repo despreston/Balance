@@ -75,10 +75,18 @@ function ProjectListItem ({ project, hideNudgeBtn = false }) {
 
   function renderStatusIcon () {
     if (!lastUpdated || status !== 'active') {
-      return null;
+      return <View style={{ width: 10 }} />;
     }
 
     return <StatusIcon lastUpdated={ lastUpdated } />;
+  }
+
+  function renderUpdateButton () {
+    if (status !== 'active' || !hideNudgeBtn) {
+      return null;
+    }
+
+    return <UpdateIcon project={ project } />;
   }
   
   return (
@@ -92,7 +100,7 @@ function ProjectListItem ({ project, hideNudgeBtn = false }) {
         <View style={ Style.footer }>
           <View style={ Style.footerIcons }>
             { renderNudgeBtn() }
-            { hideNudgeBtn && <UpdateIcon project={ project } /> }
+            { renderUpdateButton() }
           </View>
           { renderNudgeUsers() }
         </View>

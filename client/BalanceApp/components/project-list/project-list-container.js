@@ -1,7 +1,7 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { AsyncStorage, View } from 'react-native';
 
 // Components
 import ProjectList from './project-list';
@@ -35,7 +35,7 @@ class ProjectListContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { projects: [], filtered: [] };
+    this.state = { projects: [], filtered: [], filter: 'All' };
 
     props.fetchProjectsForUser(props.user);
   }
@@ -48,29 +48,50 @@ class ProjectListContainer extends Component {
       fetchProjectsForUser
     } = nextProps;
 
-    // TODO: get filtered project by getting setting from AsyncStorage
-    this.setState({ projects, filtered: projects });
+    this.loadFilterValue().then(filter => {
+      if (filter === null) {
+        filter = 'All';
+      }
+
+      this.setProjectStates(projects, filter);
+    });
 
     if (projectsInvalidated) {
       fetchProjectsForUser(user);
     }
   }
 
-  onFilterChange (value) {
-    switch (value) {
+  loadFilterValue () {
+    return AsyncStorage.getItem('PROJECTS_FILTER');
+  }
+
+  saveFilterValue (value) {
+    return AsyncStorage.setItem('PROJECTS_FILTER', value);
+  }
+
+  getFilteredProjects (projects, filter) {
+    switch (filter) {
       case 'All':
-        return this.setState({
-          filtered: this.state.projects
-        });
+        return projects;
       case 'Finished':
-        return this.setState({
-          filtered: this.state.projects.filter(p => p.status === 'finished')
-        });
+        return projects.filter(p => p.status === 'finished');
       case 'In Progress':
-        return this.setState({
-          filtered: this.state.projects.filter(p => p.status !== 'finished')
-        });
+        return projects.filter(p => p.status !== 'finished');
     }
+  }
+
+  setProjectStates (projects, filter) {
+    this.setState({
+      filter,
+      projects,
+      filtered: this.getFilteredProjects(projects, filter)
+    })
+  }
+
+  onFilterChange (filter) {
+    this.saveFilterValue(filter).then(() => {
+      this.setProjectStates(this.state.projects, filter);
+    });
   }
 
   render () {
@@ -78,7 +99,10 @@ class ProjectListContainer extends Component {
       <View style={{ flex: 1 }}>
         {
           this.props.showFilter &&
-          <ProjectFilter onChange={ this.onFilterChange.bind(this) } />
+          <ProjectFilter
+            filter={ this.state.filter }
+            onChange={ this.onFilterChange.bind(this) }
+          />
         }
         <ProjectList
           loggedInUser={ this.props.loggedInUser }
