@@ -115,11 +115,19 @@ export default class AddUpdate extends Component {
   }
 
   privacy () {
-    switch (this.props.project.privacyLevel) {
-      case 'global' : return 'Public';
-      case 'friends': return 'Friends-only';
-      case 'private': return 'Private';
+    function getText() {
+      switch (this.props.project.privacyLevel) {
+        case 'global' : return 'Public';
+        case 'friends': return 'Friends-only';
+        case 'private': return 'Private';
+      }
     }
+
+    return (
+      <Text style={[ Styles.subText, Styles.privacy ]}>
+        Privacy Level: { getText.call(this) }
+      </Text>
+    );
   }
 
   render () {
@@ -145,7 +153,7 @@ export default class AddUpdate extends Component {
               placeHolder={ this.pastNotePlaceholder }
             />
             <Text style={[ Styles.subText, Styles.privacy ]}>
-              Privacy Level: { this.privacy() }
+              { this.privacy() }
             </Text>
             <View style={ Styles.navButtonContainer }>
               { this.renderCancelButton() }
@@ -166,9 +174,7 @@ export default class AddUpdate extends Component {
               note={ this.state.future }
               placeHolder={ this.futureNotePlaceholder }
             />
-            <Text style={[ Styles.subText, Styles.privacy ]}>
-              Privacy Level: { this.privacy() }
-            </Text>
+            { this.privacy() }
             <View style={ Styles.navButtonContainer }>
               { this.renderCancelButton() }
               { this.renderBackButton() }
