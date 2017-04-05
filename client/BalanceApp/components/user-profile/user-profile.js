@@ -95,7 +95,7 @@ class UserProfile extends Component {
     function selector (notes, user) {
       return Object.keys(notes)
         .map(id => notes[id])
-        .filter(note => note.user === user);
+        .filter(note => note.author[0].userId === user);
     }
 
     return (
