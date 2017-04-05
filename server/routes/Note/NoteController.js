@@ -17,7 +17,15 @@ module.exports = ({ get, post, put, del }) => {
 
       return note.addComment(body);
     })
-    .then(note => res.send(200, note.toObject()))
+    .then(note => {
+      note = note.toObject();
+      delete note.project.Future;
+      delete note.project.Past;
+      delete note.project.nudgeUsers;
+      delete note.project.owner;
+      delete note.project.id;
+      return res.send(200, note);
+    })
     .catch(err => {
       log.error(err);
       return res.send(500);
@@ -76,6 +84,9 @@ module.exports = ({ get, post, put, del }) => {
       const { privacyLevel } = notes[0].project;
 
       return AccessControl.single(owner, user.sub, privacyLevel)
+        .then(() => {
+          notes.forEach(n => delete n.user);
+        })
         .then(() => res.send(200, notes))
         .catch(err => res.send(403, err));
     })

@@ -48,7 +48,6 @@ Note.pre('find', function () {
 });
 
 Note.pre('findOne', function () {
-  this.populate('project', 'title privacyLevel');
   this.populate('author', 'userId username picture');
 });
 
@@ -60,6 +59,7 @@ Note.pre('findOne', function () {
 Note.methods.addComment = function (comment) {
   return new Promise ((resolve, reject) => {
     comment.createdAt = new Date();
+    comment._id = new mongoose.Types.ObjectId();
 
     this.comments.push(comment);
 
@@ -68,7 +68,13 @@ Note.methods.addComment = function (comment) {
         reject('Could not add comment');
       }
 
-      resolve(this);
+      this.populate('author', 'userId username picture', err => {
+        if (err) {
+          reject('Could not populate author');
+        }
+
+        resolve(this);
+      });
     });
   });
 };

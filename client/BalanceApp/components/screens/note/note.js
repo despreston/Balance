@@ -17,6 +17,7 @@ import Styles from './note-styles';
 
 // components
 import CommentInput from './comment-input/comment-input';
+import CommentList from '../../comment-list/comment-list';
 
 export default class Note extends Component {
 
@@ -70,6 +71,7 @@ export default class Note extends Component {
           </View>
           <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
           <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
+          { note.comments && <CommentList comments={ note.comments } onCommentSelect={ () => null }/> }
         </ScrollView>
         <CommentInput onSend={ sendComment }/>
       </KeyboardAvoidingView>

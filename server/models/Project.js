@@ -36,7 +36,7 @@ let Project = new mongoose.Schema({
     }
   }]
   
-}, { 
+}, {
   toObject: { virtuals: true }
 });
 
