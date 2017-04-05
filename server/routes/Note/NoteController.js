@@ -20,13 +20,6 @@ module.exports = ({ get, post, put, del }) => {
     .then(note => {
       note = note.toObject();
 
-      // https://github.com/despreston/Balance/issues/43
-      delete note.project.Future;
-      delete note.project.Past;
-      delete note.project.nudgeUsers;
-      delete note.project.owner;
-      delete note.project.id;
-      
       return res.send(200, note);
     })
     .catch(err => {

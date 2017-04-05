@@ -17,7 +17,6 @@ export default class CommentList extends Component {
   }
 
   renderComments () {
-    console.log(this.props.comments)
     return this.props.comments.map(comment => {
       return (
         <TouchableOpacity
