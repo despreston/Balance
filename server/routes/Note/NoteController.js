@@ -71,7 +71,7 @@ module.exports = ({ get, post, put, del }) => {
       if (notes.length === 0) {
         return res.send(200, notes);
       }
-      
+
       const owner = notes[0].user;
       const { privacyLevel } = notes[0].project;
 

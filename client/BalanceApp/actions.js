@@ -304,7 +304,9 @@ export function fetchFriendsForUser (userId) {
  * @param {String} friend Target user
  */
 export function createFriendship (userId, friend) {
-  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, { method: 'POST' });
+  const opts = { method: 'POST' };
+
+  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, opts);
 };
 
 /**
@@ -313,5 +315,31 @@ export function createFriendship (userId, friend) {
  * @param {String} friend Target user to remove
  */
 export function removeFriendship (userId, friend) {
-  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, { method: 'DELETE' });
+  const opts = { method: 'DELETE' };
+
+  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, opts);
 }
+
+/**
+ * Create a new comment
+ * @param {Object} comment
+ * @param {String} note The _id of the note to add a comment to
+ * @return {Promise}
+ */
+export function createComment (comment, note) {
+  const opts = { method: 'POST', body: comment };
+
+  return apiDispatch(`notes/${note}/comments`, receiveNotes, opts);
+};
+
+/**
+ * Remove a comment
+ * @param {String} comment The _id of the comment
+ * @param {String} note The _id of the note
+ * @return {Promise}
+ */
+export function removeComment (comment, note) {
+  const opts = { method: 'DELETE' };
+
+  return apiDispatch(`notes/${note}/comments/${comment}`, receiveNotes, opts);
+};

@@ -52,15 +52,6 @@ function mapStateToProps (state, ownProps) {
     friends = [];
   }
 
-  // const friends = Object.keys(state.users)
-  //   .map(id => state.users[id])
-  //   .filter(userToFilter => {
-  //     return user.friends.some(friend => {
-  //       return friend.userId === userToFilter.userId && 
-  //         friend.status === 'accepted';
-  //     });
-  //   });
-
   return {
     userId,
     loggedInUser: state.loggedInUser,

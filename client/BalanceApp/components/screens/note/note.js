@@ -5,12 +5,9 @@ import {
   ScrollView,
   Text,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView
 } from 'react-native';
-import { connect } from 'react-redux';
-
-// actions
-import { fetchNote } from '../../../actions';
 
 // utils
 import { formatDate } from '../../../utils/helpers';
@@ -18,28 +15,21 @@ import { formatDate } from '../../../utils/helpers';
 // styles
 import Styles from './note-styles';
 
-function mapStateToProps (state, ownProps) {
-  return {
-    note: state.notes[ownProps.navigation.state.params.id]
-  };
-}
+// components
+import CommentInput from './comment-input/comment-input';
 
-class Note extends Component {
+export default class Note extends Component {
 
-  static navigationOptions = {
-    header: ({ state, navigate }, defaultHeader) => {
-      const title = 'Note';
-
-      return { ...defaultHeader, title };
-    }
+  static propTypes = {
+    note: PropTypes.object.isRequired,
+    goToProject: PropTypes.func.isRequired,
+    goToAuthor: PropTypes.func.isRequired,
+    sendComment: PropTypes.func.isRequired
   }
   
   constructor (props) {
     super(props);
-
     this.author = props.note.author[0];
-
-    props.fetchNote(props.navigation.state.params.id);
   }
 
   header () {
@@ -49,48 +39,41 @@ class Note extends Component {
     }
   }
 
-  goToProject () {
-    const project = this.props.note.project._id;
-
-    this.props.navigation.navigate('Project', { project });
-  }
-
-  goToAuthor () {
-    const userId = this.author.userId;
-
-    this.props.navigation.navigate('UserProfile', { userId });
-  }
-
   render () {
-    const { note } = this.props;
+    const { note, goToAuthor, goToProject, sendComment } = this.props;
 
     return (
-      <ScrollView style={ Styles.container }>
-        <View style={ Styles.meta }>
-          <Image
-            style={ Styles.authorImage }
-            source={{ uri: this.author.picture }}
-          />
-          <View style={ Styles.info }>
-            <Text style={ Styles.header }>{ this.header() }</Text>
-            <Text style={[ Styles.text, Styles.subheader ]}>
-              for { }
-              <Text onPress={ () => this.goToProject() } style={ Styles.purple }>
-                { note.project.title }
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={63}
+        behavior='padding'
+        style={ Styles.container }
+      >
+        <ScrollView style={ Styles.scrollContainer }>
+          <View style={ Styles.meta }>
+            <Image
+              style={ Styles.authorImage }
+              source={{ uri: this.author.picture }}
+            />
+            <View style={ Styles.info }>
+              <Text style={ Styles.header }>{ this.header() }</Text>
+              <Text style={[ Styles.text, Styles.subheader ]}>
+                for { }
+                <Text onPress={ () => goToProject() } style={ Styles.purple }>
+                  { note.project.title }
+                </Text>
+                { } by { }
+                <Text onPress={ () => goToAuthor() } style={ Styles.purple }>
+                  { this.author.username }
+                </Text>
               </Text>
-              { } by { }
-              <Text onPress={ () => this.goToAuthor() } style={ Styles.purple }>
-                { this.author.username }
-              </Text>
-            </Text>
+            </View>
           </View>
-        </View>
-        <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
-        <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
-      </ScrollView>
+          <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
+          <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
+        </ScrollView>
+        <CommentInput onSend={ sendComment }/>
+      </KeyboardAvoidingView>
     );
   }
 
 };
-
-export default connect(mapStateToProps, { fetchNote })(Note);
