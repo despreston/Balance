@@ -6,7 +6,6 @@ import {
   Text
 } from 'react-native';
 
-
 // styles
 import Styles from './comment-input-styles';
 
@@ -19,16 +18,24 @@ export default class CommentInput extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { comment: '' };
+    this.state = { comment: '', valid: false };
   }
 
   onChange (comment) {
-    this.setState({ comment });
+    this.setState({ comment, valid: (comment !== '') });
+  }
+
+  sendBtnStyle () {
+    return this.state.valid ? Styles.valid : Styles.invalid;
+  }
+
+  send () {
+    this.props.onSend(this.state.comment);
+
+    this.setState({ comment: '', valid: false });
   }
 
   render () {
-    const { onSend } = this.props;
-
     return (
       <View style={ Styles.container }>
         <TextInput
@@ -37,8 +44,11 @@ export default class CommentInput extends Component {
           onChange={ event => this.onChange(event.nativeEvent.text || '') }
           style={ Styles.input }
         />
-        <TouchableOpacity onPress={ () => onSend(this.state.comment) }>
-          <Text style={ Styles.send }>Send</Text>
+        <TouchableOpacity
+          onPress={ () => this.send() }
+          disabled={ !this.state.valid }
+        >
+          <Text style={[ Styles.send, this.sendBtnStyle() ]}>Send</Text>
         </TouchableOpacity>
       </View>
     )

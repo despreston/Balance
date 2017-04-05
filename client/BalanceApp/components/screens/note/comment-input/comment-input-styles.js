@@ -24,8 +24,15 @@ export default StyleSheet.create ({
   send: {
     paddingHorizontal: 10,
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 16
+  },
+
+  valid: {
     color: Colors.blue
+  },
+
+  invalid: {
+    color: Colors.gray.silver
   }
 
 });
