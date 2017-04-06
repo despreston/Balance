@@ -23,7 +23,7 @@ export function api (url, properties = {}, externalUrl = false) {
 
       return fetch(url, properties)
         .then(response => response.json())
-        .then(json => json)
+        .then(json => convertDates(json))
         .catch(err => console.log("ERROR ", err));
     });
 };
@@ -31,7 +31,6 @@ export function api (url, properties = {}, externalUrl = false) {
 export function apiDispatch (url, action, properties = { method: 'GET' }) {
   return dispatch => {
     return api(url, properties)
-      .then(result => convertDates(result))
       .then(result => dispatch(action(result)))
       .catch(err => console.log(err));
   };

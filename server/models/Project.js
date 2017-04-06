@@ -36,8 +36,6 @@ let Project = new mongoose.Schema({
     }
   }]
   
-}, {
-  toObject: { virtuals: true }
 });
 
 /**
@@ -109,15 +107,12 @@ Project.statics.projectCountForUser = function (userId, privacyLevels) {
 /**
  * Transforms the project ID in project.Note and project.Future to a full object
  * that contains the project title, _id, and privacyLevel.
- * e.g. { Past: { project: <ID> } } --> 
- *      { Past: { project: { _id, title, privacyLevel } } }
  *
- * @param {Array} or {Object} array of projects or a single project object
- * @return {Array} or {Object} depending on input 
+ * @param {Object} project
+ * @return {Object}
  */
-Project.statics.augmentNotesWithProject = function (projects) {
+function augmentNotesWithProject (p) {
 
-  function transform (p) {
     let fullObject = { 
       _id: p._id,
       title: p.title,
@@ -136,15 +131,50 @@ Project.statics.augmentNotesWithProject = function (projects) {
     }
 
     return p;
+
+}
+
+/**
+ * Appends the commentCount to each note
+ * @param {Object} project
+ * @return {Object}
+ */
+function commentCountForNotes (project) {
+
+  function commentCount (noteFromProject) {
+    let note = Object.assign({}, noteFromProject);
+
+    if (!note.comments) {
+      return;
+    }
+
+    note.commentCount = note.comments.length;
+    delete note.comments;
+    return note;
   }
 
-  if (Array.isArray(projects)) {
-    return projects.map(transform);
+  if (project.Past) {
+    project.Past = commentCount(project.Past);
   }
 
- return transform(projects);
+  if (project.Future) {
+    project.Future = commentCount(project.Future);
+  }
 
+  return project;
+
+}
+
+/**
+ * commentCountForNotes and augmentNotesWithProject are mutually-exlusive as far
+ * as things go now so this calls both of those. 
+ * @param {Object} project
+ * @return {Object}
+ */
+Project.statics.futureAndPastNotes = function (project) {
+  return commentCountForNotes(augmentNotesWithProject(project));
 };
+
 
 /**
  * Adds a nudge to the project
@@ -166,8 +196,6 @@ Project.methods.addNudge = function (userId) {
         if (err) {
           reject('Could not add nudge');
         }
-
-        delete this.nudges;
 
         resolve(this);
       });
@@ -209,6 +237,15 @@ Project.methods.removeNudge = function (userId) {
   });
 
 };
+
+Project.statics.removeExcludedFields = function (project) {
+  let copy = Object.assign({}, project);
+
+  delete copy.user;
+  delete copy.nudges;
+
+  return copy;
+}
 
 Project.pre('find', function () {
   this.populate('owner', 'userId username');

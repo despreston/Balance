@@ -1,37 +1,44 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import { TouchableOpacity, View, Text, Image } from 'react-native';
+
+// utils
+import fancyDate from '../../../utils/fancy-date';
 
 // styles
-// import Styles from './comment-list-item-styles';
+import Styles from './comment-list-item-styles';
 
 export default class CommentListItem extends Component {
 
   static propTypes = {
     comment: PropTypes.object.isRequired,
+    allowDelete: PropTypes.bool.isRequired
   };
 
   constructor (props) {
     super(props);
   }
 
-  // renderUsername () {
-  //   const { user } = this.props;
-  //   if (!user.username) {
-  //     return null;
-  //   }
-
-  //   return (
-  //     <Text style={[ Styles.text, Styles.username ]} >
-  //       @{user.username}
-  //     </Text>
-  //   );
-  // }
-
   render () {
-    const { comment } = this.props;
+    const { comment, allowDelete } = this.props;
+
     return (
-      <Text>{ comment.content }</Text>
+      <View style={ Styles.container }>
+        <Image source={{ uri: comment.commenter.picture }} style={ Styles.picture } />
+        <View style={ Styles.right }>
+          <View style={ Styles.top }>
+            <Text style={ Styles.commenter }>{ comment.commenter.username }</Text>
+            <Text style={ Styles.subtext }>{ fancyDate(comment.createdAt) }</Text>
+          </View>
+          <Text style={ Styles.content }>{ comment.content }</Text>
+          {
+            allowDelete &&
+            <TouchableOpacity onPress={ () => null }>
+              <Text style={[ Styles.subtext, Styles.bold ]}>delete</Text>
+            </TouchableOpacity>
+          }
+        </View>
+      </View>
     );
   }
 

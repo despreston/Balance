@@ -3,7 +3,6 @@ import { arrayToObj } from './utils/helpers';
 import formatQueryParams from './utils/query-params';
 import Auth0Lock from 'react-native-lock';
 import { saveToken } from './utils/auth';
-import convertDates from './utils/convert-dates';
 
 /*
  * action types
@@ -16,6 +15,8 @@ export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
+
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 
 export const RESET = 'RESET';
 
@@ -49,6 +50,22 @@ export function receiveUsers (users) {
   return {
     type: RECEIVE_USERS,
     users: arrayToObj(users, 'userId')
+  };
+};
+
+/**
+ * creates action for receiving comments
+ * @param {object} comments (single) OR {array} comments (multiple)
+ * @return {action}
+ */
+export function receiveComments (comments) {
+  if (!Array.isArray(comments)) {
+    comments = [comments];
+  }
+
+  return {
+    type: RECEIVE_COMMENTS,
+    comments: arrayToObj(comments, '_id')
   };
 };
 
@@ -234,7 +251,22 @@ export function requestNotes (params) {
  * @return {Promise}
  */
 export function fetchNote (id) {
-  return apiDispatch(`notes/${id}`, receiveNotes);
+  return dispatch => {
+    return api(`notes/${id}`)
+    .then(note => {
+      let comments = [];
+
+      if (note.comments) {
+        note.comments.forEach(c => {
+          comments.push(c);
+        });
+      }
+
+      dispatch(receiveComments(comments));
+      return dispatch(receiveNotes(note));
+    })
+    .catch(err => console.log(err));
+  };
 };
 
 /**
@@ -323,13 +355,12 @@ export function removeFriendship (userId, friend) {
 /**
  * Create a new comment
  * @param {Object} comment
- * @param {String} note The _id of the note to add a comment to
  * @return {Promise}
  */
-export function createComment (comment, note) {
+export function createComment (comment) {
   const opts = { method: 'POST', body: comment };
 
-  return apiDispatch(`notes/${note}/comments`, receiveNotes, opts);
+  return apiDispatch(`comments`, receiveComments, opts);
 };
 
 /**
@@ -338,8 +369,8 @@ export function createComment (comment, note) {
  * @param {String} note The _id of the note
  * @return {Promise}
  */
-export function removeComment (comment, note) {
+export function removeComment (comment) {
   const opts = { method: 'DELETE' };
 
-  return apiDispatch(`notes/${note}/comments/${comment}`, receiveNotes, opts);
+  return apiDispatch(`comments/${comment}`, receiveComments, opts);
 };

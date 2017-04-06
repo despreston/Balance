@@ -4,8 +4,16 @@ import Note from './note';
 import { fetchNote, createComment } from '../../../actions';
 
 function mapStateToProps (state, ownProps) {
+  let noteId = ownProps.navigation.state.params.id;
+
+  let comments = Object.keys(state.comments)
+    .map(id => state.comments[id])
+    .filter(c => c.note === noteId);
+
   return {
-    note: state.notes[ownProps.navigation.state.params.id]
+    note: state.notes[noteId],
+    comments,
+    loggedInUser: state.loggedInUser
   };
 }
 
@@ -22,7 +30,7 @@ class NoteContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.author = props.note.author[0];
+    this.author = props.note.author;
 
     props.fetchNote(props.navigation.state.params.id);
   }
@@ -38,15 +46,20 @@ class NoteContainer extends Component {
   }
 
   sendComment (content) {
-    const comment = { userId: this.props.note.user, content };
+    const comment = {
+      note: this.props.note._id,
+      user: this.props.loggedInUser,
+      content
+    };
 
-    this.props.createComment(comment, this.props.note._id);
+    this.props.createComment(comment);
   }
 
   render () {
     return (
       <Note
         note={ this.props.note }
+        comments={ this.props.comments }
         goToProject={ () => this.goToProject() }
         goToAuthor={ () => this.goToAuthor() }
         sendComment={ content => this.sendComment(content) }

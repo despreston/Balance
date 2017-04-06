@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const privacyLevel = require('./shared/privacy-level');
-const comment = require('./shared/comment');
 
 let Note = new mongoose.Schema({
 
@@ -24,7 +23,10 @@ let Note = new mongoose.Schema({
     required: true
   },
 
-  comments: [ comment ],
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'comment'
+  }],
 
   lastUpdated: Date,
 
@@ -32,6 +34,13 @@ let Note = new mongoose.Schema({
 
   privacyLevel: privacyLevel
   
+}, {
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
+});
+
+Note.virtual('commentCount').get(function () {
+  return this.comments.length;
 });
 
 /**
@@ -40,7 +49,8 @@ let Note = new mongoose.Schema({
 Note.virtual('author', {
   ref: 'user',
   localField: 'user',
-  foreignField: 'userId'
+  foreignField: 'userId',
+  justOne: true
 });
 
 Note.pre('find', function () {
@@ -50,59 +60,6 @@ Note.pre('find', function () {
 Note.pre('findOne', function () {
   this.populate('author', 'userId username picture');
 });
-
-/**
- * Adds a comment to a note
- * @param {Object} comment
- * @return {Promise} resolves with the updated note
- */
-Note.methods.addComment = function (comment) {
-  return new Promise ((resolve, reject) => {
-    comment.createdAt = new Date();
-    comment._id = new mongoose.Types.ObjectId();
-
-    this.comments.push(comment);
-
-    this.save(err => {
-      if (err) {
-        reject('Could not add comment');
-      }
-
-      this.populate('author', 'userId username picture', err => {
-        if (err) {
-          reject('Could not populate author');
-        }
-
-        resolve(this);
-      });
-    });
-  });
-};
-
-/**
- * Removes a comment from the note
- * @param {String} comment The _id belonging to the comment to remove
- * @return {Promise} resolves with the updated note
- */
-Note.methods.removeComment = function (comment) {
-  return new Promise ((resolve, reject) => {
-    const commentIdx = this.comments.findIndex(c => c._id === comment);
-
-    if (commentIdx < 0) {
-      reject('Comment does not exist');
-    }
-
-    this.comments.splice(commentIdx);
-
-    this.save(err => {
-      if (err) {
-        reject('Could not remove comment');
-      }
-
-      resolve(this);
-    });
-  });
-};
 
 Note.pre('save', function(next) {
 

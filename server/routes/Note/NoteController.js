@@ -3,60 +3,41 @@ const Project = require('../../models/Project');
 const AccessControl = require('../../utils/access-control');
 const log = require('logbro');
 
-module.exports = ({ get, post, put, del }) => {
-
-  post('notes/:_id/comments', ({ body, params }, res) => {
-    body = JSON.parse(body);
-
-    Note
-    .findOne(params)
-    .then(note => {
-      if (!note) {
-        return res.send(404);
-      }
-
-      return note.addComment(body);
-    })
-    .then(note => {
-      note = note.toObject();
-
-      return res.send(200, note);
-    })
-    .catch(err => {
-      log.error(err);
-      return res.send(500);
-    });
-  });
-
-  del('notes/:_id/comments/:comment', ({ params, user }, res) => {
-    Note
-    .findOne({ _id: params._id })
-    .then(note => {
-      const comment = note.comments.find(c => c._id === params.comment);
-
-      if (!comment || comment.userId !== user.sub) {
-        return res.send(403);
-      }
-
-      return note.removeComment(params.comment);
-    })
-    .then(note => res.send(200, note))
-    .catch(err => {
-      log.error(err);
-      return res.send(500);
-    });
-  });
+module.exports = ({ get, post, put }) => {
 
   get('notes/:_id', ({ params, user }, res) => {
     Note
     .findOne(params)
-    .lean()
-    .then(note => {
-      return AccessControl.single(note.user, user.sub, note.project.privacyLevel)
-        .then(() => res.send(200, note))
-        .catch(err => res.send(403, err));
+    .populate({
+      path: 'comments',
+      populate: { path: 'commenter', select: 'userId username picture' }
     })
-    .catch(err => res.send(500, err));
+    .populate('project', 'title privacyLevel')
+    .then(note => {
+
+      return AccessControl.single(note.user, user.sub, note.project.privacyLevel)
+        .then(() => {
+
+          // author is populated. no need for user
+          if (note.comments) {
+            note.comments.forEach(c => {
+              c.commenter = c.commenter[0];
+              delete c.user;
+            });
+          }
+
+        })
+        .then(() => res.send(200, note))
+        .catch(err => {
+          log.error(err);          
+          return res.send(403, err);
+        });
+
+    })
+    .catch(err => {
+      log.error(err);
+      return res.send(500, err);
+    });
   });
 
   get('notes', ({ params, user }, res) => {
@@ -70,8 +51,8 @@ module.exports = ({ get, post, put, del }) => {
     .find(params)
     .sort({'createdAt': -1})
     .populate('project', 'title privacyLevel')
-    .lean()
     .then(notes => {
+
       if (notes.length === 0) {
         return res.send(200, notes);
       }
@@ -80,11 +61,21 @@ module.exports = ({ get, post, put, del }) => {
       const { privacyLevel } = notes[0].project;
 
       return AccessControl.single(owner, user.sub, privacyLevel)
-        .then(() => notes.forEach(n => delete n.user))
-        .then(() => res.send(200, notes))
+        .then(() => {
+          return notes.map(n => {
+            n = n.toObject();
+            delete n.comments;
+            delete n.user;
+            return n;
+          });
+        })
         .catch(err => res.send(403, err));
     })
-    .catch(err => res.send(500, err));
+    .then(notes => res.send(200, notes))
+    .catch(err => {
+      log.error(err)
+      return res.send(500);
+    });
   });
 
   post('notes', ({ body, user }, res) => {
@@ -97,9 +88,13 @@ module.exports = ({ get, post, put, del }) => {
     Note
     .create(body)
     .then((newNote, err) => {
+      
       if (err) {
         res.send(500, err);
       }
+
+      newNote.commentCount = 0;
+      newNote.comments = [];
 
       return Project
         .findOne({ _id: newNote.project })
@@ -122,20 +117,44 @@ module.exports = ({ get, post, put, del }) => {
 
     Note
     .findOne({_id: params._id})
+    .populate({
+      path: 'comments',
+      populate: { path: 'commenter', select: 'userId username picture' }
+    })
     .then(note => {
+
       if (note.user !== user.sub) {
         return res.send(403);
       }
 
       note = Object.assign(note, body);
       note.save();
+      note = note.toObject();
+
+      if (note.comments) {
+        note.comments.forEach(c => {
+          c.commenter = c.commenter[0];
+          delete c.user;
+        });
+
+        note.commentCount = note.comments.length;
+      }
+
+      // I have NO idea why its some times an array and some times a single obj
+      if (Array.isArray(note.author)) {
+        note.author = note.author[0];
+      }
 
       // Add properly formatted project object back to the note
-      note = Object.assign(note.toObject(), { project: body.project });
+      note = Object.assign(note, { project: body.project });
 
-      res.send(200, note);
+      return res.send(200, note);
+
     })
-    .catch(err => res.send(500, err));
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
   });
 
 };

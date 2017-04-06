@@ -23,6 +23,7 @@ export default class Note extends Component {
 
   static propTypes = {
     note: PropTypes.object.isRequired,
+    comments: PropTypes.array.isRequired,
     goToProject: PropTypes.func.isRequired,
     goToAuthor: PropTypes.func.isRequired,
     sendComment: PropTypes.func.isRequired
@@ -30,7 +31,7 @@ export default class Note extends Component {
   
   constructor (props) {
     super(props);
-    this.author = props.note.author[0];
+    this.author = props.note.author;
   }
 
   header () {
@@ -41,7 +42,7 @@ export default class Note extends Component {
   }
 
   render () {
-    const { note, goToAuthor, goToProject, sendComment } = this.props;
+    const { note, comments, goToAuthor, goToProject, sendComment } = this.props;
 
     return (
       <KeyboardAvoidingView
@@ -49,7 +50,7 @@ export default class Note extends Component {
         behavior='padding'
         style={ Styles.container }
       >
-        <ScrollView style={ Styles.scrollContainer }>
+        <ScrollView stickyHeaderIndices={[0]} style={ Styles.scrollContainer }>
           <View style={ Styles.meta }>
             <Image
               style={ Styles.authorImage }
@@ -71,7 +72,16 @@ export default class Note extends Component {
           </View>
           <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
           <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
-          { note.comments && <CommentList comments={ note.comments } onCommentSelect={ () => null }/> }
+          {
+            note.comments && 
+            <View style={ Styles.comments }>
+              <CommentList 
+                style={ Styles.comments } 
+                comments={ comments }
+                onCommentSelect={ () => null }
+              />
+            </View>
+          }
         </ScrollView>
         <CommentInput onSend={ sendComment }/>
       </KeyboardAvoidingView>
