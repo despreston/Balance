@@ -2,7 +2,7 @@ const Comment = require('../../models/Comment');
 const Note = require('../../models/Note');
 const log = require('logbro');
 
-module.exports = ({ post }) => {
+module.exports = ({ post, del }) => {
 
   post('comments', ({ body, user }, res) => {
     body = JSON.parse(body);
@@ -46,5 +46,23 @@ module.exports = ({ post }) => {
     });
 
   });
+
+  del('comments/:_id', ({ params, user }, res) => {
+
+    Comment
+    .findOne(params)
+    .then(comment => {
+      if (comment.user !== user.sub) {
+        return res.send(403);
+      }
+
+      comment.remove();
+    })
+    .then(() => res.send(200, []))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
+  })
 
 };

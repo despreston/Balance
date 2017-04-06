@@ -12,6 +12,7 @@ export function api (url, properties = {}, externalUrl = false) {
   if (properties.body) {
     properties.body = JSON.stringify(properties.body);
   }
+  
   return getToken()
     .then(token => new Headers({ authorization: `Bearer ${token}` }) )
     .then(headers => {

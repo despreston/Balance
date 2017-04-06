@@ -17,6 +17,7 @@ export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
+export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 
 export const RESET = 'RESET';
 
@@ -66,6 +67,18 @@ export function receiveComments (comments) {
   return {
     type: RECEIVE_COMMENTS,
     comments: arrayToObj(comments, '_id')
+  };
+};
+
+/**
+ * removes a single comment
+ * @param {String} comment The _id of the comment to remove
+ * @return {action}
+ */
+export function removeComment (comment) {
+  return {
+    type: REMOVE_COMMENT,
+    comment
   };
 };
 
@@ -366,11 +379,16 @@ export function createComment (comment) {
 /**
  * Remove a comment
  * @param {String} comment The _id of the comment
- * @param {String} note The _id of the note
  * @return {Promise}
  */
-export function removeComment (comment) {
+export function deleteComment (comment) {
   const opts = { method: 'DELETE' };
 
-  return apiDispatch(`comments/${comment}`, receiveComments, opts);
+  return dispatch => {
+    return api(`comments/${comment}`, opts)
+      .then(result => {
+        dispatch(removeComment(comment));
+        return dispatch(receiveComments(result));
+      });
+  };
 };

@@ -12,7 +12,8 @@ export default class CommentListItem extends Component {
 
   static propTypes = {
     comment: PropTypes.object.isRequired,
-    allowDelete: PropTypes.bool.isRequired
+    allowDelete: PropTypes.bool.isRequired,
+    onDelete: PropTypes.func.isRequired
   };
 
   constructor (props) {
@@ -20,7 +21,7 @@ export default class CommentListItem extends Component {
   }
 
   render () {
-    const { comment, allowDelete } = this.props;
+    const { comment, allowDelete, onDelete } = this.props;
 
     return (
       <View style={ Styles.container }>
@@ -33,7 +34,7 @@ export default class CommentListItem extends Component {
           <Text style={ Styles.content }>{ comment.content }</Text>
           {
             allowDelete &&
-            <TouchableOpacity onPress={ () => null }>
+            <TouchableOpacity onPress={ () => onDelete(comment._id) }>
               <Text style={[ Styles.subtext, Styles.bold ]}>delete</Text>
             </TouchableOpacity>
           }
