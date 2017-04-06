@@ -30,8 +30,6 @@ class NoteContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.author = props.note.author;
-
     props.fetchNote(props.navigation.state.params.id);
   }
 
@@ -40,8 +38,7 @@ class NoteContainer extends Component {
     this.props.navigation.navigate('Project', { project });
   }
 
-  goToAuthor () {
-    const userId = this.author.userId;
+  goToUser (userId) {
     this.props.navigation.navigate('UserProfile', { userId });
   }
 
@@ -61,7 +58,7 @@ class NoteContainer extends Component {
         note={ this.props.note }
         comments={ this.props.comments }
         goToProject={ () => this.goToProject() }
-        goToAuthor={ () => this.goToAuthor() }
+        goToUser={ user => this.goToUser(user) }
         sendComment={ content => this.sendComment(content) }
       />
     );

@@ -25,7 +25,7 @@ export default class Note extends Component {
     note: PropTypes.object.isRequired,
     comments: PropTypes.array.isRequired,
     goToProject: PropTypes.func.isRequired,
-    goToAuthor: PropTypes.func.isRequired,
+    goToUser: PropTypes.func.isRequired,
     sendComment: PropTypes.func.isRequired
   }
   
@@ -42,7 +42,7 @@ export default class Note extends Component {
   }
 
   render () {
-    const { note, comments, goToAuthor, goToProject, sendComment } = this.props;
+    const { note, comments, goToUser, goToProject, sendComment } = this.props;
 
     return (
       <KeyboardAvoidingView
@@ -64,7 +64,10 @@ export default class Note extends Component {
                   { note.project.title }
                 </Text>
                 { } by { }
-                <Text onPress={ () => goToAuthor() } style={ Styles.purple }>
+                <Text
+                  onPress={ () => goToUser(this.author.userId) }
+                  style={ Styles.purple }
+                >
                   { this.author.username }
                 </Text>
               </Text>
@@ -78,7 +81,7 @@ export default class Note extends Component {
               <CommentList 
                 style={ Styles.comments } 
                 comments={ comments }
-                onCommentSelect={ () => null }
+                onUserSelect={ user => goToUser(user) }
               />
             </View>
           }

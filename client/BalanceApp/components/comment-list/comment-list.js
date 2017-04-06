@@ -17,9 +17,9 @@ class CommentList extends Component {
 
   static propTypes = {
     comments: PropTypes.array.isRequired,
-    onCommentSelect: PropTypes.func.isRequired,
     loggedInUser: PropTypes.string.isRequired,
-    deleteComment: PropTypes.func.isRequired
+    deleteComment: PropTypes.func.isRequired,
+    onUserSelect: PropTypes.func.isRequired
   };
 
   constructor (props) {
@@ -35,6 +35,7 @@ class CommentList extends Component {
       return (
         <View key={ comment._id }>
           <CommentListItem
+            onUserSelect={ this.props.onUserSelect }
             onDelete={ comment => this.onDelete(comment) }
             comment={ comment }
             allowDelete={ (this.props.loggedInUser === comment.commenter.userId ) }

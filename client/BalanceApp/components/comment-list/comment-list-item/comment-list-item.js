@@ -13,7 +13,8 @@ export default class CommentListItem extends Component {
   static propTypes = {
     comment: PropTypes.object.isRequired,
     allowDelete: PropTypes.bool.isRequired,
-    onDelete: PropTypes.func.isRequired
+    onDelete: PropTypes.func.isRequired,
+    onUserSelect: PropTypes.func.isRequired
   };
 
   constructor (props) {
@@ -21,14 +22,20 @@ export default class CommentListItem extends Component {
   }
 
   render () {
-    const { comment, allowDelete, onDelete } = this.props;
+    const { onUserSelect, comment, allowDelete, onDelete } = this.props;
 
     return (
       <View style={ Styles.container }>
         <Image source={{ uri: comment.commenter.picture }} style={ Styles.picture } />
         <View style={ Styles.right }>
           <View style={ Styles.top }>
-            <Text style={ Styles.commenter }>{ comment.commenter.username }</Text>
+            <TouchableOpacity 
+              onPress={ () => onUserSelect(comment.commenter.userId) }
+            >
+              <Text style={ Styles.commenter }>
+                { comment.commenter.username }
+              </Text>
+            </TouchableOpacity>
             <Text style={ Styles.subtext }>{ fancyDate(comment.createdAt) }</Text>
           </View>
           <Text style={ Styles.content }>{ comment.content }</Text>
