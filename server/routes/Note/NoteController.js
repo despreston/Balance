@@ -13,6 +13,7 @@ module.exports = ({ get, post, put }) => {
       populate: { path: 'commenter', select: 'userId username picture' }
     })
     .populate('project', 'title privacyLevel')
+    .lean()
     .then(note => {
 
       return AccessControl.single(note.user, user.sub, note.project.privacyLevel)
@@ -20,12 +21,9 @@ module.exports = ({ get, post, put }) => {
 
           // author is populated. no need for user
           if (note.comments) {
-            note.comments.forEach(c => {
-              c.commenter = c.commenter[0];
-              delete c.user;
-            });
+            note.comments.forEach(c => delete c.user);
           }
-
+          
         })
         .then(() => res.send(200, note))
         .catch(err => {

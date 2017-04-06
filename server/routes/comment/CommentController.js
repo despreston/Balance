@@ -31,7 +31,6 @@ module.exports = ({ post }) => {
         .lean()
         .then(comment => {
           delete comment.user;
-          comment.commenter = comment.commenter[0];
           return res.send(201, comment)
         })
         .catch(err => {

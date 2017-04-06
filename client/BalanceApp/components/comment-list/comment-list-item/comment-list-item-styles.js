@@ -8,7 +8,7 @@ export default StyleSheet.create  ({
     borderBottomColor: '#E8E8EA',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15
+    paddingVertical: 12
   },
 
   picture: {
@@ -27,7 +27,7 @@ export default StyleSheet.create  ({
     color: Colors.gray.tundora,
     lineHeight: 20,
     fontSize: 14,
-    paddingVertical: 3
+    paddingVertical: 6
   },
 
   top: {

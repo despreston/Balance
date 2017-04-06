@@ -29,7 +29,8 @@ let Comment = new mongoose.Schema ({
 Comment.virtual('commenter', {
   ref: 'user',
   localField: 'user',
-  foreignField: 'userId'
+  foreignField: 'userId',
+  justOne: true
 });
 
 Comment.pre('save', function(next) {
