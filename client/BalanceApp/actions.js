@@ -270,16 +270,14 @@ export function fetchNote (id) {
       let comments = [];
 
       if (note.comments) {
-        note.comments.forEach(c => {
-          comments.push(c);
-        });
+        note.comments.forEach(c => comments.push(c));
       }
 
       dispatch(receiveComments(comments));
       return dispatch(receiveNotes(note));
     })
     .catch(err => console.log(err));
-  };
+  }
 };
 
 /**
