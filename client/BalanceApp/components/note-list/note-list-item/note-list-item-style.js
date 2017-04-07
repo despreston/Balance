@@ -1,19 +1,7 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../colors';
 
 export const Styles = StyleSheet.create  ({
-
-  editButton: {
-    height: 20,
-    width: 20,
-    opacity: 0.4
-  },
-
-  editButtonContainer: {
-    height: 20,
-    borderWidth: 1,
-    position: 'absolute',
-    right: 10
-  },
 
   container: {
     flexDirection: 'column'
@@ -26,24 +14,33 @@ export const Styles = StyleSheet.create  ({
   },
 
   createdAt: {
-    color: '#B8B8BA',
+    color: Colors.gray.silver,
     fontSize: 12
   },
 
   content: {
-    color: '#3D3F3E',
+    color: Colors.gray.tundora,
     fontSize: 14,
     lineHeight: 20,
-    paddingVertical: 10
+    paddingVertical: 15
+  },
+
+  bottom: {
+    flexDirection: 'row'
+  },
+
+  comment: {
+    paddingRight: 10,
+    justifyContent: 'center'
   },
 
   dark: {
-    color: '#3D3F3E',
+    color: Colors.gray.tundora,
     fontWeight: '400'
   },
 
   darker: {
-    color: '#3D3F3E',
+    color: Colors.gray.tundora,
     fontWeight: '600' 
   }
   

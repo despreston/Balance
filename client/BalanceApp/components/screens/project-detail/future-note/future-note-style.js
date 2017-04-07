@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const Style = StyleSheet.create  ({
 
   container: {
-    padding: 5
+    padding: 10
   },
 
   title: {

@@ -60,8 +60,7 @@ export const Styles = StyleSheet.create ({
   finishedTitleText: {
     color: '#3D3F3E',
     fontSize: 15,
-    padding: 5,
-    paddingTop: 10
+    padding: 10
   },
 
   whiteText: {
