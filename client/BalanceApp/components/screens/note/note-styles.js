@@ -13,11 +13,16 @@ export default StyleSheet.create ({
 
   container: {
     flex: 1,
-    padding: 30,
     backgroundColor: Colors.white
   },
 
+  scrollContainer: {
+    paddingHorizontal: 20
+  },
+
   meta: {
+    paddingVertical: 30,
+    backgroundColor: Colors.white,
     flexDirection: 'row',
     paddingBottom: 20
   },
@@ -60,6 +65,10 @@ export default StyleSheet.create ({
   text: {
     ...defaults.text,
     lineHeight: 20
+  },
+
+  comments: {
+    marginTop: 20
   }
 
 });

@@ -1,9 +1,10 @@
 import projects from './projects';
-import users from './users';
-import notes from './notes';
+import users    from './users';
+import notes    from './notes';
+import comments from './comments';
 
 const initialState = {
-  // Users key'd by _id
+  // Users key'd by userId
   users: {},
 
   // Logged in user. If value is null, we know there is no one logged in
@@ -17,13 +18,16 @@ const initialState = {
   projects_invalidated: false,
   
   // Notes key'd by _id
-  notes: {}
-  
+  notes: {},
+
+  // Comment key'd by _id
+  comments: {}
+
 };
 
 export default function reducer (state = initialState, action) {
 
-  let handlers = Object.assign({}, projects, notes, users);
+  let handlers = Object.assign({}, projects, notes, users, comments);
 
   if (action.type === 'RESET') {
     return Object.assign({}, initialState);

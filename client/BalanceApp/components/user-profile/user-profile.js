@@ -52,15 +52,6 @@ function mapStateToProps (state, ownProps) {
     friends = [];
   }
 
-  // const friends = Object.keys(state.users)
-  //   .map(id => state.users[id])
-  //   .filter(userToFilter => {
-  //     return user.friends.some(friend => {
-  //       return friend.userId === userToFilter.userId && 
-  //         friend.status === 'accepted';
-  //     });
-  //   });
-
   return {
     userId,
     loggedInUser: state.loggedInUser,
@@ -104,7 +95,7 @@ class UserProfile extends Component {
     function selector (notes, user) {
       return Object.keys(notes)
         .map(id => notes[id])
-        .filter(note => note.user === user);
+        .filter(note => note.author.userId === user);
     }
 
     return (
