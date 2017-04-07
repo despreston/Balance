@@ -26,17 +26,13 @@ class CommentList extends Component {
     super(props);
   }
 
-  onDelete (comment) {
-    this.props.deleteComment(comment);
-  }
-
   renderComments () {
     return this.props.comments.map(comment => {
       return (
         <View key={ comment._id }>
           <CommentListItem
             onUserSelect={ this.props.onUserSelect }
-            onDelete={ comment => this.onDelete(comment) }
+            onDelete={ comment => this.props.deleteComment(comment) }
             comment={ comment }
             allowDelete={ (this.props.loggedInUser === comment.commenter.userId ) }
           />
