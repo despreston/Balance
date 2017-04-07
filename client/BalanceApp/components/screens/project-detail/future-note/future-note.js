@@ -26,7 +26,7 @@ function FutureNote ({ note }) {
   return (
     <View style={Style.container}>
       <View style={Style.top}>
-        <Text style={Style.title}>Reminder</Text>
+        <Text style={Style.title}>Next Time</Text>
         {
           note.lastUpdated &&
           <Text style={Style.date}>Added {formatDate(note.lastUpdated)}</Text>

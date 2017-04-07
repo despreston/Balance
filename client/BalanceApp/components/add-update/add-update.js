@@ -164,7 +164,7 @@ export default class AddUpdate extends Component {
 
           <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
             <Text style={ Styles.text }>
-              What do you want to work on next time?
+              Anything to remember for next time?
             </Text>
             <Text style={ Styles.subText }>
               Leave this blank if you're unsure.

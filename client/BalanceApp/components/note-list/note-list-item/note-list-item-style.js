@@ -8,6 +8,13 @@ export const Styles = StyleSheet.create  ({
     opacity: 0.4
   },
 
+  editButtonContainer: {
+    height: 20,
+    borderWidth: 1,
+    position: 'absolute',
+    right: 10
+  },
+
   container: {
     flexDirection: 'column'
   },
@@ -26,9 +33,8 @@ export const Styles = StyleSheet.create  ({
   content: {
     color: '#3D3F3E',
     fontSize: 14,
-    lineHeight: 18,
-    paddingTop: 8,
-    paddingBottom: 15 
+    lineHeight: 20,
+    paddingVertical: 10
   },
 
   dark: {

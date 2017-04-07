@@ -30,7 +30,7 @@ export default class EditNote extends Component {
 
   constructor (props) {
     super();
-    this.state = { isDirty: false, textValue: '' };
+    this.state = { isDirty: false, textValue: '', visible: false };
   }
 
   getSaveTextColor () {
@@ -46,7 +46,11 @@ export default class EditNote extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    this.setState({ isDirty: false, textValue: nextProps.note.content || '' });
+    this.setState({
+      isDirty: false,
+      textValue: nextProps.note.content || '',
+      visible: nextProps.visible
+    });
   }
 
   onClear () {
@@ -68,44 +72,42 @@ export default class EditNote extends Component {
 
   render () {
     return (
-      <View style={Styles.editNote}>
-        <Modal
-          animationType={"slide"}
-          transparent={false}
-          visible={this.props.visible}
-          >
-          <View style={Styles.editNote}>
-            <View style={Styles.header}>
-              <TouchableOpacity onPress={this.props.onClose}>
-                <Text style={Styles.headerText}>Close</Text>
+      <Modal
+        animationType={"slide"}
+        transparent={false}
+        visible={this.props.visible}
+      >
+        <View style={Styles.editNote}>
+          <View style={Styles.header}>
+            <TouchableOpacity onPress={this.props.onClose}>
+              <Text style={Styles.headerText}>Close</Text>
+            </TouchableOpacity>
+            <View style={Styles.actions}>
+              <TouchableOpacity>
+                <Text
+                  style={[Styles.headerText, Styles.clear]}
+                  onPress={() => this.onClear()}>
+                  Clear
+                </Text>
               </TouchableOpacity>
-              <View style={Styles.actions}>
-                <TouchableOpacity>
-                  <Text
-                    style={[Styles.headerText, Styles.clear]}
-                    onPress={() => this.onClear()}>
-                    Clear
-                  </Text>
-                </TouchableOpacity>
-                <View style={Styles.spacer} />
-                <TouchableOpacity>
-                  <Text
-                    style={[Styles.headerText, this.getSaveTextColor() ]}
-                    onPress={() => this.save(this.props.note)}>
-                    Save
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              <View style={Styles.spacer} />
+              <TouchableOpacity>
+                <Text
+                  style={[Styles.headerText, this.getSaveTextColor() ]}
+                  onPress={() => this.save(this.props.note)}>
+                  Save
+                </Text>
+              </TouchableOpacity>
             </View>
-            <AutoGrowingTextInput
-              autoFocus
-              value={this.state.textValue}
-              onChange={event => this.onTextChange(event)}
-              style={Styles.input}
-            />
           </View>
-        </Modal>
-      </View>
+          <AutoGrowingTextInput
+            autoFocus
+            value={this.state.textValue}
+            onChange={event => this.onTextChange(event)}
+            style={Styles.input}
+          />
+        </View>
+      </Modal>
     );
   }
 }

@@ -31,9 +31,12 @@ function NoteListItem ({ note, onEdit, showContext }) {
     if (!onEdit) { return null; }
 
     return (
-      <EditButton
-        onEdit={ onEdit.bind(this, note) }
-        style={ Styles.editButton } />
+      <View style={ Styles.editButtonContainer }>
+        <EditButton
+          onEdit={ onEdit.bind(this, note) }
+          style={ Styles.editButton } 
+        />
+      </View>
     );
   }
 

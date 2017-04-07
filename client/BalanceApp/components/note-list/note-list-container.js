@@ -5,10 +5,9 @@ import { View } from 'react-native';
 
 // components
 import NoteList from './note-list';
-import EditNote from '../edit-note/edit-note';
 
 // actions
-import { requestNotes, saveNote } from '../../actions';
+import { requestNotes } from '../../actions';
 
 function mapStateToProps (state, ownProps) {
 
@@ -22,7 +21,7 @@ function mapStateToProps (state, ownProps) {
   return { notes }
 }
 
-const mapDispatchToProps = { requestNotes, saveNote };
+const mapDispatchToProps = { requestNotes };
 
 class NoteListContainer extends Component {
 
@@ -45,65 +44,28 @@ class NoteListContainer extends Component {
     // selector to use when getting notes from redux
     // @param {object} notes from redux state
     // @return {array}
-    selector: PropTypes.func,
-
-    // function to exec when edit button is selected. if null, no edit btn is shown
-    showEdit: PropTypes.bool,
-
-    // comes from redux
-    saveNote: PropTypes.func.isRequired
+    selector: PropTypes.func
   }
 
   constructor (props) {
     super(props);
 
-    this.state = { note: {}, editModalVisible: false };
-
     props.query && props.requestNotes(props.query);
-  }
-
-  onEdit (note) {
-    this.setState({ note, editModalVisible: true });
-  }
-
-  onEditProp () {
-    if (this.props.showEdit) {
-      return note => this.onEdit(note);
-    }
-
-    return null;
-  }
-
-  onClose () {
-    this.setState({ note: {}, editModalVisible: false });
   }
 
   render () {
     const {
       onSelect,
       notes,
-      showContext = false,
-      showEdit
+      showContext = false
     } = this.props;
 
     return (
-      <View>
-        <NoteList
-          onEdit={ this.onEditProp() }
-          onSelect={ onSelect }
-          showContext={ showContext }
-          notes={ notes }
-        />
-        {
-          showEdit &&
-          <EditNote
-            note={ this.state.note }
-            onSave={ note => this.props.saveNote(note) }
-            onClose={ () => this.onClose() }
-            visible={ this.state.editModalVisible }
-          />
-        }
-      </View>
+      <NoteList
+        onSelect={ onSelect }
+        showContext={ showContext }
+        notes={ notes }
+      />
     );
   }
 
