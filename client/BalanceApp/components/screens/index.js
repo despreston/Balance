@@ -11,7 +11,7 @@ import Notifications from './notifications/notifications';
 import UserSettings from './user-settings/user-settings';
 import UserProfile from '../user-profile/user-profile';
 import UserSearch from './user-search/user-search';
-import Note from './note/note';
+import NoteContainer from './note/note-container';
 import Auth from './auth/auth';
 
 export {
@@ -24,6 +24,6 @@ export {
   UserSettings,
   UserProfile,
   UserSearch,
-  Note,
+  NoteContainer,
   Auth
 };

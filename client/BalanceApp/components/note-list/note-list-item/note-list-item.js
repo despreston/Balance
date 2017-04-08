@@ -9,43 +9,39 @@ import { Styles } from './note-list-item-style';
 import { formatDate } from '../../../utils/helpers';
 
 // components
-import EditButton from '../../edit-button/edit-button';
+import CommentButton from './comment-button/comment-button';
+import ReactionsContainer from '../../reactions/reactions-container';
 
-function NoteListItem ({ note, onEdit, showContext }) {
+function NoteListItem ({ note, showContext }) {
 
   function renderHeader () {
-    if (!showContext) { return formatDate(note.createdAt); }
+    // if (!showContext) {
+    //   return <Text style={ Styles.createdAt }>{ formatDate(note.createdAt) }</Text>;
+    // }
 
     let typeText = `${note.type === 'Future' ? 'Reminder' : 'Did work'}`;
 
     return (
-      <Text>
-        <Text style={ Styles.dark }>{ typeText } for </Text>
-        <Text style={ Styles.darker }>{ note.project.title } </Text>
-        { formatDate(note.createdAt) }
-      </Text>
-    );
-  }
-
-  function renderEditButton () {
-    if (!onEdit) { return null; }
-
-    return (
-      <EditButton
-        onEdit={ onEdit.bind(this, note) }
-        style={ Styles.editButton } />
+      <View style={ Styles.top }>
+        <Text style={ Styles.createdAt }>
+          <Text style={ Styles.dark }>{ typeText } for </Text>
+          <Text style={ Styles.darker }>{ note.project.title } </Text>
+        </Text>
+        <Text style={ Styles.createdAt }>{ formatDate(note.createdAt) }</Text>
+      </View>
     );
   }
 
   return (
     <View style={ Styles.container }>
-      <View style={ Styles.top }>
-        <Text style={ Styles.createdAt }>
-          { renderHeader() }
-        </Text>
-        { renderEditButton() }
-      </View>
+      { renderHeader() }
       <Text style={ Styles.content }>{ note.content }</Text>
+      <View style={ Styles.bottom }>
+        <View style={ Styles.comment }>
+          <CommentButton onPress={ () => null } count={ note.commentCount || 0 } />
+        </View>
+        <ReactionsContainer />
+      </View>
     </View>
   );
 }
@@ -56,7 +52,6 @@ NoteListItem.propTypes = {
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.instanceOf(Date).isRequired
   }).isRequired,
-  onEdit: PropTypes.func,
   showContext: PropTypes.bool
 };
 

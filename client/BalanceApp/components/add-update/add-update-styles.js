@@ -14,21 +14,22 @@ export default StyleSheet.create  ({
   },
 
   card: {
-    paddingVertical: 50,
+    paddingTop: 35,
+    paddingBottom: 20,
     paddingHorizontal: 15,
     height: Dimensions.get('window').height, 
     width: Dimensions.get('window').width
   },
 
   navButtonContainer: {
-    paddingVertical: 30,
+    paddingVertical: 15,
     alignItems: 'center',
     alignSelf: 'center',
     flexDirection: 'row',
   },
 
   unimportantButton: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderColor: Colors.white,
     backgroundColor: Colors.purple
   },
@@ -40,13 +41,18 @@ export default StyleSheet.create  ({
   text: {
     ...defaultText,
     paddingBottom: 20,
-    fontSize: 20
+    fontSize: 18,
+    fontWeight: '600'
   },
 
   subText: {
     ...defaultText,
-    paddingBottom: 20,
     fontSize: 14
+  },
+
+  privacy: {
+    fontSize: 12,
+    opacity: 0.9
   }
 
 });

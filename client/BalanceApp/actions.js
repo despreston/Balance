@@ -3,7 +3,6 @@ import { arrayToObj } from './utils/helpers';
 import formatQueryParams from './utils/query-params';
 import Auth0Lock from 'react-native-lock';
 import { saveToken } from './utils/auth';
-import convertDates from './utils/convert-dates';
 
 /*
  * action types
@@ -16,6 +15,9 @@ export const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
 export const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
 export const RECEIVE_NOTES = 'RECEIVE_NOTES';
+
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
+export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 
 export const RESET = 'RESET';
 
@@ -49,6 +51,34 @@ export function receiveUsers (users) {
   return {
     type: RECEIVE_USERS,
     users: arrayToObj(users, 'userId')
+  };
+};
+
+/**
+ * creates action for receiving comments
+ * @param {object} comments (single) OR {array} comments (multiple)
+ * @return {action}
+ */
+export function receiveComments (comments) {
+  if (!Array.isArray(comments)) {
+    comments = [comments];
+  }
+
+  return {
+    type: RECEIVE_COMMENTS,
+    comments: arrayToObj(comments, '_id')
+  };
+};
+
+/**
+ * removes a single comment
+ * @param {String} comment The _id of the comment to remove
+ * @return {action}
+ */
+export function removeComment (comment) {
+  return {
+    type: REMOVE_COMMENT,
+    comment
   };
 };
 
@@ -234,7 +264,20 @@ export function requestNotes (params) {
  * @return {Promise}
  */
 export function fetchNote (id) {
-  return apiDispatch(`notes/${id}`, receiveNotes);
+  return dispatch => {
+    return api(`notes/${id}`)
+    .then(note => {
+      let comments = [];
+
+      if (note.comments) {
+        note.comments.forEach(c => comments.push(c));
+      }
+
+      dispatch(receiveComments(comments));
+      return dispatch(receiveNotes(note));
+    })
+    .catch(err => console.log(err));
+  }
 };
 
 /**
@@ -304,7 +347,9 @@ export function fetchFriendsForUser (userId) {
  * @param {String} friend Target user
  */
 export function createFriendship (userId, friend) {
-  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, { method: 'POST' });
+  const opts = { method: 'POST' };
+
+  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, opts);
 };
 
 /**
@@ -313,5 +358,35 @@ export function createFriendship (userId, friend) {
  * @param {String} friend Target user to remove
  */
 export function removeFriendship (userId, friend) {
-  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, { method: 'DELETE' });
+  const opts = { method: 'DELETE' };
+
+  return apiDispatch(`users/${userId}/friends/${friend}`, receiveUsers, opts);
 }
+
+/**
+ * Create a new comment
+ * @param {Object} comment
+ * @return {Promise}
+ */
+export function createComment (comment) {
+  const opts = { method: 'POST', body: comment };
+
+  return apiDispatch(`comments`, receiveComments, opts);
+};
+
+/**
+ * Remove a comment
+ * @param {String} comment The _id of the comment
+ * @return {Promise}
+ */
+export function deleteComment (comment) {
+  const opts = { method: 'DELETE' };
+
+  return dispatch => {
+    return api(`comments/${comment}`, opts)
+      .then(result => {
+        dispatch(removeComment(comment));
+        return dispatch(receiveComments(result));
+      });
+  };
+};

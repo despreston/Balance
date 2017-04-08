@@ -15,13 +15,13 @@ export default StyleSheet.create({
   },
   
   image: {
-    height: 20,
-    width: 20
+    height: 22,
+    width: 22
   },
 
   text: {
     color: Colors.white,
-    fontSize: 10,
+    fontSize: 12,
     paddingHorizontal: 10,
     fontStyle: 'italic'
   }

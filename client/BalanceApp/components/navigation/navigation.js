@@ -14,7 +14,7 @@ import {
   UserSettings,
   UserProfile,
   UserSearch,
-  Note,
+  NoteContainer,
   Auth
 } from '../screens';
 
@@ -33,7 +33,7 @@ const navigationOptions = {
 // screens included in all nav stacks
 const defaultScreens = {
   UserProfile: { screen: UserProfile },
-  Note: { screen: Note },
+  Note: { screen: NoteContainer },
   Project: { screen: ProjectDetailContainer }
 };
 

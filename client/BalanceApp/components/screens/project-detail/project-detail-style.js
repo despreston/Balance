@@ -4,7 +4,7 @@ import Colors from '../../colors';
 export const Styles = StyleSheet.create ({
 
   projectDetail: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.white,
     flex: 1
   },
 
@@ -58,10 +58,9 @@ export const Styles = StyleSheet.create ({
   },
 
   finishedTitleText: {
-    color: '#3D3F3E',
+    color: Colors.gray.tundora,
     fontSize: 15,
-    padding: 5,
-    paddingTop: 10
+    padding: 10
   },
 
   whiteText: {

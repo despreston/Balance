@@ -1,6 +1,7 @@
 'use strict';
 const Project = require('../../models/Project');
 const AccessControl = require('../../utils/access-control');
+const log = require('logbro');
 
 module.exports = ({ get, post, del, put }) => {
 
@@ -20,17 +21,14 @@ module.exports = ({ get, post, del, put }) => {
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
         .populate('nudgeUsers', 'userId picture')
-        .lean()
-        .then(projects => Project.augmentNotesWithProject(projects))
-        .then(projects => {
-          projects.forEach(p => {
-            delete p.user;
-            delete p.nudges;
-          });
-
-          return res.send(200, projects)
-        })
-        .catch(() => res.send(500));
+        .then(projects => projects.map(p => p.toObject({ virtuals: true })))
+        .then(projects => projects.map(Project.futureAndPastNotes))
+        .then(projects => projects.map(Project.removeExcludedFields))
+        .then(projects => res.send(200, projects))
+        .catch(err => {
+          log.error(err);
+          return res.send(500);
+        });
 
       }).catch(err => res.send(403, 'Failed: ' + err));
   });
@@ -56,12 +54,14 @@ module.exports = ({ get, post, del, put }) => {
     .populate(Project.latestPastNote)
     .populate(Project.latestFutureNote)
     .then(project => project.addNudge(user.sub))
-    .then(project => {
-      delete project.user;
-      return Project.augmentNotesWithProject(project.toObject());
-    })
+    .then(project => project.toObject({ virtuals: true }))
+    .then(project => Project.futureAndPastNotes(project))
+    .then(project => Project.removeExcludedFields(project))
     .then(project => res.send(200, project))
-    .catch(err => res.send(500, err));
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
   });
 
   del('projects/:project/nudges/:user', ({ params, user }, res) => {
@@ -75,12 +75,14 @@ module.exports = ({ get, post, del, put }) => {
     .populate(Project.latestFutureNote)
     .populate('nudgeUsers', 'userId picture')
     .then(project => project.removeNudge(user.sub))
-    .then(project => {
-      delete project.user;
-      return Project.augmentNotesWithProject(project.toObject());
-    })
+    .then(project => project.toObject({ virtuals: true }))
+    .then(project => Project.futureAndPastNotes(project))
+    .then(project => Project.removeExcludedFields(project))
     .then(project => res.send(200, project))
-    .catch(() => res.send(500));
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
   });
 
   post('projects', ({ body, user }, res) => {
@@ -98,8 +100,9 @@ module.exports = ({ get, post, del, put }) => {
       .then(project => {
         project.Past = null;
         project.Future = null;
-        delete project.user;
-        delete project.nudges;
+        
+        project = Project.removeExcludedFields(project);
+
         return res.send(201, project.toObject());
       });
     })
@@ -114,19 +117,24 @@ module.exports = ({ get, post, del, put }) => {
     .populate(Project.latestPastNote)
     .populate(Project.latestFutureNote)
     .populate('nudgeUsers', 'userId picture')
-    .then(project => Project.augmentNotesWithProject(project))
     .then(project => {
+
       if (project.user !== user.sub) {
         return res.send(403);
       }
 
       project = Object.assign(project, body);
       project.save();
-      project = project.toObject();
-      delete project.nudges;
-      delete project.user;
+      project = project.toObject({ virtuals: true });
 
-      return res.send(200, project);
+      return Project.futureAndPastNotes(project);
+
+    })
+    .then(project => Project.removeExcludedFields(project))
+    .then(project => res.send(200, project))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
     });
   });
 

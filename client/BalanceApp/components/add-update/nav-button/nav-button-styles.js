@@ -5,7 +5,7 @@ export default StyleSheet.create  ({
 
   navButton: {
     flex: 1,
-    height: 30,
+    height: 35,
     borderRadius: 5,
     marginHorizontal: 5,
     justifyContent: 'center',
@@ -14,7 +14,7 @@ export default StyleSheet.create  ({
 
   buttonText: {
     color: Colors.white,
-    fontWeight: 'bold'
+    fontWeight: '600'
   }
 
 });

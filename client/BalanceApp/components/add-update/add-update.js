@@ -114,6 +114,22 @@ export default class AddUpdate extends Component {
     );   
   }
 
+  privacy () {
+    function getText() {
+      switch (this.props.project.privacyLevel) {
+        case 'global' : return 'Public';
+        case 'friends': return 'Friends-only';
+        case 'private': return 'Private';
+      }
+    }
+
+    return (
+      <Text style={[ Styles.subText, Styles.privacy ]}>
+        Privacy Level: { getText.call(this) }
+      </Text>
+    );
+  }
+
   render () {
     const { visible } = this.props;
 
@@ -136,6 +152,9 @@ export default class AddUpdate extends Component {
               note={ this.state.past }
               placeHolder={ this.pastNotePlaceholder }
             />
+            <Text style={[ Styles.subText, Styles.privacy ]}>
+              { this.privacy() }
+            </Text>
             <View style={ Styles.navButtonContainer }>
               { this.renderCancelButton() }
               { this.renderSkipButton() }
@@ -145,16 +164,17 @@ export default class AddUpdate extends Component {
 
           <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
             <Text style={ Styles.text }>
-              What do you want to work on next time?
+              Anything to remember for next time?
             </Text>
             <Text style={ Styles.subText }>
-              Leave this blank if you're unsure what to work on next.
+              Leave this blank if you're unsure.
             </Text>
             <Note
               onTextChange={ text => this.setState({ future: text }) }
               note={ this.state.future }
               placeHolder={ this.futureNotePlaceholder }
             />
+            { this.privacy() }
             <View style={ Styles.navButtonContainer }>
               { this.renderCancelButton() }
               { this.renderBackButton() }

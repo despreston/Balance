@@ -61,6 +61,7 @@ class MainScene extends Component {
   render () {
     return (
         <ProjectListContainer
+          showFilter
           onProjectTap={ this.openProject.bind(this) }
           user={ this.props.loggedInUser }
         />

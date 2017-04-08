@@ -23,12 +23,42 @@ let Note = new mongoose.Schema({
     required: true
   },
 
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'comment'
+  }],
+
   lastUpdated: Date,
 
   createdAt: Date,
 
   privacyLevel: privacyLevel
   
+}, {
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
+});
+
+Note.virtual('commentCount').get(function () {
+  return this.comments.length;
+});
+
+/**
+ * Ref to note author
+ */
+Note.virtual('author', {
+  ref: 'user',
+  localField: 'user',
+  foreignField: 'userId',
+  justOne: true
+});
+
+Note.pre('find', function () {
+  this.populate('author', 'userId username picture');
+});
+
+Note.pre('findOne', function () {
+  this.populate('author', 'userId username picture');
 });
 
 Note.pre('save', function(next) {

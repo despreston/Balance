@@ -9,8 +9,8 @@ export default StyleSheet.create  ({
   },
 
   container: {
-    height: 25,
-    width: 75,
+    height: 30,
+    width: 80,
     justifyContent: 'center',
     alignItems: 'center'
   },
