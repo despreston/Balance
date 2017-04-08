@@ -30,8 +30,8 @@ class NoteListContainer extends Component {
     // function to exec when note is selected
     onSelect: PropTypes.func.isRequired,
 
-    // show the project title and note type
-    showContext: PropTypes.bool,
+    // show the project title in note list items
+    showProjectName: PropTypes.bool,
 
     // comes from redux
     requestNotes: PropTypes.func.isRequired,
@@ -57,13 +57,13 @@ class NoteListContainer extends Component {
     const {
       onSelect,
       notes,
-      showContext = false
+      showProjectName = false
     } = this.props;
 
     return (
       <NoteList
         onSelect={ onSelect }
-        showContext={ showContext }
+        showProjectName={ showProjectName }
         notes={ notes }
       />
     );

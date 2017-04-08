@@ -101,7 +101,7 @@ class UserProfile extends Component {
     return (
       <NoteListContainer
         onSelect={ id => this.props.nav('Note', { id }) }
-        showContext={ this.props.userId === this.props.loggedInUser }
+        showProjectName
         query={[{ user: this.props.userId }]}
         selector={ notes => selector(notes, this.props.userId) }
       />

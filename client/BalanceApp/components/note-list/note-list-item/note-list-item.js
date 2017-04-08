@@ -12,20 +12,22 @@ import { formatDate } from '../../../utils/helpers';
 import CommentButton from './comment-button/comment-button';
 import ReactionsContainer from '../../reactions/reactions-container';
 
-function NoteListItem ({ note, showContext }) {
+function NoteListItem ({ note, showProjectName }) {
 
   function renderHeader () {
-    if (!showContext) {
-      return <Text style={ Styles.createdAt }>{ formatDate(note.createdAt) }</Text>;
-    }
-
     let typeText = `${note.type === 'Future' ? 'Reminder' : 'Did work'}`;
 
     return (
       <View style={ Styles.top }>
         <Text style={ Styles.createdAt }>
-          <Text style={ Styles.dark }>{ typeText } for </Text>
-          <Text style={ Styles.darker }>{ note.project.title } </Text>
+          <Text style={ Styles.darker }>{ typeText }</Text>
+          {
+            showProjectName &&
+            <Text>
+              <Text style={ Styles.dark }> for </Text>
+              <Text style={ Styles.darker }>{ note.project.title } </Text>
+            </Text>
+          }
         </Text>
         <Text style={ Styles.createdAt }>{ formatDate(note.createdAt) }</Text>
       </View>
@@ -52,7 +54,8 @@ NoteListItem.propTypes = {
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.instanceOf(Date).isRequired
   }).isRequired,
-  showContext: PropTypes.bool
+  showContext: PropTypes.bool,
+  showProjectName: PropTypes.bool
 };
 
 export default NoteListItem;
