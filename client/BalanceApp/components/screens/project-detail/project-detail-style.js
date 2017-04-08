@@ -18,8 +18,9 @@ export const Styles = StyleSheet.create ({
 
   author: {
     fontSize: 12,
-    paddingBottom: 30,
-    opacity: 0.9
+    paddingBottom: 20,
+    opacity: 0.9,
+    textAlign: 'center'
   },
 
   container: {
@@ -35,8 +36,8 @@ export const Styles = StyleSheet.create ({
   updateButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 25,
-    paddingHorizontal: 20
+    marginBottom: 20,
+    height: 40
   },
 
   updateButton: {
@@ -75,19 +76,27 @@ export const Styles = StyleSheet.create ({
     textAlign: 'center'
   },
 
+  description: {
+    textAlign: 'center',
+    lineHeight: 19,
+    paddingHorizontal: 20,
+  },
+
   info: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 25,
     backgroundColor: Colors.purple,
+    justifyContent: 'space-between'
   },
 
   bold: {
-    fontWeight: 'bold'
+    fontWeight: '600'
   },
 
   nudgeStuff: {
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 20,
+    paddingBottom: 10
   }
   
 });

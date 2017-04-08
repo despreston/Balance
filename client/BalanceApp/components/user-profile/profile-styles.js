@@ -10,7 +10,7 @@ export default StyleSheet.create ({
   },
 
   profileInfo: {
-    marginBottom: 25
+    marginBottom: 20
   },
 
   body: {

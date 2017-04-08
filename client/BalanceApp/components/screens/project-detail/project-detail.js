@@ -162,13 +162,20 @@ class ProjectDetail extends Component {
         keyboardShouldPersistTaps='handled'
       >
         <View style={ Styles.info }>
-          <Text style={ [Styles.title, Styles.whiteText] }>
-            { project.title }
-          </Text>
-          <Text style={ [Styles.author, Styles.whiteText] }>
-            Started by
-            <Text style={ Styles.bold }> { project.owner[0].username }</Text>
-          </Text>
+          <View>
+            <Text style={ [Styles.title, Styles.whiteText] }>
+              { project.title }
+            </Text>
+            <Text style={ [Styles.author, Styles.whiteText] }>
+              Started by
+              <Text style={ Styles.bold }> { project.owner[0].username }</Text>
+            </Text>
+          </View>
+          <View>
+            <Text style={[ Styles.whiteText, Styles.description ]}>
+              Testing out a project description with two lines. This should wrap to second line.
+            </Text>
+          </View>
           { this.renderNudgeStuff() }
           { this.renderUpdateButton() }
         </View>

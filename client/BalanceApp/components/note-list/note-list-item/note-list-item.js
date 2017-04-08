@@ -54,7 +54,6 @@ NoteListItem.propTypes = {
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.instanceOf(Date).isRequired
   }).isRequired,
-  showContext: PropTypes.bool,
   showProjectName: PropTypes.bool
 };
 
