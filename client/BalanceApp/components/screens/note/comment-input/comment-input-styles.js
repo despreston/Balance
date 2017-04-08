@@ -12,7 +12,7 @@ export default StyleSheet.create ({
 
   input: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 15,
     color: Colors.gray.tundora,
     marginLeft: 10,
     paddingHorizontal: 10,

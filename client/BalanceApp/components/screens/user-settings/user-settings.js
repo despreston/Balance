@@ -33,11 +33,9 @@ class UserSettings extends Component {
 
       const title = 'Settings';
 
-      const left = <NavBtn title='Cancel' onPress={ () => goBack() }/>;
-
       const right = <NavBtn title='Save' onPress={ () => state.params.save() }/>;
 
-      return { ...defaultHeader, left, right, title };
+      return { ...defaultHeader, right, title };
     }
   }
   

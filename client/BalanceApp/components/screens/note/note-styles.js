@@ -27,6 +27,12 @@ export default StyleSheet.create ({
     paddingBottom: 20
   },
 
+  flexRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+
   header: {
     ...defaults.text,
     fontSize: 20,

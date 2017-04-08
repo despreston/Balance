@@ -15,9 +15,9 @@ import ReactionsContainer from '../../reactions/reactions-container';
 function NoteListItem ({ note, showContext }) {
 
   function renderHeader () {
-    // if (!showContext) {
-    //   return <Text style={ Styles.createdAt }>{ formatDate(note.createdAt) }</Text>;
-    // }
+    if (!showContext) {
+      return <Text style={ Styles.createdAt }>{ formatDate(note.createdAt) }</Text>;
+    }
 
     let typeText = `${note.type === 'Future' ? 'Reminder' : 'Did work'}`;
 

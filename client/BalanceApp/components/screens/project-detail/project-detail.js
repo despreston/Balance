@@ -65,6 +65,7 @@ class ProjectDetail extends Component {
     // hide edit buttons if project is Finished OR user is not the owner
     return (
       <NoteListContainer
+        showContext
         showEdit={ status !== 'finished' && userIsOwner }
         onSelect={ id => nav('Note', { id }) }
         notes={ notes }
