@@ -13,8 +13,8 @@ module.exports = ({ get, post, put }) => {
       populate: { path: 'commenter', select: 'userId username picture' }
     })
     .populate('project', 'title privacyLevel')
-    .lean()
     .then(note => {
+      note = note.toObject();
 
       return AccessControl.single(note.user, user.sub, note.project.privacyLevel)
         .then(() => {
@@ -23,7 +23,7 @@ module.exports = ({ get, post, put }) => {
           if (note.comments) {
             note.comments.forEach(c => delete c.user);
           }
-          
+
         })
         .then(() => res.send(200, note))
         .catch(err => {
