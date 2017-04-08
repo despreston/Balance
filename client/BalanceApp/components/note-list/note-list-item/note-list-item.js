@@ -35,7 +35,7 @@ function NoteListItem ({ note, showContext }) {
   return (
     <View style={ Styles.container }>
       { renderHeader() }
-      <Text style={ Styles.content }>{ note.content }</Text>
+      <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
       <View style={ Styles.bottom }>
         <View style={ Styles.comment }>
           <CommentButton onPress={ () => null } count={ note.commentCount || 0 } />
