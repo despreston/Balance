@@ -52,7 +52,7 @@ module.exports = ({ get, post, put }) => {
     .then(notes => {
 
       if (notes.length === 0) {
-        return res.send(200, notes);
+        return notes;
       }
 
       const owner = notes[0].user;

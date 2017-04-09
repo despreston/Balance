@@ -25,7 +25,9 @@ class ProjectDetail extends Component {
   static propTypes = {
     project: PropTypes.shape({
       title: PropTypes.string.isRequired,
-      status: PropTypes.string.isRequired
+      status: PropTypes.string.isRequired,
+      nudgeUsers: PropTypes.array,
+      owner: PropTypes.array.isRequired
     }),
     nav: PropTypes.func.isRequired,
     notes: PropTypes.array,
@@ -130,7 +132,7 @@ class ProjectDetail extends Component {
   }
 
   renderNudgeButton (id) {
-    return <NudgeBtn project={ id } useWhite={ true } showText={ true } />;
+    return <NudgeBtn project={ id } useWhite />;
   }
 
   render () {
@@ -173,7 +175,7 @@ class ProjectDetail extends Component {
           </View>
           <View>
             <Text style={[ Styles.whiteText, Styles.description ]}>
-              Testing out a project description with two lines. This should wrap to second line.
+              { project.description }
             </Text>
           </View>
           { this.renderNudgeStuff() }
