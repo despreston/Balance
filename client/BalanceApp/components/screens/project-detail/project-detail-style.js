@@ -36,7 +36,7 @@ export const Styles = StyleSheet.create ({
   updateButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginVertical: 20,
     height: 40
   },
 
@@ -46,7 +46,7 @@ export const Styles = StyleSheet.create ({
     flex: 1,
     justifyContent: 'center',
     height: 40,
-    marginHorizontal: 5
+    marginHorizontal: 25
   },
 
   updateButtonText: {
@@ -71,9 +71,12 @@ export const Styles = StyleSheet.create ({
   finishedProjectText: {
     color: Colors.gray.tundora,
     fontSize: 16,
-    flex: 1,
-    marginBottom: 15,
     textAlign: 'center'
+  },
+
+  infoTextContainer: {
+    flex: 1,
+    justifyContent: 'center'
   },
 
   description: {
@@ -83,6 +86,7 @@ export const Styles = StyleSheet.create ({
   },
 
   info: {
+    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.purple,
@@ -91,12 +95,6 @@ export const Styles = StyleSheet.create ({
 
   bold: {
     fontWeight: '600'
-  },
-
-  nudgeStuff: {
-    alignItems: 'center',
-    paddingTop: 20,
-    paddingBottom: 10
   }
   
 });

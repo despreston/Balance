@@ -16,6 +16,7 @@ import NoteListContainer from '../../note-list/note-list-container';
 import Nudges from '../../nudges/nudges';
 import NudgeBtn from '../../nudges/nudge-button/nudge-button';
 import AddUpdateContainer from '../../add-update/add-update-container';
+import NudgeField from './nudge-field/nudge-field';
 
 // utils
 import emptyNote from '../../../utils/empty-note';
@@ -38,6 +39,10 @@ class ProjectDetail extends Component {
     super(props);
 
     this.state = { addUpdateVisible: false };
+
+    this.pastNotes = this.notesForType('Past');
+    this.futureNotes = this.notesForType('Future');
+    this.futureNote = this.getFutureNote();
   }
 
   notesForType (type) {
@@ -46,6 +51,26 @@ class ProjectDetail extends Component {
 
   toggleAddUpdateModal () {
     this.setState({ addUpdateVisible: !this.state.addUpdateVisible });
+  }
+
+  getFutureNote () {
+    const { project } = this.props;
+
+    if (this.futureNotes.length > 0) {
+      return this.futureNotes.reduce((latest, note) => {
+        return note.lastUpdated.getTime() > latest.lastUpdated.getTime()
+          ? note
+          : latest;
+      }, this.futureNotes[0]);
+    }
+
+    else if (project.Future) {
+      return project.Future;
+    }
+
+    else {
+      return emptyNote(project, 'Future');
+    }
   }
 
   renderPastNotes (notes) {
@@ -82,7 +107,7 @@ class ProjectDetail extends Component {
 
     if (project.status === 'finished') {
       return (
-        <View style={ Styles.updateButtonContainer }>
+        <View style={ Styles.infoTextContainer }>
           <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
             This project has been marked as finished. {"\n"} Nice job! 🎉
           </Text>
@@ -136,27 +161,7 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const { project, saveNote, note } = this.props;
-
-    let pastNotes = this.notesForType('Past');
-    let futureNotes = this.notesForType('Future');
-    let futureNote;
-
-    if (futureNotes.length > 0) {
-      futureNote = futureNotes.reduce((latest, note) => {
-        return note.lastUpdated.getTime() > latest.lastUpdated.getTime()
-          ? note
-          : latest;
-      }, futureNotes[0]);
-    }
-
-    else if (project.Future) {
-      futureNote = project.Future;
-    }
-
-    else {
-      futureNote = emptyNote(project, 'Future');
-    }
+    const { project, saveNote } = this.props;
 
     return (
       <ScrollView
@@ -173,21 +178,27 @@ class ProjectDetail extends Component {
               <Text style={ Styles.bold }> { project.owner[0].username }</Text>
             </Text>
           </View>
-          <View>
+          <View style={ Styles.infoTextContainer }>
             <Text style={[ Styles.whiteText, Styles.description ]}>
-              { project.description }
+              { 
+                project.description ||
+                <Text style={{ opacity: 0.9 }}>No description</Text>
+              }
             </Text>
           </View>
-          { this.renderNudgeStuff() }
           { this.renderUpdateButton() }
         </View>
+        <NudgeField project={ project } />
         <View style={ Styles.container }>
-          { project.status === 'active' && <FutureNote note={ futureNote }/> }
+          {
+            project.status === 'active' &&
+            <FutureNote note={ this.futureNote }/>
+          }
           <View style={ Styles.pastNotesView }>
             <Text style={ [Styles.finishedTitleText, Styles.bold] }>
               Completed
             </Text>
-            { this.renderPastNotes(pastNotes) }
+            { this.renderPastNotes(this.pastNotes) }
           </View>
         </View>
         <AddUpdateContainer

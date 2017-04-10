@@ -72,7 +72,7 @@ export default class Nudges extends Component {
       case (numOfNudgers < 6): return 'want an';
       case (numOfNudgers > 6):
         let remaining = numOfNudgers - 5;
-        return `and ${remaining} others want an`;
+        return `+${remaining} others want an`;
       default: return null;
     }
   }
