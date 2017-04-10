@@ -13,8 +13,6 @@ import { Styles } from './project-detail-style';
 // Components
 import FutureNote from './future-note/future-note';
 import NoteListContainer from '../../note-list/note-list-container';
-import Nudges from '../../nudges/nudges';
-import NudgeBtn from '../../nudges/nudge-button/nudge-button';
 import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
 
@@ -132,32 +130,9 @@ class ProjectDetail extends Component {
   renderNudgeStuff () {
     const { project, userIsOwner } = this.props;
 
-    if (project.status !== 'active') {
-      return null;
-    }
-
-    return (
-      <View style={ Styles.nudgeStuff }>
-        { !userIsOwner && this.renderNudgeButton(project._id) }
-        { this.renderNudges(project.nudgeUsers) }
-      </View>
-    );
-  }
-
-  renderNudges (nudgeUsers) {
-    if (!nudgeUsers || nudgeUsers.length === 0) { return null; }
-
-    return (
-      <Nudges
-        nudgeUsers={ nudgeUsers }
-        imageSize={ 30 }
-        textStyle={ Styles.whiteText }
-      />
-    );
-  }
-
-  renderNudgeButton (id) {
-    return <NudgeBtn project={ id } useWhite />;
+    return project.status === 'active'
+      ? <NudgeField hideButton={ userIsOwner } project={ project } />
+      : null;
   }
 
   render () {
@@ -188,7 +163,7 @@ class ProjectDetail extends Component {
           </View>
           { this.renderUpdateButton() }
         </View>
-        <NudgeField project={ project } />
+        { this.renderNudgeStuff() }
         <View style={ Styles.container }>
           {
             project.status === 'active' &&

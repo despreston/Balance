@@ -15,6 +15,10 @@ export default StyleSheet.create ({
     flex: 1
   },
 
+  center: {
+    alignItems: 'center'
+  },
+
   emptyText: {
     color: Colors.gray.tundora,
     fontSize: 13

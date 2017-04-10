@@ -7,7 +7,8 @@ import Nudges from '../../../nudges/nudges';
 export default class NudgeField extends Component {
 
   static propTypes = {
-    project: PropTypes.object.isRequired
+    project: PropTypes.object.isRequired,
+    hideButton: PropTypes.bool.isRequired
   }
 
   constructor (props) {
@@ -37,10 +38,13 @@ export default class NudgeField extends Component {
   render () {
     return (
       <View style={ Styles.container }>
-        <View style={ Styles.button }>
+      {
+        !this.props.hideButton &&
+        (<View style={ Styles.button }>
           <NudgeBtn project={ this.props.project._id } />
-        </View>
-        <View style={ Styles.nudges }>
+        </View>)
+      }
+        <View style={[ Styles.nudges, (this.props.hideButton && Styles.center) ]}>
           { this.renderNudges() }
         </View>
       </View>
