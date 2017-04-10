@@ -51,6 +51,12 @@ class ProjectDetail extends Component {
     this.setState({ addUpdateVisible: !this.state.addUpdateVisible });
   }
 
+  goToAuthor () {
+    this.props.nav('UserProfile', {
+      userId: this.props.project.owner[0].userId
+    });
+  }
+
   getFutureNote () {
     const { project } = this.props;
 
@@ -136,7 +142,7 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const { project, saveNote } = this.props;
+    const { project, saveNote, nav } = this.props;
 
     return (
       <ScrollView
@@ -150,7 +156,12 @@ class ProjectDetail extends Component {
             </Text>
             <Text style={ [Styles.author, Styles.whiteText] }>
               Started by
-              <Text style={ Styles.bold }> { project.owner[0].username }</Text>
+              <Text
+                onPress={ () => this.goToAuthor() }
+                style={[ Styles.bold, { flex: 1 } ]}
+              >
+                { ` ${project.owner[0].username}` }
+              </Text>
             </Text>
           </View>
           <View style={ Styles.infoTextContainer }>
