@@ -6,12 +6,7 @@ import { addReaction } from '../../../actions';
 
 class AddReaction extends Component {
 
-  static mapStateToProps (state) {
-
-  }
-
-  onClick () {
-
+  test () {
     this.props.addReaction('😄', '58da814eab025b03b13695b3');
   }
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Note = require('./Note');
 
 let Reaction = new mongoose.Schema ({
 
@@ -33,6 +34,19 @@ Reaction.virtual('user', {
   justOne: true
 });
 
+Reaction.post('remove', function(reaction, next) {
+
+  // Remove the reaction from the Note
+  Note
+  .findOne({ _id: reaction.note })
+  .then(note => {
+    const idx = note.reactions.findIndex(r => r._id === reaction._id);
+    note.reactions.splice(idx);
+    note.save();
+    next();
+  });
+
+});
 
 Reaction.pre('save', function(next) {
 

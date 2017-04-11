@@ -10,7 +10,8 @@ import Styles from './reactions-styles';
 export default class Reactions extends Component {
 
   static propTypes = {
-    reactions: PropTypes.array
+    reactions: PropTypes.array,
+    note: PropTypes.string.isRequired
   }
 
   constructor (props) {
@@ -23,16 +24,23 @@ export default class Reactions extends Component {
     this.setState({ reactions: this.keyByReaction(nextProps.reactions) });
   }
 
+  // creates a [ userId, reaction _id ] pair
+  userReactionTuple (user, reactionId) {
+    return [ user, reactionId ];
+  }
+
   keyByReaction (reactions) {
     let obj = {};
 
     if (reactions.length < 1) { return obj; }
 
     reactions.forEach(reaction => {
+      let userReactionTuple = this.userReactionTuple(reaction.userId, reaction._id);
+
       if (obj[reaction.reaction]) {
-        obj[reaction.reaction]++;
+        obj[reaction.reaction].push(userReactionTuple);
       } else {
-        obj[reaction.reaction] = 1;
+        obj[reaction.reaction] = [ userReactionTuple ];
       }
     });
 
@@ -41,7 +49,14 @@ export default class Reactions extends Component {
 
   renderReactions () {
     return Object.keys(this.state.reactions).map((reaction, i) => {
-      return <Reaction key={ i } reaction={ reaction } count={ this.state.reactions[reaction] }/>;
+      return (
+        <Reaction
+          key={ i }
+          note={ this.props.note }
+          reaction={ reaction }
+          users={ this.state.reactions[reaction] }
+        />
+      );
     });
   }
 

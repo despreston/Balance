@@ -19,6 +19,8 @@ export const RECEIVE_NOTES = 'RECEIVE_NOTES';
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 
+export const REMOVE_REACTION = 'REMOVE_REACTION';
+
 export const RESET = 'RESET';
 
 /**
@@ -79,6 +81,18 @@ export function removeComment (comment) {
   return {
     type: REMOVE_COMMENT,
     comment
+  };
+};
+
+/**
+ * removes a single reaction
+ * @param {String} reaction The _id of the reaction to remove
+ * @return {action}
+ */
+export function removeReaction (reaction) {
+  return {
+    type: REMOVE_REACTION,
+    reaction
   };
 };
 
@@ -401,4 +415,15 @@ export function addReaction (reaction, note) {
   const opts = { body: { reaction }, method: 'POST' };
 
   return apiDispatch(`notes/${note}/reactions`, receiveNotes, opts);
+};
+
+/**
+ * Delete a reaction
+ * @param {String} reaction The _id of the reaction to remove
+ * @param {Promise}
+ */
+export function deleteReaction (reaction) {
+  const opts = { method: 'DELETE' };
+
+  return apiDispatch(`reactions/${reaction}`, removeReaction, opts);
 };
