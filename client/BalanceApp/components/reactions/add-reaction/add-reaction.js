@@ -6,7 +6,12 @@ import { addReaction } from '../../../actions';
 
 class AddReaction extends Component {
 
-  test () {
+  static mapStateToProps (state) {
+
+  }
+
+  onClick () {
+
     this.props.addReaction('😄', '58da814eab025b03b13695b3');
   }
 
@@ -24,4 +29,7 @@ class AddReaction extends Component {
 
 }
 
-export default connect(null, { addReaction })(AddReaction);
+export default connect(
+  AddReaction.mapStateToProps,
+  { addReaction }
+)(AddReaction);

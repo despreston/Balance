@@ -9,24 +9,9 @@ import NoteList from './note-list';
 // actions
 import { requestNotes } from '../../actions';
 
-function mapStateToProps (state, ownProps) {
-
-  /**
-   * Optionally, if no query is given, notes can manually be given to 
-   * NoteListContainer. If a query is given, notes will be requested from the
-   * server.
-   */
-  const notes = ownProps.query ? ownProps.selector(state.notes) : ownProps.notes;
-
-  return { notes };
-}
-
-const mapDispatchToProps = { requestNotes };
-
 class NoteListContainer extends Component {
 
   static propTypes = {
-
     // function to exec when note is selected
     onSelect: PropTypes.func.isRequired,
 
@@ -45,6 +30,19 @@ class NoteListContainer extends Component {
     // @param {object} notes from redux state
     // @return {array}
     selector: PropTypes.func
+  }
+
+  static mapStateToProps (state, ownProps) {
+    /**
+     * Optionally, if no query is given, notes can manually be given to 
+     * NoteListContainer. If a query is given, notes will be requested from the
+     * server.
+     */
+    const notes = ownProps.query
+      ? ownProps.selector(state.notes)
+      : ownProps.notes;
+
+    return { notes };
   }
 
   constructor (props) {
@@ -83,4 +81,4 @@ class NoteListContainer extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoteListContainer);
+export default connect(NoteListContainer.mapStateToProps, { requestNotes })(NoteListContainer);
