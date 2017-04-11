@@ -11,27 +11,6 @@ class ReactionsContainer extends Component {
     note: PropTypes.string.isRequired
   }
 
-  // /**
-  //  * Handles tapping on an existing reaction
-  //  * If the user has already added that reaction, then delete the reaction
-  //  * otherwise, add the reaction to the note
-  //  *
-  //  * @param {String} reaction
-  //  * @param {String} note The _id of the note
-  //  * @returns {Promise}
-  //  */
-  // onReactionTap (reaction, note) {
-  //   let existing = this.props.reactions.find(r => {
-  //     return r.userId === this.props.loggedInUser && r.reaction === reaction;
-  //   });
-
-  //   if (existing) {
-  //     return this.props.deleteReaction(existing._id);
-  //   }
-
-  //   return this.props.addReaction(reaction, note);
-  // }
-
   render () {
     return <Reactions note={ this.props.note } reactions={ this.props.reactions }/>;
   }
