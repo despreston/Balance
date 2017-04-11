@@ -94,13 +94,7 @@ module.exports = ({ get, post, put }) => {
 
     Reaction
     .create(body)
-    .then((reaction, err) => {
-
-      if (err) {
-        log.error(err);
-        return res.send(500);
-      }
-
+    .then(reaction => {
       Note
       .findOne({ _id: body.note })
       .populate('project', 'title privacyLevel')
@@ -112,11 +106,24 @@ module.exports = ({ get, post, put }) => {
           note.reactions = [reaction._id];
         }
 
-        note.save();
-        delete note.user;
-        delete note.comments;
+        note.save(err => {
+          if (err) {
+            log.error(err);
+            return res.send(500);
+          }
 
-        return res.send(201, note.toObject());
+          delete note.user;
+          delete note.comments;
+          
+          note.populate('reactions', 'userId reaction', err => {
+            if (err) {
+              log.error(err);
+              return res.send(500);
+            }
+            return res.send(200, note.toObject());
+          });
+        });
+        
       })
       .catch(err => {
         log.error(err);

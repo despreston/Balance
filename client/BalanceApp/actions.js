@@ -87,12 +87,14 @@ export function removeComment (comment) {
 /**
  * removes a single reaction
  * @param {String} reaction The _id of the reaction to remove
+ * @param {String} note The _id of the note
  * @return {action}
  */
-export function removeReaction (reaction) {
+export function removeReaction (reaction, note) {
   return {
     type: REMOVE_REACTION,
-    reaction
+    reaction,
+    note
   };
 };
 
@@ -420,10 +422,14 @@ export function addReaction (reaction, note) {
 /**
  * Delete a reaction
  * @param {String} reaction The _id of the reaction to remove
+ * @param {String} note The _id of the note
  * @param {Promise}
  */
-export function deleteReaction (reaction) {
+export function deleteReaction (reaction, note) {
   const opts = { method: 'DELETE' };
 
-  return apiDispatch(`reactions/${reaction}`, removeReaction, opts);
+  return dispatch => {
+    return api(`reactions/${reaction}`, opts)
+      .then(() => dispatch(removeReaction(reaction, note)));
+  };
 };

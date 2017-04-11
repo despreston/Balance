@@ -33,6 +33,7 @@ export default StyleSheet.create  ({
   },
 
   plus: {
+    paddingRight: 3,
     color: Colors.gray.silver,
     fontSize: 10
   }

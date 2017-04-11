@@ -25,7 +25,7 @@ class Reaction extends Component {
     });
 
     if (userReactionPair) {
-      this.props.deleteReaction(userReactionPair[1]);
+      this.props.deleteReaction(userReactionPair[1], this.props.note);
     } else {
       this.props.addReaction(this.props.reaction, this.props.note);
     }
