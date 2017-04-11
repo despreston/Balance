@@ -390,3 +390,15 @@ export function deleteComment (comment) {
       });
   };
 };
+
+/**
+ * Add a reaction to a note
+ * @param {String} reaction
+ * @param {String} note The _id of the note
+ * @param {Promise}
+ */
+export function addReaction (reaction, note) {
+  const opts = { body: { reaction }, method: 'POST' };
+
+  return apiDispatch(`notes/${note}/reactions`, receiveNotes, opts);
+};

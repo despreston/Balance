@@ -18,7 +18,7 @@ function mapStateToProps (state, ownProps) {
    */
   const notes = ownProps.query ? ownProps.selector(state.notes) : ownProps.notes;
 
-  return { notes }
+  return { notes };
 }
 
 const mapDispatchToProps = { requestNotes };
@@ -50,10 +50,22 @@ class NoteListContainer extends Component {
   constructor (props) {
     super(props);
 
-    props.query && props.requestNotes(props.query);
+    this.state = { loading: !!props.query };
+
+    if (props.query) {
+      this.requestNotes();
+    }
+  }
+
+  requestNotes () {
+    this.props.requestNotes(this.props.query).then(() => {
+      this.setState({ loading: false });
+    });
   }
 
   render () {
+    if (this.state.loading) { return null; }
+
     const {
       onSelect,
       notes,

@@ -42,7 +42,7 @@ function NoteListItem ({ note, showProjectName }) {
         <View style={ Styles.comment }>
           <CommentButton onPress={ () => null } count={ note.commentCount || 0 } />
         </View>
-        <ReactionsContainer />
+        <ReactionsContainer reactions={ note.reactions }/>
       </View>
     </View>
   );
@@ -52,7 +52,8 @@ NoteListItem.propTypes = {
   note: PropTypes.shape({
     type: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired
+    createdAt: PropTypes.instanceOf(Date).isRequired,
+    reactions: PropTypes.array
   }).isRequired,
   showProjectName: PropTypes.bool
 };

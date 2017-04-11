@@ -11,10 +11,8 @@ import NavBtn from '../../navigation/nav-btn';
 import { styles } from '../../navigation/navigation-styles';
 
 
-function mapStateToProps (state) {
-  return {
-    loggedInUser: state.loggedInUser
-  }
+function mapStateToProps ({ loggedInUser }) {
+  return { loggedInUser };
 }
 
 class MainScene extends Component {

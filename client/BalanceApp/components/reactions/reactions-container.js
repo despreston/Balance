@@ -6,10 +6,12 @@ import Reactions from './reactions';
 
 class ReactionsContainer extends Component {
 
+  static propTypes = {
+    reactions: PropTypes.array
+  }
+
   render () {
-    return (
-      <Reactions />
-    );
+    return <Reactions reactions={ this.props.reactions }/>;
   }
 
 }

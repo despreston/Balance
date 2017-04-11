@@ -9,23 +9,39 @@ import Styles from './reactions-styles';
 
 export default class Reactions extends Component {
 
+  static propTypes = {
+    reactions: PropTypes.array
+  }
+
   constructor (props) {
     super(props);
 
-    this.reactions = {
-      '👍': 3,
-      '😄': 1,
-      '🎉': 8
-    };
+    this.state = { reactions: this.keyByReaction(props.reactions) };
+  }
 
+  componentWillReceiveProps (nextProps) {
+    this.setState({ reactions: this.keyByReaction(nextProps.reactions) });
+  }
+
+  keyByReaction (reactions) {
+    let obj = {};
+
+    if (reactions.length < 1) { return obj; }
+
+    reactions.forEach(reaction => {
+      if (obj[reaction.reaction]) {
+        obj[reaction.reaction]++;
+      } else {
+        obj[reaction.reaction] = 1;
+      }
+    });
+
+    return obj;
   }
 
   renderReactions () {
-    let key = 0;
-
-    return Object.keys(this.reactions).map(reaction => {
-      key++;
-      return <Reaction key={ key } reaction={ reaction } count={ this.reactions[reaction] }/>;
+    return Object.keys(this.state.reactions).map((reaction, i) => {
+      return <Reaction key={ i } reaction={ reaction } count={ this.state.reactions[reaction] }/>;
     });
   }
 
