@@ -9,7 +9,7 @@ export default class Expand extends Component {
     return (
       <View>
         <TouchableOpacity
-          style={[ Styles.iconContainer, Styles.reaction ]}
+          style={ Styles.iconContainer }
           onPress={ () => null }
         >
           <Image

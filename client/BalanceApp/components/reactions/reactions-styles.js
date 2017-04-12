@@ -12,13 +12,10 @@ export default StyleSheet.create  ({
     borderRadius: 5,
     height: 25,
     paddingVertical: 2,
-    paddingHorizontal: 3,
+    paddingHorizontal: 4,
     borderColor: Colors.gray.porcelain,
     flexDirection: 'row',
-    alignItems: 'center'
-  },
-
-  reaction: {
+    alignItems: 'center',
     marginLeft: 5
   },
 

@@ -136,9 +136,9 @@ class ProjectDetail extends Component {
   renderNudgeStuff () {
     const { project, userIsOwner } = this.props;
 
-    return project.status === 'active'
-      ? <NudgeField hideButton={ userIsOwner } project={ project } />
-      : null;
+    return project.status !== 'active' || (userIsOwner && project.nudgeUsers.length < 1)
+      ? null
+      : <NudgeField hideButton={ userIsOwner } project={ project } />;
   }
 
   render () {
@@ -165,7 +165,7 @@ class ProjectDetail extends Component {
             </Text>
           </View>
           <View style={ Styles.infoTextContainer }>
-            <Text style={[ Styles.whiteText, Styles.description ]}>
+            <Text style={ [Styles.whiteText, Styles.description] }>
               { 
                 project.description ||
                 <Text style={{ opacity: 0.9 }}>No description</Text>

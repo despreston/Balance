@@ -38,8 +38,8 @@ class Reaction extends Component {
 
   containerStyles () {
     return this.isSelected()
-      ? [ Styles.iconContainer, Styles.reaction, ReactionStyles.selectedContainer ]
-      : [ Styles.iconContainer, Styles.reaction ];
+      ? [ Styles.iconContainer, ReactionStyles.selectedContainer ]
+      : [ Styles.iconContainer ];
   }
 
   countStyles () {

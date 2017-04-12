@@ -10,6 +10,8 @@ export default StyleSheet.create ({
 
   emojiPicker: {
     height: 400,
+    marginHorizontal: 10,
+    borderRadius: 5,
     backgroundColor: Colors.gray.porcelain
   },
 
