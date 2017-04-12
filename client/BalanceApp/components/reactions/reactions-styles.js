@@ -10,7 +10,9 @@ export default StyleSheet.create  ({
   iconContainer: {
     borderWidth: 1,
     borderRadius: 5,
-    padding: 2,
+    height: 25,
+    paddingVertical: 2,
+    paddingHorizontal: 3,
     borderColor: Colors.gray.porcelain,
     flexDirection: 'row',
     alignItems: 'center'
@@ -18,13 +20,6 @@ export default StyleSheet.create  ({
 
   reaction: {
     marginLeft: 5
-  },
-
-  count: {
-    textAlign: 'center',
-    fontSize: 12,
-    paddingLeft: 3,
-    color: Colors.gray.silver
   },
 
   icon: {

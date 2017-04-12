@@ -1,24 +1,52 @@
 import React, { Component, PropTypes } from 'react';
-import { TouchableOpacity, Image, Text } from 'react-native';
+import { TouchableOpacity, View, Image, Text } from 'react-native';
 import { connect } from 'react-redux';
 import Styles from '../reactions-styles';
 import { addReaction } from '../../../actions';
+import ReactionSelector from '../../reaction-selector/reaction-selector';
 
 class AddReaction extends Component {
 
-  test () {
-    this.props.addReaction('😄', '58da814eab025b03b13695b3');
+  constructor (props) {
+    super(props);
+
+    this.state = { selectorVisible: false }
+
+    this.onSelectorClose = this.onSelectorClose.bind(this);
+    this.openSelector = this.openSelector.bind(this);
+  }
+
+  openSelector () {
+    this.setState({ selectorVisible: true });
+  }
+
+  onSelectorClose (emoji) {
+    this.setState({ selectorVisible: false });
+
+    if (emoji) {
+      this.props.addReaction(emoji, this.props.note)
+    }
   }
 
   render () {
     return (
-      <TouchableOpacity style={ Styles.iconContainer } onPress={ () => this.test() }>
-        <Text style={ Styles.plus }>✚</Text>
-        <Image
-          style={ Styles.icon }
-          source={ require('../../../assets/icons/add-reaction.png') }
+      <View>
+        <TouchableOpacity
+          style={[ Styles.iconContainer, { flex: 1 } ]}
+          onPress={ () => this.openSelector() }
+        >
+          <Text style={ Styles.plus }>✚</Text>
+          <Image
+            style={ Styles.icon }
+            source={ require('../../../assets/icons/add-reaction.png') }
+          />
+        </TouchableOpacity>
+
+        <ReactionSelector
+          visible={ this.state.selectorVisible }
+          close={ this.onSelectorClose }
         />
-      </TouchableOpacity>
+      </View>
     )
   }
 

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity, Text } from 'react-native';
 import Styles from '../reactions-styles';
+import ReactionStyles from './reaction-styles';
 import { addReaction, deleteReaction } from '../../../actions';
 
 class Reaction extends Component {
@@ -20,9 +21,7 @@ class Reaction extends Component {
   }
 
   onTap () {
-    let userReactionPair = this.props.users.find(userReactionPair => {
-      return userReactionPair[0] === this.props.loggedInUser;
-    });
+    let userReactionPair = this.isSelected();
 
     if (userReactionPair) {
       this.props.deleteReaction(userReactionPair[1], this.props.note);
@@ -31,14 +30,32 @@ class Reaction extends Component {
     }
   }
 
+  isSelected () {
+    return this.props.users.find(userReactionPair => {
+      return userReactionPair[0] === this.props.loggedInUser;
+    });
+  }
+
+  containerStyles () {
+    return this.isSelected()
+      ? [ Styles.iconContainer, Styles.reaction, ReactionStyles.selectedContainer ]
+      : [ Styles.iconContainer, Styles.reaction ];
+  }
+
+  countStyles () {
+    return this.isSelected()
+      ? [ ReactionStyles.selectedCount ]
+      : [ ReactionStyles.count ];
+  }
+
   render () {
     return (
       <TouchableOpacity
-        style={[ Styles.iconContainer, Styles.reaction ]}
+        style={ this.containerStyles() }
         onPress={ () => this.onTap() }
       >
         <Text>{ this.props.reaction }</Text>
-        <Text style={ Styles.count }>{ this.props.users.length }</Text>
+        <Text style={ this.countStyles() }>{ this.props.users.length }</Text>
       </TouchableOpacity>
     );
   }

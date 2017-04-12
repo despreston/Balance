@@ -4,6 +4,7 @@ import { View } from 'react-native';
 // components
 import AddReaction from './add-reaction/add-reaction';
 import Reaction from './reaction/reaction';
+import Expand from './expand/expand';
 
 import Styles from './reactions-styles';
 
@@ -11,7 +12,9 @@ export default class Reactions extends Component {
 
   static propTypes = {
     reactions: PropTypes.array,
-    note: PropTypes.string.isRequired
+    note: PropTypes.string.isRequired,
+    maxList: PropTypes.number.isRequired,
+    hideExpand: PropTypes.bool
   }
 
   constructor (props) {
@@ -48,7 +51,9 @@ export default class Reactions extends Component {
   }
 
   renderReactions () {
-    return Object.keys(this.state.reactions).map((reaction, i) => {
+    const reactions = Object.keys(this.state.reactions).slice(0, this.props.maxList);
+
+    return reactions.map((reaction, i) => {
       return (
         <Reaction
           key={ i }
@@ -63,8 +68,9 @@ export default class Reactions extends Component {
   render () {
     return (
       <View style={ Styles.reactions }>
-        <AddReaction />
+        <AddReaction note={ this.props.note }/>
         { this.renderReactions.call(this) }
+        { !this.props.hideExpand && <Expand /> }
       </View>
     );
   }

@@ -1,5 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { View, TouchableOpacity, Text, Image } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Image
+} from 'react-native';
 import { connect } from 'react-redux';
 
 // actions

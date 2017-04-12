@@ -20,8 +20,6 @@ let Reaction = new mongoose.Schema ({
 
   createdAt: Date
 
-}, {
-  toObject: { virtuals: true }
 });
 
 /**
@@ -36,16 +34,15 @@ Reaction.virtual('user', {
 
 Reaction.post('remove', function(reaction, next) {
 
-  // Remove the reaction from the Note
+  // Remove the reaction from the Note. Using 'update' so the pre 'save' hooks
+  // on the Note model are not triggered
   Note
-  .findOne({ _id: reaction.note })
-  .then(note => {
-    const idx = note.reactions.findIndex(r => r._id === reaction._id);
-    note.reactions.splice(idx);
-    note.save();
-    next();
-  });
+  .update(
+    { _id: reaction.note },
+    { $pull: { reactions: reaction._id } }
+  ).exec();
 
+  next();
 });
 
 Reaction.pre('save', function(next) {
@@ -57,7 +54,6 @@ Reaction.pre('save', function(next) {
   }
 
   next();
-  
 });
 
 module.exports = mongoose.model("reaction", Reaction);

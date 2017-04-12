@@ -95,41 +95,25 @@ module.exports = ({ get, post, put }) => {
     Reaction
     .create(body)
     .then(reaction => {
-      Note
-      .findOne({ _id: body.note })
-      .populate('project', 'title privacyLevel')
-      .then(note => {
 
-        if (note.reactions) {
-          note.reactions.push(reaction._id);
-        } else {
-          note.reactions = [reaction._id];
-        }
+      return Note
+        .findByIdAndUpdate(
+          { _id: body.note },
+          { $push: { reactions: reaction._id } },
+          { new: true }
+        )
+        .populate('project', 'title privacyLevel')
+        .populate('author', 'userId username picture')
+        .populate('reactions', 'userId reaction')
+        .exec();
 
-        note.save(err => {
-          if (err) {
-            log.error(err);
-            return res.send(500);
-          }
-
-          delete note.user;
-          delete note.comments;
-          
-          note.populate('reactions', 'userId reaction', err => {
-            if (err) {
-              log.error(err);
-              return res.send(500);
-            }
-            return res.send(200, note.toObject());
-          });
-        });
-        
-      })
-      .catch(err => {
-        log.error(err);
-        return res.send(500);
-      });
-
+    })
+    .then(note => {
+      note = note.toObject();
+      delete note.user;
+      delete note.comments;
+      note.reactions.forEach(r => delete r.user);
+      return res.send(200, note);
     })
     .catch(err => {
       log.error(err);

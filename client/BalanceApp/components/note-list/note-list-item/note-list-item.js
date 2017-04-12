@@ -42,7 +42,12 @@ function NoteListItem ({ note, showProjectName }) {
         <View style={ Styles.comment }>
           <CommentButton onPress={ () => null } count={ note.commentCount || 0 } />
         </View>
-        <ReactionsContainer note={ note._id } reactions={ note.reactions }/>
+        <ReactionsContainer
+          hideExpand
+          maxList={ 5 }
+          note={ note._id }
+          reactions={ note.reactions }
+        />
       </View>
     </View>
   );
