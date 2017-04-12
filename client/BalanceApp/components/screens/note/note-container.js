@@ -10,23 +10,23 @@ import Icon from '../../navigation/icon';
 import Note from './note';
 import EditNote from '../../edit-note/edit-note';
 
-function mapStateToProps (state, ownProps) {
-  let noteId = ownProps.navigation.state.params.id;
-
-  let comments = Object.keys(state.comments)
-    .map(id => state.comments[id])
-    .filter(c => c.note === noteId);
-
-  return {
-    note: state.notes[noteId],
-    comments,
-    loggedInUser: state.loggedInUser
-  };
-}
-
-const mapDispatchToProps = { fetchNote, createComment, saveNote };
-
 class NoteContainer extends Component {
+
+  static mapStateToProps (state, ownProps) {
+    let noteId = ownProps.navigation.state.params.id;
+
+    let comments = Object.keys(state.comments)
+      .map(id => state.comments[id])
+      .filter(c => c.note === noteId);
+
+    return {
+      note: state.notes[noteId],
+      comments,
+      loggedInUser: state.loggedInUser
+    };
+  }
+
+  static mapDispatchToProps = { fetchNote, createComment, saveNote };
 
   static navigationOptions = {
     header: ({ state, navigate }, defaultHeader) => {
@@ -109,4 +109,7 @@ class NoteContainer extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoteContainer);
+export default connect(
+  NoteContainer.mapStateToProps,
+  NoteContainer.mapDispatchToProps)
+(NoteContainer);

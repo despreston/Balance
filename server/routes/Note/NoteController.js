@@ -1,9 +1,14 @@
 const Note = require('../../models/Note');
 const Project = require('../../models/Project');
 const AccessControl = require('../../utils/access-control');
+const Reaction = require('../../models/Reaction');
 const log = require('logbro');
 
 module.exports = ({ get, post, put }) => {
+
+  get('notes/:_id/reactions', ({ params, user }, res) => {
+    return res.send(204);
+  });
 
   get('notes/:_id', ({ params, user }, res) => {
     Note
@@ -13,6 +18,7 @@ module.exports = ({ get, post, put }) => {
       populate: { path: 'commenter', select: 'userId username picture' }
     })
     .populate('project', 'title privacyLevel')
+    .populate('reactions', 'userId reaction')
     .then(note => {
       note = note.toObject();
 
@@ -49,6 +55,7 @@ module.exports = ({ get, post, put }) => {
     .find(params)
     .sort({'createdAt': -1})
     .populate('project', 'title privacyLevel')
+    .populate('reactions', 'userId reaction')
     .then(notes => {
 
       if (notes.length === 0) {
@@ -72,6 +79,44 @@ module.exports = ({ get, post, put }) => {
     .then(notes => res.send(200, notes))
     .catch(err => {
       log.error(err)
+      return res.send(500);
+    });
+  });
+
+  post('notes/:_id/reactions', ({ params, body, user }, res) => {
+    body = JSON.parse(body);
+    body.userId = user.sub;
+    body.note = params._id;
+
+    if (!body.reaction) {
+      return res.send(400, 'Missing parameter: reaction');
+    }
+
+    Reaction
+    .create(body)
+    .then(reaction => {
+
+      return Note
+        .findByIdAndUpdate(
+          { _id: body.note },
+          { $push: { reactions: reaction._id } },
+          { new: true }
+        )
+        .populate('project', 'title privacyLevel')
+        .populate('author', 'userId username picture')
+        .populate('reactions', 'userId reaction')
+        .exec();
+
+    })
+    .then(note => {
+      note = note.toObject();
+      delete note.user;
+      delete note.comments;
+      note.reactions.forEach(r => delete r.user);
+      return res.send(200, note);
+    })
+    .catch(err => {
+      log.error(err);
       return res.send(500);
     });
   });

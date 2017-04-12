@@ -40,9 +40,14 @@ function NoteListItem ({ note, showProjectName }) {
       <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
       <View style={ Styles.bottom }>
         <View style={ Styles.comment }>
-          <CommentButton onPress={ () => null } count={ note.commentCount || 0 } />
+          <CommentButton count={ note.commentCount || 0 } />
         </View>
-        <ReactionsContainer />
+        <ReactionsContainer
+          hideExpand
+          maxList={ 5 }
+          note={ note._id }
+          reactions={ note.reactions }
+        />
       </View>
     </View>
   );
@@ -52,7 +57,8 @@ NoteListItem.propTypes = {
   note: PropTypes.shape({
     type: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired
+    createdAt: PropTypes.instanceOf(Date).isRequired,
+    reactions: PropTypes.array
   }).isRequired,
   showProjectName: PropTypes.bool
 };

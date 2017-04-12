@@ -19,6 +19,8 @@ export const RECEIVE_NOTES = 'RECEIVE_NOTES';
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 
+export const REMOVE_REACTION = 'REMOVE_REACTION';
+
 export const RESET = 'RESET';
 
 /**
@@ -79,6 +81,20 @@ export function removeComment (comment) {
   return {
     type: REMOVE_COMMENT,
     comment
+  };
+};
+
+/**
+ * removes a single reaction
+ * @param {String} reaction The _id of the reaction to remove
+ * @param {String} note The _id of the note
+ * @return {action}
+ */
+export function removeReaction (reaction, note) {
+  return {
+    type: REMOVE_REACTION,
+    reaction,
+    note
   };
 };
 
@@ -388,5 +404,32 @@ export function deleteComment (comment) {
         dispatch(removeComment(comment));
         return dispatch(receiveComments(result));
       });
+  };
+};
+
+/**
+ * Add a reaction to a note
+ * @param {String} reaction
+ * @param {String} note The _id of the note
+ * @param {Promise}
+ */
+export function addReaction (reaction, note) {
+  const opts = { body: { reaction }, method: 'POST' };
+
+  return apiDispatch(`notes/${note}/reactions`, receiveNotes, opts);
+};
+
+/**
+ * Delete a reaction
+ * @param {String} reaction The _id of the reaction to remove
+ * @param {String} note The _id of the note
+ * @param {Promise}
+ */
+export function deleteReaction (reaction, note) {
+  const opts = { method: 'DELETE' };
+
+  return dispatch => {
+    return api(`reactions/${reaction}`, opts)
+      .then(() => dispatch(removeReaction(reaction, note)));
   };
 };

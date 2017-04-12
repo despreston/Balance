@@ -13,7 +13,7 @@ let Note = new mongoose.Schema({
   },
 
   project: {
-    type: mongoose.Schema.Types.ObjectId, 
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'project',
     required: true
   },
@@ -26,6 +26,11 @@ let Note = new mongoose.Schema({
   comments: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'comment'
+  }],
+
+  reactions: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'reaction'
   }],
 
   lastUpdated: Date,

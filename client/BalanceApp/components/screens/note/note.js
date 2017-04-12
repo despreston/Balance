@@ -77,13 +77,17 @@ export default class Note extends Component {
           <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
           <View style={ Styles.flexRow }>
             <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
-            <ReactionsContainer />
+            <ReactionsContainer
+              note={ note._id }
+              reactions={ note.reactions }
+              maxList={ 3 }
+            />
           </View>
           {
-            note.comments && 
+            note.comments &&
             <View style={ Styles.comments }>
-              <CommentList 
-                style={ Styles.comments } 
+              <CommentList
+                style={ Styles.comments }
                 comments={ comments }
                 onUserSelect={ user => goToUser(user) }
               />

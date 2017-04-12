@@ -9,22 +9,6 @@ import Icon from '../../navigation/icon';
 // actions
 import { requestNotes } from '../../../actions';
 
-function mapStateToProps (state, { navigation }) {
-  const project = state.projects[navigation.state.params.project];
-
-  // notes for selected project
-  const notes = Object.keys(state.notes)
-    .map(id => state.notes[id])
-    .filter(note => note.project._id === navigation.state.params.project);
-
-  // Logged-in user is the owner of the project
-  const userIsOwner = project.owner[0].userId === state.loggedInUser;
-
-  return { userIsOwner, project, notes };
-}
-
-const mapDispatchToProps = { requestNotes };
-
 class ProjectDetailContainer extends Component {
 
   static propTypes = {
@@ -36,6 +20,20 @@ class ProjectDetailContainer extends Component {
     requestNotes: PropTypes.func.isRequired,
     userIsOwner: PropTypes.bool
   };
+
+  static mapStateToProps (state, { navigation }) {
+    const project = state.projects[navigation.state.params.project];
+
+    // notes for selected project
+    const notes = Object.keys(state.notes)
+      .map(id => state.notes[id])
+      .filter(note => note.project._id === navigation.state.params.project);
+
+    // Logged-in user is the owner of the project
+    const userIsOwner = project.owner[0].userId === state.loggedInUser;
+
+    return { userIsOwner, project, notes };
+  }
 
   static navigationOptions = {
     header: ({ state, navigate }, defaultHeader) => {
@@ -99,4 +97,7 @@ class ProjectDetailContainer extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailContainer);
+export default connect(
+  ProjectDetailContainer.mapStateToProps,
+  { requestNotes }
+)(ProjectDetailContainer);
