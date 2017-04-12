@@ -84,10 +84,10 @@ export default class Note extends Component {
             />
           </View>
           {
-            note.comments && 
+            note.comments &&
             <View style={ Styles.comments }>
-              <CommentList 
-                style={ Styles.comments } 
+              <CommentList
+                style={ Styles.comments }
                 comments={ comments }
                 onUserSelect={ user => goToUser(user) }
               />

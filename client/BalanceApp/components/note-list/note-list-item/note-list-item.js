@@ -40,7 +40,7 @@ function NoteListItem ({ note, showProjectName }) {
       <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
       <View style={ Styles.bottom }>
         <View style={ Styles.comment }>
-          <CommentButton onPress={ () => null } count={ note.commentCount || 0 } />
+          <CommentButton count={ note.commentCount || 0 } />
         </View>
         <ReactionsContainer
           hideExpand
