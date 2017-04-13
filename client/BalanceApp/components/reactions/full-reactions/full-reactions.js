@@ -94,7 +94,9 @@ const ReactionsByUser = ({ user }) => {
         <Text style={ Styles.bold }>{ user.user.username } </Text>
         reacted with
       </Text>
-      <Text>{ user.reactions.map(r => r.reaction).join(' ') }</Text>
+      <Text style={ Styles.reaction }>
+        { user.reactions.map(r => r.reaction).join(' ') }
+      </Text>
     </View>
   )
 };

@@ -33,7 +33,7 @@ class AddUpdateContainer extends Component {
     }
 
     if (future.content !== '') {
-      promises.push(this.props.dispatch(saveNote(future)));
+      promises.push(this.props.dispatch(actions.saveNote(future)));
     }
 
     return Promise.all(promises);

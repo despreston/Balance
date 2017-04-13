@@ -19,12 +19,18 @@ function ProfileInfo ({ user, customTextStyle = [] }) {
       <View style={ Styles.row }>
         <Image style={ Styles.image } source={{ uri: user.picture }} />
         <View style={ Styles.info }>
-          <Text style={ [Styles.name, ...customTextStyle] }>
-            { user.name }{"\n"}
-            <Text style={ [Styles.username, ...customTextStyle] }>
+          <Text
+            adjustsFontSizeToFit
+            minimumFontScale={ 0.8 }
+            style={ [Styles.name, ...customTextStyle] }
+          >
+            { user.name }
+          </Text>
+          <Text
+              style={ [Styles.username, ...customTextStyle] }
+            >
               @{ user.username }
             </Text>
-          </Text>
         </View>
       </View>
       {

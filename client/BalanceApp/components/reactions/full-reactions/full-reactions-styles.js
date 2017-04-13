@@ -61,6 +61,10 @@ export default StyleSheet.create  ({
     fontWeight: 'bold',
     color: Colors.white,
     textAlign: 'center'
+  },
+
+  reaction: {
+    fontSize: 20
   }
 
 });

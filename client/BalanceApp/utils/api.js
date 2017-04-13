@@ -33,7 +33,11 @@ export function api (url, properties = {}, externalUrl = false) {
 export function apiDispatch (url, action, properties = { method: 'GET' }) {
   return dispatch => {
     return api(url, properties)
-      .then(result => dispatch(action(result)))
+      .then(result => {
+        if (action) {
+          return dispatch(action(result));
+        }
+      })
       .catch(err => console.log(err));
   };
 };

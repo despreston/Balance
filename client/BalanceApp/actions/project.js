@@ -1,8 +1,8 @@
 import { apiDispatch } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
+import { invalidate } from './shared';
 
 const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
-const INVALIDATE_PROJECTS = 'INVALIDATE_PROJECTS';
 
 export default {
 

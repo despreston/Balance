@@ -38,7 +38,7 @@ export default StyleSheet.create  ({
 
   commenter: {
     color: Colors.purple,
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: 'bold'
   },
 

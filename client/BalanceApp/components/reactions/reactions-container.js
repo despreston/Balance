@@ -14,14 +14,7 @@ class ReactionsContainer extends Component {
   }
 
   render () {
-    return (
-      <Reactions
-        hideExpand={ this.props.hideExpand }
-        note={ this.props.note }
-        reactions={ this.props.reactions }
-        maxList={ this.props.maxList }
-      />
-    );
+    return <Reactions { ...this.props } />;
   }
 
 }
