@@ -135,8 +135,13 @@ class ProjectDetail extends Component {
 
   renderNudgeStuff () {
     const { project, userIsOwner } = this.props;
+    const ownerAndNoNudges = (
+      userIsOwner &&
+      !project.nudgeUsers ||
+      project.nudgeUsers.length < 1
+    );
 
-    return project.status !== 'active' || (userIsOwner && project.nudgeUsers.length < 1)
+    return project.status !== 'active' || ownerAndNoNudges
       ? null
       : <NudgeField hideButton={ userIsOwner } project={ project } />;
   }

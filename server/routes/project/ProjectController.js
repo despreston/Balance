@@ -98,12 +98,14 @@ module.exports = ({ get, post, del, put }) => {
       Project.findOne({ _id: newProject._id })
       .populate('nudgeUsers', 'userId picture')
       .then(project => {
+
+        project = project.toObject({ virtuals: true });
         project.Past = null;
         project.Future = null;
         
         project = Project.removeExcludedFields(project);
 
-        return res.send(201, project.toObject());
+        return res.send(201, project);
       });
     })
     .catch(() => res.send(500));

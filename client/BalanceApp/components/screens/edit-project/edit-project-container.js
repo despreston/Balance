@@ -78,7 +78,7 @@ class EditProjectContainer extends Component {
     }
 
     this.props.dispatch(actions.saveProject(this.state.project))
-      .then(() => this.props.navigation.goBack());
+    .then(() => this.props.navigation.goBack());
 
   }
 
