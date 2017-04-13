@@ -61,15 +61,6 @@ class ProjectDetailContainer extends Component {
     this.props.navigation.setParams({ showEdit: this.props.userIsOwner });
   }
 
-  componentDidMount () {
-    if (this.props.project._id) {
-      this.props.dispatch(actions.requestNotes([
-        { project: this.props.project._id },
-        { type: 'Past' }
-      ]));
-    }
-  }
-
   render () {
     const {
       project,

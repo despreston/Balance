@@ -23,6 +23,7 @@ class ProjectDetail extends Component {
 
   static propTypes = {
     project: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       status: PropTypes.string.isRequired,
       nudgeUsers: PropTypes.array,
@@ -38,7 +39,6 @@ class ProjectDetail extends Component {
 
     this.state = { addUpdateVisible: false };
 
-    this.pastNotes = this.notesForType('Past');
     this.futureNotes = this.notesForType('Future');
     this.futureNote = this.getFutureNote();
   }
@@ -78,12 +78,15 @@ class ProjectDetail extends Component {
   }
 
   renderPastNotes (notes) {
-    if (notes.length === 0) {
-      return (
-        <Text style={ Styles.emptyText }>
-          Nothing has been done for this project.
-        </Text>
-      );
+    function selector (notes, project) {
+      return Object.keys(notes)
+        .map(id => notes[id])
+        .filter(note => {
+          return (
+            project._id === note.project._id &&
+            note.type === 'Past'
+          );
+        });
     }
 
     const {
@@ -97,9 +100,10 @@ class ProjectDetail extends Component {
     return (
       <NoteListContainer
         showContext
+        query={[{ project: this.props.project._id }, { type: 'Past' }]}
+        selector={ notes => selector(notes, this.props.project) }
         showEdit={ status !== 'finished' && userIsOwner }
         onSelect={ id => nav('Note', { id }) }
-        notes={ notes }
       />
     );
   }
@@ -189,7 +193,7 @@ class ProjectDetail extends Component {
             <Text style={ [Styles.finishedTitleText, Styles.bold] }>
               Completed
             </Text>
-            { this.renderPastNotes(this.pastNotes) }
+            { this.renderPastNotes() }
           </View>
         </View>
         <AddUpdateContainer
