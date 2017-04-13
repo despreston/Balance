@@ -13,9 +13,7 @@ class FullReactions extends Component {
 
   constructor (props) {
     super(props);
-
     this.state = { users: [] };
-
     this.fetchReactions();
   }
 
