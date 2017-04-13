@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 
 // actions
-import { fetchNote, createComment, saveNote } from '../../../actions';
+import actions from '../../../actions/';
 
 // components
 import Icon from '../../navigation/icon';
@@ -25,8 +25,6 @@ class NoteContainer extends Component {
       loggedInUser: state.loggedInUser
     };
   }
-
-  static mapDispatchToProps = { fetchNote, createComment, saveNote };
 
   static navigationOptions = {
     header: ({ state, navigate }, defaultHeader) => {
@@ -52,7 +50,7 @@ class NoteContainer extends Component {
 
     this.toggleEditModal = this.toggleEditModal.bind(this);
 
-    props.fetchNote(props.navigation.state.params.id);
+    props.dispatch(actions.fetchNote(props.navigation.state.params.id));
   }
 
   componentWillMount () {
@@ -80,7 +78,7 @@ class NoteContainer extends Component {
       content
     };
 
-    this.props.createComment(comment);
+    this.props.dispatch(actions.createComment(comment));
   }
 
   toggleEditModal () {
@@ -99,7 +97,7 @@ class NoteContainer extends Component {
         />
         <EditNote
           note={ this.props.note }
-          onSave={ note => this.props.saveNote(note) }
+          onSave={ note => this.props.dispatch(actions.saveNote(note)) }
           onClose={ () => this.toggleEditModal() }
           visible={ this.state.editModalVisible }
         />
@@ -111,5 +109,4 @@ class NoteContainer extends Component {
 
 export default connect(
   NoteContainer.mapStateToProps,
-  NoteContainer.mapDispatchToProps)
-(NoteContainer);
+)(NoteContainer);

@@ -10,15 +10,15 @@ import NavBtn from '../../navigation/nav-btn';
 // styles
 import { styles } from '../../navigation/navigation-styles';
 
-
-function mapStateToProps ({ loggedInUser }) {
-  return { loggedInUser };
-}
-
 class MainScene extends Component {
+
   static propTypes = {
     loggedInUser: PropTypes.string.isRequired
   };
+
+  static mapStateToProps ({ loggedInUser }) {
+    return { loggedInUser };
+  }
 
   static navigationOptions = {
     header: ({ state, navigate, dispatch }, defaultHeader) => ({
@@ -67,4 +67,4 @@ class MainScene extends Component {
   }
 }
 
-export default connect(mapStateToProps)(MainScene);
+export default connect(MainScene.mapStateToProps)(MainScene);

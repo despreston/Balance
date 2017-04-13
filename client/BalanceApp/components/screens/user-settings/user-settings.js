@@ -12,20 +12,18 @@ import Help from '../../help/help';
 import Styles from '../edit-project/edit-project-style';
 
 // actions
-import { saveUser } from '../../../actions';
-
-function mapStateToProps (state) {
-  return {
-    user: state.users[state.loggedInUser]
-  };
-}
-
-const mapDispatchToProps = { saveUser };
+import actions from '../../../actions/';
 
 class UserSettings extends Component {
 
   static propTypes = {
     user: PropTypes.object.isRequired
+  }
+
+  static mapStateToProps (state) {
+    return {
+      user: state.users[state.loggedInUser]
+    };
   }
 
   static navigationOptions = {
@@ -66,7 +64,7 @@ class UserSettings extends Component {
 
   save () {
     this.props.navigation.navigate('Profile');
-    this.props.saveUser(this.state.user);
+    this.props.dispatch(actions.saveUser(this.state.user));
   }
 
   toggleHelp () {
@@ -126,4 +124,4 @@ class UserSettings extends Component {
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserSettings);
+export default connect(UserSettings.mapStateToProps)(UserSettings);

@@ -1,15 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { reset } from '../../actions';
+import actions from '../../actions/';
 import { removeToken } from '../../utils/auth';
 import Styles from './logout-styles';
-
-function mapDispatchToProps (dispatch) {
-  return {
-    reset: () => dispatch(reset(null))
-  };
-}
 
 class Logout extends Component {
 
@@ -31,7 +25,7 @@ class Logout extends Component {
         throw "Could not log out";
       }
 
-      this.props.reset();
+      this.props.dispatch(actions.reset());
     });
   }
 
@@ -46,4 +40,4 @@ class Logout extends Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Logout);
+export default connect()(Logout);

@@ -4,16 +4,22 @@ import { ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 
 // actions
-import { deleteComment } from '../../actions';
+import actions from '../../actions/';
 
 // components
 import CommentListItem from './comment-list-item/comment-list-item';
 
-function mapStateToProps (state) {
-  return { loggedInUser: state.loggedInUser };
-}
-
 class CommentList extends Component {
+
+  static mapDispatchToProps (dispatch) {
+    return {
+      deleteComment: comment => dispatch(actions.deleteComment(comment))
+    };
+  }
+
+  static mapStateToProps (state) {
+    return { loggedInUser: state.loggedInUser };
+  }
 
   static propTypes = {
     comments: PropTypes.array.isRequired,
@@ -51,4 +57,7 @@ class CommentList extends Component {
 
 }
 
-export default connect(mapStateToProps, { deleteComment })(CommentList);
+export default connect(
+  CommentList.mapStateToProps,
+  CommentList.mapDispatchToProps)
+(CommentList);

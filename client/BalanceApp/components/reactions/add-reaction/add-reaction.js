@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, View, Image, Text } from 'react-native';
 import { connect } from 'react-redux';
 import Styles from '../reactions-styles';
-import { addReaction } from '../../../actions';
+import actions from '../../../actions/';
 import ReactionSelector from '../../reaction-selector/reaction-selector';
 
 class AddReaction extends Component {
@@ -24,7 +24,7 @@ class AddReaction extends Component {
     this.setState({ selectorVisible: false });
 
     if (emoji) {
-      this.props.addReaction(emoji, this.props.note)
+      this.props.dispatch(actions.addReaction(emoji, this.props.note));
     }
   }
 
@@ -53,6 +53,5 @@ class AddReaction extends Component {
 }
 
 export default connect(
-  AddReaction.mapStateToProps,
-  { addReaction }
+  AddReaction.mapStateToProps
 )(AddReaction);

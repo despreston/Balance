@@ -7,7 +7,7 @@ import ProjectDetail from './project-detail';
 import Icon from '../../navigation/icon';
 
 // actions
-import { requestNotes } from '../../../actions';
+import actions from '../../../actions/';
 
 class ProjectDetailContainer extends Component {
 
@@ -17,7 +17,6 @@ class ProjectDetailContainer extends Component {
       status: PropTypes.string.isRequired
     }),
     notes: PropTypes.array,
-    requestNotes: PropTypes.func.isRequired,
     userIsOwner: PropTypes.bool
   };
 
@@ -64,10 +63,10 @@ class ProjectDetailContainer extends Component {
 
   componentDidMount () {
     if (this.props.project._id) {
-      this.props.requestNotes([
+      this.props.dispatch(actions.requestNotes([
         { project: this.props.project._id },
         { type: 'Past' }
-      ]);
+      ]));
     }
   }
 
@@ -98,6 +97,5 @@ class ProjectDetailContainer extends Component {
 }
 
 export default connect(
-  ProjectDetailContainer.mapStateToProps,
-  { requestNotes }
+  ProjectDetailContainer.mapStateToProps
 )(ProjectDetailContainer);

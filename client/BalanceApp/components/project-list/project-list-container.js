@@ -6,21 +6,7 @@ import { AsyncStorage, View } from 'react-native';
 // Components
 import ProjectList from './project-list';
 import ProjectFilter from './project-filter/project-filter';
-import { fetchProjectsForUser } from '../../actions';
-
-function mapStateToProps (state, ownProps) {
-  const projects = Object.keys(state.projects)
-    .map(id => state.projects[id])
-    .filter(project => project.owner[0].userId === ownProps.user);
-
-  return {
-    projectsInvalidated: state.projects_invalidated,
-    loggedInUser: state.loggedInUser,
-    projects
-  };
-}
-
-const mapDispatchToProps = { fetchProjectsForUser };
+import actions from '../../actions/';
 
 class ProjectListContainer extends Component {
 
@@ -28,8 +14,19 @@ class ProjectListContainer extends Component {
     user: PropTypes.string.isRequired,
     projects: PropTypes.array.isRequired,
     onProjectTap: PropTypes.func.isRequired,
-    fetchProjectsForUser: PropTypes.func.isRequired,
     showFilter: PropTypes.bool
+  }
+
+  static mapStateToProps (state, ownProps) {
+    const projects = Object.keys(state.projects)
+      .map(id => state.projects[id])
+      .filter(project => project.owner[0].userId === ownProps.user);
+
+    return {
+      projectsInvalidated: state.projects_invalidated,
+      loggedInUser: state.loggedInUser,
+      projects
+    };
   }
 
   constructor (props) {
@@ -37,7 +34,7 @@ class ProjectListContainer extends Component {
 
     this.state = { projects: [], filtered: [], filter: 'All' };
 
-    props.fetchProjectsForUser(props.user);
+    props.dispatch(actions.fetchProjectsForUser(props.user));
   }
 
   componentWillReceiveProps (nextProps) {
@@ -45,7 +42,7 @@ class ProjectListContainer extends Component {
       projects,
       projectsInvalidated,
       user,
-      fetchProjectsForUser
+      dispatch
     } = nextProps;
 
     this.loadFilterValue().then(filter => {
@@ -57,7 +54,7 @@ class ProjectListContainer extends Component {
     });
 
     if (projectsInvalidated) {
-      fetchProjectsForUser(user);
+      dispatch(actions.fetchProjectsForUser(user));
     }
   }
 
@@ -115,4 +112,4 @@ class ProjectListContainer extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectListContainer);
+export default connect(ProjectListContainer.mapStateToProps)(ProjectListContainer);

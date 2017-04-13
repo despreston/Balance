@@ -7,7 +7,7 @@ import { View } from 'react-native';
 import NoteList from './note-list';
 
 // actions
-import { requestNotes } from '../../actions';
+import actions from '../../actions/';
 
 class NoteListContainer extends Component {
 
@@ -17,9 +17,6 @@ class NoteListContainer extends Component {
 
     // show the project title in note list items
     showProjectName: PropTypes.bool,
-
-    // comes from redux
-    requestNotes: PropTypes.func.isRequired,
 
     notes: PropTypes.array.isRequired,
 
@@ -56,7 +53,7 @@ class NoteListContainer extends Component {
   }
 
   requestNotes () {
-    this.props.requestNotes(this.props.query).then(() => {
+    this.props.dispatch(actions.requestNotes(this.props.query)).then(() => {
       this.setState({ loading: false });
     });
   }
@@ -81,4 +78,4 @@ class NoteListContainer extends Component {
 
 }
 
-export default connect(NoteListContainer.mapStateToProps, { requestNotes })(NoteListContainer);
+export default connect(NoteListContainer.mapStateToProps)(NoteListContainer);

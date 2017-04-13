@@ -8,7 +8,8 @@ import {
 import { connect } from 'react-redux';
 
 // actions
-import { nudge, removeNudge } from '../../../actions';
+import actions from '../../../actions/';
+// import { nudge, removeNudge } from '../../../actions';
 
 // styles
 import Style from './nudge-button-style';
@@ -23,15 +24,12 @@ function mapStateToProps ({ projects, loggedInUser }, ownProps) {
   return { user: loggedInUser, isSelected };
 }
 
-const mapDispatchToProps = { nudge, removeNudge };
-
 class NudgeBtn extends Component {
 
   static propTypes = {
     isSelected: PropTypes.bool.isRequired,
     project: PropTypes.string.isRequired,
     removeNudge: PropTypes.func.isRequired,
-    nudge: PropTypes.func.isRequired,
     useWhite: PropTypes.bool
   };
 
@@ -60,12 +58,12 @@ class NudgeBtn extends Component {
   }
 
   toggleNudge () {
-    const { removeNudge, project, user, nudge } = this.props;
+    const { dispatch, project, user } = this.props;
 
     if (this.state.isSelected) {
-      removeNudge(project, user);
+      dispatch(actions.removeNudge(project, user));
     } else {
-      nudge(project);
+      dispatch(actions.nudge(project));
     }
 
     this.setState({ isSelected: !this.state.isSelected });
@@ -96,4 +94,4 @@ class NudgeBtn extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NudgeBtn);
+export default connect(mapStateToProps)(NudgeBtn);

@@ -7,11 +7,11 @@ import NavBtn from '../../navigation/nav-btn';
 import UserProfile from '../../user-profile/user-profile';
 import Icon from '../../navigation/icon';
 
-function mapStateToProps (state) {
-  return { loggedInUser: state.loggedInUser };
-}
-
 class Profile extends Component {
+
+  static mapStateToProps (state) {
+    return { loggedInUser: state.loggedInUser };
+  }
 
   static navigationOptions = {
     header: ({ state, navigate: nav, dispatch }, defaultHeader) => ({
@@ -46,4 +46,4 @@ class Profile extends Component {
 
 };
 
-export default connect(mapStateToProps)(Profile);
+export default connect(Profile.mapStateToProps)(Profile);

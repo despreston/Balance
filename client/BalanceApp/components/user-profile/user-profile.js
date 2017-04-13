@@ -13,10 +13,7 @@ import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 import Friends from './contexts/friends';
 
 // actions
-import {
-  fetchFriendsForUser,
-  requestUser
-} from '../../actions';
+import actions from '../../actions/';
 
 // styles
 import Styles from './profile-styles';
@@ -28,8 +25,7 @@ class UserProfile extends Component {
     user: PropTypes.object,
     userId: PropTypes.string.isRequired,
     friends: PropTypes.array,
-    nav: PropTypes.func.isRequired,
-    fetchFriendsForUser: PropTypes.func.isRequired
+    nav: PropTypes.func.isRequired
   };
 
   static mapStateToProps (state, ownProps) {
@@ -71,8 +67,6 @@ class UserProfile extends Component {
     };
   }
 
-  static mapDispatchToState = { fetchFriendsForUser, requestUser };
-
   constructor (props) {
     super(props);
 
@@ -81,11 +75,11 @@ class UserProfile extends Component {
       loadingContext: false
     };
 
-    props.requestUser(props.userId, false);
+    props.dispatch(actions.requestUser(props.userId, false));
   }
 
   fetchFriendsList () {
-    return this.props.fetchFriendsForUser(this.props.userId)
+    return this.props.dispatch(actions.fetchFriendsForUser(this.props.userId))
       .then(() => this.setState({ loadingContext: false }));
   }
 
@@ -161,6 +155,4 @@ class UserProfile extends Component {
 
 }
 
-export default connect(
-  UserProfile.mapStateToProps, UserProfile.mapDispatchToState
-)(UserProfile);
+export default connect(UserProfile.mapStateToProps)(UserProfile);

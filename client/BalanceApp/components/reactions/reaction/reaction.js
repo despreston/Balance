@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { TouchableOpacity, Text } from 'react-native';
 import Styles from '../reactions-styles';
 import ReactionStyles from './reaction-styles';
-import { addReaction, deleteReaction } from '../../../actions';
+import actions from '../../../actions/';
 
 class Reaction extends Component {
 
@@ -15,18 +15,17 @@ class Reaction extends Component {
     reaction: PropTypes.string.isRequired,
     users: PropTypes.array.isRequired,
     note: PropTypes.string.isRequired,
-    loggedInUser: PropTypes.string.isRequired,
-    addReaction: PropTypes.func.isRequired,
-    deleteReaction: PropTypes.func.isRequired
+    loggedInUser: PropTypes.string.isRequired
   }
 
   onTap () {
+    const { dispatch } = this.props;
     let userReactionPair = this.isSelected();
 
     if (userReactionPair) {
-      this.props.deleteReaction(userReactionPair[1], this.props.note);
+      dispatch(actions.deleteReaction(userReactionPair[1], this.props.note));
     } else {
-      this.props.addReaction(this.props.reaction, this.props.note);
+      dispatch(actions.addReaction(this.props.reaction, this.props.note));
     }
   }
 
@@ -62,7 +61,4 @@ class Reaction extends Component {
 
 }
 
-export default connect(
-  Reaction.mapStateToProps,
-  { addReaction, deleteReaction }
-)(Reaction);
+export default connect(Reaction.mapStateToProps)(Reaction);
