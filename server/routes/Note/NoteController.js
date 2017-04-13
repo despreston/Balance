@@ -7,7 +7,18 @@ const log = require('logbro');
 module.exports = ({ get, post, put }) => {
 
   get('notes/:_id/reactions', ({ params, user }, res) => {
-    return res.send(204);
+    Reaction
+    .find({ note: params._id })
+    .populate('user', 'userId username picture')
+    .lean()
+    .then(reactions => {
+      reactions.forEach(r => delete r.userId);
+      return res.send(200, reactions);
+    })
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
   });
 
   get('notes/:_id', ({ params, user }, res) => {

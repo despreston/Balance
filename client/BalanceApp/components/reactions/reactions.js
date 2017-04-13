@@ -72,7 +72,10 @@ export default class Reactions extends Component {
       <View style={ Styles.reactions }>
         <AddReaction note={ this.props.note }/>
         { this.renderReactions.call(this) }
-        { (!this.props.hideExpand && reactionsLength > 0) && <Expand /> }
+        {
+          (!this.props.hideExpand && reactionsLength > 0) &&
+          <Expand note={ this.props.note }/>
+        }
       </View>
     );
   }
