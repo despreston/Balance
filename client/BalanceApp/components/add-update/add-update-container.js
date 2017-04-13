@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux';
 
 // actions
-import { saveNote } from '../../actions';
+import actions from '../../actions/';
 
 // components
 import AddUpdate from './add-update';
@@ -10,13 +10,9 @@ import AddUpdate from './add-update';
 class AddUpdateContainer extends Component {
 
   static propTypes = {
-    // inputs
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
-    project: PropTypes.object.isRequired,
-
-    // from react-redux
-    saveNote: PropTypes.func.isRequired
+    project: PropTypes.object.isRequired
   }
 
   constructor (props) {
@@ -33,11 +29,11 @@ class AddUpdateContainer extends Component {
     let promises = [];
 
     if (past.content !== '') {
-      promises.push(this.props.saveNote(past));
+      promises.push(this.props.dispatch(actions.saveNote(past)));
     }
 
     if (future.content !== '') {
-      promises.push(this.props.saveNote(future));
+      promises.push(this.props.dispatch(saveNote(future)));
     }
 
     return Promise.all(promises);
@@ -58,4 +54,4 @@ class AddUpdateContainer extends Component {
 
 }
 
-export default connect(null, { saveNote })(AddUpdateContainer);
+export default connect()(AddUpdateContainer);

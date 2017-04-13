@@ -13,56 +13,10 @@ import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 import Friends from './contexts/friends';
 
 // actions
-import {
-  fetchFriendsForUser,
-  requestUser
-} from '../../actions';
+import actions from '../../actions/';
 
 // styles
 import Styles from './profile-styles';
-
-function mapStateToProps (state, ownProps) {
-
-  let userId, nav, friends;
-
-  /**
-   * if nav'ing directly thru react-navigator, the userId is passed as
-   * ownProps.navigation.state.params.userId
-   */
-  if (ownProps.navigation) {
-    nav = ownProps.navigation.navigate;
-    userId = ownProps.navigation.state.params.userId;
-  } else {
-    nav = ownProps.nav;
-    userId = ownProps.userId;
-  }
-
-  const user = state.users[userId];
-
-  if (user) {
-    friends = Object.keys(state.users)
-      .map(id => state.users[id])
-      .filter(userToFilter => {
-        return user.friends.some(friend => {
-          return friend.userId === userToFilter.userId && 
-            friend.status === 'accepted';
-        });
-      });
-  } else {
-    friends = [];
-  }
-
-  return {
-    userId,
-    loggedInUser: state.loggedInUser,
-    user,
-    friends,
-    nav
-  };
-
-}
-
-const mapDispatchToState = { fetchFriendsForUser, requestUser };
 
 class UserProfile extends Component {
   
@@ -71,9 +25,47 @@ class UserProfile extends Component {
     user: PropTypes.object,
     userId: PropTypes.string.isRequired,
     friends: PropTypes.array,
-    nav: PropTypes.func.isRequired,
-    fetchFriendsForUser: PropTypes.func.isRequired
+    nav: PropTypes.func.isRequired
   };
+
+  static mapStateToProps (state, ownProps) {
+    let userId, nav, friends;
+
+    /**
+     * if nav'ing directly thru react-navigator, the userId is passed as
+     * ownProps.navigation.state.params.userId
+     */
+    if (ownProps.navigation) {
+      nav = ownProps.navigation.navigate;
+      userId = ownProps.navigation.state.params.userId;
+    } else {
+      nav = ownProps.nav;
+      userId = ownProps.userId;
+    }
+
+    const user = state.users[userId];
+
+    if (user) {
+      friends = Object.keys(state.users)
+        .map(id => state.users[id])
+        .filter(userToFilter => {
+          return user.friends.some(friend => {
+            return friend.userId === userToFilter.userId &&
+              friend.status === 'accepted';
+          });
+        });
+    } else {
+      friends = [];
+    }
+
+    return {
+      userId,
+      loggedInUser: state.loggedInUser,
+      user,
+      friends,
+      nav
+    };
+  }
 
   constructor (props) {
     super(props);
@@ -83,11 +75,11 @@ class UserProfile extends Component {
       loadingContext: false
     };
 
-    props.requestUser(props.userId, false);
+    props.dispatch(actions.requestUser(props.userId, false));
   }
 
   fetchFriendsList () {
-    return this.props.fetchFriendsForUser(this.props.userId)
+    return this.props.dispatch(actions.fetchFriendsForUser(this.props.userId))
       .then(() => this.setState({ loadingContext: false }));
   }
 
@@ -101,7 +93,7 @@ class UserProfile extends Component {
     return (
       <NoteListContainer
         onSelect={ id => this.props.nav('Note', { id }) }
-        showContext={ this.props.userId === this.props.loggedInUser }
+        showProjectName
         query={[{ user: this.props.userId }]}
         selector={ notes => selector(notes, this.props.userId) }
       />
@@ -163,4 +155,4 @@ class UserProfile extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToState)(UserProfile);
+export default connect(UserProfile.mapStateToProps)(UserProfile);

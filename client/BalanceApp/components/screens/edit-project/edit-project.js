@@ -111,6 +111,14 @@ export default class EditProject extends Component {
               onChangeText={ value => onEdit('title', value) } />
           </View>
           <View style={ Styles.inputRow }>
+            <Text style={ [Styles.text, Styles.rowLabel] }>Description</Text>
+            <TextInput
+              value={ project.description }
+              style={ [Styles.text, Styles.rowInput] }
+              placeholder="Description"
+              onChangeText={ value => onEdit('description', value) } />
+          </View>
+          <View style={ Styles.inputRow }>
             <Text style={ [Styles.text, Styles.rowLabel] }>Share with</Text>
             <PrivacyPicker
               textStyle={ [Styles.text, Styles.rowInput] }

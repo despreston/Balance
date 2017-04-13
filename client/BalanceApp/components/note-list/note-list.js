@@ -6,7 +6,7 @@ import { ScrollView, TouchableOpacity, Text } from 'react-native';
 import NoteListItem from './note-list-item/note-list-item';
 import { Styles } from './note-list-style';
 
-function NoteList ({ notes, showContext = false, onSelect }) {
+function NoteList ({ notes, showProjectName = false, onSelect }) {
 
   notes.sort((a,b) => b.createdAt - a.createdAt);
 
@@ -20,7 +20,7 @@ function NoteList ({ notes, showContext = false, onSelect }) {
           onPress={ () => onSelect(note._id) }>
           <NoteListItem
             note={ note }
-            showContext={ showContext } />
+            showProjectName={ showProjectName } />
         </TouchableOpacity>
       );
     });
@@ -37,7 +37,7 @@ function NoteList ({ notes, showContext = false, onSelect }) {
 
 NoteList.propTypes = {
   notes: PropTypes.array.isRequired,
-  showContext: PropTypes.bool,
+  showProjectName: PropTypes.bool,
   onSelect: PropTypes.func.isRequired
 };
 

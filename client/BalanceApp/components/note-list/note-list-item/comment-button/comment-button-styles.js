@@ -6,8 +6,8 @@ export default StyleSheet.create  ({
   container: {
     borderWidth: 1,
     borderRadius: 5,
-    paddingVertical: 4,
-    padding: 2,
+    height: 25,
+    paddingHorizontal: 3,
     borderColor: Colors.gray.porcelain,
     flexDirection: 'row',
     alignItems: 'center'

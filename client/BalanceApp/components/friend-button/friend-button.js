@@ -7,22 +7,7 @@ import { connect } from 'react-redux';
 import Styles from './friend-button-style';
 
 // actions
-import { createFriendship, removeFriendship } from '../../actions';
-
-function mapStateToProps (state, ownProps) {
-  let fullLoggedInUser = state.users[state.loggedInUser];
-
-  let fromFriendList = fullLoggedInUser.friends.find(friend => {
-    return friend.userId === ownProps.userId;
-  });
-
-  return {
-    status: fromFriendList ? fromFriendList.status : 'none',
-    loggedInUser: state.loggedInUser
-  };
-}
-
-const mapDispatchToProps = { createFriendship, removeFriendship };
+import actions from '../../actions/';
 
 class FriendButton extends Component {
 
@@ -32,6 +17,19 @@ class FriendButton extends Component {
     status: PropTypes.string.isRequired,
     hideIfLoggedInUser: PropTypes.bool
   };
+
+  static mapStateToProps (state, ownProps) {
+    let fullLoggedInUser = state.users[state.loggedInUser];
+
+    let fromFriendList = fullLoggedInUser.friends.find(friend => {
+      return friend.userId === ownProps.userId;
+    });
+
+    return {
+      status: fromFriendList ? fromFriendList.status : 'none',
+      loggedInUser: state.loggedInUser
+    };
+  }
 
   constructor (props) {
     super(props);
@@ -93,8 +91,8 @@ class FriendButton extends Component {
   }
 
   create () {
-    const { userId, loggedInUser, createFriendship } = this.props;
-    createFriendship(loggedInUser, userId);
+    const { userId, loggedInUser, dispatch } = this.props;
+    dispatch(actions.createFriendship(loggedInUser, userId));
   }
 
   removePending () {
@@ -102,12 +100,12 @@ class FriendButton extends Component {
   }
 
   remove () {
-    const { userId, loggedInUser, removeFriendship } = this.props;
-    removeFriendship(loggedInUser, userId);
+    const { userId, loggedInUser, dispatch } = this.props;
+    dispatch(actions.removeFriendship(loggedInUser, userId));
   }
 
   render () {
-    const { hideIfLoggedInUser, userId, loggedInUser, createFriendship } = this.props;
+    const { hideIfLoggedInUser, userId, loggedInUser } = this.props;
     const { actionText, buttonStyles, textStyles, pressAction } = this.state;
 
     if (userId === loggedInUser) {
@@ -128,4 +126,4 @@ class FriendButton extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FriendButton);
+export default connect(FriendButton.mapStateToProps)(FriendButton);

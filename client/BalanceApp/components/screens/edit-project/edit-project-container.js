@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 // actions
-import { saveProject, deleteProject } from '../../../actions';
+import actions from '../../../actions/';
 
 // components
 import EditProject from './edit-project';
@@ -12,27 +12,23 @@ import NavBtn from '../../navigation/nav-btn';
 // utils
 import emptyProject from '../../../utils/empty-project';
 
-function mapStateToProps (state, { navigation }) {
-  let project;
-
-  if (navigation.state.params && navigation.state.params.project) {
-    project = state.projects[navigation.state.params.project];
-  } else {
-    project = emptyProject(state.loggedInUser);
-  }
-
-  return { project };
-}
-
-const mapDispatchToProps = { deleteProject, saveProject };
-
 class EditProjectContainer extends Component {
 
   static propTypes = {
-    project: PropTypes.object,
-    saveProject: PropTypes.func.isRequired,
-    deleteProject: PropTypes.func.isRequired
+    project: PropTypes.object
   };
+
+  static mapStateToProps (state, { navigation }) {
+    let project;
+
+    if (navigation.state.params && navigation.state.params.project) {
+      project = state.projects[navigation.state.params.project];
+    } else {
+      project = emptyProject(state.loggedInUser);
+    }
+
+    return { project };
+  }
 
   static navigationOptions = {
     header: ({ goBack, state }, defaultHeader) => {
@@ -81,14 +77,14 @@ class EditProjectContainer extends Component {
       return;
     }
 
-    this.props.saveProject(this.state.project)
+    this.props.dispatch(actions.saveProject(this.state.project))
       .then(() => this.props.navigation.goBack());
 
   }
 
   delete = () => {
     this.props.navigation.navigate('Home');
-    this.props.deleteProject(this.state.project._id);
+    this.props.dispatch(actions.deleteProject(this.state.project._id));
   }
 
   render () {
@@ -102,4 +98,6 @@ class EditProjectContainer extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditProjectContainer);
+export default connect(
+  EditProjectContainer.mapStateToProps
+)(EditProjectContainer);

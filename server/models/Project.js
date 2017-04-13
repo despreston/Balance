@@ -34,7 +34,12 @@ let Project = new mongoose.Schema({
       type: Date,
       required: true
     }
-  }]
+  }],
+
+  description: {
+    type: String,
+    trim: true
+  }
   
 });
 

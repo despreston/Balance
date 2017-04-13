@@ -4,27 +4,16 @@ import { Button } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 // actions
-import { login, requestUser } from '../../../actions';
+import actions from '../../../actions/';
+// import { login, requestUser } from '../../../actions';
 
 // utils
 import { isLoggedIn, parseToken } from '../../../utils/auth';
 
-function mapStateToProps (state) {
-  return { user: state.users[state.loggedInUser] };
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    fetchCurrentUser: (userId) => dispatch(requestUser(userId, true)),
-    login: () => dispatch(login())
-  };
-}
-
 class Auth extends Component {
 
-  static propTypes = {
-    fetchCurrentUser: PropTypes.func.isRequired,
-    login: PropTypes.func.isRequired
+  static mapStateToProps (state) {
+    return { user: state.users[state.loggedInUser] };
   }
 
   constructor (props) {
@@ -34,7 +23,7 @@ class Auth extends Component {
   }
 
   handleAuth () {
-    const { user } = this.props;
+    const { user, dispatch } = this.props;
 
     if (user) {
       return;
@@ -44,7 +33,7 @@ class Auth extends Component {
     isLoggedIn().then(authenticated => {
       if (authenticated) {
         parseToken()
-        .then(token => this.props.fetchCurrentUser(token.sub))
+        .then(token => dispatch(actions.requestUser(token.sub, true)))
         .then(() => this.navigateToApp());
       }
     });
@@ -64,9 +53,10 @@ class Auth extends Component {
   }
 
   render () {
-    return <Button onPress={ () => this.props.login() } title='Login' />;
+    const { dispatch } = this.props;
+    return <Button onPress={ () => dispatch(actions.login()) } title='Login' />;
   }
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default connect(Auth.mapStateToProps)(Auth);

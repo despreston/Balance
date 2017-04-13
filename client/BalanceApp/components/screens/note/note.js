@@ -18,6 +18,7 @@ import Styles from './note-styles';
 // components
 import CommentInput from './comment-input/comment-input';
 import CommentList from '../../comment-list/comment-list';
+import ReactionsContainer from '../../reactions/reactions-container';
 
 export default class Note extends Component {
 
@@ -74,12 +75,19 @@ export default class Note extends Component {
             </View>
           </View>
           <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
-          <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
+          <View style={ Styles.flexRow }>
+            <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
+            <ReactionsContainer
+              note={ note._id }
+              reactions={ note.reactions }
+              maxList={ 3 }
+            />
+          </View>
           {
-            note.comments && 
+            note.comments &&
             <View style={ Styles.comments }>
-              <CommentList 
-                style={ Styles.comments } 
+              <CommentList
+                style={ Styles.comments }
                 comments={ comments }
                 onUserSelect={ user => goToUser(user) }
               />

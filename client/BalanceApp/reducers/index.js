@@ -22,7 +22,7 @@ const initialState = {
 
   // Comment key'd by _id
   comments: {}
-
+  
 };
 
 export default function reducer (state = initialState, action) {

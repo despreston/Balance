@@ -9,6 +9,7 @@ import { getToken } from './auth';
  * @param {Bool} externalUrl True if the URL needs to point to something outside of Balance host
  */
 export function api (url, properties = {}, externalUrl = false) {
+
   if (properties.body) {
     properties.body = JSON.stringify(properties.body);
   }

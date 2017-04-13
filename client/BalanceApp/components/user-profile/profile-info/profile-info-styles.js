@@ -9,7 +9,7 @@ export default StyleSheet.create  ({
 
   ProfileInfo: {
     alignSelf: 'center',
-    height: 140
+    minHeight: 150
   },
 
   row: {

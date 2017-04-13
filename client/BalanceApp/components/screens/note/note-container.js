@@ -3,30 +3,28 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 
 // actions
-import { fetchNote, createComment, saveNote } from '../../../actions';
+import actions from '../../../actions/';
 
 // components
 import Icon from '../../navigation/icon';
 import Note from './note';
 import EditNote from '../../edit-note/edit-note';
 
-function mapStateToProps (state, ownProps) {
-  let noteId = ownProps.navigation.state.params.id;
-
-  let comments = Object.keys(state.comments)
-    .map(id => state.comments[id])
-    .filter(c => c.note === noteId);
-
-  return {
-    note: state.notes[noteId],
-    comments,
-    loggedInUser: state.loggedInUser
-  };
-}
-
-const mapDispatchToProps = { fetchNote, createComment, saveNote };
-
 class NoteContainer extends Component {
+
+  static mapStateToProps (state, ownProps) {
+    let noteId = ownProps.navigation.state.params.id;
+
+    let comments = Object.keys(state.comments)
+      .map(id => state.comments[id])
+      .filter(c => c.note === noteId);
+
+    return {
+      note: state.notes[noteId],
+      comments,
+      loggedInUser: state.loggedInUser
+    };
+  }
 
   static navigationOptions = {
     header: ({ state, navigate }, defaultHeader) => {
@@ -52,7 +50,7 @@ class NoteContainer extends Component {
 
     this.toggleEditModal = this.toggleEditModal.bind(this);
 
-    props.fetchNote(props.navigation.state.params.id);
+    props.dispatch(actions.fetchNote(props.navigation.state.params.id));
   }
 
   componentWillMount () {
@@ -80,7 +78,7 @@ class NoteContainer extends Component {
       content
     };
 
-    this.props.createComment(comment);
+    this.props.dispatch(actions.createComment(comment));
   }
 
   toggleEditModal () {
@@ -99,7 +97,7 @@ class NoteContainer extends Component {
         />
         <EditNote
           note={ this.props.note }
-          onSave={ note => this.props.saveNote(note) }
+          onSave={ note => this.props.dispatch(actions.saveNote(note)) }
           onClose={ () => this.toggleEditModal() }
           visible={ this.state.editModalVisible }
         />
@@ -109,4 +107,6 @@ class NoteContainer extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoteContainer);
+export default connect(
+  NoteContainer.mapStateToProps,
+)(NoteContainer);

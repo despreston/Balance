@@ -11,7 +11,7 @@ export default StyleSheet.create  ({
 
   close: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 20,
     alignSelf: 'center',
     height: 30,
     width: 100,

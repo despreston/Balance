@@ -1,9 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import { View, TouchableOpacity, Text, Image } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Image
+} from 'react-native';
 import { connect } from 'react-redux';
 
 // actions
-import { nudge, removeNudge } from '../../../actions';
+import actions from '../../../actions/';
+// import { nudge, removeNudge } from '../../../actions';
 
 // styles
 import Style from './nudge-button-style';
@@ -11,18 +17,12 @@ import Style from './nudge-button-style';
 function mapStateToProps ({ projects, loggedInUser }, ownProps) {
   let fullProj = projects[ownProps.project];
 
-  function getIsSelected () {
-    if (fullProj.nudgeUsers) {
-      return fullProj.nudgeUsers.some(u => u.userId === loggedInUser);
-    }
-    
-    return false;
-  }
+  let isSelected = fullProj.nudgeUsers
+    ? fullProj.nudgeUsers.some(u => u.userId === loggedInUser)
+    : false;
 
-  return { user: loggedInUser, isSelected: getIsSelected() };
+  return { user: loggedInUser, isSelected };
 }
-
-const mapDispatchToProps = { nudge, removeNudge };
 
 class NudgeBtn extends Component {
 
@@ -30,7 +30,6 @@ class NudgeBtn extends Component {
     isSelected: PropTypes.bool.isRequired,
     project: PropTypes.string.isRequired,
     removeNudge: PropTypes.func.isRequired,
-    nudge: PropTypes.func.isRequired,
     useWhite: PropTypes.bool
   };
 
@@ -59,12 +58,12 @@ class NudgeBtn extends Component {
   }
 
   toggleNudge () {
-    const { removeNudge, project, user, nudge } = this.props;
+    const { dispatch, project, user } = this.props;
 
     if (this.state.isSelected) {
-      removeNudge(project, user);
+      dispatch(actions.removeNudge(project, user));
     } else {
-      nudge(project);
+      dispatch(actions.nudge(project));
     }
 
     this.setState({ isSelected: !this.state.isSelected });
@@ -95,4 +94,4 @@ class NudgeBtn extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NudgeBtn);
+export default connect(mapStateToProps)(NudgeBtn);
