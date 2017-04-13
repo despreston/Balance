@@ -19,11 +19,17 @@ class FullReactions extends Component {
     this.fetchReactions();
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.visible) {
+      this.fetchReactions();
+    }
+  }
+
   fetchReactions () {
     api(`notes/${this.props.note}/reactions`)
     .then(this.transform)
     .then(reactionsByUser => {
-      this.state.users = reactionsByUser;
+      this.setState({ users: reactionsByUser });
     });
   }
 
@@ -49,7 +55,7 @@ class FullReactions extends Component {
 
   render () {
     return (
-      <Modal transparent visible={ this.props.visible }>
+      <Modal transparent visible={ this.props.visible } animationType='fade'>
         <View style={[ Styles.absolute, Styles.flex, Styles.center ]}>
           <TouchableOpacity style={[ Styles.absolute ]}
             onPress={ () => this.props.onClose() }

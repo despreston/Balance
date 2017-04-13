@@ -16,7 +16,7 @@ export default class ReactionSelector extends Component {
   
   render () {
     return (
-      <Modal visible={ this.props.visible } transparent>
+      <Modal visible={ this.props.visible } transparent animationType='fade'>
         <EmojiOverlay
           style={ Styles.emojiPicker }
           visible={ this.props.visible }
