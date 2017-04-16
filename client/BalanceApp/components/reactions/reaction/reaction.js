@@ -54,7 +54,10 @@ class Reaction extends Component {
         onPress={ () => this.onTap() }
       >
         <Text>{ this.props.reaction }</Text>
-        <Text style={ this.countStyles() }>{ this.props.users.length }</Text>
+        {
+          this.props.users.length > 1 &&
+          <Text style={ this.countStyles() }>{ this.props.users.length }</Text>
+        }
       </TouchableOpacity>
     );
   }

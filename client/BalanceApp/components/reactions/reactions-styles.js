@@ -10,8 +10,7 @@ export default StyleSheet.create  ({
   iconContainer: {
     borderWidth: 1,
     borderRadius: 5,
-    height: 25,
-    paddingVertical: 2,
+    height: 26,
     paddingHorizontal: 4,
     borderColor: Colors.gray.porcelain,
     flexDirection: 'row',

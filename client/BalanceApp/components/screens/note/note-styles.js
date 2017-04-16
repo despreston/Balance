@@ -28,6 +28,7 @@ export default StyleSheet.create ({
   },
 
   flexRow: {
+    paddingBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -60,7 +61,8 @@ export default StyleSheet.create ({
   },
 
   note: {
-    paddingBottom: 20
+    paddingTop: 5,
+    paddingBottom: 25
   },
 
   date: {
