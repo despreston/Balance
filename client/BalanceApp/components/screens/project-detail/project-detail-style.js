@@ -34,6 +34,7 @@ export const Styles = StyleSheet.create ({
   },
 
   emptyText: {
+    paddingTop: 15,
     alignSelf: 'center',
     color: Colors.gray.tundora
   },

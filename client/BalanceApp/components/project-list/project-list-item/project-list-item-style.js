@@ -42,13 +42,15 @@ export const Style = StyleSheet.create({
 
   bold: {
     color: Colors.purple,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    opacity: 1.0
   },
 
   message: {
     textAlign: 'center',
     fontSize: 14,
-    color: Colors.gray.tundora
+    color: Colors.gray.tundora,
+    opacity: 0.8
   },
 
   footer: {

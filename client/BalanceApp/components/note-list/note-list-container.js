@@ -20,6 +20,8 @@ class NoteListContainer extends Component {
 
     notes: PropTypes.array.isRequired,
 
+    emptyState: PropTypes.object,
+
     // array of key/value query params to use with requestNotes
     query: PropTypes.array,
 
@@ -52,12 +54,6 @@ class NoteListContainer extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.forceReload && nextProps.query) {
-      this.requestNotes(nextProps.query);
-    }
-  }
-
   requestNotes (query) {
     this.props.dispatch(actions.requestNotes(query)).then(() => {
       this.setState({ loading: false });
@@ -70,8 +66,13 @@ class NoteListContainer extends Component {
     const {
       onSelect,
       notes,
-      showProjectName = false
+      showProjectName = false,
+      emptyState
     } = this.props;
+
+    if (emptyState && notes.length < 1) {
+      return emptyState;
+    }
 
     return (
       <NoteList

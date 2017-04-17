@@ -102,6 +102,7 @@ class ProjectDetail extends Component {
     return (
       <NoteListContainer
         showContext
+        emptyState={ <EmptyCompletedNotes /> }
         query={[{ project: this.props.project._id }, { type: 'Past' }]}
         selector={ notes => selector(notes, this.props.project) }
         showEdit={ status !== 'finished' && userIsOwner }
@@ -209,5 +210,11 @@ const UpdateButton = ({ press }) => {
     </View>
   );
 };
+
+const EmptyCompletedNotes = () => {
+  return (
+    <Text style={ Styles.emptyText }>No work has been done for this project.</Text>
+  )
+}
 
 export default ProjectDetail;

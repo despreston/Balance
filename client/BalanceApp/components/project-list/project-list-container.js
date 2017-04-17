@@ -38,14 +38,15 @@ class ProjectListContainer extends Component {
       projects: [],
       filtered: [],
       filter: 'All',
-      refreshing: false
+      refreshing: true
     };
 
     this.loadProjects(props.user);
   }
 
   loadProjects (user) {
-    this.props.dispatch(actions.fetchProjectsForUser(user));
+    this.props.dispatch(actions.fetchProjectsForUser(user))
+      .then(() => this.setState({ refreshing: false }));
   }
 
   componentWillReceiveProps (nextProps) {
@@ -103,7 +104,7 @@ class ProjectListContainer extends Component {
   }
 
   renderList () {
-    if (this.props.emptyState && this.state.filtered.length === 0) {
+    if (this.props.emptyState && !this.state.refreshing && this.props.projects.length === 0) {
       return this.props.emptyState;
     }
 
