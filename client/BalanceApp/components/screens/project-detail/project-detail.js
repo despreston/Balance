@@ -125,7 +125,9 @@ class ProjectDetail extends Component {
 
     const refreshProps = {
       refreshing,
-      onRefresh: () => this.props.onRefresh()
+      onRefresh: () => this.props.onRefresh(),
+      tintColor: 'white',
+      styles: Styles.purpleBackground
     };
 
     return (
@@ -134,42 +136,44 @@ class ProjectDetail extends Component {
         keyboardShouldPersistTaps='handled'
         refreshControl={ <Refresh { ...refreshProps }/> }
       >
-        <View style={ Styles.info }>
-          <View>
-            { project.status === 'finished' && <FinishedProjectText />} 
-            <Text style={ [Styles.title, Styles.whiteText] }>
-              { project.title }
-            </Text>
-            <Text style={ [Styles.author, Styles.whiteText] }>
-              Started by
-              <Text
-                onPress={ () => this.goToAuthor() }
-                style={[ Styles.bold, { flex: 1 } ]}
-              >
-                { ` ${project.owner[0].username}` }
+        <View style={[ Styles.whiteBackground, Styles.main ]}>
+          <View style={[ Styles.purpleBackground, Styles.info ]}>
+            <View>
+              { project.status === 'finished' && <FinishedProjectText />}
+              <Text style={ [Styles.title, Styles.whiteText] }>
+                { project.title }
               </Text>
-            </Text>
+              <Text style={ [Styles.author, Styles.whiteText] }>
+                Started by
+                <Text
+                  onPress={ () => this.goToAuthor() }
+                  style={[ Styles.bold, { flex: 1 } ]}
+                >
+                  { ` ${project.owner[0].username}` }
+                </Text>
+              </Text>
+            </View>
+            <View style={ Styles.infoTextContainer }>
+              <Text style={ [Styles.whiteText, Styles.description] }>
+                {
+                  project.description
+                }
+              </Text>
+            </View>
+            { userIsOwner && <UpdateButton press={ () => this.toggleAddUpdateModal() } /> }
           </View>
-          <View style={ Styles.infoTextContainer }>
-            <Text style={ [Styles.whiteText, Styles.description] }>
-              { 
-                project.description
-              }
-            </Text>
-          </View>
-          { userIsOwner && <UpdateButton press={ () => this.toggleAddUpdateModal() } /> }
-        </View>
-        { this.renderNudgeStuff() }
-        <View style={ Styles.container }>
-          {
-            project.status === 'active' &&
-            <FutureNote note={ this.futureNote }/>
-          }
-          <View style={ Styles.pastNotesView }>
-            <Text style={ [Styles.finishedTitleText, Styles.bold] }>
-              Completed
-            </Text>
-            { this.renderPastNotes() }
+          { this.renderNudgeStuff() }
+          <View style={ Styles.container }>
+            {
+              project.status === 'active' &&
+              <FutureNote note={ this.futureNote }/>
+            }
+            <View style={ Styles.pastNotesView }>
+              <Text style={ [Styles.finishedTitleText, Styles.bold] }>
+                Completed
+              </Text>
+              { this.renderPastNotes() }
+            </View>
           </View>
         </View>
         <AddUpdateContainer

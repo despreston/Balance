@@ -1,11 +1,15 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Colors from '../../colors';
 
 export const Styles = StyleSheet.create ({
 
   projectDetail: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.purple,
     flex: 1
+  },
+
+  main: {
+    minHeight: Dimensions.get('window').height-110
   },
 
   title: {
@@ -92,12 +96,19 @@ export const Styles = StyleSheet.create ({
     minHeight: 130,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.purple,
     justifyContent: 'space-between'
   },
 
   bold: {
     fontWeight: '600'
+  },
+
+  purpleBackground: {
+    backgroundColor: Colors.purple
+  },
+
+  whiteBackground: {
+    backgroundColor: Colors.white,
   }
   
 });

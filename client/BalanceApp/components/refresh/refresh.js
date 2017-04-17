@@ -6,13 +6,16 @@ class Refresh extends Component {
 
   static propTypes = {
     refreshing: PropTypes.bool.isRequired,
-    onRefresh: PropTypes.func.isRequired
+    onRefresh: PropTypes.func.isRequired,
+    tintColor: PropTypes.string,
+    styles: PropTypes.number
   }
 
   render () {
     return (
       <RefreshControl
-        tintColor={ Colors.purple }
+        style={ this.props.styles }
+        tintColor={ this.props.tintColor || Colors.purple }
         refreshing={ this.props.refreshing }
         onRefresh={ () => this.props.onRefresh() }
       />
