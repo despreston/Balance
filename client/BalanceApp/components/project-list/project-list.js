@@ -15,7 +15,8 @@ class ProjectList extends Component {
     projects: PropTypes.array.isRequired,
     loggedInUser: PropTypes.string.isRequired,
     refreshing: PropTypes.bool.isRequired,
-    onRefresh: PropTypes.func.isRequired
+    onRefresh: PropTypes.func.isRequired,
+    addNote: PropTypes.func.isRequired
   }
 
   constructor (props) {

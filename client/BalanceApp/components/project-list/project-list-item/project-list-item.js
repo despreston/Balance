@@ -1,6 +1,6 @@
 // Vendors
 import React, { PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 
 // Components
 import StatusIcon from '../../status-icon/StatusIcon';
@@ -14,7 +14,7 @@ import { Style } from './project-list-item-style';
 // utils
 import { formatDate } from '../../../utils/helpers';
 
-function ProjectListItem ({ project, hideNudgeBtn = false }) {
+function ProjectListItem ({ project, hideNudgeBtn = false, addNote }) {
   const { Past, Future, status, nudgeUsers } = project;
   let lastUpdated;
 
@@ -44,7 +44,11 @@ function ProjectListItem ({ project, hideNudgeBtn = false }) {
       )
     }
 
-    return <Text style={ Style.message }>Nothing done for this yet. 😕</Text>;
+    if (hideNudgeBtn) {
+      return <EmptyState addNote={ () => null } />
+    }
+
+    return <EmptyState />
   }
 
   function renderNudgeUsers () {
@@ -109,6 +113,26 @@ function ProjectListItem ({ project, hideNudgeBtn = false }) {
     </View>
   );
 }
+
+const EmptyState = ({ addNote }) => {
+
+  if (addNote) {
+    return (
+      <View>
+        <Text style={ Style.message }>
+          Nothing planned for this project.
+        </Text>
+        <TouchableOpacity onPress={ addNote } style={ Style.addNoteMessage }>
+          <Text style={[ Style.message, Style.bold ]}>
+            Add a note
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  return <Text style={ Style.message }>Nothing planned for this project.</Text>;
+};
 
 ProjectListItem.propTypes = {
   project: PropTypes.object.isRequired,

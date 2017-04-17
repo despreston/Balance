@@ -36,6 +36,15 @@ export const Style = StyleSheet.create({
     fontSize: 11
   },
 
+  addNoteMessage: {
+    paddingTop: 5
+  },
+
+  bold: {
+    color: Colors.purple,
+    fontWeight: 'bold'
+  },
+
   message: {
     textAlign: 'center',
     fontSize: 14,
