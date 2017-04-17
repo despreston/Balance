@@ -33,9 +33,21 @@ class ProjectListContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { projects: [], filtered: [], filter: 'All' };
+    this.state = {
+      projects: [],
+      filtered: [],
+      filter: 'All',
+      refreshing: false
+    };
 
-    props.dispatch(actions.fetchProjectsForUser(props.user));
+    this.loadProjects(props.user);
+  }
+
+  loadProjects (user) {
+    this.setState({ refreshing: true });
+
+    this.props.dispatch(actions.fetchProjectsForUser(user))
+    .then(() => this.setState({ refreshing: false }));
   }
 
   componentWillReceiveProps (nextProps) {
@@ -55,7 +67,7 @@ class ProjectListContainer extends Component {
     });
 
     if (projectsInvalidated) {
-      dispatch(actions.fetchProjectsForUser(user));
+      this.loadProjects(user);
     }
   }
 
@@ -103,6 +115,8 @@ class ProjectListContainer extends Component {
           />
         }
         <ProjectList
+          onRefresh={ () => this.loadProjects() }
+          refreshing={ this.state.refreshing }
           loggedInUser={ this.props.loggedInUser }
           onProjectTap={ this.props.onProjectTap }
           projects={ this.state.filtered }
