@@ -44,10 +44,7 @@ class ProjectListContainer extends Component {
   }
 
   loadProjects (user) {
-    this.setState({ refreshing: true });
-
-    this.props.dispatch(actions.fetchProjectsForUser(user))
-    .then(() => this.setState({ refreshing: false }));
+    this.props.dispatch(actions.fetchProjectsForUser(user));
   }
 
   componentWillReceiveProps (nextProps) {
@@ -115,7 +112,7 @@ class ProjectListContainer extends Component {
           />
         }
         <ProjectList
-          onRefresh={ () => this.loadProjects() }
+          onRefresh={ () => this.loadProjects(this.props.user) }
           refreshing={ this.state.refreshing }
           loggedInUser={ this.props.loggedInUser }
           onProjectTap={ this.props.onProjectTap }

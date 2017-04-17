@@ -15,6 +15,7 @@ import FutureNote from './future-note/future-note';
 import NoteListContainer from '../../note-list/note-list-container';
 import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
+import Refresh from '../../refresh/refresh';
 
 // utils
 import emptyNote from '../../../utils/empty-note';
@@ -31,13 +32,15 @@ class ProjectDetail extends Component {
     }),
     nav: PropTypes.func.isRequired,
     notes: PropTypes.array,
-    userIsOwner: PropTypes.bool
+    userIsOwner: PropTypes.bool,
+    refreshing: PropTypes.bool.isRequired,
+    onRefresh: PropTypes.func.isRequired
   };
 
   constructor (props) {
     super(props);
 
-    this.state = { addUpdateVisible: false };
+    this.state = { addUpdateVisible: false, refreshing: false };
 
     this.futureNotes = this.notesForType('Future');
     this.futureNote = this.getFutureNote();
@@ -71,13 +74,11 @@ class ProjectDetail extends Component {
     else if (project.Future) {
       return project.Future;
     }
-
-    else {
-      return emptyNote(project, 'Future');
-    }
+    
+    return emptyNote(project, 'Future');
   }
 
-  renderPastNotes (notes) {
+  renderPastNotes () {
     function selector (notes, project) {
       return Object.keys(notes)
         .map(id => notes[id])
@@ -151,12 +152,18 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const { project, saveNote, nav } = this.props;
+    const { project, refreshing, saveNote, nav } = this.props;
+
+    const refreshProps = {
+      refreshing,
+      onRefresh: () => this.props.onRefresh()
+    };
 
     return (
       <ScrollView
         style={ Styles.projectDetail }
         keyboardShouldPersistTaps='handled'
+        refreshControl={ <Refresh { ...refreshProps }/> }
       >
         <View style={ Styles.info }>
           <View>

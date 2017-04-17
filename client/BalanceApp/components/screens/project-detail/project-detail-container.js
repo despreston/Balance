@@ -55,10 +55,19 @@ class ProjectDetailContainer extends Component {
 
   constructor (props) {
     super(props);
+
+    this.state = { refreshing: false };
   }
 
   componentWillMount () {
     this.props.navigation.setParams({ showEdit: this.props.userIsOwner });
+  }
+
+  refresh () {
+    this.setState({ refreshing: true });
+
+    this.props.dispatch(actions.fetchProject(this.props.project))
+      .then(() => this.setState({ refreshing: false }));
   }
 
   render () {
@@ -77,6 +86,8 @@ class ProjectDetailContainer extends Component {
 
     return (
       <ProjectDetail
+        onRefresh={ () => this.refresh() }
+        refreshing={ this.state.refreshing }
         nav={ nav }
         project={ project }
         notes={ notes }
@@ -87,6 +98,4 @@ class ProjectDetailContainer extends Component {
 
 }
 
-export default connect(
-  ProjectDetailContainer.mapStateToProps
-)(ProjectDetailContainer);
+export default connect(ProjectDetailContainer.mapStateToProps)(ProjectDetailContainer);

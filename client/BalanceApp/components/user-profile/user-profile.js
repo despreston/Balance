@@ -7,10 +7,9 @@ import ProfileInfo from './profile-info/profile-info';
 import UserList from '../user-list/user-list';
 import ProjectListContainer from '../project-list/project-list-container';
 import NoteListContainer from '../note-list/note-list-container';
-
-import EmptyMessage from './empty-message/empty-message';
 import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 import Friends from './contexts/friends';
+import Refresh from '../refresh/refresh';
 
 // actions
 import actions from '../../actions/';
@@ -72,10 +71,15 @@ class UserProfile extends Component {
 
     this.state = {
       context: 'latest',
-      loadingContext: false
+      loadingContext: false,
+      refreshing: false
     };
 
-    props.dispatch(actions.requestUser(props.userId, false));
+    this.loadUser();
+  }
+
+  loadUser () {
+    return this.props.dispatch(actions.requestUser(this.props.userId, false));
   }
 
   fetchFriendsList () {
@@ -131,13 +135,24 @@ class UserProfile extends Component {
     }
   }
 
+  refresh () {
+    this.setState({ refreshing: true });
+
+    this.loadUser().then(() => this.setState({ refreshing: false }));
+  }
+
   render () {
     if (!this.props.user) {
       return <Text>Loading...</Text>;
     }
 
+    const refreshProps = {
+      refreshing: this.state.refreshing,
+      onRefresh: () => this.refresh()
+    };
+
     return (
-      <ScrollView style={ Styles.profile }>
+      <ScrollView style={ Styles.profile } refreshControl={ <Refresh { ...refreshProps } /> }>
         <View style={ Styles.profileInfo }>
             <ProfileInfo user={ this.props.user } />
             <UserProfileSwitch
