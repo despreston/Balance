@@ -159,7 +159,8 @@ class UserProfile extends Component {
               user={ this.props.user }
               hideProjects={ this.props.userId === this.props.loggedInUser }
               selectedContext={ this.state.context }
-              switchContext={ (context) => this.switchContext(context) } />
+              switchContext={ (context) => this.switchContext(context) }
+            />
         </View>
         <View style={ Styles.body }>
           { this.renderBody() }

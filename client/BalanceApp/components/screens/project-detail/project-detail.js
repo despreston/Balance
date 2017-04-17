@@ -155,9 +155,7 @@ class ProjectDetail extends Component {
             </View>
             <View style={ Styles.infoTextContainer }>
               <Text style={ [Styles.whiteText, Styles.description] }>
-                {
-                  project.description
-                }
+                { project.description }
               </Text>
             </View>
             { userIsOwner && <UpdateButton press={ () => this.toggleAddUpdateModal() } /> }

@@ -15,7 +15,8 @@ class ProjectListContainer extends Component {
     user: PropTypes.string.isRequired,
     projects: PropTypes.array.isRequired,
     onProjectTap: PropTypes.func.isRequired,
-    showFilter: PropTypes.bool
+    showFilter: PropTypes.bool,
+    emptyState: PropTypes.object
   }
 
   static mapStateToProps (state, ownProps) {
@@ -101,6 +102,22 @@ class ProjectListContainer extends Component {
     });
   }
 
+  renderList () {
+    if (this.props.emptyState && this.state.filtered.length === 0) {
+      return this.props.emptyState;
+    }
+
+    return (
+      <ProjectList
+        onRefresh={ () => this.loadProjects(this.props.user) }
+        refreshing={ this.state.refreshing }
+        loggedInUser={ this.props.loggedInUser }
+        onProjectTap={ this.props.onProjectTap }
+        projects={ this.state.filtered }
+      />
+    );
+  }
+
   render () {
     return (
       <View style={{ flex: 1 }}>
@@ -111,13 +128,7 @@ class ProjectListContainer extends Component {
             onChange={ this.onFilterChange.bind(this) }
           />
         }
-        <ProjectList
-          onRefresh={ () => this.loadProjects(this.props.user) }
-          refreshing={ this.state.refreshing }
-          loggedInUser={ this.props.loggedInUser }
-          onProjectTap={ this.props.onProjectTap }
-          projects={ this.state.filtered }
-        />
+        { this.renderList() }
       </View>
     );
   }
