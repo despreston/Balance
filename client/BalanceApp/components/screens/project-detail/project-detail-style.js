@@ -19,8 +19,8 @@ export const Styles = StyleSheet.create ({
 
   author: {
     fontSize: 12,
-    paddingBottom: 20,
     opacity: 0.9,
+    paddingBottom: 20,
     textAlign: 'center'
   },
 
@@ -37,7 +37,7 @@ export const Styles = StyleSheet.create ({
   updateButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 20,
+    marginBottom: 20,
     height: 40
   },
 
@@ -72,6 +72,7 @@ export const Styles = StyleSheet.create ({
   finishedProjectText: {
     color: Colors.gray.tundora,
     fontSize: 16,
+    marginBottom: 20,
     textAlign: 'center'
   },
 
@@ -83,11 +84,12 @@ export const Styles = StyleSheet.create ({
   description: {
     textAlign: 'center',
     lineHeight: 19,
+    paddingBottom: 20,
     paddingHorizontal: 20,
   },
 
   info: {
-    height: 200,
+    minHeight: 130,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.purple,

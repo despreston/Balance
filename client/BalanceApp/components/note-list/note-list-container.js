@@ -48,12 +48,18 @@ class NoteListContainer extends Component {
     this.state = { loading: !!props.query };
 
     if (props.query) {
-      this.requestNotes();
+      this.requestNotes(props.query);
     }
   }
 
-  requestNotes () {
-    this.props.dispatch(actions.requestNotes(this.props.query)).then(() => {
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.forceReload && nextProps.query) {
+      this.requestNotes(nextProps.query);
+    }
+  }
+
+  requestNotes (query) {
+    this.props.dispatch(actions.requestNotes(query)).then(() => {
       this.setState({ loading: false });
     });
   }

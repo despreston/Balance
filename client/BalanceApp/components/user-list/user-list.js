@@ -30,7 +30,7 @@ export default class UserList extends Component {
 
   render () {
     return (
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='handled'>
         { this.renderUsers() }
       </ScrollView>
     );

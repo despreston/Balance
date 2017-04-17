@@ -44,6 +44,7 @@ class ProjectDetail extends Component {
 
     this.futureNotes = this.notesForType('Future');
     this.futureNote = this.getFutureNote();
+    this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
   }
 
   notesForType (type) {
@@ -109,50 +110,18 @@ class ProjectDetail extends Component {
     );
   }
 
-  renderUpdateButton () {
-    const { project, userIsOwner } = this.props;
-
-    if (!userIsOwner) { return null; }
-
-    if (project.status === 'finished') {
-      return (
-        <View style={ Styles.infoTextContainer }>
-          <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
-            This project has been marked as finished. {"\n"} Nice job! 🎉
-          </Text>
-        </View>
-      );
-    }
-
-    return (
-      <View style={ Styles.updateButtonContainer }>
-        <TouchableOpacity
-          onPress={ () => this.toggleAddUpdateModal() }
-          style={ Styles.updateButton }>
-          <Text
-            style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
-            Add an update
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   renderNudgeStuff () {
     const { project, userIsOwner } = this.props;
-    const ownerAndNoNudges = (
-      userIsOwner &&
-      !project.nudgeUsers ||
-      project.nudgeUsers.length < 1
-    );
 
-    return project.status !== 'active' || ownerAndNoNudges
-      ? null
-      : <NudgeField hideButton={ userIsOwner } project={ project } />;
+    if (project.status !== 'active' || (userIsOwner && !project.nudgeUsers)) {
+      return null;
+    }
+
+    return <NudgeField hideButton={ userIsOwner } project={ project } />;
   }
 
   render () {
-    const { project, refreshing, saveNote, nav } = this.props;
+    const { project, refreshing, saveNote, nav, userIsOwner } = this.props;
 
     const refreshProps = {
       refreshing,
@@ -167,6 +136,7 @@ class ProjectDetail extends Component {
       >
         <View style={ Styles.info }>
           <View>
+            { project.status === 'finished' && <FinishedProjectText />} 
             <Text style={ [Styles.title, Styles.whiteText] }>
               { project.title }
             </Text>
@@ -183,12 +153,11 @@ class ProjectDetail extends Component {
           <View style={ Styles.infoTextContainer }>
             <Text style={ [Styles.whiteText, Styles.description] }>
               { 
-                project.description ||
-                <Text style={{ opacity: 0.9 }}>No description</Text>
+                project.description
               }
             </Text>
           </View>
-          { this.renderUpdateButton() }
+          { userIsOwner && <UpdateButton press={ () => this.toggleAddUpdateModal() } /> }
         </View>
         { this.renderNudgeStuff() }
         <View style={ Styles.container }>
@@ -213,5 +182,30 @@ class ProjectDetail extends Component {
   }
 
 }
+
+const FinishedProjectText = () => {
+  return (
+    <View>
+      <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
+        This project has been marked as finished. {"\n"} Nice job! 🎉
+      </Text>
+    </View>
+  );
+};
+
+const UpdateButton = ({ press }) => {
+  return (
+    <View style={ Styles.updateButtonContainer }>
+      <TouchableOpacity
+        onPress={ press }
+        style={ Styles.updateButton }>
+        <Text
+          style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
+          Add an update
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export default ProjectDetail;
