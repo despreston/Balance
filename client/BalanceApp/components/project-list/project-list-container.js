@@ -6,6 +6,7 @@ import { AsyncStorage, View } from 'react-native';
 // Components
 import ProjectList from './project-list';
 import ProjectFilter from './project-filter/project-filter';
+
 import actions from '../../actions/';
 
 class ProjectListContainer extends Component {
