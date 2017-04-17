@@ -151,13 +151,15 @@ class UserProfile extends Component {
       onRefresh: () => this.refresh()
     };
 
+    const userIsLoggedInUser = this.props.userId === this.props.loggedInUser;
+
     return (
       <ScrollView style={ Styles.profile } refreshControl={ <Refresh { ...refreshProps } /> }>
         <View style={ Styles.profileInfo }>
             <ProfileInfo user={ this.props.user } />
             <UserProfileSwitch
               user={ this.props.user }
-              hideProjects={ this.props.userId === this.props.loggedInUser }
+              hideProjects={ userIsLoggedInUser }
               selectedContext={ this.state.context }
               switchContext={ (context) => this.switchContext(context) }
             />
