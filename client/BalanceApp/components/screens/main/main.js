@@ -1,6 +1,6 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { Text } from 'react-native';
+import { TouchableOpacity, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
 // Components
@@ -9,6 +9,7 @@ import NavBtn from '../../navigation/nav-btn';
 
 // styles
 import { styles } from '../../navigation/navigation-styles';
+import MainStyle from './main-styles';
 
 class MainScene extends Component {
 
@@ -39,6 +40,8 @@ class MainScene extends Component {
   constructor (props) {
     super(props);
 
+    this.state = { helpVisible: false };
+
     this.nav = this.props.navigation.navigate;
   }
 
@@ -58,13 +61,25 @@ class MainScene extends Component {
 
   render () {
     return (
-        <ProjectListContainer
-          showFilter
-          onProjectTap={ this.openProject.bind(this) }
-          user={ this.props.loggedInUser }
-        />
+      <ProjectListContainer
+        emptyState={ <EmptyState start={() => this.newProject() }/> }
+        showFilter
+        onProjectTap={ this.openProject.bind(this) }
+        user={ this.props.loggedInUser }
+      />
     );
   }
 }
+
+const EmptyState = ({ start }) => {
+  return (
+    <View style={ MainStyle.center }>
+      <Text style={ MainStyle.text }>Nothing started yet 😐</Text>
+      <TouchableOpacity onPress={ start } style={ MainStyle.start }>
+        <Text style={ MainStyle.buttonText }>Start a project</Text>
+      </TouchableOpacity>
+    </View>
+  )
+};
 
 export default connect(MainScene.mapStateToProps)(MainScene);

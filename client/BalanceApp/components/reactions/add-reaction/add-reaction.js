@@ -32,7 +32,7 @@ class AddReaction extends Component {
     return (
       <View>
         <TouchableOpacity
-          style={[ Styles.iconContainer, { flex: 1 } ]}
+          style={[ Styles.iconContainer, { flex: 1, marginLeft: 0 } ]}
           onPress={ () => this.openSelector() }
         >
           <Text style={ Styles.plus }>✚</Text>

@@ -1,3 +1,4 @@
+import { arrayToObj } from '../utils/helpers';
 export default {
 
   /**
@@ -33,6 +34,21 @@ export default {
    */
   INVALIDATE_PROJECTS (state) {
     return Object.assign({}, state, { projects_invalidated: true });
+  },
+
+  /**
+   * remove a project and all related notes
+   */
+  REMOVE_PROJECT (state, { project }) {
+    let projects = Object.assign({}, state.projects);
+
+    let notes = Object.keys(state.notes)
+      .map(id => state.notes[id])
+      .filter(n => n.project._id !== project);
+
+    delete projects[project];
+
+    return Object.assign({}, state, { projects, notes: arrayToObj(notes) });
   }
 
 };

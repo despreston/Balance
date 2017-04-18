@@ -39,13 +39,23 @@ module.exports = ({ get, post, del, put }) => {
     .populate(Project.latestPastNote)
     .populate(Project.latestFutureNote)
     .populate('nudgeUsers', 'userId picture')
-    .lean()
+    .then(project => project.toObject({ virtuals: true }))
+    .then(project => Project.futureAndPastNotes(project))
+    .then(project => Project.removeExcludedFields(project))
     .then(project => {
-      return AccessControl.single(project.user, user.sub, project.privacyLevel)
+      const owner = project.owner[0]._id.toString();
+
+      return AccessControl.single(owner, user.sub, project.privacyLevel)
         .then(() => res.send(200, project))
-        .catch(err => res.send(403, err));
+        .catch(err => {
+          log.error(err);
+          return res.send(403, err);
+        });
     })
-    .catch(err => res.send(500, err))
+    .catch(err => {
+      log.error(err);
+      return res.send(500, err);
+    })
   });
 
   post('projects/:_id/nudges', ({ params, user }, res) => {

@@ -1,9 +1,11 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { View, ListView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 
 // Components
 import ProjectListItem from './project-list-item/project-list-item';
+import Refresh from '../refresh/refresh';
+
 import { Style } from './project-list-style';
 
 class ProjectList extends Component {
@@ -11,44 +13,43 @@ class ProjectList extends Component {
   static propTypes = {
     onProjectTap: PropTypes.func.isRequired,
     projects: PropTypes.array.isRequired,
-    loggedInUser: PropTypes.string.isRequired
+    loggedInUser: PropTypes.string.isRequired,
+    refreshing: PropTypes.bool.isRequired,
+    onRefresh: PropTypes.func.isRequired
   }
 
   constructor (props) {
     super();
-    this._renderRow = this._renderRow.bind(this);
+    this.renderRow = this.renderRow.bind(this);
   }
 
-  // https://github.com/facebook/react-native/issues/1040
-  setNativeProps (nativeProps) {
-    this._root.setNativeProps(nativeProps);
-  }
-
-  _renderRow (rowData) {
+  renderRow (rowData) {
     const hideNudgeBtn = rowData.owner[0].userId === this.props.loggedInUser;
 
     return (
       <TouchableOpacity
-        onPress={ this.props.onProjectTap.bind(this, rowData) }
+        key={ rowData._id }
+        onPress={ () => this.props.onProjectTap(rowData) }
         style={ Style.project }>
-        <View ref={ component => this._root = component }>
           <ProjectListItem project={ rowData } hideNudgeBtn={ hideNudgeBtn }/>
-        </View>
       </TouchableOpacity>
     );    
   }
 
   render () {
-    const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
+    const refreshProps = {
+      refreshing: this.props.refreshing,
+      onRefresh: this.props.onRefresh
+    };
 
     return (
-      <ListView
+      <ScrollView
+        refreshControl={ <Refresh { ...refreshProps } /> }
         keyboardShouldPersistTaps='handled'
-        enableEmptySections={true}
-        style={Style.projectList}
-        dataSource={ds.cloneWithRows(this.props.projects)}
-        renderRow={this._renderRow.bind(this)}
-      />
+        style={ Style.projectList }
+      >
+        { this.props.projects.map(p => this.renderRow(p)) }
+      </ScrollView>
     );    
   }
  

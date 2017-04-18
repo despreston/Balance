@@ -1,11 +1,15 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Colors from '../../colors';
 
 export const Styles = StyleSheet.create ({
 
   projectDetail: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.purple,
     flex: 1
+  },
+
+  main: {
+    minHeight: Dimensions.get('window').height-110
   },
 
   title: {
@@ -19,8 +23,8 @@ export const Styles = StyleSheet.create ({
 
   author: {
     fontSize: 12,
-    paddingBottom: 20,
     opacity: 0.9,
+    paddingBottom: 20,
     textAlign: 'center'
   },
 
@@ -30,6 +34,7 @@ export const Styles = StyleSheet.create ({
   },
 
   emptyText: {
+    paddingTop: 15,
     alignSelf: 'center',
     color: Colors.gray.tundora
   },
@@ -37,7 +42,7 @@ export const Styles = StyleSheet.create ({
   updateButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 20,
+    marginBottom: 20,
     height: 40
   },
 
@@ -72,6 +77,7 @@ export const Styles = StyleSheet.create ({
   finishedProjectText: {
     color: Colors.gray.tundora,
     fontSize: 16,
+    marginBottom: 20,
     textAlign: 'center'
   },
 
@@ -83,19 +89,27 @@ export const Styles = StyleSheet.create ({
   description: {
     textAlign: 'center',
     lineHeight: 19,
+    paddingBottom: 20,
     paddingHorizontal: 20,
   },
 
   info: {
-    height: 200,
+    minHeight: 130,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.purple,
     justifyContent: 'space-between'
   },
 
   bold: {
     fontWeight: '600'
+  },
+
+  purpleBackground: {
+    backgroundColor: Colors.purple
+  },
+
+  whiteBackground: {
+    backgroundColor: Colors.white,
   }
   
 });

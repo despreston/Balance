@@ -9,7 +9,7 @@ export default StyleSheet.create  ({
 
   ProfileInfo: {
     alignSelf: 'center',
-    minHeight: 150
+    minHeight: 100
   },
 
   row: {
@@ -33,7 +33,6 @@ export default StyleSheet.create  ({
   username: {
     ...shared,
     fontSize: 14,
-    paddingTop: 5,
     fontWeight: 'normal',
     textAlign: 'center'
   },
@@ -47,6 +46,7 @@ export default StyleSheet.create  ({
 
   bio: {
     ...shared,
+    paddingTop: 10,
     paddingBottom: 20,
     paddingHorizontal: 30,
     opacity: 0.8,

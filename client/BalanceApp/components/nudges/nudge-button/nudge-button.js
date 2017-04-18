@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 
 // actions
 import actions from '../../../actions/';
-// import { nudge, removeNudge } from '../../../actions';
 
 // styles
 import Style from './nudge-button-style';
@@ -29,7 +28,6 @@ class NudgeBtn extends Component {
   static propTypes = {
     isSelected: PropTypes.bool.isRequired,
     project: PropTypes.string.isRequired,
-    removeNudge: PropTypes.func.isRequired,
     useWhite: PropTypes.bool
   };
 

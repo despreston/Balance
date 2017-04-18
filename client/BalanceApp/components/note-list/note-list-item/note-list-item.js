@@ -6,7 +6,7 @@ import { View, Text } from 'react-native';
 import { Styles } from './note-list-item-style';
 
 // tools
-import { formatDate } from '../../../utils/helpers';
+import prettyDate from '../../../utils/fancy-date';
 
 // components
 import CommentButton from './comment-button/comment-button';
@@ -29,7 +29,7 @@ function NoteListItem ({ note, showProjectName }) {
             </Text>
           }
         </Text>
-        <Text style={ Styles.createdAt }>{ formatDate(note.createdAt) }</Text>
+        <Text style={ Styles.createdAt }>{ prettyDate(note.createdAt) }</Text>
       </View>
     );
   }
@@ -44,7 +44,7 @@ function NoteListItem ({ note, showProjectName }) {
         </View>
         <ReactionsContainer
           hideExpand
-          maxList={ 5 }
+          maxList={ 4 }
           note={ note._id }
           reactions={ note.reactions }
         />

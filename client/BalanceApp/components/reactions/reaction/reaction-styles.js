@@ -6,7 +6,6 @@ export default StyleSheet.create  ({
   count: {
     textAlign: 'center',
     fontSize: 12,
-    paddingLeft: 3,
     color: Colors.gray.silver
   },
 

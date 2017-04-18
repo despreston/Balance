@@ -7,7 +7,8 @@ let Project = new mongoose.Schema({
 
   title: {
     required: true,
-    type: String
+    type: String,
+    trim: true
   },
 
   user: String,
