@@ -64,10 +64,6 @@ class ProjectListContainer extends Component {
 
       this.setProjectStates(projects, filter);
     });
-
-    if (projectsInvalidated) {
-      this.loadProjects(user);
-    }
   }
 
   loadFilterValue () {

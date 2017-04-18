@@ -1,15 +1,16 @@
-import { apiDispatch } from '../utils/api';
+import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import { invalidate } from './shared';
 
 const RECEIVE_PROJECTS = 'RECEIVE_PROJECTS';
+const REMOVE_PROJECT = 'REMOVE_PROJECT';
 
 export default {
 
   /**
    * Receive projects and convert dates to date objects
    * @param {json} json
-   * @return {action}
+   * @return {Object}
    */
   receiveProjects (json) {
     if (!Array.isArray(json)) {
@@ -20,6 +21,15 @@ export default {
       type: RECEIVE_PROJECTS,
       projects: arrayToObj(json, '_id')
     };
+  },
+
+  /**
+   * Removes a project from redux store
+   * @param {String} project
+   * return {Object}
+   */
+  removeProject (project) {
+    return { type: REMOVE_PROJECT, project };
   },
 
   /**
@@ -88,7 +98,10 @@ export default {
    * @param {string} id Project ID
    */
   deleteProject (id) {
-    return apiDispatch(`projects/${id}`, null, { method: 'DELETE' });
+    return dispatch => {
+      return api(`projects/${id}`, { method: 'DELETE' })
+        .then(() => dispatch(this.removeProject(id)));
+    };
   }
 
 };

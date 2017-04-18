@@ -1,6 +1,7 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation'
 
 // actions
 import actions from '../../../actions/';
@@ -83,8 +84,17 @@ class EditProjectContainer extends Component {
   }
 
   delete = () => {
-    this.props.navigation.navigate('Home');
-    this.props.dispatch(actions.deleteProject(this.state.project._id));
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Home' })
+      ]
+    });
+
+    this.props.navigation.dispatch(resetAction);
+    setTimeout(() => {
+      this.props.dispatch(actions.deleteProject(this.state.project._id));
+    }, 2000);
   }
 
   render () {
