@@ -1,6 +1,6 @@
 // vendors
 import React, { Component } from 'react';
-import { TextInput, View } from 'react-native';
+import { TextInput, View, Text } from 'react-native';
 import { api } from '../../../utils/api';
 
 // components 
@@ -9,28 +9,28 @@ import UserList from '../../user-list/user-list';
 // styles
 import Styles from './user-search-styles';
 
-export default class UserSearch extends Component {
+class UserSearch extends Component {
 
   constructor (props) {
     super(props);
 
-    this.state = { query: '', users: [] };
+    this.state = { query: '', users: [], searching: false };
   }
 
   queryUsers () {
     // If the query is empty, don't show anything
     if (this.state.query === '') {
-      this.setState({ users: [] });
+      this.setState({ users: [], searching: false });
       return;
     }
 
     api('users/search?q=' + this.state.query).then(users => {
-      this.setState({ users });
+      this.setState({ users, searching: false });
     });
   }
 
   onTextChange (query) {
-    this.setState({ query });
+    this.setState({ query, searching: true });
 
     if (this.submitTimeout) {
       clearTimeout(this.submitTimeout);
@@ -38,6 +38,20 @@ export default class UserSearch extends Component {
 
     this.submitTimeout = setTimeout(() => this.queryUsers(), 400);
 
+  }
+
+  renderUserList () {
+    if (this.state.query.length > 0 && this.state.users.length < 1 && !this.state.searching) {
+      return <Empty />;
+    }
+
+    return (
+      <UserList
+        users={this.state.users}
+        onTextChange={ this.onTextChange.bind(this) }
+        onUserSelect={ userId => navigate('UserProfile', { userId }) }
+      />
+    );
   }
  
   render () {
@@ -53,12 +67,18 @@ export default class UserSearch extends Component {
             value={ this.state.query }
           />
         </View>
-        <UserList
-          users={this.state.users}
-          onTextChange={ this.onTextChange.bind(this) }
-          onUserSelect={ userId => navigate('UserProfile', { userId }) }
-        />
+        { this.renderUserList() }
       </View>
     )
   } 
 }
+
+const Empty = () => {
+  return (
+    <View style={ Styles.center }>
+      <Text style={ Styles.text }>No results</Text>
+    </View>
+  );
+}
+
+export default UserSearch;

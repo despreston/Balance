@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../colors';
 
 export default StyleSheet.create ({
 
@@ -15,6 +16,17 @@ export default StyleSheet.create ({
 
   searchBox: {
     height: 40  
+  },
+
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  text: {
+    paddingTop: 50,
+    color: Colors.gray.tundora,
+    fontSize: 16
   }
   
 });
