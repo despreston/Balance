@@ -41,13 +41,15 @@ class UserSearch extends Component {
   }
 
   renderUserList () {
+    const { navigate } = this.props.navigation;
+
     if (this.state.query.length > 0 && this.state.users.length < 1 && !this.state.searching) {
       return <Empty />;
     }
 
     return (
       <UserList
-        users={this.state.users}
+        users={ this.state.users }
         onTextChange={ this.onTextChange.bind(this) }
         onUserSelect={ userId => navigate('UserProfile', { userId }) }
       />
@@ -55,8 +57,6 @@ class UserSearch extends Component {
   }
  
   render () {
-    const { navigate } = this.props.navigation;
-
     return (
       <View style={ Styles.container }>
         <View style={ Styles.searchContainer }>

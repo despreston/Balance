@@ -17,7 +17,9 @@ class ProfileInfo extends Component  {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    customTextStyle: PropTypes.array
+    customTextStyle: PropTypes.array,
+    showEmptyBio: PropTypes.bool,
+    addBio: PropTypes.func
   }
 
   constructor (props) {
@@ -25,7 +27,7 @@ class ProfileInfo extends Component  {
   }
 
   render () {
-    const { user, customTextStyle = [] } = this.props;
+    const { user, customTextStyle = [], showEmptyBio, addBio } = this.props;
 
     return (
       <View style={ Styles.ProfileInfo }>
@@ -44,18 +46,36 @@ class ProfileInfo extends Component  {
             </Text>
           </View>
         </View>
-        {
-          user.bio &&
-          <Text style={ [Styles.bio, ...customTextStyle] }>
-            { user.bio }
-          </Text>
-        }
+        <Bio bio={ user.bio } showEmptyBio={ showEmptyBio } onAdd={ addBio }/>
         <View style={ Styles.friendButton }>
           <FriendButton userId={ user.userId } hideIfLoggedInUser={ true } />
         </View>
       </View>
     );
   }
+
+}
+
+const Bio = ({ bio, showEmptyBio, onAdd }) => {
+  if (bio && (bio.length > 0 || !showEmptyBio)) {
+    return (
+      <Text style={ Styles.bio }>
+        { bio }
+      </Text>
+    );
+  }
+
+  if (showEmptyBio) {
+    return (
+      <TouchableOpacity onPress={ onAdd }>
+        <Text style={ [Styles.bio, Styles.selectedContext] }>
+          Add a short bio
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
+  return null;
 
 }
 

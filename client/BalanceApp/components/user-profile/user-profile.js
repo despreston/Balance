@@ -167,7 +167,11 @@ class UserProfile extends Component {
     return (
       <ScrollView style={ Styles.profile } refreshControl={ <Refresh { ...refreshProps } /> }>
         <View style={ Styles.profileInfo }>
-          <ProfileInfo user={ this.props.user } />
+          <ProfileInfo
+            user={ this.props.user }
+            showEmptyBio={ this.userIsLoggedInUser }
+            addBio={ () => this.props.nav('UserSettings') }
+          />
           <UserProfileSwitch
             user={ this.props.user }
             hideProjects={ this.userIsLoggedInUser }
