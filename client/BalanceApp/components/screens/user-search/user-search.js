@@ -61,6 +61,8 @@ class UserSearch extends Component {
       <View style={ Styles.container }>
         <View style={ Styles.searchContainer }>
           <TextInput
+            autoCorrect={ false }
+            autoCapitalize='none'
             style={ Styles.searchBox }
             placeholder="Search for users"
             onChangeText={ this.onTextChange.bind(this) }

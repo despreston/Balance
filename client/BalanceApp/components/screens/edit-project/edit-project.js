@@ -65,37 +65,6 @@ export default class EditProject extends Component {
     );
   }
 
-  renderProjectStatus () {
-    if (this.props.project._new) {
-      return null;
-    }
-
-    const { project, onEdit } = this.props;
-    let text, statusOption;
-
-    if (project.status === 'active') {
-      text = 'Mark as Finished';
-      statusOption = 'finished';
-    } else {
-      text = 'Mark as Active';
-      statusOption = 'active';
-    }
-
-    return (
-      <View style={ Styles.statusContainer }>
-        <Text>
-          Marking a project as finished makes the project read-only.
-          You can always reopen the project any time.
-        </Text>
-        <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
-          <TouchableOpacity onPress={ () => onEdit('status', statusOption) }>
-            <Text style={ Styles.markStatus }>{ text }</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
-
   render () {
     const { project, onEdit } = this.props;
 
@@ -105,6 +74,7 @@ export default class EditProject extends Component {
           <View style={ Styles.inputRow }>
             <Text style={ [Styles.text, Styles.rowLabel] }>Title</Text>
             <TextInput
+              autoCorrect={ false }
               value={ project.title }
               style={ [Styles.text, Styles.rowInput] }
               placeholder="Project Title (required)"
@@ -125,7 +95,7 @@ export default class EditProject extends Component {
               initLevel={ project.privacyLevel }
               onChange={ val => onEdit('privacyLevel', val) } />
           </View>
-          { this.renderProjectStatus() }
+          <ProjectStatus project={ project } onEdit={ onEdit }/>
           { this.renderRemoveButton() }
         </View>
       </View>
@@ -133,3 +103,33 @@ export default class EditProject extends Component {
   }
 
 }
+
+const ProjectStatus = ({ project, onEdit }) => {
+  if (project._new) {
+    return null;
+  }
+
+  let text, statusOption;
+
+  if (project.status === 'active') {
+    text = 'Mark as Finished';
+    statusOption = 'finished';
+  } else {
+    text = 'Mark as Active';
+    statusOption = 'active';
+  }
+
+  return (
+    <View style={ Styles.statusContainer }>
+      <Text>
+        Marking a project as finished makes the project read-only.
+        You can always reopen the project any time.
+      </Text>
+      <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+        <TouchableOpacity onPress={ () => onEdit('status', statusOption) }>
+          <Text style={ Styles.markStatus }>{ text }</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};

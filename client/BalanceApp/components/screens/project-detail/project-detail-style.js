@@ -66,7 +66,7 @@ export const Styles = StyleSheet.create ({
 
   finishedTitleText: {
     color: Colors.gray.tundora,
-    fontSize: 15,
+    fontSize: 16,
     padding: 10
   },
 
@@ -101,7 +101,7 @@ export const Styles = StyleSheet.create ({
   },
 
   bold: {
-    fontWeight: '600'
+    fontWeight: 'bold'
   },
 
   purpleBackground: {

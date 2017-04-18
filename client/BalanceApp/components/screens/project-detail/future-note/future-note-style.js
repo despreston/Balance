@@ -8,7 +8,7 @@ export const Style = StyleSheet.create  ({
 
   title: {
     color: '#3D3F3E',
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'bold'
   },
 

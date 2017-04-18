@@ -148,6 +148,7 @@ export default class AddUpdate extends Component {
               Feel free to skip if you did not do anything.
             </Text>
             <Note
+              autoFocus
               onTextChange={ text => this.setState({ past: text }) }
               note={ this.state.past }
               placeHolder={ this.pastNotePlaceholder }
