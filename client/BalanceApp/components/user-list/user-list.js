@@ -9,7 +9,8 @@ export default class UserList extends Component {
 
   static propTypes = {
     users: PropTypes.array.isRequired,
-    onUserSelect: PropTypes.func.isRequired
+    onUserSelect: PropTypes.func.isRequired,
+    emptyState: PropTypes.object
   };
 
   constructor (props) {
@@ -17,6 +18,10 @@ export default class UserList extends Component {
   }
 
   renderUsers () {
+    if (this.props.users.length < 1) {
+      return this.props.emptyState;
+    }
+    
     return this.props.users.map(user => {
       return (
         <TouchableOpacity

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 // components
@@ -8,7 +8,6 @@ import UserList from '../user-list/user-list';
 import ProjectListContainer from '../project-list/project-list-container';
 import NoteListContainer from '../note-list/note-list-container';
 import UserProfileSwitch from './user-profile-switch/user-profile-switch';
-import Friends from './contexts/friends';
 import Refresh from '../refresh/refresh';
 
 // actions
@@ -76,6 +75,8 @@ class UserProfile extends Component {
     };
 
     this.loadUser();
+
+    this.userIsLoggedInUser = props.userId === props.loggedInUser;
   }
 
   loadUser () {
@@ -96,6 +97,7 @@ class UserProfile extends Component {
 
     return (
       <NoteListContainer
+        emptyState={ <EmptyLatest /> }
         onSelect={ id => this.props.nav('Note', { id }) }
         showProjectName
         query={[{ user: this.props.userId }]}
@@ -105,7 +107,17 @@ class UserProfile extends Component {
   }
 
   renderFriends () {
-    return <Friends friends={ this.props.friends } nav={ this.props.nav } />;
+    const addFriend = this.userIsLoggedInUser
+      ? () => this.props.nav('UserSearch')
+      : null;
+
+    return (
+      <UserList
+        emptyState={ <EmptyFriends addFriend={ addFriend }/> }
+        users={ this.props.friends }
+        onUserSelect={ userId => this.props.nav('UserProfile', { userId }) }
+      />
+    );
   }
 
   renderProjects () {
@@ -113,6 +125,7 @@ class UserProfile extends Component {
 
     return (
       <ProjectListContainer
+        emptyState={ <EmptyProjects addProject={ () => this.props.nav('EditProject') }/> }
         onProjectTap={ project => nav('Project', { project: project._id }) }
         user={ userId }
       />
@@ -151,15 +164,13 @@ class UserProfile extends Component {
       onRefresh: () => this.refresh()
     };
 
-    const userIsLoggedInUser = this.props.userId === this.props.loggedInUser;
-
     return (
       <ScrollView style={ Styles.profile } refreshControl={ <Refresh { ...refreshProps } /> }>
         <View style={ Styles.profileInfo }>
             <ProfileInfo user={ this.props.user } />
             <UserProfileSwitch
               user={ this.props.user }
-              hideProjects={ userIsLoggedInUser }
+              hideProjects={ this.userIsLoggedInUser }
               selectedContext={ this.state.context }
               switchContext={ (context) => this.switchContext(context) }
             />
@@ -172,5 +183,27 @@ class UserProfile extends Component {
   }
 
 }
+
+const EmptyLatest = () => {
+  return <Text style={ Styles.emptyText }>No updates yet 😕</Text>;
+};
+
+const EmptyFriends = ({ addFriend }) => {
+  if (addFriend) {
+    return (
+      <View style={ Styles.center }>
+        <Text style={ Styles.emptyText }>No friends yet. 😕</Text>
+        <TouchableOpacity onPress={ addFriend } style={ Styles.findFriends }>
+          <Text style={ Styles.findFriendsText }>Find friends</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  return <Text style={ Styles.emptyText }>No friends yet. 😕</Text>;
+};
+
+const EmptyProjects = () => {
+  return <Text style={ Styles.emptyText }>No projects yet. 😕</Text>;
+};
 
 export default connect(UserProfile.mapStateToProps)(UserProfile);
