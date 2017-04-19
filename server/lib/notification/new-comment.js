@@ -2,12 +2,19 @@ const Notification = require('./base');
 
 class NewComment extends Notification {
 
-  constructor (user, sender, note) {
+  static remove (user, note, commenter) {
+    super.remove({
+      userId: user,
+      $and: [{ 'related.item': note }, { 'related.item': commenter }]
+    });
+  }
+
+  constructor (user, commenter, note) {
     
     const related = [
       {
         kind: 'user',
-        item: sender
+        item: commenter
       },
       {
         kind: 'note',
