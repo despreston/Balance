@@ -12,7 +12,7 @@ class Notification {
   }
   
   constructor (user, type, related = []) {
-
+    
     if (!type || typeof type !== 'string') {
       throw 'Notification type should be a string.';
     }

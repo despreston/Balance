@@ -72,10 +72,7 @@ module.exports = ({ get, post, del, put }) => {
     }
 
     User.createFriendship(params.userId, params.friend)
-    .then(updatedUsers => {
-      new NewFriendRequest(params.friend, updatedUsers[0]._id).save();
-      return res.send(201, updatedUsers);
-    })
+    .then(updatedUsers => res.send(201, updatedUsers))
     .catch(err => res.send(500, err));
 
   });
@@ -88,9 +85,10 @@ module.exports = ({ get, post, del, put }) => {
 
     User.removeFriendship(params.userId, params.friend)
     .then(updatedUsers => {
-      
+
       // remove any lingering notifications from friend request
       NewFriendRequest.remove(params.friend, updatedUsers[1]._id);
+      NewFriendRequest.remove(params.friend, updatedUsers[0]._id);
 
       return res.send(200, updatedUsers);
     })
