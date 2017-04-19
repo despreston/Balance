@@ -2,12 +2,19 @@ const Notification = require('./base');
 
 class NewNudge extends Notification {
 
-  constructor (user, sender, project) {
+  static remove (user, project, nudger) {
+    super.remove({
+      userId: user,
+      $and: [{ 'related.item': nudger }, { 'related.item': project }]
+    });
+  }
+
+  constructor (user, nudger, project) {
     
     const related = [
-      { 
+      {
         kind: 'user',
-        item: sender
+        item: nudger
       },
       {
         kind: 'project',

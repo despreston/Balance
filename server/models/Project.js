@@ -1,7 +1,10 @@
 'use strict';
 const mongoose = require("mongoose");
 const Note = require("./Note");
+const User = require('./User');
 const privacyLevel = require('./shared/privacy-level');
+const Notification = require('../lib/notification/');
+const { NewNudge } = Notification;
 
 let Project = new mongoose.Schema({
 
@@ -211,6 +214,10 @@ Project.methods.addNudge = function (userId) {
           reject('Could not add nudge');
         }
 
+        const nudger = this.nudgeUsers.find(user => user.userId === userId);
+
+        new NewNudge(this.user, nudger, this._id).save();
+
         resolve(this);
       });
     });
@@ -245,6 +252,13 @@ Project.methods.removeNudge = function (userId) {
       this.nudgeUsers.splice(
         this.nudgeUsers.findIndex(u => u.userId === userId)
       );
+
+      // Remove lingering notifications
+      User
+      .findOne({ userId })
+      .then(nudger => {
+        NewNudge.remove(this.user, this._id, nudger._id);
+      });
 
       resolve(this);
     });
