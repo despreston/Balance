@@ -42,9 +42,29 @@ module.exports = ({ get, post, del, put }) => {
     .catch(err => res.send(500, err));
   });
 
+  get("users/:userId/friends/requests", ({ params }, res) => {
+    const query = Object.assign({}, params, { 'friends.status': 'requested' });
+
+    User
+    .findOne(query)
+    .select('friends')
+    .lean()
+    .then(user => {
+      const friendIds = user.friends.map(f => f.userId);
+
+      return User
+        .find({ userId: { $in: friendIds } })
+        .select('name userId picture friends username bio')
+        .lean()
+        .then(friends => res.send(200, friends))
+        .catch(err => res.send(500, err));
+    })
+    .catch(err => res.send(500, err));
+  });
+
   get("users/:userId/friends", (req, res) => {
     User
-    .findOne(req.params)
+    .findOne(req.params.userId)
     .select('friends')
     .lean()
     .then(user => {

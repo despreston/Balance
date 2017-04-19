@@ -48,7 +48,6 @@ class EditProjectContainer extends Component {
     }
   };
   
-  
   constructor (props) {
     super();
 

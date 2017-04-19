@@ -9,7 +9,7 @@ import {
   ProjectDetailContainer,
   EditProjectContainer,
   Activity,
-  Notifications,
+  NotificationsContainer,
   Profile,
   UserSettings,
   UserProfile,
@@ -76,7 +76,7 @@ const ActivityStack = StackNavigator({
 
 const NotificationsStack = StackNavigator({
   ...defaultScreens,
-  Notifications: { screen: Notifications }
+  Notifications: { screen: NotificationsContainer }
 }, { 
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {

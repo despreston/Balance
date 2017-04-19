@@ -7,7 +7,7 @@ import ProjectDetailContainer from './project-detail/project-detail-container';
 import EditProjectContainer from './edit-project/edit-project-container';
 import Activity from './activity/activity';
 import Profile from './profile/profile';
-import Notifications from './notifications/notifications';
+import NotificationsContainer from './notifications/notifications-container';
 import UserSettings from './user-settings/user-settings';
 import UserProfile from '../user-profile/user-profile';
 import UserSearch from './user-search/user-search';
@@ -19,7 +19,7 @@ export {
   ProjectDetailContainer,
   EditProjectContainer,
   Activity,
-  Notifications,
+  NotificationsContainer,
   Profile,
   UserSettings,
   UserProfile,
