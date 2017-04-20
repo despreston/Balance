@@ -1,7 +1,7 @@
 const Notification = require('../../models/Notification');
 const log = require('logbro');
 
-module.exports = ({ get }) => {
+module.exports = ({ get, post }) => {
 
   get('notifications', ({ user }, res) => {
     Notification
@@ -13,5 +13,19 @@ module.exports = ({ get }) => {
       return res.send(500);
     });
   });
+
+  post('notifications/read', ({ user }, res) => {
+    Notification
+    .update(
+      {
+        $and: [{ readAt: { $exists: false } }, { userId: user.sub }]
+      },
+      { $set: { readAt: new Date() } }
+    ).then(() => res.send(201))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
+  })
 
 };
