@@ -46,32 +46,32 @@ const ProjectsStack = StackNavigator({
   ...defaultScreens,
   Home: { screen: MainScene },
   EditProject: { screen: EditProjectContainer }
-}, { 
-  navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
+}, {
+  navigationOptions: Object.assign({}, navigationOptions, { tabBar:
     {
       icon: ({ focused }) => {
         return focused
           ? icon(require('../../assets/icons/projects-tabbar-selected.png'))
           : icon(require('../../assets/icons/projects-tabbar.png'));
       }
-    } 
-  }), 
+    }
+  }),
   initialRouteName: 'Home'
 });
 
 const ActivityStack = StackNavigator({
   ...defaultScreens,
   Activity: { screen: Activity }
-}, { 
+}, {
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
-        return focused 
+        return focused
           ? icon(require('../../assets/icons/activity-tabbar-selected.png'))
           : icon(require('../../assets/icons/activity-tabbar.png'));
       }
-    } 
-  }), 
+    }
+  }),
   initialRouteName: 'Activity'
 });
 
@@ -79,7 +79,7 @@ const NotificationsStack = StackNavigator({
   ...defaultScreens,
   Notifications: { screen: NotificationsContainer },
   FriendRequests: { screen: FriendRequestList }
-}, { 
+}, {
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
@@ -87,7 +87,7 @@ const NotificationsStack = StackNavigator({
           ? icon(require('../../assets/icons/notifications-tabbar-selected.png'))
           : icon(require('../../assets/icons/notifications-tabbar.png'));
       }
-    } 
+    }
   }), 
   initialRouteName: 'Notifications'
 });
@@ -97,11 +97,11 @@ const ProfileStack = StackNavigator({
   Profile: { screen: Profile },
   UserSettings: { screen: UserSettings },
   UserSearch: { screen: UserSearch }
-}, { 
+}, {
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
-        return focused 
+        return focused
           ? icon(require('../../assets/icons/profile-tabbar-selected.png'))
           : icon(require('../../assets/icons/profile-tabbar.png'));
       }

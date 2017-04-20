@@ -31,7 +31,7 @@ const initialState = {
 
 export default function reducer (state = initialState, action) {
 
-  let handlers = Object.assign({}, projects, notes, users, comments);
+  let handlers = Object.assign({}, projects, notes, users, comments, notifications);
 
   if (action.type === 'RESET') {
     return Object.assign({}, initialState);

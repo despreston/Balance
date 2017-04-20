@@ -1,4 +1,4 @@
-import { apiDispatch, api } from '../utils/api';
+import { apiDispatch } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 
 const RECEIVE_NOTIFICATIONS = 'RECEIVE_NOTIFICATIONS';
@@ -19,6 +19,14 @@ export default {
       type: RECEIVE_NOTIFICATIONS,
       notifications: arrayToObj(notifications, '_id')
     };
+  },
+
+  /**
+   * fetch notifications
+   * @return {Promise}
+   */
+  fetchNotifications (userId) {
+    return apiDispatch(`notifications`, this.receiveNotifications);
   }
 
 };

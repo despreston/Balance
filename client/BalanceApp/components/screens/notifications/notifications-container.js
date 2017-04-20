@@ -3,17 +3,22 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { api } from '../../../utils/api';
+import actions from '../../../actions/';
 
 import Notifications from './notifications';
 
 class NotificationsContainer extends Component {
 
   static mapStateToProps (state) {
-    return { user: state.users[state.loggedInUser] };
+    return {
+      user: state.users[state.loggedInUser],
+      notifications: Object.keys(state.notifications).map(id => state.notifications[id])
+    };
   }
 
   static propTypes = {
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    notifications: PropTypes.array.isRequired
   }
 
   static navigationOptions = {
@@ -25,7 +30,7 @@ class NotificationsContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { friend_requests: [], refreshing: false, notifications: [] };
+    this.state = { friend_requests: [], refreshing: false };
 
     this.fetchAll = this.fetchAll.bind(this);
 
@@ -33,16 +38,10 @@ class NotificationsContainer extends Component {
   }
 
   fetchAll () {
-    Promise.all([
-      this.fetchFriendRequests(),
-      this.fetchNotifications()
-    ]).then(([ friend_requests, notifications ]) => {
-      this.setState({ friend_requests, notifications });
-    })
-  }
-
-  fetchNotifications () {
-    return api(`notifications`);
+    this.fetchFriendRequests()
+    .then(friend_requests => this.setState({ friend_requests }));
+    
+    this.props.dispatch(actions.fetchNotifications());
   }
 
   fetchFriendRequests () {
@@ -52,7 +51,7 @@ class NotificationsContainer extends Component {
   render () {
     return (
       <Notifications
-        notifications={ this.state.notifications }
+        notifications={ this.props.notifications }
         refreshing={ this.state.refreshing }
         onRefresh={ () => this.fetchAll() }
         nav={ this.props.navigation.navigate }

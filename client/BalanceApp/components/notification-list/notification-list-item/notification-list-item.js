@@ -25,7 +25,6 @@ class NotificationListItem extends Component {
     let props = { nav: this.nav, user: this.sender };
 
     switch (this.type) {
-
       case 'new_comment':
         props.note = this.related.find(r => r.kind === 'note').item._id;
         return <NewComment { ...props } />;
