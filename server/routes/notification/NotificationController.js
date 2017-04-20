@@ -21,7 +21,7 @@ module.exports = ({ get, post }) => {
         $and: [{ readAt: { $exists: false } }, { userId: user.sub }]
       },
       { $set: { readAt: new Date() } }
-    ).then(() => res.send(201))
+    ).then(notifications => res.send(200, notifications))
     .catch(err => {
       log.error(err);
       return res.send(500);

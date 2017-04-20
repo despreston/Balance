@@ -41,7 +41,8 @@ class NotificationsContainer extends Component {
     this.fetchFriendRequests()
     .then(friend_requests => this.setState({ friend_requests }));
     
-    this.props.dispatch(actions.fetchNotifications());
+    this.props.dispatch(actions.fetchNotifications())
+    .then(() => this.props.dispatch(actions.markAsRead()));
   }
 
   fetchFriendRequests () {

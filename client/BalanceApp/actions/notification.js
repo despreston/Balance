@@ -25,8 +25,13 @@ export default {
    * fetch notifications
    * @return {Promise}
    */
-  fetchNotifications (userId) {
+  fetchNotifications () {
     return apiDispatch(`notifications`, this.receiveNotifications);
+  },
+
+  markAsRead () {
+    const opts = { method: 'POST' };
+    return apiDispatch('notifications/read', this.receiveNotifications, opts);
   }
 
 };

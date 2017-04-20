@@ -1,7 +1,7 @@
 // Vendors
 import React from 'react';
 import { StackNavigator, TabNavigator } from 'react-navigation';
-import { Image } from 'react-native';
+import { View, Image } from 'react-native';
 
 // Screens
 import {
@@ -18,6 +18,8 @@ import {
   Auth,
   FriendRequestList
 } from '../screens';
+
+import UnreadNotifications from './unread-notifications/unread-notifications';
 
 import Colors from '../colors';
 
@@ -40,6 +42,19 @@ const defaultScreens = {
 
 function icon (path) {
   return <Image source={ path } style={{ width: 26, height: 26 }} />;
+}
+
+const NotificationIcon = ({ focused }) => {
+  let rightIcon = focused
+    ? icon(require('../../assets/icons/notifications-tabbar-selected.png'))
+    : icon(require('../../assets/icons/notifications-tabbar.png'));
+
+  return (
+    <View>
+      { rightIcon }
+      <UnreadNotifications />
+    </View>
+  );
 }
 
 const ProjectsStack = StackNavigator({
@@ -83,9 +98,7 @@ const NotificationsStack = StackNavigator({
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
-        return focused 
-          ? icon(require('../../assets/icons/notifications-tabbar-selected.png'))
-          : icon(require('../../assets/icons/notifications-tabbar.png'));
+        return <NotificationIcon focused={ focused } />
       }
     }
   }), 
