@@ -62,33 +62,51 @@ class NotificationListItem extends Component {
 
 const NewComment = ({ user, note, nav }) => {
   return (
-    <View style={ Styles.flexRow }>
-      <Text onPress={ () => nav('UserProfile', { userId: user.userId }) } style={ Styles.link }>{ user.username }</Text>
+    <Text>
+      <Text
+        onPress={ () => nav('UserProfile', { userId: user.userId }) }
+        style={ Styles.link }
+      >
+        { user.username }
+      </Text>
       <Text style={ Styles.text }> commented on your </Text>
-      <TouchableOpacity onPress={ () => nav('Note', { id: note }) }>
-        <Text style={ Styles.link }>note</Text>
-      </TouchableOpacity>
-    </View>
+      <Text onPress={ () => nav('Note', { id: note }) } style={ Styles.link }>
+        note
+      </Text>
+    </Text>
   );
 };
 
 const AcceptedFriendRequest = ({ user, nav }) => {
   return (
-    <View style={ Styles.flexRow }>
-      <TouchableOpacity onPress={ () => nav('UserProfile', { userId: user.userId }) }>
-        <Text style={ Styles.link }>{ user.username }</Text>
-      </TouchableOpacity>
+    <Text>
+      <Text
+        onPress={ () => nav('UserProfile', { userId: user.userId }) }
+        style={ Styles.link }
+      >
+        { user.username }
+      </Text>
       <Text style={ Styles.text }> and you are now friends.</Text>
-    </View>
+    </Text>
   );
 };
 
 const NewNudge = ({ user, project, nav }) => {
   return (
     <Text>
-      <Text onPress={ () => nav('UserProfile', { userId: user.userId }) } style={ Styles.link }>{ user.username }</Text>
+      <Text
+        onPress={ () => nav('UserProfile', { userId: user.userId }) }
+        style={ Styles.link }
+      >
+        { user.username }
+      </Text>
       <Text style={ Styles.text }> wants you to work on </Text>
-      <Text onPress={ () => nav('Project', { project: project._id }) } style={ Styles.link }>{ project.title }</Text>
+      <Text
+        onPress={ () => nav('Project', { project: project._id }) }
+        style={ Styles.link }
+      >
+        { project.title }
+      </Text>
     </Text>
   );
 }

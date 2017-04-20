@@ -15,6 +15,8 @@ class NotificationList extends Component {
   }
 
   render () {
+    this.props.notifications.sort((a,b) => b.createdAt - a.createdAt);
+
     return (
       <View>
         {
