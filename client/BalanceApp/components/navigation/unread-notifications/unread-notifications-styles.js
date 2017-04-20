@@ -8,6 +8,7 @@ export default StyleSheet.create  ({
     top: -3,
     right: -10,
     backgroundColor: Colors.red,
+    flex: 1,
     width: 20,
     height: 20,
     borderRadius: 10,
@@ -16,11 +17,9 @@ export default StyleSheet.create  ({
   },
 
   count: {
-    width: 15,
     fontSize: 11,
     color: Colors.white,
-    textAlign: 'center',
-    fontWeight: 'bold'
+    textAlign: 'center'
   }
 
 });

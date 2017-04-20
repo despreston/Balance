@@ -24,9 +24,11 @@ class UnreadNotifications extends Component {
   render () {
     if (this.props.count === 0) { return null; }
     
+    let text = this.props.count > 9 ?  '9+' : String(this.props.count);
+
     return (
       <View style={ Styles.container }>
-        <Text style={ Styles.count }>{ this.props.count }</Text>
+        <Text style={ Styles.count }>{ text }</Text>
       </View>
     );
   }
