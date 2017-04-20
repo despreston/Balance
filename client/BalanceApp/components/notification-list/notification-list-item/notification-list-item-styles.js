@@ -7,8 +7,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray.porcelain,
     alignItems: 'center',
-    marginHorizontal: 5,
-    paddingHorizontal: 5,
+    marginHorizontal: 10,
     paddingVertical: 15
   },
 
@@ -29,7 +28,7 @@ export default StyleSheet.create({
 
   textContainer: {
     flex: 1,
-    marginHorizontal: 10
+    marginHorizontal: 15
   },
 
   text: {

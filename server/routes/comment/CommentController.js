@@ -34,7 +34,7 @@ module.exports = ({ post, del }) => {
           
           // Create notification for author if the comment is by someone other
           // than the author.
-          if (noteAuthor !== comment.commenter._id) {
+          if (noteAuthor !== comment.commenter.userId) {
             new NewComment(noteAuthor, comment.commenter._id, comment.note).save();
           }
 

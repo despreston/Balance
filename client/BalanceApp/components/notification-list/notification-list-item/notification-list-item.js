@@ -22,23 +22,29 @@ class NotificationListItem extends Component {
   }
 
   getText () {
-    // 'accepted_friend_request',
-    // 'new_nudge',
-    // 'nudged_project_updated',
-    // 'new_reaction',
-    // 'new_comment'
+    let props = { nav: this.nav, user: this.sender };
+
     switch (this.type) {
 
       case 'new_comment':
-        const note = this.related.find(r => r.kind === 'note').item;
-        return <NewComment user={ this.sender } note={ note._id } nav={ this.nav } />;
+        props.note = this.related.find(r => r.kind === 'note').item._id;
+        return <NewComment { ...props } />;
 
       case 'accepted_friend_request':
-        return <AcceptedFriendRequest user={ this.sender } nav={ this.nav } />;
+        return <AcceptedFriendRequest { ...props } />;
 
       case 'new_nudge':
-        const project = this.related.find(r => r.kind === 'project').item;
-        return <NewNudge user={ this.sender } project={ project } nav={ this.nav } />;
+        props.project = this.related.find(r => r.kind === 'project').item;
+        return <NewNudge { ...props } />;
+
+      case 'nudged_project_updated':
+        props.project = this.related.find(r => r.kind === 'project').item;
+        return <NudgedProjectUpdated { ...props } />;
+
+      case 'new_reaction':
+        props.note = this.related.find(r => r.kind === 'note').item._id;
+        props.reaction = this.related.find(r => r.kind === 'reaction').item.reaction;
+        return <NewReaction { ...props } />;
     }
   }
 
@@ -77,6 +83,23 @@ const NewComment = ({ user, note, nav }) => {
   );
 };
 
+const NewReaction = ({ user, note, nav, reaction }) => {
+  return (
+    <Text>
+      <Text
+        onPress={ () => nav('UserProfile', { userId: user.userId }) }
+        style={ Styles.link }
+      >
+        { user.username }
+      </Text>
+      <Text style={ Styles.text }> reacted to your </Text>
+      <Text onPress={ () => nav('Note', { id: note }) } style={ Styles.link }>
+        note { reaction }
+      </Text>
+    </Text>
+  );
+};
+
 const AcceptedFriendRequest = ({ user, nav }) => {
   return (
     <Text>
@@ -86,7 +109,7 @@ const AcceptedFriendRequest = ({ user, nav }) => {
       >
         { user.username }
       </Text>
-      <Text style={ Styles.text }> and you are now friends.</Text>
+      <Text style={ Styles.text }> and you are now friends</Text>
     </Text>
   );
 };
@@ -109,6 +132,27 @@ const NewNudge = ({ user, project, nav }) => {
       </Text>
     </Text>
   );
-}
+};
+
+const NudgedProjectUpdated = ({ user, project, nav }) => {
+  return (
+    <Text>
+      <Text
+        onPress={ () => nav('UserProfile', { userId: user.userId }) }
+        style={ Styles.link }
+      >
+        { user.username }
+      </Text>
+      <Text style={ Styles.text }> listened to your nudge! </Text>
+      <Text
+        onPress={ () => nav('Project', { project: project._id }) }
+        style={ Styles.link }
+      >
+        { project.title }
+      </Text>
+      <Text style={ Styles.text }> was recently updated</Text>
+    </Text>
+  );
+};
 
 export default NotificationListItem;
