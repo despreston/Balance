@@ -19,13 +19,13 @@ module.exports = ({ post, del }) => {
       }
 
       Note
-      .findOne({ _id: body.note })
+      .findByIdAndUpdate(
+        { _id: body.note },
+        { $push: { comments: comment._id } },
+        { new: true }
+      )
       .then(note => {
-        note.comments.push(comment._id);
-        note.save();
-        return note.user;
-      })
-      .then(noteAuthor => {
+        let noteAuthor = note.user;
         return Comment
         .findOne({ _id: comment._id })
         .populate('commenter', 'userId username picture')

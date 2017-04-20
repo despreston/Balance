@@ -38,14 +38,12 @@ Comment.post('remove', function(comment, next) {
 
   // Remove the comment from the Note
   Note
-  .findOne({ _id: comment.note })
-  .then(note => {
-    const idx = note.comments.findIndex(c => c._id === comment._id);
-    note.comments.splice(idx);
-    note.save();
-    next();
-  });
+  .update(
+    { _id: comment.note },
+    { $pull: { comments: comment._id } }
+  ).exec();
 
+  next();
 });
 
 Comment.pre('save', function(next) {
