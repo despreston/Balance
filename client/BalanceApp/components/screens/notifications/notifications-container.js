@@ -25,19 +25,35 @@ class NotificationsContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { friend_requests: [] };
+    this.state = { friend_requests: [], refreshing: false };
 
-    this.fetchFriendRequests(props.user.userId);
+    this.fetchAll = this.fetchAll.bind(this);
+
+    this.fetchAll();
+  }
+
+  fetchAll () {
+    Promise.all([
+      this.fetchFriendRequests(this.props.user.userId),
+      this.fetchNotifications()
+    ]).then(([ friend_requests, notifications ]) => {
+      this.setState({ friend_requests, notifications });
+    })
+  }
+
+  fetchNotifications () {
+    return api(`notifications`);
   }
 
   fetchFriendRequests (userId) {
-    api(`users/${userId}/friends/requests`)
-    .then(users => this.setState({ friend_requests: users }));
+    return api(`users/${userId}/friends/requests`);
   }
   
   render () {
     return (
       <Notifications
+        refreshing={ this.state.refreshing }
+        onRefresh={ () => this.fetchAll() }
         nav={ this.props.navigation.navigate }
         friendRequests={ this.state.friend_requests }
         user={ this.props.user }
