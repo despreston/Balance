@@ -1,6 +1,6 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 
 import Styles from './friend-requests-styles';
 
@@ -28,8 +28,9 @@ export default class FriendRequests extends Component {
           />
           <Text style={ Styles.text }>Friend requests</Text>
         </View>
-        <View>
+        <View style={ Styles.flexRow }>
           <Text style={ Styles.text }>{ requests.length }</Text>
+          <Image style={ Styles.forward } source={ require('../../../../assets/icons/forward.png') } />
         </View>
       </View>
     );
