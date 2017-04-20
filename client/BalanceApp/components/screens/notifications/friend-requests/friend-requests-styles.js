@@ -13,11 +13,11 @@ export default StyleSheet.create ({
   },
 
   friendRequests: {
-    height: 60,
+    height: 65,
     justifyContent: 'space-between',
     paddingLeft: 20,
     paddingRight: 10,
-    borderBottomWidth: 5,
+    borderBottomWidth: 10,
     borderBottomColor: Colors.gray.porcelain
   },
 
