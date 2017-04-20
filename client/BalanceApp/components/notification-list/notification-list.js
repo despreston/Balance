@@ -19,9 +19,7 @@ class NotificationList extends Component {
       <View>
         {
           this.props.notifications.map((n, i) => (
-            <TouchableOpacity key={ i } onPress={ () => null }>
-              <NotificationListItem nav={ this.props.nav } notification={ n } />
-            </TouchableOpacity>
+            <NotificationListItem key={ i } nav={ this.props.nav } notification={ n } />
           ))
         }
       </View>

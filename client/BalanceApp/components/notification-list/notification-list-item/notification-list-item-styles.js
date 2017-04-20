@@ -22,17 +22,24 @@ export default StyleSheet.create({
     borderRadius: 17
   },
 
-  textContainer: {
-    paddingHorizontal: 10
-  },
-
   link: {
     fontWeight: 'bold',
     color: Colors.purple
   },
 
+  textContainer: {
+    flex: 1,
+    marginHorizontal: 10
+  },
+
   text: {
+    lineHeight: 20,
     color: Colors.gray.tundora
+  },
+
+  date: {
+    fontSize: 12,
+    color: Colors.gray.silver
   }
 
 });

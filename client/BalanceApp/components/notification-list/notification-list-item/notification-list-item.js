@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 
+import prettyDate from '../../../utils/fancy-date';
+
 import Styles from './notification-list-item-styles';
 
 class NotificationListItem extends Component {
@@ -20,7 +22,6 @@ class NotificationListItem extends Component {
   }
 
   getText () {
-    // 'new_friend_request',
     // 'accepted_friend_request',
     // 'new_nudge',
     // 'nudged_project_updated',
@@ -30,7 +31,14 @@ class NotificationListItem extends Component {
 
       case 'new_comment':
         const note = this.related.find(r => r.kind === 'note').item;
-        return <NewComment user={ this.sender } note={ note._id } nav={ this.props.nav } />;
+        return <NewComment user={ this.sender } note={ note._id } nav={ this.nav } />;
+
+      case 'accepted_friend_request':
+        return <AcceptedFriendRequest user={ this.sender } nav={ this.nav } />;
+
+      case 'new_nudge':
+        const project = this.related.find(r => r.kind === 'project').item;
+        return <NewNudge user={ this.sender } project={ project } nav={ this.nav } />;
     }
   }
 
@@ -40,8 +48,11 @@ class NotificationListItem extends Component {
     return (
       <View style={[ Styles.flexRow, Styles.notification ]}>
         <Image source={{ uri: this.sender.picture }} style={ Styles.avatar } />
-        <View style={[ Styles.flexRow, Styles.textContainer ]}>
+        <View style={[ Styles.textContainer ]}>
           { this.getText() }
+        </View>
+        <View>
+          <Text style={ Styles.date }>{ prettyDate(notification.createdAt) }</Text>
         </View>
       </View>
     );
@@ -52,14 +63,33 @@ class NotificationListItem extends Component {
 const NewComment = ({ user, note, nav }) => {
   return (
     <View style={ Styles.flexRow }>
-      <TouchableOpacity onPress={ () => nav('UserProfile', { userId: user.userId }) }>
-        <Text style={ Styles.link }>{ user.username }</Text>
-      </TouchableOpacity>
+      <Text onPress={ () => nav('UserProfile', { userId: user.userId }) } style={ Styles.link }>{ user.username }</Text>
       <Text style={ Styles.text }> commented on your </Text>
       <TouchableOpacity onPress={ () => nav('Note', { id: note }) }>
         <Text style={ Styles.link }>note</Text>
       </TouchableOpacity>
     </View>
+  );
+};
+
+const AcceptedFriendRequest = ({ user, nav }) => {
+  return (
+    <View style={ Styles.flexRow }>
+      <TouchableOpacity onPress={ () => nav('UserProfile', { userId: user.userId }) }>
+        <Text style={ Styles.link }>{ user.username }</Text>
+      </TouchableOpacity>
+      <Text style={ Styles.text }> and you are now friends.</Text>
+    </View>
+  );
+};
+
+const NewNudge = ({ user, project, nav }) => {
+  return (
+    <Text>
+      <Text onPress={ () => nav('UserProfile', { userId: user.userId }) } style={ Styles.link }>{ user.username }</Text>
+      <Text style={ Styles.text }> wants you to work on </Text>
+      <Text onPress={ () => nav('Project', { project: project._id }) } style={ Styles.link }>{ project.title }</Text>
+    </Text>
   );
 }
 

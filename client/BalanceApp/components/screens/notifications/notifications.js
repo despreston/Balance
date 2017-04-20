@@ -30,9 +30,14 @@ export default class Notifications extends Component {
         style={ Styles.notifications }
         refreshControl={ <Refresh onRefresh={ onRefresh } refreshing={ refreshing } /> }
       >
-        <TouchableOpacity onPress={ () => nav('FriendRequests', { friendRequests }) }>
-          <FriendRequests requests={ friendRequests } />
-        </TouchableOpacity>
+        {
+          friendRequests.length > 0 &&
+          (
+            <TouchableOpacity onPress={ () => nav('FriendRequests', { friendRequests }) }>
+              <FriendRequests requests={ friendRequests } />
+            </TouchableOpacity>
+          )
+        }
         <NotificationList nav={ this.props.nav } notifications={ notifications } />
       </ScrollView>
     );
