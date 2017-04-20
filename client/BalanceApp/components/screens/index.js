@@ -13,6 +13,7 @@ import UserProfile from '../user-profile/user-profile';
 import UserSearch from './user-search/user-search';
 import NoteContainer from './note/note-container';
 import Auth from './auth/auth';
+import FriendRequestList from './friend-request-list/friend-request-list';
 
 export {
   MainScene,
@@ -25,5 +26,6 @@ export {
   UserProfile,
   UserSearch,
   NoteContainer,
-  Auth
+  Auth,
+  FriendRequestList
 };

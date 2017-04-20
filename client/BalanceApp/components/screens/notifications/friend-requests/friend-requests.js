@@ -30,7 +30,10 @@ export default class FriendRequests extends Component {
         </View>
         <View style={ Styles.flexRow }>
           <Text style={ Styles.text }>{ requests.length }</Text>
-          <Image style={ Styles.forward } source={ require('../../../../assets/icons/forward.png') } />
+          <Image
+            style={ Styles.forward }
+            source={ require('../../../../assets/icons/forward.png') }
+          />
         </View>
       </View>
     );

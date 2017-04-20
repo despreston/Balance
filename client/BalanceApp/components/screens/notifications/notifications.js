@@ -1,6 +1,6 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView, Text, TouchableOpacity } from 'react-native';
 
 import FriendRequests from './friend-requests/friend-requests';
 
@@ -10,7 +10,8 @@ export default class Notifications extends Component {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    friendRequests: PropTypes.array.isRequired
+    friendRequests: PropTypes.array.isRequired,
+    nav: PropTypes.func.isRequired,
   }
 
   constructor (props) {
@@ -18,9 +19,12 @@ export default class Notifications extends Component {
   }
   
   render () {
+    const { friendRequests, nav } = this.props;
     return (
       <ScrollView style={ Styles.notifications }>
-        <FriendRequests requests={ this.props.friendRequests } />
+        <TouchableOpacity onPress={ () => nav('FriendRequests', { friendRequests }) }>
+          <FriendRequests requests={ this.props.friendRequests } />
+        </TouchableOpacity>
       </ScrollView>
     );
   }

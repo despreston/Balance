@@ -50,6 +50,10 @@ module.exports = ({ get, post, del, put }) => {
     .select('friends')
     .lean()
     .then(user => {
+      if (!user) {
+        return res.send(200, []);
+      }
+      
       const friendIds = user.friends.map(f => f.userId);
 
       return User

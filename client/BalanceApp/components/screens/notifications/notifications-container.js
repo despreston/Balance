@@ -38,6 +38,7 @@ class NotificationsContainer extends Component {
   render () {
     return (
       <Notifications
+        nav={ this.props.navigation.navigate }
         friendRequests={ this.state.friend_requests }
         user={ this.props.user }
       />

@@ -15,7 +15,8 @@ import {
   UserProfile,
   UserSearch,
   NoteContainer,
-  Auth
+  Auth,
+  FriendRequestList
 } from '../screens';
 
 import Colors from '../colors';
@@ -76,7 +77,8 @@ const ActivityStack = StackNavigator({
 
 const NotificationsStack = StackNavigator({
   ...defaultScreens,
-  Notifications: { screen: NotificationsContainer }
+  Notifications: { screen: NotificationsContainer },
+  FriendRequests: { screen: FriendRequestList }
 }, { 
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
