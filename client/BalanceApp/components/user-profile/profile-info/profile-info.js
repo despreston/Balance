@@ -68,7 +68,7 @@ const Bio = ({ bio, showEmptyBio, onAdd }) => {
   if (showEmptyBio) {
     return (
       <TouchableOpacity onPress={ onAdd }>
-        <Text style={ [Styles.bio, Styles.selectedContext] }>
+        <Text style={ [Styles.bio, Styles.purpleText] }>
           Add a short bio
         </Text>
       </TouchableOpacity>
@@ -76,7 +76,6 @@ const Bio = ({ bio, showEmptyBio, onAdd }) => {
   }
 
   return null;
-
 }
 
 export default ProfileInfo;

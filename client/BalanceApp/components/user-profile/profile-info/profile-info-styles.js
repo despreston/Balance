@@ -73,8 +73,11 @@ export default StyleSheet.create  ({
 
   selectedContext: {
     ...shared,
-    color: Colors.purple,
     fontWeight: 'bold'
+  },
+
+  purpleText: {
+    color: Colors.purple
   },
 
   border: {
