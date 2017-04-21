@@ -11,14 +11,9 @@ export default class FriendRequests extends Component {
   static propTypes = {
     requests: PropTypes.array.isRequired
   }
-
-  constructor (props) {
-    super(props);
-  }
   
   render () {
     const { requests } = this.props;
-    
     const text = `${requests.length} friend request${(requests.length === 0 || requests.length > 1) ? 's' : ''}`;
 
     return (
