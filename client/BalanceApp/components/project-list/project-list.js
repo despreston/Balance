@@ -30,7 +30,8 @@ class ProjectList extends Component {
       <TouchableOpacity
         key={ rowData._id }
         onPress={ () => this.props.onProjectTap(rowData) }
-        style={ Style.project }>
+        style={ Style.project }
+      >
           <ProjectListItem project={ rowData } hideNudgeBtn={ hideNudgeBtn }/>
       </TouchableOpacity>
     );    

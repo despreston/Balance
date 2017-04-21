@@ -127,7 +127,7 @@ export default class Help extends Component {
           <View style={ Styles.answer }>
             <Text style={ Styles.topic }>Who made this?</Text>
             <ProfileInfo user={ this.me } customTextStyle={[ Styles.me ]}/>
-            <Text style={ Styles.text }>
+            <Text style={[ Styles.text, { paddingTop: 20 } ]}>
               Hi, my name's Des Preston. I created Balance to manage my own 
               projects in 2016. Since then I've worked some long hours so I can
               see what my friends are also working on.

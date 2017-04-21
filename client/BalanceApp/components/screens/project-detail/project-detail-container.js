@@ -55,7 +55,6 @@ class ProjectDetailContainer extends Component {
 
   constructor (props) {
     super(props);
-
     this.state = { refreshing: false };
   }
 

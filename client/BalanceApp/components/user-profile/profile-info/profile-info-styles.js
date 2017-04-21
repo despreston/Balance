@@ -49,7 +49,6 @@ export default StyleSheet.create  ({
     paddingTop: 10,
     paddingBottom: 20,
     paddingHorizontal: 30,
-    opacity: 0.8,
     textAlign: 'center'
   },
 

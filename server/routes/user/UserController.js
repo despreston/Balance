@@ -2,6 +2,8 @@
 const User = require('../../models/User');
 const Project = require('../../models/Project');
 const AccessControl = require('../../utils/access-control');
+const Notification = require('../../lib/notification/');
+const NewFriendRequest = Notification.NewFriendRequest;
 
 module.exports = ({ get, post, del, put }) => {
 
@@ -40,9 +42,33 @@ module.exports = ({ get, post, del, put }) => {
     .catch(err => res.send(500, err));
   });
 
+  get("users/:userId/friends/requests", ({ params }, res) => {
+    const query = Object.assign({}, params, { 'friends.status': 'requested' });
+
+    User
+    .findOne(query)
+    .select('friends')
+    .lean()
+    .then(user => {
+      if (!user) {
+        return res.send(200, []);
+      }
+      
+      const friendIds = user.friends.map(f => f.userId);
+
+      return User
+        .find({ userId: { $in: friendIds } })
+        .select('name userId picture friends username bio')
+        .lean()
+        .then(friends => res.send(200, friends))
+        .catch(err => res.send(500, err));
+    })
+    .catch(err => res.send(500, err));
+  });
+
   get("users/:userId/friends", (req, res) => {
     User
-    .findOne(req.params)
+    .findOne(req.params.userId)
     .select('friends')
     .lean()
     .then(user => {
@@ -82,7 +108,14 @@ module.exports = ({ get, post, del, put }) => {
     }
 
     User.removeFriendship(params.userId, params.friend)
-    .then(updatedUsers => res.send(200, updatedUsers))
+    .then(updatedUsers => {
+
+      // remove any lingering notifications from friend request
+      NewFriendRequest.remove(params.friend, updatedUsers[1]._id);
+      NewFriendRequest.remove(params.friend, updatedUsers[0]._id);
+
+      return res.send(200, updatedUsers);
+    })
     .catch(err => res.send(500, err));
 
   });

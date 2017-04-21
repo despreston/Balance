@@ -3,11 +3,6 @@ import Colors from '../colors';
 
 export const styles = StyleSheet.create  ({
 
-  mainTitle: {
-    letterSpacing: 5,
-    fontWeight: 'bold'
-  },
-
   button: {
     paddingHorizontal: 20
   },

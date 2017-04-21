@@ -82,11 +82,15 @@ class UserSettings extends Component {
               value={ user.username }
               style={ [Styles.text, Styles.rowInput] }
               placeholder="@username"
+              autoCorrect={ false }
               onChangeText={ value => this.onEdit('username', value) } />
           </View>
           <View style={ Styles.inputRow }>
             <Text style={ [Styles.text, Styles.rowLabel] }>Email</Text>
             <TextInput
+              keyboardType='email-address'
+              autoCapitalize='none'
+              autoCorrect={ false }
               value={ user.email }
               style={ [Styles.text, Styles.rowInput] }
               placeholder="email address"

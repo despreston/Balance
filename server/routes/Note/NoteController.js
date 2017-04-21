@@ -1,8 +1,11 @@
 const Note = require('../../models/Note');
+const User = require('../../models/User');
 const Project = require('../../models/Project');
 const AccessControl = require('../../utils/access-control');
 const Reaction = require('../../models/Reaction');
 const log = require('logbro');
+const Notification = require('../../lib/notification/');
+const { NudgedProjectUpdated } = Notification;
 
 module.exports = ({ get, post, put }) => {
 
@@ -47,7 +50,6 @@ module.exports = ({ get, post, put }) => {
           log.error(err);          
           return res.send(403, err);
         });
-
     })
     .catch(err => {
       log.error(err);
@@ -117,7 +119,6 @@ module.exports = ({ get, post, put }) => {
         .populate('author', 'userId username picture')
         .populate('reactions', 'userId reaction')
         .exec();
-
     })
     .then(note => {
       note = note.toObject();
@@ -152,16 +153,26 @@ module.exports = ({ get, post, put }) => {
 
       return Project
         .findOne({ _id: newNote.project })
-        .select('title')
+        .select('title nudges')
         .then(project => {
+
+          let { nudges } = project;
+
+          User
+          .findOne({ userId: project.user })
+          .select('_id')
+          .then(projectOwner => {
+            nudges.forEach(user => {
+              new NudgedProjectUpdated(user.userId, projectOwner, project._id).save();
+            });
+          });
+
           // reset nudges
           project.nudges = [];
           project.save();
-          
           newNote.project = { _id: project._id, name: project.title };
           return newNote;
         });
-
     })
     .then(newNote => res.send(200, newNote));
   });
@@ -203,7 +214,6 @@ module.exports = ({ get, post, put }) => {
       note = Object.assign(note, { project: body.project });
 
       return res.send(200, note);
-
     })
     .catch(err => {
       log.error(err);

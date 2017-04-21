@@ -18,7 +18,7 @@ function FutureNote ({ note }) {
     }
     return (
       <Text style={[Style.content, Style.center]}>
-        No reminders for this project
+        Nothing planned for this project.
       </Text> 
     );
   }

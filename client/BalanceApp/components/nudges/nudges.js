@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Image, Text, View } from 'react-native';
 
+import AvatarCollection from '../avatar-collection/avatar-collection';
+
 // styles
 import Style from './nudges-style';
 
@@ -17,7 +19,6 @@ export default class Nudges extends Component {
     super(props);
 
     this.state = {
-      nudgers: props.nudgeUsers,
       numOfNudgers: props.nudgeUsers.length,
       textPos: this.calcTextPos(props.nudgeUsers.length)
     };
@@ -27,7 +28,6 @@ export default class Nudges extends Component {
 
   componentWillReceiveProps (nextProps) {
     this.setState({
-      nudgers: nextProps.nudgeUsers,
       numOfNudgers: nextProps.nudgeUsers.length,
       textPos: this.calcTextPos(nextProps.nudgeUsers.length)
     });
@@ -35,33 +35,6 @@ export default class Nudges extends Component {
 
   calcTextPos (numOfNudgers) {
     return numOfNudgers > 5 ? -30: (numOfNudgers * -8) + 10;
-  }
-
-  renderPictures () {
-    let { nudgers, numOfNudgers } = this.state;
-    let key = 0, size = null;
-
-    if (this.props.imageSize) {
-      size = {
-        height: this.props.imageSize,
-        width: this.props.imageSize,
-        borderRadius: this.props.imageSize / 2
-      };
-    }
-
-    if (numOfNudgers > 5) {
-      nudgers = nudgers.slice(0, 5);
-    }
-
-    return nudgers.map(user => {
-      key++;
-      return (
-        <Image
-          key={ key }
-          source={{ uri: user.picture }}
-          style={ [Style.picture, { left: -8 * key }, size] } />
-      );
-    });
   }
 
   renderText () {
@@ -78,11 +51,14 @@ export default class Nudges extends Component {
   }
 
   render () {
-    const { textStyle } = this.props;
+    const { textStyle, imageSize } = this.props;
 
     return (
       <View style={ Style.nudges }>
-        { this.renderPictures() }
+        <AvatarCollection
+          images={ this.props.nudgeUsers.map(n => n.picture) }
+          imageSize={ imageSize }
+        />
         <Text style={ [Style.text, { left: this.state.textPos }, textStyle] }>
           { `${this.renderText()} update` }
         </Text>

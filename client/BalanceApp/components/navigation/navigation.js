@@ -1,7 +1,7 @@
 // Vendors
 import React from 'react';
 import { StackNavigator, TabNavigator } from 'react-navigation';
-import { Image } from 'react-native';
+import { View, Image } from 'react-native';
 
 // Screens
 import {
@@ -9,14 +9,17 @@ import {
   ProjectDetailContainer,
   EditProjectContainer,
   Activity,
-  Notifications,
+  NotificationsContainer,
   Profile,
   UserSettings,
   UserProfile,
   UserSearch,
   NoteContainer,
-  Auth
+  Auth,
+  FriendRequestList
 } from '../screens';
+
+import UnreadNotifications from './unread-notifications/unread-notifications';
 
 import Colors from '../colors';
 
@@ -41,51 +44,63 @@ function icon (path) {
   return <Image source={ path } style={{ width: 26, height: 26 }} />;
 }
 
+const NotificationIcon = ({ focused }) => {
+  let rightIcon = focused
+    ? icon(require('../../assets/icons/notifications-tabbar-selected.png'))
+    : icon(require('../../assets/icons/notifications-tabbar.png'));
+
+  return (
+    <View>
+      { rightIcon }
+      <UnreadNotifications />
+    </View>
+  );
+}
+
 const ProjectsStack = StackNavigator({
   ...defaultScreens,
   Home: { screen: MainScene },
   EditProject: { screen: EditProjectContainer }
-}, { 
-  navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
+}, {
+  navigationOptions: Object.assign({}, navigationOptions, { tabBar:
     {
       icon: ({ focused }) => {
         return focused
           ? icon(require('../../assets/icons/projects-tabbar-selected.png'))
           : icon(require('../../assets/icons/projects-tabbar.png'));
       }
-    } 
-  }), 
+    }
+  }),
   initialRouteName: 'Home'
 });
 
 const ActivityStack = StackNavigator({
   ...defaultScreens,
   Activity: { screen: Activity }
-}, { 
+}, {
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
-        return focused 
+        return focused
           ? icon(require('../../assets/icons/activity-tabbar-selected.png'))
           : icon(require('../../assets/icons/activity-tabbar.png'));
       }
-    } 
-  }), 
+    }
+  }),
   initialRouteName: 'Activity'
 });
 
 const NotificationsStack = StackNavigator({
   ...defaultScreens,
-  Notifications: { screen: Notifications }
-}, { 
+  Notifications: { screen: NotificationsContainer },
+  FriendRequests: { screen: FriendRequestList }
+}, {
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
-        return focused 
-          ? icon(require('../../assets/icons/notifications-tabbar-selected.png'))
-          : icon(require('../../assets/icons/notifications-tabbar.png'));
+        return <NotificationIcon focused={ focused } />
       }
-    } 
+    }
   }), 
   initialRouteName: 'Notifications'
 });
@@ -95,11 +110,11 @@ const ProfileStack = StackNavigator({
   Profile: { screen: Profile },
   UserSettings: { screen: UserSettings },
   UserSearch: { screen: UserSearch }
-}, { 
+}, {
   navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
     {
       icon: ({ focused }) => {
-        return focused 
+        return focused
           ? icon(require('../../assets/icons/profile-tabbar-selected.png'))
           : icon(require('../../assets/icons/profile-tabbar.png'));
       }

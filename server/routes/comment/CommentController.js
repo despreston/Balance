@@ -1,6 +1,8 @@
 const Comment = require('../../models/Comment');
 const Note = require('../../models/Note');
 const log = require('logbro');
+const Notification = require('../../lib/notification/');
+const { NewComment } = Notification;
 
 module.exports = ({ post, del }) => {
 
@@ -10,29 +12,35 @@ module.exports = ({ post, del }) => {
     Comment
     .create(body)
     .then((comment, err) => {
+
       if (err) {
         log.error(err);
         return res.send(500);
       }
 
       Note
-      .findOne({ _id: body.note })
+      .findByIdAndUpdate(
+        { _id: body.note },
+        { $push: { comments: comment._id } },
+        { new: true }
+      )
       .then(note => {
-        note.comments.push(comment._id);
-        note.save();
-      });
+        let noteAuthor = note.user;
+        return Comment
+        .findOne({ _id: comment._id })
+        .populate('commenter', 'userId username picture')
+        .lean()
+        .then(comment => {
+          
+          // Create notification for author if the comment is by someone other
+          // than the author.
+          if (noteAuthor !== comment.commenter.userId) {
+            new NewComment(noteAuthor, comment.commenter._id, comment.note).save();
+          }
 
-      Comment
-      .findOne({ _id: comment._id })
-      .populate('commenter', 'userId username picture')
-      .lean()
-      .then(comment => {
-        delete comment.user;
-        return res.send(201, comment)
-      })
-      .catch(err => {
-        log.error(err);
-        return res.send(500);
+          delete comment.user;
+          return res.send(201, comment)
+        });
       });
     })
     .catch(err => {

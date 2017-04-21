@@ -167,13 +167,17 @@ class UserProfile extends Component {
     return (
       <ScrollView style={ Styles.profile } refreshControl={ <Refresh { ...refreshProps } /> }>
         <View style={ Styles.profileInfo }>
-            <ProfileInfo user={ this.props.user } />
-            <UserProfileSwitch
-              user={ this.props.user }
-              hideProjects={ this.userIsLoggedInUser }
-              selectedContext={ this.state.context }
-              switchContext={ (context) => this.switchContext(context) }
-            />
+          <ProfileInfo
+            user={ this.props.user }
+            showEmptyBio={ this.userIsLoggedInUser }
+            addBio={ () => this.props.nav('UserSettings') }
+          />
+          <UserProfileSwitch
+            user={ this.props.user }
+            hideProjects={ this.userIsLoggedInUser }
+            selectedContext={ this.state.context }
+            switchContext={ (context) => this.switchContext(context) }
+          />
         </View>
         <View style={ Styles.body }>
           { this.renderBody() }

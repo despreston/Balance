@@ -1,7 +1,8 @@
-import projects from './projects';
-import users    from './users';
-import notes    from './notes';
-import comments from './comments';
+import projects      from './projects';
+import users         from './users';
+import notes         from './notes';
+import comments      from './comments';
+import notifications from './notifications';
 
 const initialState = {
   // Users key'd by userId
@@ -21,13 +22,16 @@ const initialState = {
   notes: {},
 
   // Comment key'd by _id
-  comments: {}
+  comments: {},
+
+  // notifications by _id
+  notifications: {}
   
 };
 
 export default function reducer (state = initialState, action) {
 
-  let handlers = Object.assign({}, projects, notes, users, comments);
+  let handlers = Object.assign({}, projects, notes, users, comments, notifications);
 
   if (action.type === 'RESET') {
     return Object.assign({}, initialState);

@@ -33,7 +33,12 @@ class Auth extends Component {
     isLoggedIn().then(authenticated => {
       if (authenticated) {
         parseToken()
-        .then(token => dispatch(actions.requestUser(token.sub, true)))
+        .then(token => {
+          return Promise.all([
+            dispatch(actions.fetchNotifications()),
+            dispatch(actions.requestUser(token.sub, true))
+          ]);
+        })
         .then(() => this.navigateToApp());
       }
     });
