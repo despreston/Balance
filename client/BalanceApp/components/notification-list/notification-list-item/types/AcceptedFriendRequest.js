@@ -16,4 +16,6 @@ const AcceptedFriendRequest = ({ user, nav }) => {
   );
 };
 
+AcceptedFriendRequest.icon = require('../../../../assets/icons/friends-filled.png');
+
 export default AcceptedFriendRequest;

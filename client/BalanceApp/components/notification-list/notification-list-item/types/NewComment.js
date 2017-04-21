@@ -19,4 +19,6 @@ const NewComment = ({ user, note, nav }) => {
   );
 };
 
+NewComment.icon = require('../../../../assets/icons/comment-filled.png');
+
 export default NewComment;

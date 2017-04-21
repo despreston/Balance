@@ -22,4 +22,6 @@ const NewNudge = ({ user, project, nav }) => {
   );
 };
 
+NewNudge.icon = require('../../../../assets/icons/nudge-filled.png');
+
 export default NewNudge;

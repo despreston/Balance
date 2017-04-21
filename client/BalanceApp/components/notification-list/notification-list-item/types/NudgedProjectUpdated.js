@@ -23,4 +23,6 @@ const NudgedProjectUpdated = ({ user, project, nav }) => {
   );
 };
 
+NudgedProjectUpdated.icon = require('../../../../assets/icons/star-filled.png');
+
 export default NudgedProjectUpdated;

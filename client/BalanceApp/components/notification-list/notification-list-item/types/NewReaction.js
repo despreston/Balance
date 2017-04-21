@@ -19,4 +19,6 @@ const NewReaction = ({ user, note, nav, reaction }) => {
   );
 };
 
+NewReaction.icon = require('../../../../assets/icons/reaction-filled.png');
+
 export default NewReaction;

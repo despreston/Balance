@@ -29,38 +29,46 @@ class NotificationListItem extends Component {
 
   getText () {
     let props = { nav: this.nav, user: this.sender };
+    let icon;
 
     switch (this.type) {
       case 'new_comment':
         props.note = this.related.find(r => r.kind === 'note').item._id;
-        return <NewComment { ...props } />;
+        return { text: (<NewComment { ...props } />), icon: NewComment.icon };
 
       case 'accepted_friend_request':
-        return <AcceptedFriendRequest { ...props } />;
+        return { text: (<AcceptedFriendRequest { ...props } />), icon: AcceptedFriendRequest.icon };
 
       case 'new_nudge':
         props.project = this.related.find(r => r.kind === 'project').item;
-        return <NewNudge { ...props } />;
+        return { text: (<NewNudge { ...props } />), icon: NewNudge.icon };
 
       case 'nudged_project_updated':
         props.project = this.related.find(r => r.kind === 'project').item;
-        return <NudgedProjectUpdated { ...props } />;
+        return { text: (<NudgedProjectUpdated { ...props } />), icon: NudgedProjectUpdated.icon };
 
       case 'new_reaction':
         props.note = this.related.find(r => r.kind === 'note').item._id;
         props.reaction = this.related.find(r => r.kind === 'reaction').item.reaction;
-        return <NewReaction { ...props } />;
+        return { text: (<NewReaction { ...props }/>), icon: NewReaction.icon };
     }
   }
 
   render () {
     const { notification } = this.props;
 
+    const { text, icon } = this.getText();
+
     return (
       <View style={[ Styles.flexRow, Styles.notification ]}>
-        <Image source={{ uri: this.sender.picture }} style={ Styles.avatar } />
+        <View>
+          <Image source={{ uri: this.sender.picture }} style={ Styles.avatar } />
+          <View style={ Styles.iconOverlay }>
+            <Image source={ icon } style={ Styles.icon } />
+          </View>
+        </View>
         <View style={[ Styles.textContainer ]}>
-          { this.getText() }
+          { text }
         </View>
         <View>
           <Text style={ Styles.date }>{ prettyDate(notification.createdAt) }</Text>
