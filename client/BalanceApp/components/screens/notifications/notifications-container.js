@@ -33,20 +33,29 @@ class NotificationsContainer extends Component {
     this.state = { friend_requests: [], refreshing: false };
 
     this.fetchAll = this.fetchAll.bind(this);
+    this.refresh = this.refresh.bind(this);
 
     this.fetchAll();
   }
 
   fetchAll () {
-    this.fetchFriendRequests()
-    .then(friend_requests => this.setState({ friend_requests }));
-    
-    this.props.dispatch(actions.fetchNotifications())
-    .then(() => this.props.dispatch(actions.markAsRead()));
+    return this.props.dispatch(actions.markAsRead())
+    .then(() => this.props.dispatch(actions.fetchNotifications()))
+    .then(() => this.fetchFriendRequests())
+    .then(friend_requests => {
+      this.setState({ friend_requests })
+    });
   }
 
   fetchFriendRequests () {
     return api(`users/${this.props.user.userId}/friends/requests`);
+  }
+
+  refresh () {
+    this.setState({ refreshing: true });
+
+    this.fetchAll()
+    .then(() => this.setState({ refreshing: false }));
   }
   
   render () {
@@ -54,7 +63,7 @@ class NotificationsContainer extends Component {
       <Notifications
         notifications={ this.props.notifications }
         refreshing={ this.state.refreshing }
-        onRefresh={ () => this.fetchAll() }
+        onRefresh={ () => this.refresh() }
         nav={ this.props.navigation.navigate }
         friendRequests={ this.state.friend_requests }
         user={ this.props.user }

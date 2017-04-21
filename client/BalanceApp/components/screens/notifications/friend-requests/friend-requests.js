@@ -18,6 +18,8 @@ export default class FriendRequests extends Component {
   
   render () {
     const { requests } = this.props;
+    
+    const text = `${requests.length} friend request${(requests.length === 0 || requests.length > 1) ? 's' : ''}`;
 
     return (
       <View style={[ Styles.flexRow, Styles.friendRequests ]}>
@@ -26,10 +28,11 @@ export default class FriendRequests extends Component {
             imageSize={ 34 }
             images={ requests.map(r => r.picture) }
           />
-          <Text style={ Styles.text }>Friend requests</Text>
+          <Text style={ Styles.text }>
+            { text } 
+          </Text>
         </View>
         <View style={ Styles.flexRow }>
-          <Text style={ Styles.text }>{ requests.length }</Text>
           <Image
             style={ Styles.forward }
             source={ require('../../../../assets/icons/forward.png') }

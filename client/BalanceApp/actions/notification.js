@@ -8,7 +8,7 @@ export default {
   /**
    * creates action for receiving notifications
    * @param {object} notifications (single) OR {array} notifications (multiple)
-   * @return {action}
+   * @return {object}
    */
   receiveNotifications (notifications) {
     if (!Array.isArray(notifications)) {
@@ -22,6 +22,14 @@ export default {
   },
 
   /**
+   * creates action for marking all notifications as read
+   * @return {object}
+   */
+  // read () {
+  //   return { type: MARK_AS_READ }
+  // },
+
+  /**
    * fetch notifications
    * @return {Promise}
    */
@@ -31,7 +39,7 @@ export default {
 
   markAsRead () {
     const opts = { method: 'POST' };
-    return apiDispatch('notifications/read', this.receiveNotifications, opts);
+    return apiDispatch('notifications/read', null, opts);
   }
 
 };
