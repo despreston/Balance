@@ -77,7 +77,8 @@ export default StyleSheet.create  ({
   },
 
   purpleText: {
-    color: Colors.purple
+    color: Colors.purple,
+    fontWeight: '600'
   },
 
   border: {
