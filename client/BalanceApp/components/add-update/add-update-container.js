@@ -12,7 +12,8 @@ class AddUpdateContainer extends Component {
   static propTypes = {
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
-    project: PropTypes.object.isRequired
+    project: PropTypes.object.isRequired,
+    reloadProject: PropTypes.bool
   }
 
   constructor (props) {
@@ -34,6 +35,10 @@ class AddUpdateContainer extends Component {
 
     if (future.content !== '') {
       promises.push(this.props.dispatch(actions.saveNote(future)));
+    }
+
+    if (this.props.reloadProject) {
+      promises.push(this.props.dispatch(actions.fetchProject(this.props.project)));
     }
 
     return Promise.all(promises);

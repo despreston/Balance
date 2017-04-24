@@ -5,10 +5,14 @@ import { NavigationActions } from 'react-navigation';
 
 // actions
 import actions from '../../../actions/';
-// import { login, requestUser } from '../../../actions';
 
 // utils
-import { isLoggedIn, parseToken } from '../../../utils/auth';
+import {
+  isLoggedIn,
+  parseToken,
+  getRefreshToken,
+  refreshIdToken
+} from '../../../utils/auth';
 
 class Auth extends Component {
 
@@ -32,7 +36,8 @@ class Auth extends Component {
     // is token valid?
     isLoggedIn().then(authenticated => {
       if (authenticated) {
-        parseToken()
+        refreshIdToken()
+        .then(parseToken)
         .then(token => {
           return Promise.all([
             dispatch(actions.fetchNotifications()),

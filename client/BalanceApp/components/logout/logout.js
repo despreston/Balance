@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import actions from '../../actions/';
-import { removeToken } from '../../utils/auth';
+import { removeAuthToken, removeRefreshToken } from '../../utils/auth';
 import Styles from './logout-styles';
 
 class Logout extends Component {
@@ -20,7 +20,9 @@ class Logout extends Component {
       this.props.beforeLogoutHook();
     }
     
-    removeToken().then( err => {  
+    removeRefreshToken()
+    .then(removeAuthToken)
+    .then( err => {  
       if (err) {
         throw "Could not log out";
       }

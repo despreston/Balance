@@ -39,6 +39,25 @@ export default StyleSheet.create({
   date: {
     fontSize: 12,
     color: Colors.gray.silver
+  },
+
+  iconOverlay: {
+    height: 23,
+    width: 23,
+    borderWidth: 1,
+    borderColor: Colors.gray.porcelain,
+    borderRadius: 11,
+    backgroundColor: Colors.white,
+    position: 'absolute',
+    bottom: -5,
+    right: -5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  icon: {
+    height: 17,
+    width: 17
   }
 
 });

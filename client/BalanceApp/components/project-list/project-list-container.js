@@ -25,7 +25,6 @@ class ProjectListContainer extends Component {
       .filter(project => project.owner[0].userId === ownProps.user);
 
     return {
-      projectsInvalidated: state.projects_invalidated,
       loggedInUser: state.loggedInUser,
       projects
     };
@@ -52,7 +51,6 @@ class ProjectListContainer extends Component {
   componentWillReceiveProps (nextProps) {
     const {
       projects,
-      projectsInvalidated,
       user,
       dispatch
     } = nextProps;
@@ -100,7 +98,11 @@ class ProjectListContainer extends Component {
   }
 
   renderList () {
-    if (this.props.emptyState && !this.state.refreshing && this.props.projects.length === 0) {
+    if (
+      this.props.emptyState &&
+      !this.state.refreshing &&
+      this.props.projects.length === 0
+    ) {
       return this.props.emptyState;
     }
 
