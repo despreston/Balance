@@ -1,7 +1,6 @@
 import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import formatQueryParams from '../utils/query-params';
-import { invalidate } from './shared';
 
 const RECEIVE_NOTES = 'RECEIVE_NOTES';
 
@@ -24,7 +23,7 @@ export default {
   },
 
   /**
-   * Save a note to server and invalidate the projects
+   * Save a note
    * Properly handles POST or PUT determination based on _new flag in note
    * @param {object} note
    * @return {Promise}
@@ -41,7 +40,6 @@ export default {
     }
 
     return dispatch => {
-      dispatch(invalidate('projects'));
       return api(url, { method, body: note })
         .then(user => dispatch(this.receiveNotes));
     };

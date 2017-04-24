@@ -26,28 +26,31 @@ class ProjectListItem extends Component {
     super(props);
 
     this.state = { addUpdateVisible: false };
-
-    this.Past = props.project.Past;
-    this.Future = props.project.Future;
-    this.status = props.project.status;
-    this.nudgeUsers = props.project.nudgeUsers;
-    this.lastUpdated = this.getLastUpdated();
+    this.lastUpdated = this.getLastUpdated(props.project);
   }
 
-  getLastUpdated () {
-    if (this.Past && this.Future) {
-      return this.Past.lastUpdated.getTime() > this.Future.lastUpdated.getTime()
-        ? this.Past.lastUpdated
+  componentWillReceiveProps (nextProps) {
+    this.lastUpdated = this.getLastUpdated(nextProps.project);
+  }
+
+  getLastUpdated (project) {
+    const { Past, Future } = project;
+
+    if (Past && Future) {
+      return Past.lastUpdated.getTime() > Future.lastUpdated.getTime()
+        ? Past.lastUpdated
         : Future.lastUpdated;
-    } else if (this.Past) {
-      return this.Past.lastUpdated;
-    } else if (this.Future) {
-      return this.Future.lastUpdated;
+    } else if (Past) {
+      return Past.lastUpdated;
+    } else if (Future) {
+      return Future.lastUpdated;
     }
   }
 
   renderNote () {
-    if (this.status === 'finished') {
+    const { Future, status } = this.props.project;
+
+    if (status === 'finished') {
       return (
         <Text style={ Style.message }>
           This project is finished!
@@ -55,10 +58,10 @@ class ProjectListItem extends Component {
       );
     }
 
-    if (this.Future) {
+    if (Future) {
       return (
         <Text style={ Style.note } numberOfLines={ 2 }>
-          { this.Future.content }
+          { Future.content }
         </Text>
       )
     }
@@ -71,15 +74,17 @@ class ProjectListItem extends Component {
   }
 
   renderNudgeUsers () {
-    if (this.nudgeUsers && this.nudgeUsers.length > 0) {
-      return <Nudges nudgeUsers={ this.nudgeUsers } linkToUpdate={ true }/>
+    const { nudgeUsers } = this.props.project;
+
+    if (nudgeUsers && nudgeUsers.length > 0) {
+      return <Nudges nudgeUsers={ nudgeUsers } linkToUpdate={ true }/>
     }
 
     return null;
   }
 
   renderNudgeBtn () {
-    if (this.props.hideNudgeBtn || this.status === 'finished') {
+    if (this.props.hideNudgeBtn || this.props.project.status === 'finished') {
       return <View />;
     }
 
@@ -97,7 +102,7 @@ class ProjectListItem extends Component {
   }
 
   renderStatusIcon () {
-    if (!this.lastUpdated || this.status !== 'active') {
+    if (!this.lastUpdated || this.props.project.status !== 'active') {
       return <View style={{ width: 10 }} />;
     }
 
@@ -105,7 +110,7 @@ class ProjectListItem extends Component {
   }
 
   renderUpdateButton () {
-    if (this.status !== 'active' || !this.props.hideNudgeBtn) {
+    if (this.props.project.status !== 'active' || !this.props.hideNudgeBtn) {
       return null;
     }
 
@@ -136,6 +141,7 @@ class ProjectListItem extends Component {
         { this.renderStatusIcon() }
 
         <AddUpdateContainer
+          reloadProject={ true }
           project={ this.props.project }
           visible={ this.state.addUpdateVisible }
           hideFn={ () => this.toggleAddUpdateModal() }
