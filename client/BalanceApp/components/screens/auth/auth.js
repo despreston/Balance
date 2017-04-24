@@ -25,6 +25,8 @@ class Auth extends Component {
   constructor (props) {
     super(props);
 
+    this.state = { showLogin: false };
+
     this.handleAuth();
   }
 
@@ -47,6 +49,8 @@ class Auth extends Component {
           ]);
         })
         .then(() => this.navigateToApp());
+      } else {
+        this.setState({ showLogin: true });
       }
     });
   }
@@ -65,20 +69,24 @@ class Auth extends Component {
   }
 
   render () {
+    const icon = require('../../../assets/icons/icon-white.png');
     const { dispatch } = this.props;
     
     return (
       <View style={ Styles.container }>
-        <Image source={ require('../../../assets/icons/icon-white.png') } style={ Styles.icon }/>
+        <Image source={ icon } style={ Styles.icon }/>
         <Text style={ Styles.title }>
           Hello!
         </Text>
         <Text style={[ Styles.white, Styles.subtitle ]}>
           Welcome to <Text style={ Styles.bold }>Balance</Text>
         </Text>
-        <TouchableOpacity style={ Styles.button } onPress={ () => dispatch(actions.login()) }>
-          <Text style={[ Styles.bold, Styles.white ]}>Get started</Text>
-        </TouchableOpacity>
+        {
+          this.state.showLogin &&
+          <TouchableOpacity style={ Styles.button } onPress={ () => dispatch(actions.login()) }>
+            <Text style={[ Styles.bold, Styles.white ]}>Get started</Text>
+          </TouchableOpacity>
+        }
       </View>
     );
   }
