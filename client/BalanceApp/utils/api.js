@@ -1,5 +1,5 @@
 import convertDates from './convert-dates';
-import { getToken } from './auth';
+import { getAuthToken } from './auth';
 
 /**
  * Sets up api calls.
@@ -14,7 +14,7 @@ export function api (url, properties = {}, externalUrl = false) {
     properties.body = JSON.stringify(properties.body);
   }
   
-  return getToken()
+  return getAuthToken()
     .then(token => new Headers({ authorization: `Bearer ${token}` }) )
     .then(headers => {
       properties.headers = headers;

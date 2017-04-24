@@ -1,7 +1,7 @@
 import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import Auth0Lock from 'react-native-lock';
-import { saveToken } from '../utils/auth';
+import { saveAuthToken, saveRefreshToken } from '../utils/auth';
 
 const LOGGED_IN_USER = 'LOGGED_IN_USER';
 const RESET_CURRENT_USER = 'RESET_CURRENT_USER';
@@ -83,17 +83,20 @@ export default {
   login () {
     const { clientId, domain } = CONFIG;
     const lock = new Auth0Lock({ clientId, domain });
+    const authParams = { scope: 'openid offline_access', device: 'my-device' };
 
     // show lock screen to prompt for login details
     return dispatch => {
-      lock.show({}, (err, profile, tokens) => {
+      lock.show({ authParams }, (err, profile, tokens) => {
         if (err) {
           console.log('something went wrong ' + err);
         }
 
-        // save token to local storage
-        saveToken(tokens.idToken).catch( err => {
-          console.log('could not save token ', err);
+        // save tokens to local storage
+        saveRefreshToken(tokens.refreshToken)
+        .then(() => saveAuthToken(tokens.idToken))
+        .catch( err => {
+          console.log('could not save tokens ', err);
         });
 
         delete profile.extraInfo;

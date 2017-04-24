@@ -1,8 +1,6 @@
 import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import formatQueryParams from '../utils/query-params';
-import Auth0Lock from 'react-native-lock';
-import { saveToken } from '../utils/auth';
 import { invalidate } from './shared';
 
 const RECEIVE_NOTES = 'RECEIVE_NOTES';
