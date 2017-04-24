@@ -2,6 +2,7 @@ import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import Auth0Lock from 'react-native-lock';
 import { saveAuthToken, saveRefreshToken } from '../utils/auth';
+import Colors from '../components/colors';
 
 const LOGGED_IN_USER = 'LOGGED_IN_USER';
 const RESET_CURRENT_USER = 'RESET_CURRENT_USER';
@@ -82,12 +83,34 @@ export default {
    */
   login () {
     const { clientId, domain } = CONFIG;
-    const lock = new Auth0Lock({ clientId, domain });
+
+    const style = {
+      ios: {
+        screenBackgroundColor: Colors.purple,
+        closeButtonTintColor: Colors.white,
+        primaryButtonNormalColor: Colors.green,
+        textFieldTextColor: Colors.gray.tundora,
+        textFieldIconColor: Colors.purple,
+        titleTextColor: Colors.white,
+        credentialBoxBorderColor: Colors.purple,
+        credentialBoxSeparatorColor: Colors.purple,
+        credentialBoxBackgroundColor: Colors.white,
+        secondaryButtonTextColor: Colors.white,
+        descriptionTextColor: Colors.white,
+        separatorTextColor: Colors.white
+      }
+    };
+
+    const lock = new Auth0Lock({ clientId, domain, style });
     const authParams = { scope: 'openid offline_access', device: 'my-device' };
 
     // show lock screen to prompt for login details
     return dispatch => {
-      lock.show({ authParams }, (err, profile, tokens) => {
+      lock.show({ closable: true, authParams }, (err, profile, tokens) => {
+        if (!tokens) {
+          return;
+        }
+
         if (err) {
           console.log('something went wrong ' + err);
         }

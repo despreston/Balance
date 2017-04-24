@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 // components
 import Logout from '../../logout/logout';
@@ -50,7 +51,15 @@ class UserSettings extends Component {
   }
 
   beforeLogout () {
-    this.props.navigation.navigate('Home');
+    // this.props.navigation.navigate('Login');
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Login' })
+      ]
+    });
+
+    this.props.navigation.dispatch(resetAction);
   }
 
   onEdit (property, value) {

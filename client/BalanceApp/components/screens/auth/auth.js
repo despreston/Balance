@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-native';
+import { TouchableOpacity, Text, View, Image } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 // actions
 import actions from '../../../actions/';
+
+import Styles from './auth-styles';
 
 // utils
 import {
@@ -64,7 +66,21 @@ class Auth extends Component {
 
   render () {
     const { dispatch } = this.props;
-    return <Button onPress={ () => dispatch(actions.login()) } title='Login' />;
+    
+    return (
+      <View style={ Styles.container }>
+        <Image source={ require('../../../assets/icons/icon-white.png') } style={ Styles.icon }/>
+        <Text style={ Styles.title }>
+          Hello!
+        </Text>
+        <Text style={[ Styles.white, Styles.subtitle ]}>
+          Welcome to <Text style={ Styles.bold }>Balance</Text>
+        </Text>
+        <TouchableOpacity style={ Styles.button } onPress={ () => dispatch(actions.login()) }>
+          <Text style={[ Styles.bold, Styles.white ]}>Get started</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
 }
