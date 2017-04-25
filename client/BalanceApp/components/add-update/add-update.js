@@ -4,10 +4,9 @@ import {
   Text,
   KeyboardAvoidingView,
   TouchableOpacity,
-  ScrollView,
+  SegmentedControlIOS,
   View
 } from 'react-native';
-import Dimensions from 'Dimensions';
 
 // utils
 import emptyNote from '../../utils/empty-note';
@@ -31,20 +30,30 @@ export default class AddUpdate extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { past: '', future: '' };
-
+    this.options = [ 'Todo', 'Completed' ];
     this.scrollView = null;
     this.pastNotePlaceholder = "Finished math homework";
     this.futureNotePlaceholder = "Study for test on Tuesday";
+    this.typeChange = this.typeChange.bind(this);
+
+    this.state = {
+      note: '',
+      placeholder: this.futureNotePlaceholder,
+      selectedOption: 'Todo'
+    };
   }
 
-  move (factor) {
-    this.scrollView.scrollTo({ x: factor * Dimensions.get('window').width });
+  componentWillReceiveProps () {
+    this.setState({
+      note: '',
+      placeholder: this.futureNotePlaceholder,
+      selectedOption: 'Todo'
+    });
   }
 
   renderCancelButton () {
     function doCancel () {
-      this.setState({ past: '', future: '' });
+      this.setState({ note: '' });
       this.props.hideFn();
     }
 
@@ -57,51 +66,15 @@ export default class AddUpdate extends Component {
     );
   }
 
-  renderNextButton () {
-    return (
-      <NavButton
-        onPress={ () => this.move(1) }
-        label="Next"
-        buttonStyle={ Styles.green }
-      />
-    );
-  }
-
-  renderSkipButton () {
-    function doSkip () {
-      this.setState({ past: '' });
-      this.move(1);
-    }
-
-    return (
-      <NavButton
-        onPress={ doSkip.bind(this) }
-        label="Skip"
-        buttonStyle={ Styles.unimportantButton }
-      />
-    );
-  }
-
-  renderBackButton () {
-    return (
-      <NavButton
-        onPress={ () => this.move(0) }
-        label="Back"
-        buttonStyle={ Styles.unimportantButton }
-      />
-    );   
-  }
-
   renderSaveButton () {
     function saveAndClose () {
-      let past = emptyNote(this.props.project, 'Past');
-      let future = emptyNote(this.props.project, 'Future');
+      let note = this.state.selectedOption === 'Completed'
+        ? emptyNote(this.props.project, 'Past')
+        : emptyNote(this.props.project, 'Future');
 
-      past.content = this.state.past;
-      future.content = this.state.future;
+      note.content = this.state.note;
 
-      this.props.save(past, future)
-        .then(() => this.setState({ past: '', future: '' }))
+      this.props.save(note)
         .then(this.props.hideFn);
     }
 
@@ -130,59 +103,45 @@ export default class AddUpdate extends Component {
     );
   }
 
+  typeChange (selectedOption) {
+    const placeholder = selectedOption === 'Completed'
+      ? this.pastNotePlaceholder
+      : this.futureNotePlaceholder;
+
+    this.setState({
+      selectedOption,
+      placeholder
+    });
+  }
+
   render () {
     const { visible } = this.props;
 
     return (
       <Modal animationType={ 'slide' } visible={ visible } >
-        <ScrollView
-          keyboardShouldPersistTaps='handled'
-          horizontal
-          scrollEnabled={ true }
-          style={ Styles.content }
-          ref={ scrollView => { this.scrollView = scrollView; } }
-        >
+        <View style={ Styles.content }>
           <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
-            <Text style={ Styles.text }>What did you do this time?</Text>
-            <Text style={ Styles.subText }>
-              Feel free to skip if you did not do anything.
-            </Text>
+            <SegmentedControlIOS
+              selectedIndex={ this.options.findIndex(v => v === this.state.selectedOption) }
+              onValueChange={ val => this.typeChange(val) }
+              values={ this.options }
+              tintColor={ '#fff' }
+            />
             <Note
               autoFocus
-              onTextChange={ text => this.setState({ past: text }) }
-              note={ this.state.past }
-              placeHolder={ this.pastNotePlaceholder }
+              onTextChange={ text => this.setState({ note: text }) }
+              note={ this.state.note }
+              placeHolder={ this.state.placeholder }
             />
             <Text style={[ Styles.subText, Styles.privacy ]}>
               { this.privacy() }
             </Text>
             <View style={ Styles.navButtonContainer }>
               { this.renderCancelButton() }
-              { this.renderSkipButton() }
-              { this.renderNextButton() }
-            </View>
-          </KeyboardAvoidingView>
-
-          <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
-            <Text style={ Styles.text }>
-              Anything to remember for next time?
-            </Text>
-            <Text style={ Styles.subText }>
-              Leave this blank if you're unsure.
-            </Text>
-            <Note
-              onTextChange={ text => this.setState({ future: text }) }
-              note={ this.state.future }
-              placeHolder={ this.futureNotePlaceholder }
-            />
-            { this.privacy() }
-            <View style={ Styles.navButtonContainer }>
-              { this.renderCancelButton() }
-              { this.renderBackButton() }
               { this.renderSaveButton() }
             </View>
           </KeyboardAvoidingView>
-        </ScrollView>
+        </View>
       </Modal>
     );
   }
