@@ -19,16 +19,19 @@ export default StyleSheet.create  ({
     justifyContent: 'center'
   },
 
+  top: {
+    justifyContent: 'space-between'
+  },
+
   card: {
     paddingTop: 35,
-    paddingBottom: 20,
-    paddingHorizontal: 15,
     height: Dimensions.get('window').height, 
     width: Dimensions.get('window').width
   },
 
   navButtonContainer: {
-    paddingVertical: 15,
+    paddingHorizontal: 10,
+    paddingBottom: 15,
     alignSelf: 'center',
   },
 
