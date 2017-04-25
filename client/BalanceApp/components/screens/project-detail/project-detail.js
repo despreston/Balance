@@ -15,6 +15,7 @@ import NoteListContainer from '../../note-list/note-list-container';
 import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
 import Refresh from '../../refresh/refresh';
+import UpdateButton from './update-button/update-button';
 
 // utils
 import emptyNote from '../../../utils/empty-note';
@@ -194,21 +195,6 @@ const FinishedProjectText = () => {
       <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
         This project has been marked as finished. {"\n"} Nice job! 🎉
       </Text>
-    </View>
-  );
-};
-
-const UpdateButton = ({ press }) => {
-  return (
-    <View style={ Styles.updateButtonContainer }>
-      <TouchableOpacity
-        onPress={ press }
-        style={ Styles.updateButton }>
-        <Text
-          style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
-          Add an update
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 };

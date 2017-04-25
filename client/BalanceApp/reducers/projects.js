@@ -23,17 +23,8 @@ export default {
 
     return Object.assign({}, state, {
       projects: { ...state.projects, ...projects },
-      notes: { ...state.notes, ...notes },
-      projects_invalidated: false
+      notes: { ...state.notes, ...notes }
     });
-  },
-
-  /**
-   * Mark projects as stale
-   * This is used as a flag to reload projects collection
-   */
-  INVALIDATE_PROJECTS (state) {
-    return Object.assign({}, state, { projects_invalidated: true });
   },
 
   /**

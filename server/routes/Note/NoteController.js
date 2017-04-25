@@ -142,16 +142,15 @@ module.exports = ({ get, post, put }) => {
 
     Note
     .create(body)
-    .then((newNote, err) => {
-      
-      if (err) {
-        res.send(500, err);
-      }
+    .then(newNote => {
 
-      newNote.commentCount = 0;
-      newNote.comments = [];
+      return Note
+      .findOne({ _id: newNote._id })
+      .populate('project', 'title privacyLevel')
+      .populate('author', 'userId username picture')
+      .then(newNote => {
 
-      return Project
+        return Project
         .findOne({ _id: newNote.project })
         .select('title nudges')
         .then(project => {
@@ -165,16 +164,23 @@ module.exports = ({ get, post, put }) => {
             nudges.forEach(user => {
               new NudgedProjectUpdated(user.userId, projectOwner, project._id).save();
             });
-          });
+          })
+          .catch(log.error);
 
           // reset nudges
           project.nudges = [];
           project.save();
           newNote.project = { _id: project._id, name: project.title };
           return newNote;
-        });
+        })
+        .catch(log.error);
+      });
     })
-    .then(newNote => res.send(200, newNote));
+    .then(newNote => res.send(200, newNote))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
   });
 
   put('notes/:_id', ({ body, params, user }, res) => {
