@@ -19,7 +19,7 @@ class NoteListItem extends Component {
     note: PropTypes.shape({
       type: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
-      createdAt: PropTypes.instanceOf(Date).isRequired,
+      lastUpdated: PropTypes.instanceOf(Date).isRequired,
       author: PropTypes.shape({
         userId: PropTypes.string.isRequired
       }).isRequired,
@@ -45,7 +45,7 @@ class NoteListItem extends Component {
 
     return (
       <View style={[ Styles.flexRow, Styles.top ]}>
-        <Text style={ Styles.createdAt }>
+        <Text style={ Styles.smallLightText }>
           <Text style={ Styles.darker }>{ typeText }</Text>
           {
             showProjectName &&
@@ -55,7 +55,7 @@ class NoteListItem extends Component {
             </Text>
           }
         </Text>
-        <Text style={ Styles.createdAt }>{ prettyDate(note.createdAt) }</Text>
+        <Text style={ Styles.smallLightText }>{ prettyDate(note.lastUpdated) }</Text>
       </View>
     );
   }

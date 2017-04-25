@@ -8,7 +8,8 @@ import actions from '../../../actions/';
 // components
 import Icon from '../../navigation/icon';
 import Note from './note';
-import EditNote from '../../edit-note/edit-note';
+import AddUpdateContainer from '../../add-update/add-update-container';
+// import EditNote from '../../edit-note/edit-note';
 
 class NoteContainer extends Component {
 
@@ -95,10 +96,10 @@ class NoteContainer extends Component {
           goToUser={ user => this.goToUser(user) }
           sendComment={ content => this.sendComment(content) }
         />
-        <EditNote
+        <AddUpdateContainer
           note={ this.props.note }
-          onSave={ note => this.props.dispatch(actions.saveNote(note)) }
-          onClose={ () => this.toggleEditModal() }
+          project={ this.props.note.project }
+          hideFn={ () => this.toggleEditModal() }
           visible={ this.state.editModalVisible }
         />
       </View>

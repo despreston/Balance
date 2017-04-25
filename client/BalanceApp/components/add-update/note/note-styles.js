@@ -9,7 +9,8 @@ export default StyleSheet.create  ({
     borderColor: Colors.white,
     backgroundColor: Colors.white,
     fontSize: 18,
-    padding: 10
+    padding: 10,
+    color: Colors.gray.tundora
   }
 
 });

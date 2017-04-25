@@ -16,7 +16,7 @@ export const Styles = StyleSheet.create  ({
     justifyContent: 'space-between'
   },
 
-  createdAt: {
+  smallLightText: {
     color: Colors.gray.silver,
     fontSize: 12
   },

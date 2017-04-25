@@ -8,7 +8,7 @@ import { Styles } from './note-list-style';
 
 function NoteList ({ notes, showProjectName = false, onSelect }) {
 
-  notes.sort((a,b) => b.createdAt - a.createdAt);
+  notes.sort((a,b) => b.lastUpdated - a.lastUpdated);
 
   function renderNotes () {
 

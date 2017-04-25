@@ -13,7 +13,8 @@ class AddUpdateContainer extends Component {
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
-    reloadProject: PropTypes.bool
+    reloadProject: PropTypes.bool,
+    note: PropTypes.object
   }
 
   constructor (props) {
@@ -41,10 +42,11 @@ class AddUpdateContainer extends Component {
   }
 
   render () {
-    const { hideFn, visible, project } = this.props;
+    const { hideFn, note, visible, project } = this.props;
 
     return (
       <AddUpdate
+        note={ note }
         hideFn={ hideFn }
         save={ this.save.bind(this) }
         visible={ visible }

@@ -25,7 +25,8 @@ export default class AddUpdate extends Component {
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
-    save: PropTypes.func.isRequired
+    save: PropTypes.func.isRequired,
+    note: PropTypes.object
   }
 
   constructor (props) {
@@ -38,17 +39,17 @@ export default class AddUpdate extends Component {
     this.typeChange = this.typeChange.bind(this);
 
     this.state = {
-      note: '',
+      note: (this.props.note && this.props.note.content) || '',
       placeholder: this.futureNotePlaceholder,
-      complete: false
+      complete: (this.props.note && this.props.note.type) === 'Past'
     };
   }
 
-  componentWillReceiveProps () {
+  componentWillReceiveProps (nextProps) {
     this.setState({
-      note: '',
+      note: (nextProps.note && nextProps.note.content) || '',
       placeholder: this.futureNotePlaceholder,
-      complete: false
+      complete: (nextProps.note && nextProps.note.type) === 'Past'
     });
   }
 
@@ -69,9 +70,16 @@ export default class AddUpdate extends Component {
 
   renderSaveButton () {
     function saveAndClose () {
-      let note = this.state.complete
-        ? emptyNote(this.props.project, 'Past')
-        : emptyNote(this.props.project, 'Future');
+      let note;
+
+      if (this.props.note) {
+        note = this.props.note;
+        note.type = this.state.complete ? 'Past' : 'Future';
+      } else if (this.state.complete) {
+        note = emptyNote(this.props.project, 'Past');
+      } else {
+        note = emptyNote(this.props.project, 'Future');
+      }
 
       note.content = this.state.note;
 
