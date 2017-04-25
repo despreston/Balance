@@ -72,7 +72,6 @@ export default StyleSheet.create  ({
   },
 
   selectedContext: {
-    ...shared,
     fontWeight: 'bold'
   },
 

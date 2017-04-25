@@ -145,12 +145,14 @@ module.exports = ({ get, post, put }) => {
     .then(newNote => {
 
       return Note
-      .findOne({ _id: newNote._id })
-      .populate('project', 'title privacyLevel')
-      .populate('author', 'userId username picture')
-      .then(newNote => {
+        .findOne({ _id: newNote._id })
+        .populate('project', 'title privacyLevel')
+        .populate('author', 'userId username picture')
+        .exec();
+    })
+    .then(newNote => {
 
-        return Project
+      return Project
         .findOne({ _id: newNote.project })
         .select('title nudges')
         .then(project => {
@@ -174,7 +176,6 @@ module.exports = ({ get, post, put }) => {
           return newNote;
         })
         .catch(log.error);
-      });
     })
     .then(newNote => res.send(200, newNote))
     .catch(err => {

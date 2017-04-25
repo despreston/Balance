@@ -1,7 +1,6 @@
 // vendors
 import React, { PropTypes, Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
 
 // styles
 import { Styles } from './note-list-item-style';
@@ -25,14 +24,7 @@ class NoteListItem extends Component {
       }).isRequired,
       reactions: PropTypes.array
     }).isRequired,
-    showProjectName: PropTypes.bool,
-    isLoggedInUser: PropTypes.bool.isRequired
-  }
-
-  static mapStateToProps (state, ownProps) {
-    return {
-      isLoggedInUser: state.loggedInUser === ownProps.note.author.userId
-    };
+    showProjectName: PropTypes.bool
   }
 
   constructor (props) {
@@ -84,4 +76,4 @@ class NoteListItem extends Component {
 
 }
 
-export default connect(NoteListItem.mapStateToProps)(NoteListItem);
+export default NoteListItem;

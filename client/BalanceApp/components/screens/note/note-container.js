@@ -9,7 +9,6 @@ import actions from '../../../actions/';
 import Icon from '../../navigation/icon';
 import Note from './note';
 import AddUpdateContainer from '../../add-update/add-update-container';
-// import EditNote from '../../edit-note/edit-note';
 
 class NoteContainer extends Component {
 

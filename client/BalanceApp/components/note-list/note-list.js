@@ -26,7 +26,7 @@ function NoteList ({ notes, showProjectName = false, onSelect }) {
     });
 
   }
-   
+
   return (
     <ScrollView>
       { renderNotes() }
