@@ -34,8 +34,8 @@ export default class AddUpdate extends Component {
     this.state = { past: '', future: '' };
 
     this.scrollView = null;
-    this.pastNotePlaceholder = "e.g., Finished math homework";
-    this.futureNotePlaceholder = "e.g., Study for test on Tuesday";
+    this.pastNotePlaceholder = "Finished math homework";
+    this.futureNotePlaceholder = "Study for test on Tuesday";
   }
 
   move (factor) {
