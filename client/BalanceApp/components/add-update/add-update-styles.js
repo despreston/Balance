@@ -13,6 +13,12 @@ export default StyleSheet.create  ({
     backgroundColor: Colors.purple
   },
 
+  flexRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+
   card: {
     paddingTop: 35,
     paddingBottom: 20,
@@ -23,9 +29,7 @@ export default StyleSheet.create  ({
 
   navButtonContainer: {
     paddingVertical: 15,
-    alignItems: 'center',
     alignSelf: 'center',
-    flexDirection: 'row',
   },
 
   unimportantButton: {
@@ -39,20 +43,15 @@ export default StyleSheet.create  ({
   },
 
   text: {
-    ...defaultText,
-    paddingBottom: 20,
-    fontSize: 18,
+    marginRight: 10,
+    color: Colors.white,
+    fontSize: 16,
     fontWeight: '600'
   },
 
   subText: {
     ...defaultText,
     fontSize: 14
-  },
-
-  privacy: {
-    fontSize: 12,
-    opacity: 0.9
   }
 
 });

@@ -38,7 +38,7 @@ export default class Note extends Component {
   header () {
     switch (this.props.note.type) {
       case 'Past': return 'Completed';
-      case 'Future': return 'Reminder';
+      case 'Future': return 'Todo';
     }
   }
 

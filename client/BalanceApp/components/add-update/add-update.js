@@ -4,7 +4,7 @@ import {
   Text,
   KeyboardAvoidingView,
   TouchableOpacity,
-  SegmentedControlIOS,
+  Switch,
   View
 } from 'react-native';
 
@@ -13,6 +13,7 @@ import emptyNote from '../../utils/empty-note';
 
 // styles
 import Styles from './add-update-styles';
+import Colors from '../colors';
 
 // components
 import NavButton from './nav-button/nav-button';
@@ -39,7 +40,7 @@ export default class AddUpdate extends Component {
     this.state = {
       note: '',
       placeholder: this.futureNotePlaceholder,
-      selectedOption: 'Todo'
+      complete: false
     };
   }
 
@@ -47,7 +48,7 @@ export default class AddUpdate extends Component {
     this.setState({
       note: '',
       placeholder: this.futureNotePlaceholder,
-      selectedOption: 'Todo'
+      complete: false
     });
   }
 
@@ -68,7 +69,7 @@ export default class AddUpdate extends Component {
 
   renderSaveButton () {
     function saveAndClose () {
-      let note = this.state.selectedOption === 'Completed'
+      let note = this.state.complete
         ? emptyNote(this.props.project, 'Past')
         : emptyNote(this.props.project, 'Future');
 
@@ -103,13 +104,13 @@ export default class AddUpdate extends Component {
     );
   }
 
-  typeChange (selectedOption) {
-    const placeholder = selectedOption === 'Completed'
+  typeChange (complete) {
+    const placeholder = complete
       ? this.pastNotePlaceholder
       : this.futureNotePlaceholder;
 
     this.setState({
-      selectedOption,
+      complete,
       placeholder
     });
   }
@@ -121,22 +122,21 @@ export default class AddUpdate extends Component {
       <Modal animationType={ 'slide' } visible={ visible } >
         <View style={ Styles.content }>
           <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
-            <SegmentedControlIOS
-              selectedIndex={ this.options.findIndex(v => v === this.state.selectedOption) }
-              onValueChange={ val => this.typeChange(val) }
-              values={ this.options }
-              tintColor={ '#fff' }
-            />
+            <View style={ Styles.flexRow }>
+              <Text style={ Styles.text }>Completed</Text>
+              <Switch
+                value={ this.state.complete }
+                onValueChange={ val => this.typeChange(val) }
+                onTintColor={ Colors.green }
+              />
+            </View>
             <Note
               autoFocus
               onTextChange={ text => this.setState({ note: text }) }
               note={ this.state.note }
               placeHolder={ this.state.placeholder }
             />
-            <Text style={[ Styles.subText, Styles.privacy ]}>
-              { this.privacy() }
-            </Text>
-            <View style={ Styles.navButtonContainer }>
+            <View style={[ Styles.flexRow, Styles.navButtonContainer ]}>
               { this.renderCancelButton() }
               { this.renderSaveButton() }
             </View>

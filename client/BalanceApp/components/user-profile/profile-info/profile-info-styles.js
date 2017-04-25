@@ -66,7 +66,7 @@ export default StyleSheet.create  ({
 
   contextOptionText: {
     ...shared,
-    fontSize: 13,
+    fontSize: 14,
     textAlign: 'center',
     paddingBottom: 5
   },
