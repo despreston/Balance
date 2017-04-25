@@ -7,8 +7,11 @@ export const Styles = StyleSheet.create  ({
     flexDirection: 'column'
   },
 
+  flexRow: {
+    flexDirection: 'row'
+  },
+
   top: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
@@ -25,10 +28,6 @@ export const Styles = StyleSheet.create  ({
     paddingVertical: 15
   },
 
-  bottom: {
-    flexDirection: 'row'
-  },
-
   comment: {
     paddingRight: 10,
     justifyContent: 'center'
@@ -42,6 +41,20 @@ export const Styles = StyleSheet.create  ({
   darker: {
     color: Colors.gray.tundora,
     fontWeight: '600' 
+  },
+
+  bottom: {
+    justifyContent: 'space-between'
+  },
+
+  doneBtn: {
+    justifyContent: 'center'
+  },
+
+  dontBtnText: {
+    color: Colors.purple,
+    fontSize: 12,
+    fontWeight: 'bold'
   }
   
 });

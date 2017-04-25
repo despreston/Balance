@@ -11,7 +11,6 @@ import {
 import { Styles } from './project-detail-style';
 
 // Components
-import FutureNote from './future-note/future-note';
 import NoteListContainer from '../../note-list/note-list-container';
 import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
@@ -42,13 +41,7 @@ class ProjectDetail extends Component {
 
     this.state = { addUpdateVisible: false, refreshing: false };
 
-    this.futureNotes = this.notesForType('Future');
-    this.futureNote = this.getFutureNote();
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
-  }
-
-  notesForType (type) {
-    return this.props.notes.filter(note => note.type === type);
   }
 
   toggleAddUpdateModal () {
@@ -61,36 +54,20 @@ class ProjectDetail extends Component {
     });
   }
 
-  getFutureNote () {
-    const { project } = this.props;
-
-    if (this.futureNotes.length > 0) {
-      return this.futureNotes.reduce((latest, note) => {
-        return note.lastUpdated.getTime() > latest.lastUpdated.getTime()
-          ? note
-          : latest;
-      }, this.futureNotes[0]);
-    }
-
-    else if (project.Future) {
-      return project.Future;
-    }
-    
-    return emptyNote(project, 'Future');
-  }
-
-  renderPastNotes () {
-    function selector (notes, project) {
+  notesSelector (type) {
+    return (notes, project) => {
       return Object.keys(notes)
         .map(id => notes[id])
         .filter(note => {
           return (
             project._id === note.project._id &&
-            note.type === 'Past'
+            note.type === type
           );
         });
     }
+  }
 
+  renderPastNotes () {
     const {
       nav,
       status,
@@ -104,10 +81,35 @@ class ProjectDetail extends Component {
         showContext
         emptyState={ <EmptyCompletedNotes /> }
         query={[{ project: this.props.project._id }, { type: 'Past' }]}
-        selector={ notes => selector(notes, this.props.project) }
+        selector={ notes => this.notesSelector('Past')(notes, this.props.project) }
         showEdit={ status !== 'finished' && userIsOwner }
         onSelect={ id => nav('Note', { id }) }
       />
+    );
+  }
+
+  renderFutureNotes () {
+    const {
+      nav,
+      status,
+      userIsOwner,
+      onEdit
+    } = this.props;
+
+    // hide edit buttons if project is Finished OR user is not the owner
+    return (
+      <View>
+        <Text style={ [Styles.finishedTitleText, Styles.bold] }>
+          Next
+        </Text>
+        <NoteListContainer
+          emptyState={ <EmptyCompletedNotes /> }
+          query={[{ project: this.props.project._id }, { type: 'Future' }]}
+          selector={ notes => this.notesSelector('Future')(notes, this.props.project) }
+          showEdit={ status !== 'finished' && userIsOwner }
+          onSelect={ id => nav('Note', { id }) }
+        />
+      </View>
     );
   }
 
@@ -165,7 +167,7 @@ class ProjectDetail extends Component {
           <View style={ Styles.container }>
             {
               project.status === 'active' &&
-              <FutureNote note={ this.futureNote }/>
+              this.renderFutureNotes()
             }
             <View style={ Styles.pastNotesView }>
               <Text style={ [Styles.finishedTitleText, Styles.bold] }>
