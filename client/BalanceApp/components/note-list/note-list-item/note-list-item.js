@@ -1,6 +1,7 @@
 // vendors
 import React, { PropTypes, Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Image, View, Text, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 
 // styles
 import { Styles } from './note-list-item-style';
@@ -11,8 +12,13 @@ import prettyDate from '../../../utils/fancy-date';
 // components
 import CommentButton from './comment-button/comment-button';
 import ReactionsContainer from '../../reactions/reactions-container';
+import MarkDone from './mark-done/mark-done';
 
 class NoteListItem extends Component {
+
+  static mapStateToProps (state, ownProps) {
+    return { isLoggedInUser: state.loggedInUser === ownProps.note.author.userId }
+  }
 
   static propTypes = {
     note: PropTypes.shape({
@@ -24,7 +30,8 @@ class NoteListItem extends Component {
       }).isRequired,
       reactions: PropTypes.array
     }).isRequired,
-    showProjectName: PropTypes.bool
+    showProjectName: PropTypes.bool,
+    isLoggedInUser: PropTypes.bool
   }
 
   constructor (props) {
@@ -60,6 +67,10 @@ class NoteListItem extends Component {
         { this.renderHeader() }
         <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
         <View style={ Styles.flexRow }>
+          {
+            (note.type === 'Future' && isLoggedInUser) &&
+            <MarkDone />
+          }
           <View style={ Styles.comment }>
             <CommentButton count={ note.commentCount || 0 } />
           </View>
@@ -76,4 +87,4 @@ class NoteListItem extends Component {
 
 }
 
-export default NoteListItem;
+export default connect(NoteListItem.mapStateToProps)(NoteListItem);

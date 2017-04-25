@@ -162,7 +162,10 @@ class ProjectDetail extends Component {
                 { project.description }
               </Text>
             </View>
-            { userIsOwner && <UpdateButton press={ () => this.toggleAddUpdateModal() } /> }
+            { 
+              userIsOwner && project.status !== 'finished' && 
+              <UpdateButton press={ () => this.toggleAddUpdateModal() } /> 
+            }
           </View>
           { this.renderNudgeStuff() }
           <View style={ Styles.container }>
@@ -193,7 +196,7 @@ const FinishedProjectText = () => {
   return (
     <View>
       <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
-        This project has been marked as finished. {"\n"} Nice job! 🎉
+        This project has been finished!  🎉
       </Text>
     </View>
   );
