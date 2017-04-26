@@ -16,6 +16,10 @@ export const Styles = StyleSheet.create  ({
     justifyContent: 'space-between'
   },
 
+  topLeft: {
+    alignItems: 'center'
+  },
+
   smallLightText: {
     color: Colors.gray.silver,
     fontSize: 12
@@ -41,6 +45,13 @@ export const Styles = StyleSheet.create  ({
   darker: {
     color: Colors.gray.tundora,
     fontWeight: '600' 
+  },
+
+  picture: {
+    width: 25,
+    height: 25,
+    borderRadius: 12.5,
+    marginRight: 5
   }
   
 });

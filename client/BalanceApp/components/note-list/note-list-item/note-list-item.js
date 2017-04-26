@@ -1,6 +1,6 @@
 // vendors
 import React, { PropTypes, Component } from 'react';
-import { Image, View, Text, TouchableOpacity } from 'react-native';
+import { Image, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // styles
@@ -12,13 +12,8 @@ import prettyDate from '../../../utils/fancy-date';
 // components
 import CommentButton from './comment-button/comment-button';
 import ReactionsContainer from '../../reactions/reactions-container';
-import MarkDone from './mark-done/mark-done';
 
 class NoteListItem extends Component {
-
-  static mapStateToProps (state, ownProps) {
-    return { isLoggedInUser: state.loggedInUser === ownProps.note.author.userId }
-  }
 
   static propTypes = {
     note: PropTypes.shape({
@@ -30,8 +25,8 @@ class NoteListItem extends Component {
       }).isRequired,
       reactions: PropTypes.array
     }).isRequired,
-    showProjectName: PropTypes.bool,
-    isLoggedInUser: PropTypes.bool
+    showTypeText: PropTypes.bool,
+    showProjectName: PropTypes.bool
   }
 
   constructor (props) {
@@ -39,21 +34,27 @@ class NoteListItem extends Component {
   }
 
   renderHeader () {
-    const { note, showProjectName } = this.props;
+    const { note, showProjectName, showTypeText } = this.props;
     let typeText = `${note.type === 'Future' ? 'Todo' : 'Did work'}`;
 
     return (
       <View style={[ Styles.flexRow, Styles.top ]}>
-        <Text style={ Styles.smallLightText }>
-          <Text style={ Styles.darker }>{ typeText }</Text>
-          {
-            showProjectName &&
-            <Text>
-              <Text style={ Styles.dark }> for </Text>
-              <Text style={ Styles.darker }>{ note.project.title } </Text>
-            </Text>
-          }
-        </Text>
+        <View style={[ Styles.flexRow, Styles.topLeft ]}>
+          <Image style={ Styles.picture } source={{ uri: note.author.picture }} />
+          <Text style={ Styles.smallLightText }>
+            {
+              showTypeText &&
+              <Text style={ Styles.darker }>{ typeText }</Text>
+            }
+            {
+              showProjectName &&
+              <Text>
+                <Text style={ Styles.dark }> for </Text>
+                <Text style={ Styles.darker }>{ note.project.title } </Text>
+              </Text>
+            }
+          </Text>
+        </View>
         <Text style={ Styles.smallLightText }>{ prettyDate(note.lastUpdated) }</Text>
       </View>
     );
@@ -67,10 +68,6 @@ class NoteListItem extends Component {
         { this.renderHeader() }
         <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
         <View style={ Styles.flexRow }>
-          {
-            (note.type === 'Future' && isLoggedInUser) &&
-            <MarkDone />
-          }
           <View style={ Styles.comment }>
             <CommentButton count={ note.commentCount || 0 } />
           </View>
@@ -87,4 +84,4 @@ class NoteListItem extends Component {
 
 }
 
-export default connect(NoteListItem.mapStateToProps)(NoteListItem);
+export default NoteListItem;

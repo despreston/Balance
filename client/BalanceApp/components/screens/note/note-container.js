@@ -86,9 +86,12 @@ class NoteContainer extends Component {
   }
 
   render () {
+    const author = this.props.note.author.userId;
+    const showMarkAsComplete = author === this.props.loggedInUser && this.props.note.type === 'Future';
     return (
       <View style={{ flex: 1 }}>
         <Note
+          showMarkAsComplete={ showMarkAsComplete }
           note={ this.props.note }
           comments={ this.props.comments }
           goToProject={ () => this.goToProject() }

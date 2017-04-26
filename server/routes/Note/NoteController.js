@@ -189,6 +189,8 @@ module.exports = ({ get, post, put }) => {
 
     Note
     .findOne({_id: params._id})
+    .populate('author', 'userId username picture')
+    .populate('project', 'title privacyLevel')
     .populate({
       path: 'comments',
       populate: { path: 'commenter', select: 'userId username picture' }
@@ -216,9 +218,6 @@ module.exports = ({ get, post, put }) => {
       if (Array.isArray(note.author)) {
         note.author = note.author[0];
       }
-
-      // Add properly formatted project object back to the note
-      note = Object.assign(note, { project: body.project });
 
       return res.send(200, note);
     })

@@ -17,21 +17,15 @@ export default StyleSheet.create ({
   },
 
   scrollContainer: {
+    paddingTop: 5,
     paddingHorizontal: 20
   },
 
   meta: {
-    paddingVertical: 30,
+    paddingVertical: 20,
     backgroundColor: Colors.white,
     flexDirection: 'row',
     paddingBottom: 20
-  },
-
-  flexRow: {
-    paddingBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
   },
 
   header: {
@@ -52,7 +46,8 @@ export default StyleSheet.create ({
   },
 
   info: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    flex: 1
   },
 
   purple: {
@@ -67,7 +62,8 @@ export default StyleSheet.create ({
 
   date: {
     color: Colors.gray.silver,
-    fontSize: 12
+    fontSize: 12,
+    paddingBottom: 10
   },
 
   text: {
