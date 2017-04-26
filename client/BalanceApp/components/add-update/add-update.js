@@ -19,6 +19,7 @@ import Colors from '../colors';
 // components
 import NavButton from './nav-button/nav-button';
 import Note from './note/note';
+import MarkComplete from './mark-complete/mark-complete';
 
 export default class AddUpdate extends Component {
 
@@ -33,11 +34,10 @@ export default class AddUpdate extends Component {
   constructor (props) {
     super(props);
 
-    this.options = [ 'Todo', 'Completed' ];
     this.scrollView = null;
     this.pastNotePlaceholder = "Finished math homework";
     this.futureNotePlaceholder = "Study for test on Tuesday";
-    this.typeChange = this.typeChange.bind(this);
+    this.toggleComplete = this.toggleComplete.bind(this);
 
     this.state = {
       note: (this.props.note && this.props.note.content) || '',
@@ -113,7 +113,9 @@ export default class AddUpdate extends Component {
     );
   }
 
-  typeChange (complete) {
+  toggleComplete () {
+    const complete = !this.state.complete;
+
     const placeholder = complete
       ? this.pastNotePlaceholder
       : this.futureNotePlaceholder;
@@ -132,16 +134,15 @@ export default class AddUpdate extends Component {
         <View style={ Styles.content }>
           <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
             <View style={[ Styles.flexRow, Styles.top ]}>
-              <View style={ Styles.flexRow }>
-                <Text style={ Styles.text }>Completed</Text>
-                <Switch
-                  value={ this.state.complete }
-                  onValueChange={ val => this.typeChange(val) }
-                  onTintColor={ Colors.green }
-                />
-              </View>
+              <MarkComplete
+                onPress={ () => this.toggleComplete() }
+                complete={ this.state.complete }
+              />
               <View>
-                <Image style={{ height: 20, width: 20 }}source={ require('../../assets/icons/trash.png')} />
+                <Image
+                  style={{ height: 20, width: 20 }}
+                  source={ require('../../assets/icons/trash.png')}
+                />
               </View>
             </View>
             <Note

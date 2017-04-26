@@ -33,7 +33,7 @@ export default StyleSheet.create  ({
   navButtonContainer: {
     paddingHorizontal: 10,
     paddingBottom: 15,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
 
   unimportantButton: {
@@ -44,13 +44,6 @@ export default StyleSheet.create  ({
 
   green: {
     backgroundColor: Colors.green
-  },
-
-  text: {
-    marginRight: 10,
-    color: Colors.white,
-    fontSize: 16,
-    fontWeight: '600'
   },
 
   subText: {
