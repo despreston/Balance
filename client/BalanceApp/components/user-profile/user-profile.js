@@ -170,7 +170,6 @@ class UserProfile extends Component {
         <View style={ Styles.profileInfo }>
           <ProfileInfo
             user={ this.props.user }
-            showEmptyBio={ this.userIsLoggedInUser }
             addBio={ () => this.props.nav('UserSettings') }
           />
           <UserProfileSwitch

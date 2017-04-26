@@ -1,6 +1,7 @@
 'use strict';
 const User = require('../../models/User');
 const Project = require('../../models/Project');
+const log = require('logbro');
 const AccessControl = require('../../utils/access-control');
 const Notification = require('../../lib/notification/');
 const NewFriendRequest = Notification.NewFriendRequest;
@@ -68,7 +69,7 @@ module.exports = ({ get, post, del, put }) => {
 
   get("users/:userId/friends", (req, res) => {
     User
-    .findOne(req.params.userId)
+    .findOne({ userId: req.params.userId })
     .select('friends')
     .lean()
     .then(user => {
@@ -121,7 +122,12 @@ module.exports = ({ get, post, del, put }) => {
   });
   
   post("users", ({ params, body, user }, res) => {
-    body = JSON.parse(body);
+    try {
+      body = JSON.parse(body);
+    } catch (e) {
+      log.error(e);
+      return res.send(500);
+    }
 
     /**
      * - If the user does not exist, create it.
@@ -130,7 +136,14 @@ module.exports = ({ get, post, del, put }) => {
      */
     User.findOne({ userId: body.userId })
     .then(newUser => newUser ? Object.assign(newUser, body) : new User(body))
-    .then(newUser => newUser.save())
+    .then(newUser => {
+      return newUser.save(err => {
+        if (err) {
+          log.eror(err);
+          return res.send(500);
+        }
+      });
+    })
     .then(newUser => {
 
       /** 
@@ -142,11 +155,17 @@ module.exports = ({ get, post, del, put }) => {
       .then(privacyLevel => {
         return Project.projectCountForUser(newUser.userId, privacyLevel)
           .then(project_count => Object.assign(newUser, { project_count }))
-          .then(user => res.send(200, user));
+          .then(user => res.send(201, user));
       })
-      .catch(err => res.send(500, err));
+      .catch(err => {
+        log.error(err);
+        return res.send(500, err)
+      });
     })
-    .catch(err => res.send(500, err));
+    .catch(err => {
+      log.error(err);
+      return res.send(500, err);
+    });
   });
 
   put('users/:userId', ({ params, body, user }, res) => {

@@ -57,6 +57,9 @@ class NotificationListItem extends Component {
   render () {
     const { notification } = this.props;
 
+    // TEMPORARY: friend requests need to be handled differently
+    if (this.type === 'new_friend_request') { return null; }
+
     const { text, icon } = this.getText();
 
     return (

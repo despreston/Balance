@@ -116,17 +116,18 @@ export default {
         }
 
         // save tokens to local storage
-        saveRefreshToken(tokens.refreshToken)
+        return saveRefreshToken(tokens.refreshToken)
         .then(() => saveAuthToken(tokens.idToken))
+        .then(() => {
+          delete profile.extraInfo;
+
+          // send the user to the server
+          return api(`users`, { method: 'POST', body: profile })
+            .then(user => dispatch(this.setLoggedInUser(user)));
+        })
         .catch( err => {
-          console.log('could not save tokens ', err);
+          console.log('could not save new user ', err);
         });
-
-        delete profile.extraInfo;
-
-        // send the user to the server
-        return api(`users`, { method: 'POST', body: profile })
-          .then(user => dispatch(this.setLoggedInUser(user)));
       });
     }
   },

@@ -15,7 +15,7 @@ export function api (url, properties = {}, externalUrl = false) {
   }
   
   return getAuthToken()
-    .then(token => new Headers({ authorization: `Bearer ${token}` }) )
+    .then(token => new Headers({ authorization: `Bearer ${token}` }))
     .then(headers => {
       properties.headers = headers;
 

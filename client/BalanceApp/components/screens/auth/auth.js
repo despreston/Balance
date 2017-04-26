@@ -48,9 +48,16 @@ class Auth extends Component {
             dispatch(actions.requestUser(token.sub, true))
           ]);
         })
-        .then(() => this.navigateToApp());
+        .then(() => {
+          if (this.state.showLogin) {
+            this.setState({ showLogin: false });
+          }
+          this.navigateToApp();
+        });
       } else {
-        this.setState({ showLogin: true });
+        if (!this.state.showLogin) {
+          this.setState({ showLogin: true });
+        }
       }
     });
   }
@@ -71,7 +78,7 @@ class Auth extends Component {
   render () {
     const icon = require('../../../assets/icons/icon-white.png');
     const { dispatch } = this.props;
-    
+console.log('RENDERING AUTH');
     return (
       <View style={ Styles.container }>
         <Image source={ icon } style={ Styles.icon }/>

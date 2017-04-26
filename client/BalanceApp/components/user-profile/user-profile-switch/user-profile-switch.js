@@ -32,7 +32,6 @@ function UserProfileSwitch (props) {
         <View style={ isSelected(value) && Styles.border }>
           <Text style={ [
             Styles.contextOptionText,
-            Styles.purpleText,
             isSelected(value) && Styles.selectedContext
             ] }>
             { label }
