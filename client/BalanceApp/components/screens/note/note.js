@@ -19,6 +19,7 @@ import Styles from './note-styles';
 import CommentInput from './comment-input/comment-input';
 import CommentList from '../../comment-list/comment-list';
 import ReactionsContainer from '../../reactions/reactions-container';
+import MarkAsComplete from './mark-as-complete/mark-as-complete';
 
 export default class Note extends Component {
 
@@ -27,7 +28,8 @@ export default class Note extends Component {
     comments: PropTypes.array.isRequired,
     goToProject: PropTypes.func.isRequired,
     goToUser: PropTypes.func.isRequired,
-    sendComment: PropTypes.func.isRequired
+    sendComment: PropTypes.func.isRequired,
+    showMarkAsComplete: PropTypes.bool
   }
   
   constructor (props) {
@@ -38,12 +40,19 @@ export default class Note extends Component {
   header () {
     switch (this.props.note.type) {
       case 'Past': return 'Completed';
-      case 'Future': return 'Reminder';
+      case 'Future': return 'Todo';
     }
   }
 
   render () {
-    const { note, comments, goToUser, goToProject, sendComment } = this.props;
+    const {
+      note,
+      comments,
+      goToUser,
+      goToProject,
+      sendComment,
+      showMarkAsComplete
+    } = this.props;
 
     return (
       <KeyboardAvoidingView
@@ -72,12 +81,11 @@ export default class Note extends Component {
                   { this.author.username }
                 </Text>
               </Text>
+              { showMarkAsComplete && <MarkAsComplete note={ note }/> }
             </View>
           </View>
           <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
-          <View style={ Styles.flexRow }>
-            <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
-          </View>
+          <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
           <ReactionsContainer
               note={ note._id }
               reactions={ note.reactions }

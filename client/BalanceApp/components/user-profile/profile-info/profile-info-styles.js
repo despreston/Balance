@@ -66,19 +66,19 @@ export default StyleSheet.create  ({
 
   contextOptionText: {
     ...shared,
-    fontSize: 13,
+    fontSize: 14,
+    color: Colors.gray.silver,
     textAlign: 'center',
     paddingBottom: 5
   },
 
   selectedContext: {
-    ...shared,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: Colors.purple
   },
 
   purpleText: {
-    color: Colors.purple,
-    fontWeight: '600'
+    color: Colors.purple
   },
 
   border: {

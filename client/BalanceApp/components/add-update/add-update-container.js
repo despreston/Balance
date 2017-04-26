@@ -13,7 +13,8 @@ class AddUpdateContainer extends Component {
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
-    reloadProject: PropTypes.bool
+    reloadProject: PropTypes.bool,
+    note: PropTypes.object
   }
 
   constructor (props) {
@@ -26,15 +27,11 @@ class AddUpdateContainer extends Component {
    * @param {Object} future Future note to save. null to leave blank
    * @return {Promise}
    */
-  save (past, future) {
+  save (note) {
     let promises = [];
 
-    if (past.content !== '') {
-      promises.push(this.props.dispatch(actions.saveNote(past)));
-    }
-
-    if (future.content !== '') {
-      promises.push(this.props.dispatch(actions.saveNote(future)));
+    if (note.content !== '') {
+      promises.push(this.props.dispatch(actions.saveNote(note)));
     }
 
     if (this.props.reloadProject) {
@@ -45,10 +42,11 @@ class AddUpdateContainer extends Component {
   }
 
   render () {
-    const { hideFn, visible, project } = this.props;
+    const { hideFn, note, visible, project } = this.props;
 
     return (
       <AddUpdate
+        note={ note }
         hideFn={ hideFn }
         save={ this.save.bind(this) }
         visible={ visible }

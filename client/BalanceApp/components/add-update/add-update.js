@@ -4,16 +4,17 @@ import {
   Text,
   KeyboardAvoidingView,
   TouchableOpacity,
-  ScrollView,
-  View
+  Switch,
+  View,
+  Image
 } from 'react-native';
-import Dimensions from 'Dimensions';
 
 // utils
 import emptyNote from '../../utils/empty-note';
 
 // styles
 import Styles from './add-update-styles';
+import Colors from '../colors';
 
 // components
 import NavButton from './nav-button/nav-button';
@@ -25,26 +26,37 @@ export default class AddUpdate extends Component {
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
-    save: PropTypes.func.isRequired
+    save: PropTypes.func.isRequired,
+    note: PropTypes.object
   }
 
   constructor (props) {
     super(props);
 
-    this.state = { past: '', future: '' };
-
+    this.options = [ 'Todo', 'Completed' ];
     this.scrollView = null;
     this.pastNotePlaceholder = "Finished math homework";
     this.futureNotePlaceholder = "Study for test on Tuesday";
+    this.typeChange = this.typeChange.bind(this);
+
+    this.state = {
+      note: (this.props.note && this.props.note.content) || '',
+      placeholder: this.futureNotePlaceholder,
+      complete: (this.props.note && this.props.note.type) === 'Past'
+    };
   }
 
-  move (factor) {
-    this.scrollView.scrollTo({ x: factor * Dimensions.get('window').width });
+  componentWillReceiveProps (nextProps) {
+    this.setState({
+      note: (nextProps.note && nextProps.note.content) || '',
+      placeholder: this.futureNotePlaceholder,
+      complete: (nextProps.note && nextProps.note.type) === 'Past'
+    });
   }
 
   renderCancelButton () {
     function doCancel () {
-      this.setState({ past: '', future: '' });
+      this.setState({ note: '' });
       this.props.hideFn();
     }
 
@@ -57,51 +69,22 @@ export default class AddUpdate extends Component {
     );
   }
 
-  renderNextButton () {
-    return (
-      <NavButton
-        onPress={ () => this.move(1) }
-        label="Next"
-        buttonStyle={ Styles.green }
-      />
-    );
-  }
-
-  renderSkipButton () {
-    function doSkip () {
-      this.setState({ past: '' });
-      this.move(1);
-    }
-
-    return (
-      <NavButton
-        onPress={ doSkip.bind(this) }
-        label="Skip"
-        buttonStyle={ Styles.unimportantButton }
-      />
-    );
-  }
-
-  renderBackButton () {
-    return (
-      <NavButton
-        onPress={ () => this.move(0) }
-        label="Back"
-        buttonStyle={ Styles.unimportantButton }
-      />
-    );   
-  }
-
   renderSaveButton () {
     function saveAndClose () {
-      let past = emptyNote(this.props.project, 'Past');
-      let future = emptyNote(this.props.project, 'Future');
+      let note;
 
-      past.content = this.state.past;
-      future.content = this.state.future;
+      if (this.props.note) {
+        note = this.props.note;
+        note.type = this.state.complete ? 'Past' : 'Future';
+      } else if (this.state.complete) {
+        note = emptyNote(this.props.project, 'Past');
+      } else {
+        note = emptyNote(this.props.project, 'Future');
+      }
 
-      this.props.save(past, future)
-        .then(() => this.setState({ past: '', future: '' }))
+      note.content = this.state.note;
+
+      this.props.save(note)
         .then(this.props.hideFn);
     }
 
@@ -130,59 +113,49 @@ export default class AddUpdate extends Component {
     );
   }
 
+  typeChange (complete) {
+    const placeholder = complete
+      ? this.pastNotePlaceholder
+      : this.futureNotePlaceholder;
+
+    this.setState({
+      complete,
+      placeholder
+    });
+  }
+
   render () {
     const { visible } = this.props;
 
     return (
       <Modal animationType={ 'slide' } visible={ visible } >
-        <ScrollView
-          keyboardShouldPersistTaps='handled'
-          horizontal
-          scrollEnabled={ true }
-          style={ Styles.content }
-          ref={ scrollView => { this.scrollView = scrollView; } }
-        >
+        <View style={ Styles.content }>
           <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
-            <Text style={ Styles.text }>What did you do this time?</Text>
-            <Text style={ Styles.subText }>
-              Feel free to skip if you did not do anything.
-            </Text>
+            <View style={[ Styles.flexRow, Styles.top ]}>
+              <View style={ Styles.flexRow }>
+                <Text style={ Styles.text }>Completed</Text>
+                <Switch
+                  value={ this.state.complete }
+                  onValueChange={ val => this.typeChange(val) }
+                  onTintColor={ Colors.green }
+                />
+              </View>
+              <View>
+                <Image style={{ height: 20, width: 20 }}source={ require('../../assets/icons/trash.png')} />
+              </View>
+            </View>
             <Note
               autoFocus
-              onTextChange={ text => this.setState({ past: text }) }
-              note={ this.state.past }
-              placeHolder={ this.pastNotePlaceholder }
+              onTextChange={ text => this.setState({ note: text }) }
+              note={ this.state.note }
+              placeHolder={ this.state.placeholder }
             />
-            <Text style={[ Styles.subText, Styles.privacy ]}>
-              { this.privacy() }
-            </Text>
-            <View style={ Styles.navButtonContainer }>
+            <View style={[ Styles.flexRow, Styles.navButtonContainer ]}>
               { this.renderCancelButton() }
-              { this.renderSkipButton() }
-              { this.renderNextButton() }
-            </View>
-          </KeyboardAvoidingView>
-
-          <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
-            <Text style={ Styles.text }>
-              Anything to remember for next time?
-            </Text>
-            <Text style={ Styles.subText }>
-              Leave this blank if you're unsure.
-            </Text>
-            <Note
-              onTextChange={ text => this.setState({ future: text }) }
-              note={ this.state.future }
-              placeHolder={ this.futureNotePlaceholder }
-            />
-            { this.privacy() }
-            <View style={ Styles.navButtonContainer }>
-              { this.renderCancelButton() }
-              { this.renderBackButton() }
               { this.renderSaveButton() }
             </View>
           </KeyboardAvoidingView>
-        </ScrollView>
+        </View>
       </Modal>
     );
   }

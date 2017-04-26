@@ -14,9 +14,6 @@ const initialState = {
 
   // Projects key'd by _id
   projects: {},
-
-  // if true, projects needs to be reloaded
-  projects_invalidated: false,
   
   // Notes key'd by _id
   notes: {},

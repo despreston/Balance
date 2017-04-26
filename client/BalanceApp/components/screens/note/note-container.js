@@ -8,7 +8,7 @@ import actions from '../../../actions/';
 // components
 import Icon from '../../navigation/icon';
 import Note from './note';
-import EditNote from '../../edit-note/edit-note';
+import AddUpdateContainer from '../../add-update/add-update-container';
 
 class NoteContainer extends Component {
 
@@ -86,19 +86,22 @@ class NoteContainer extends Component {
   }
 
   render () {
+    const author = this.props.note.author.userId;
+    const showMarkAsComplete = author === this.props.loggedInUser && this.props.note.type === 'Future';
     return (
       <View style={{ flex: 1 }}>
         <Note
+          showMarkAsComplete={ showMarkAsComplete }
           note={ this.props.note }
           comments={ this.props.comments }
           goToProject={ () => this.goToProject() }
           goToUser={ user => this.goToUser(user) }
           sendComment={ content => this.sendComment(content) }
         />
-        <EditNote
+        <AddUpdateContainer
           note={ this.props.note }
-          onSave={ note => this.props.dispatch(actions.saveNote(note)) }
-          onClose={ () => this.toggleEditModal() }
+          project={ this.props.note.project }
+          hideFn={ () => this.toggleEditModal() }
           visible={ this.state.editModalVisible }
         />
       </View>

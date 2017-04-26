@@ -6,12 +6,11 @@ export default StyleSheet.create  ({
   note: {
     flex: 1,
     marginVertical: 15,
-    borderWidth: 5,
-    borderRadius: 5,
     borderColor: Colors.white,
     backgroundColor: Colors.white,
     fontSize: 18,
-    padding: 5
+    padding: 10,
+    color: Colors.gray.tundora
   }
 
 });

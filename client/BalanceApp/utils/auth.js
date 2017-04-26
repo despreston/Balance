@@ -73,13 +73,11 @@ export async function isLoggedIn () {
  * @return the JSON-parsed token
  */
 export async function parseToken () {
-  let authenticated = await isLoggedIn();
-
-  if (authenticated) {
-    try {
-      let token = await getAuthToken();
-      return jwtDecode(token);
-    } catch (e) { throw e; }
+  try {
+    let token = await getAuthToken();
+    return jwtDecode(token);
+  } catch (e) {
+    console.log('Error parsing token', e);
   }
 };
 
