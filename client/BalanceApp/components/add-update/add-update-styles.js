@@ -20,6 +20,7 @@ export default StyleSheet.create  ({
   },
 
   top: {
+    paddingHorizontal: 15,
     justifyContent: 'space-between'
   },
 

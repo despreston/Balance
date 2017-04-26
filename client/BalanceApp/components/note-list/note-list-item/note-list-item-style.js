@@ -29,7 +29,7 @@ export const Styles = StyleSheet.create  ({
   },
 
   comment: {
-    paddingRight: 10,
+    paddingRight: 5,
     justifyContent: 'center'
   },
 
@@ -41,20 +41,6 @@ export const Styles = StyleSheet.create  ({
   darker: {
     color: Colors.gray.tundora,
     fontWeight: '600' 
-  },
-
-  bottom: {
-    justifyContent: 'space-between'
-  },
-
-  doneBtn: {
-    justifyContent: 'center'
-  },
-
-  dontBtnText: {
-    color: Colors.purple,
-    fontSize: 12,
-    fontWeight: 'bold'
   }
   
 });

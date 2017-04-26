@@ -5,7 +5,8 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   Switch,
-  View
+  View,
+  Image
 } from 'react-native';
 
 // utils
@@ -130,13 +131,18 @@ export default class AddUpdate extends Component {
       <Modal animationType={ 'slide' } visible={ visible } >
         <View style={ Styles.content }>
           <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
-            <View style={ Styles.flexRow }>
-              <Text style={ Styles.text }>Completed</Text>
-              <Switch
-                value={ this.state.complete }
-                onValueChange={ val => this.typeChange(val) }
-                onTintColor={ Colors.green }
-              />
+            <View style={[ Styles.flexRow, Styles.top ]}>
+              <View style={ Styles.flexRow }>
+                <Text style={ Styles.text }>Completed</Text>
+                <Switch
+                  value={ this.state.complete }
+                  onValueChange={ val => this.typeChange(val) }
+                  onTintColor={ Colors.green }
+                />
+              </View>
+              <View>
+                <Image style={{ height: 20, width: 20 }}source={ require('../../assets/icons/trash.png')} />
+              </View>
             </View>
             <Note
               autoFocus
