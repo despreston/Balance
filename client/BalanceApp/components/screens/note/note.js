@@ -60,7 +60,7 @@ export default class Note extends Component {
         behavior='padding'
         style={ Styles.container }
       >
-        <ScrollView stickyHeaderIndices={[1]} style={ Styles.scrollContainer }>
+        <ScrollView stickyHeaderIndices={[0]} style={ Styles.scrollContainer }>
           <View style={ Styles.meta }>
             <Image
               style={ Styles.authorImage }

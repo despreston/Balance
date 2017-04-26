@@ -78,7 +78,7 @@ class Auth extends Component {
   render () {
     const icon = require('../../../assets/icons/icon-white.png');
     const { dispatch } = this.props;
-console.log('RENDERING AUTH');
+
     return (
       <View style={ Styles.container }>
         <Image source={ icon } style={ Styles.icon }/>
