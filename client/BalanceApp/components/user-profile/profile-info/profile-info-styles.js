@@ -66,7 +66,7 @@ export default StyleSheet.create  ({
 
   contextOptionText: {
     ...shared,
-    fontSize: 12.5,
+    fontSize: 12,
     color: Colors.gray.silver,
     textAlign: 'center',
     paddingBottom: 5
@@ -74,7 +74,7 @@ export default StyleSheet.create  ({
 
   contextOptionCount: {
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 18
   },
 
   selectedContext: {

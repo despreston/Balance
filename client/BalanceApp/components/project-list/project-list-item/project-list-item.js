@@ -75,7 +75,7 @@ class ProjectListItem extends Component {
 
   renderNudgeBtn () {
     if (this.props.hideNudgeBtn || this.props.project.status === 'finished') {
-      return <View />;
+      return null;
     }
 
     return <NudgeBtn style={ Style.nudgeBtn } project={ this.props.project._id } />;
@@ -126,14 +126,13 @@ class ProjectListItem extends Component {
       </View>
     );
   }
-  
 }
 
 const EmptyState = ({ addNote }) => {
   return (
     <View>
       <Text style={ Style.message }>
-        Nothing planned for this project.
+        Nothing done for this project
       </Text>
       {
         addNote &&

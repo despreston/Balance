@@ -5,7 +5,7 @@ export const Style = StyleSheet.create({
 
   projectListItem: {
     borderRadius: 4,
-    height: 160,
+    height: 170,
     borderColor: Colors.white,
     backgroundColor: Colors.white,
     flexDirection: 'row'
@@ -55,6 +55,10 @@ export const Style = StyleSheet.create({
   },
 
   footer: {
+    borderTopWidth: 1,
+    borderTopColor: Colors.gray.porcelain,
+    paddingTop: 5,
+    marginLeft: 5,
     flexDirection: 'row-reverse',
     justifyContent: 'space-between'
   },

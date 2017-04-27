@@ -94,7 +94,7 @@ class ProjectDetail extends Component {
     return (
       <View>
         <Text style={ [Styles.finishedTitleText, Styles.bold] }>
-          Next
+          Unfinished
         </Text>
         <NoteListContainer
           showTypeText
@@ -137,7 +137,7 @@ class ProjectDetail extends Component {
         <View style={[ Styles.whiteBackground, Styles.main ]}>
           <View style={[ Styles.purpleBackground, Styles.info ]}>
             <View>
-              { project.status === 'finished' && <FinishedProjectText />}
+              { project.status === 'finished' && <FinishedProjectText /> }
               <Text style={ [Styles.title, Styles.whiteText] }>
                 { project.title }
               </Text>
@@ -156,7 +156,7 @@ class ProjectDetail extends Component {
                 { project.description }
               </Text>
             </View>
-            { 
+            {
               userIsOwner && project.status !== 'finished' && 
               <UpdateButton press={ () => this.toggleAddUpdateModal() } /> 
             }
@@ -183,7 +183,6 @@ class ProjectDetail extends Component {
       </ScrollView>
     );
   }
-
 }
 
 const FinishedProjectText = () => {
