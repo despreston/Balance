@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Styles } from '../project-detail-style';
 
-export const UpdateButton = ({ press }) => {
+export default function UpdateButton ({ press }) {
   return (
     <View style={ Styles.updateButtonContainer }>
       <TouchableOpacity
