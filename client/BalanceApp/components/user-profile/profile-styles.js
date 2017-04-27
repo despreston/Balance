@@ -4,7 +4,7 @@ import Colors from '../colors';
 export default StyleSheet.create ({
 
   profile: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.white,
     flex: 1,
     paddingTop: 50
   },

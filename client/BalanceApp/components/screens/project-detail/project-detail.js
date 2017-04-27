@@ -73,7 +73,7 @@ class ProjectDetail extends Component {
     // hide edit buttons if project is Finished OR user is not the owner
     return (
       <NoteListContainer
-        showContext
+        showTypeText
         emptyState={ <EmptyCompletedNotes /> }
         query={[{ project: this.props.project._id }, { type: 'Past' }]}
         selector={ notes => this.notesSelector('Past')(notes, this.props.project) }
@@ -97,6 +97,7 @@ class ProjectDetail extends Component {
           Next
         </Text>
         <NoteListContainer
+          showTypeText
           emptyState={ <EmptyCompletedNotes /> }
           query={[{ project: this.props.project._id }, { type: 'Future' }]}
           selector={ notes => this.notesSelector('Future')(notes, this.props.project) }
