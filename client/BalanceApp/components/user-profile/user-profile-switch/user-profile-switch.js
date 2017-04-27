@@ -14,7 +14,6 @@ class UserProfileSwitch extends Component {
 
   static propTypes = {
     userId: PropTypes.string.isRequired,
-    hideProjects: PropTypes.bool,
     switchContext: PropTypes.func.isRequired,
     selectedContext: PropTypes.string.isRequired,
     friendCount: PropTypes.number.isRequired,
@@ -70,15 +69,12 @@ class UserProfileSwitch extends Component {
   }
 
   render () {
-    const { hideProjects, projectCount, friendCount, noteCount } = this.props;
+    const { projectCount, friendCount, noteCount } = this.props;
 
     return (
       <View style={Styles.row}>
         { this.renderOption('latest', this.handlePlural('UPDATE', noteCount ), noteCount) }
-        { 
-          !hideProjects &&
-          this.renderOption('projects', this.handlePlural('PROJECT', projectCount), projectCount)
-        }
+        { this.renderOption('projects', this.handlePlural('PROJECT', projectCount), projectCount) }
         { this.renderOption('friends', this.handlePlural('FRIEND', friendCount), friendCount) }
       </View>
     );
