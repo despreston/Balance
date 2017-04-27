@@ -172,7 +172,7 @@ class UserProfile extends Component {
             user={ this.props.user }
           />
           <UserProfileSwitch
-            user={ this.props.user }
+            userId={ this.props.user.userId }
             hideProjects={ this.userIsLoggedInUser }
             selectedContext={ this.state.context }
             switchContext={ (context) => this.switchContext(context) }
