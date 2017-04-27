@@ -1,3 +1,4 @@
+/* eslint no-console: "off" */
 import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import formatQueryParams from '../utils/query-params';

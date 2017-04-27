@@ -1,3 +1,4 @@
+/* eslint no-console: "off" */
 const jwtDecode = require('jwt-decode');
 import { AsyncStorage } from 'react-native';
 import formatQueryParams from './query-params';

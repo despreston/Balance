@@ -15,4 +15,4 @@ export default function UpdateButton ({ press }) {
       </TouchableOpacity>
     </View>
   );
-};
+}
