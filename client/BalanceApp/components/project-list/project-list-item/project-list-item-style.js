@@ -26,6 +26,7 @@ export const Style = StyleSheet.create({
   },
 
   note: {
+    paddingTop: 8,
     lineHeight: 18,
     fontSize: 14,
     color: Colors.gray.tundora

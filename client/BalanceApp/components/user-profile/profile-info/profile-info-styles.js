@@ -33,7 +33,8 @@ export default StyleSheet.create  ({
     ...shared,
     fontSize: 14,
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingTop: 5
   },
 
   name: {

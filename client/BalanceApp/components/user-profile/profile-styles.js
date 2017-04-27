@@ -6,7 +6,7 @@ export default StyleSheet.create ({
   profile: {
     backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: 50
+    paddingTop: 25
   },
 
   profileInfo: {
