@@ -1,7 +1,6 @@
 // vendors
 import React, { PropTypes, Component } from 'react';
 import { Image, View, Text } from 'react-native';
-import { connect } from 'react-redux';
 
 // styles
 import { Styles } from './note-list-item-style';
@@ -61,7 +60,7 @@ class NoteListItem extends Component {
   }
 
   render () {
-    const { note, isLoggedInUser } = this.props;
+    const { note } = this.props;
 
     return (
       <View style={ Styles.container }>

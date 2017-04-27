@@ -95,7 +95,6 @@ export const Styles = StyleSheet.create ({
 
   info: {
     minHeight: 130,
-    justifyContent: 'center',
     alignItems: 'center',
     justifyContent: 'space-between'
   },

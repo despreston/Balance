@@ -40,4 +40,4 @@ export default function reducer (state = initialState, action) {
 
   return handlers[action.type](state, action);
 
-};
+}

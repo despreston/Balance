@@ -28,7 +28,7 @@ export function api (url, properties = {}, externalUrl = false) {
         .then(json => convertDates(json))
         .catch(err => console.log("ERROR ", err));
     });
-};
+}
 
 export function apiDispatch (url, action, properties = { method: 'GET' }) {
   return dispatch => {
@@ -40,4 +40,4 @@ export function apiDispatch (url, action, properties = { method: 'GET' }) {
       })
       .catch(err => console.log(err));
   };
-};
+}

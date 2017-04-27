@@ -37,4 +37,4 @@ export default class FriendRequests extends Component {
     );
   }
 
-};
+}

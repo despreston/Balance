@@ -135,6 +135,6 @@ class UserSettings extends Component {
     );
   }
 
-};
+}
 
 export default connect(UserSettings.mapStateToProps)(UserSettings);

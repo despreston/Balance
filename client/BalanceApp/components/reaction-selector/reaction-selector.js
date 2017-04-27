@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { Modal, View, Text } from 'react-native';
-import EmojiPicker, { EmojiOverlay } from 'react-native-emoji-picker';
+import { Modal } from 'react-native';
+import { EmojiOverlay } from 'react-native-emoji-picker';
 import Styles from './reaction-selector-styles';
 
 export default class ReactionSelector extends Component {

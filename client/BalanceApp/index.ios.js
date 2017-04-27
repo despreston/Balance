@@ -2,7 +2,7 @@
  * Balance iOS
  */
 
-import React, { AppRegistry } from 'react-native';
+import { AppRegistry } from 'react-native';
 import BalanceApp from './app';
 
 

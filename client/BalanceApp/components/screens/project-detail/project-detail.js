@@ -3,8 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import {
   ScrollView,
   View,
-  Text,
-  TouchableOpacity
+  Text
 } from 'react-native';
 
 // styles
@@ -17,9 +16,6 @@ import NudgeField from './nudge-field/nudge-field';
 import Refresh from '../../refresh/refresh';
 import UpdateButton from './update-button/update-button';
 
-// utils
-import emptyNote from '../../../utils/empty-note';
-
 class ProjectDetail extends Component {
 
   static propTypes = {
@@ -31,7 +27,6 @@ class ProjectDetail extends Component {
       owner: PropTypes.array.isRequired
     }),
     nav: PropTypes.func.isRequired,
-    notes: PropTypes.array,
     userIsOwner: PropTypes.bool,
     refreshing: PropTypes.bool.isRequired,
     onRefresh: PropTypes.func.isRequired
@@ -72,8 +67,7 @@ class ProjectDetail extends Component {
     const {
       nav,
       status,
-      userIsOwner,
-      onEdit
+      userIsOwner
     } = this.props;
 
     // hide edit buttons if project is Finished OR user is not the owner
@@ -93,8 +87,7 @@ class ProjectDetail extends Component {
     const {
       nav,
       status,
-      userIsOwner,
-      onEdit
+      userIsOwner
     } = this.props;
 
     // hide edit buttons if project is Finished OR user is not the owner
@@ -125,7 +118,7 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const { project, refreshing, saveNote, nav, userIsOwner } = this.props;
+    const { project, refreshing, userIsOwner } = this.props;
 
     const refreshProps = {
       refreshing,

@@ -1,6 +1,6 @@
 // vendors
-import React, { Component, PropTypes } from 'react';
-import { ScrollView, TouchableOpacity, Text } from 'react-native';
+import React, { PropTypes } from 'react';
+import { ScrollView, TouchableOpacity } from 'react-native';
 
 // components
 import NoteListItem from './note-list-item/note-list-item';

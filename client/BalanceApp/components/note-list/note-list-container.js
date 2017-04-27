@@ -1,7 +1,6 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
 
 // components
 import NoteList from './note-list';

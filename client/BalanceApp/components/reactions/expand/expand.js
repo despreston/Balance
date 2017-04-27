@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { TouchableOpacity, View, Image, Text } from 'react-native';
-import { connect } from 'react-redux';
+import { TouchableOpacity, View, Image } from 'react-native';
 import Styles from '../reactions-styles';
 import FullReactions from '../full-reactions/full-reactions';
 

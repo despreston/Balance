@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { TouchableOpacity, Text, Image } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import actions from '../../../../actions';
 
@@ -18,7 +18,7 @@ class MarkAsComplete extends Component {
   }
 
   markAsComplete () {
-    note = { _id: this.props.note._id, type: 'Past' };
+    const note = { _id: this.props.note._id, type: 'Past' };
 
     this.props.dispatch(actions.saveNote(note));
   }

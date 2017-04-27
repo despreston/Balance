@@ -1,9 +1,8 @@
 // vendors
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // components
-import NavBtn from '../../navigation/nav-btn';
 import UserProfile from '../../user-profile/user-profile';
 import Icon from '../../navigation/icon';
 
@@ -44,6 +43,6 @@ class Profile extends Component {
     return <UserProfile userId={ this.props.loggedInUser } nav={ navigate } />;
   }
 
-};
+}
 
 export default connect(Profile.mapStateToProps)(Profile);

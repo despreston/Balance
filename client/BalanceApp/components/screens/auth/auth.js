@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity, Text, View, Image } from 'react-native';
 import { NavigationActions } from 'react-navigation';
@@ -12,7 +12,6 @@ import Styles from './auth-styles';
 import {
   isLoggedIn,
   parseToken,
-  getRefreshToken,
   refreshIdToken
 } from '../../../utils/auth';
 

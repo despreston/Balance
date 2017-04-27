@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import AvatarCollection from '../avatar-collection/avatar-collection';
 
@@ -41,12 +41,10 @@ export default class Nudges extends Component {
     const { numOfNudgers } = this.state;
 
     switch (true) {
-      case (numOfNudgers === 1): return 'wants an';
-      case (numOfNudgers < 6): return 'want an';
-      case (numOfNudgers > 6):
-        let remaining = numOfNudgers - 5;
-        return `+${remaining} others want an`;
-      default: return null;
+      case (numOfNudgers === 1) : return 'wants an';
+      case (numOfNudgers < 6)   : return 'want an';
+      case (numOfNudgers > 6)   : return `+${numOfNudgers -5} others want an`;
+      default                   : return null;
     }
   }
 

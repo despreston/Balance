@@ -5,7 +5,6 @@ import {
   ScrollView,
   Text,
   Image,
-  TouchableOpacity,
   KeyboardAvoidingView
 } from 'react-native';
 
@@ -107,4 +106,4 @@ export default class Note extends Component {
     );
   }
 
-};
+}

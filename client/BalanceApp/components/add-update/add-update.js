@@ -3,8 +3,6 @@ import {
   Modal,
   Text,
   KeyboardAvoidingView,
-  TouchableOpacity,
-  Switch,
   View,
   Image
 } from 'react-native';
@@ -14,7 +12,6 @@ import emptyNote from '../../utils/empty-note';
 
 // styles
 import Styles from './add-update-styles';
-import Colors from '../colors';
 
 // components
 import NavButton from './nav-button/nav-button';

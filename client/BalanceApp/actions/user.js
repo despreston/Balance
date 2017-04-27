@@ -5,7 +5,6 @@ import { saveAuthToken, saveRefreshToken } from '../utils/auth';
 import Colors from '../components/colors';
 
 const LOGGED_IN_USER = 'LOGGED_IN_USER';
-const RESET_CURRENT_USER = 'RESET_CURRENT_USER';
 const RECEIVE_USERS = 'RECEIVE_USERS';
 
 export default {
@@ -61,7 +60,7 @@ export default {
       fields.client_id = CONFIG.clientId;
 
       return api(auth0url, fields, true)
-        .then(updatedUser => api(url, { method, body: user }))
+        .then(() => api(url, { method, body: user }))
         .then(user => dispatch(this.receiveUsers(user)))
         .catch(err => console.log('could not save user ', err));
     };

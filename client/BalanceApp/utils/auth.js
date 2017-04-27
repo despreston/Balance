@@ -12,7 +12,7 @@ const REFRESH_TOKEN = 'REFRESH_TOKEN';
  */
 export function saveRefreshToken (refreshToken) {
   return AsyncStorage.setItem(REFRESH_TOKEN, refreshToken);
-};
+}
 
 /**
  * Stores token in AsyncStorage
@@ -21,7 +21,7 @@ export function saveRefreshToken (refreshToken) {
  */
 export function saveAuthToken (authToken) {
   return AsyncStorage.setItem(AUTH_TOKEN, authToken);
-};
+}
 
 /**
  * Gets id token from AsyncStorage
@@ -29,7 +29,7 @@ export function saveAuthToken (authToken) {
  */
 export function getAuthToken () {
   return AsyncStorage.getItem(AUTH_TOKEN);
-};
+}
 
 /**
  * Gets the refresh token from AsyncStorage
@@ -37,7 +37,7 @@ export function getAuthToken () {
  */
 export function getRefreshToken () {
   return AsyncStorage.getItem(REFRESH_TOKEN);
-};
+}
 
 /**
  * Removes id token in AsyncStorage
@@ -45,7 +45,7 @@ export function getRefreshToken () {
  */
 export function removeAuthToken () {
   return AsyncStorage.removeItem(AUTH_TOKEN);
-};
+}
 
 /**
  * Removes the refresh token from AsyncStorage
@@ -53,7 +53,7 @@ export function removeAuthToken () {
  */
 export function removeRefreshToken () {
   return AsyncStorage.removeItem(REFRESH_TOKEN);
-};
+}
 
 /**
  * If there is a refresh token, then the user is logged in.
@@ -66,7 +66,7 @@ export async function isLoggedIn () {
   } catch (e) {
     Promise.reject(e);
   }
-};
+}
 
 /**
  * Parses the id token
@@ -79,7 +79,7 @@ export async function parseToken () {
   } catch (e) {
     console.log('Error parsing token', e);
   }
-};
+}
 
 /**
  * Requests a new id_token using the refresh token, then saves the id_token

@@ -21,7 +21,7 @@ function StatusIcon ({ lastUpdated }) {
   }
 
   return <View style={ [Styles.icon, { backgroundColor: iconColor() }] } />;
-};
+}
 
 StatusIcon.propTypes = {
   lastUpdated: PropTypes.instanceOf(Date).isRequired
