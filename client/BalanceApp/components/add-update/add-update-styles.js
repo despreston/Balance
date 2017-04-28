@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../colors';
-import Dimensions from 'Dimensions';
 
 const defaultText = {
   color: Colors.white,
@@ -9,7 +8,27 @@ const defaultText = {
 
 export default StyleSheet.create  ({
 
+  absolute: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  },
+
+  flex: {
+    flex: 1
+  },
+
+  overlay: {
+    backgroundColor: 'grey',
+    opacity: 0.5
+  },
+
   content: {
+    borderRadius: 5,
+    marginHorizontal: 20,
+    marginVertical: 40,
     backgroundColor: Colors.purple
   },
 
@@ -19,21 +38,13 @@ export default StyleSheet.create  ({
     justifyContent: 'center'
   },
 
-  top: {
-    paddingHorizontal: 15,
+  outsideContent: {
+    padding: 10,
     justifyContent: 'space-between'
   },
 
   card: {
-    paddingTop: 35,
-    height: Dimensions.get('window').height, 
-    width: Dimensions.get('window').width
-  },
-
-  navButtonContainer: {
-    paddingHorizontal: 10,
-    paddingBottom: 15,
-    alignSelf: 'center'
+    height: 385
   },
 
   unimportantButton: {
@@ -44,6 +55,20 @@ export default StyleSheet.create  ({
 
   green: {
     backgroundColor: Colors.green
+  },
+
+  disabledGreen: {
+    backgroundColor: '#4B4652'
+  },
+
+  disabledGreenText: {
+    color: '#685575'
+  },
+
+  text: {
+    ...defaultText,
+    fontSize: 16,
+    fontWeight: '600'
   },
 
   subText: {

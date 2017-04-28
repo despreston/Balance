@@ -14,8 +14,17 @@ export default StyleSheet.create  ({
     fontWeight: '600'
   },
 
+  box: {
+    height: 16,
+    width: 16,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: Colors.white,
+    marginRight: 5
+  },
+
   checkmark: {
-    marginLeft: 5,
+    marginRight: 5,
     height: 20,
     width: 20
   }

@@ -5,7 +5,6 @@ export default StyleSheet.create  ({
 
   note: {
     flex: 1,
-    marginVertical: 15,
     borderColor: Colors.white,
     backgroundColor: Colors.white,
     fontSize: 18,

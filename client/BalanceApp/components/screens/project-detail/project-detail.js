@@ -200,6 +200,6 @@ const EmptyCompletedNotes = () => {
   return (
     <Text style={ Styles.emptyText }>No work has been done for this project.</Text>
   )
-}
+};
 
 export default ProjectDetail;

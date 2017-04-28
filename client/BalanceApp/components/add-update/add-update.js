@@ -4,7 +4,8 @@ import {
   Text,
   KeyboardAvoidingView,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 
 // utils
@@ -51,15 +52,15 @@ export default class AddUpdate extends Component {
     });
   }
 
-  renderCancelButton () {
-    function doCancel () {
-      this.setState({ note: '' });
-      this.props.hideFn();
-    }
+  doCancel () {
+    this.setState({ note: '' });
+    this.props.hideFn();
+  }
 
+  renderCancelButton () {
     return (
       <NavButton
-        onPress={ doCancel.bind(this) }
+        onPress={ this.doCancel.bind(this) }
         label="Cancel"
         buttonStyle={ Styles.unimportantButton }
       />
@@ -85,11 +86,15 @@ export default class AddUpdate extends Component {
         .then(this.props.hideFn);
     }
 
+    const disabled = this.state.note === '';
+
     return (
       <NavButton
+        disabled={ disabled }
         onPress={ saveAndClose.bind(this) }
         label="Save"
-        buttonStyle={ Styles.green }
+        textStyle={ disabled ? Styles.disabledGreenText : null }
+        buttonStyle={ disabled ? Styles.disabledGreen : Styles.green }
       />
     );   
   }
@@ -124,35 +129,49 @@ export default class AddUpdate extends Component {
   }
 
   render () {
-    const { visible } = this.props;
+    const { visible, project } = this.props;
 
     return (
-      <Modal animationType={ 'slide' } visible={ visible } >
-        <View style={ Styles.content }>
-          <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
-            <View style={[ Styles.flexRow, Styles.top ]}>
-              <MarkComplete
-                onPress={ () => this.toggleComplete() }
-                complete={ this.state.complete }
-              />
-              <View>
-                <Image
-                  style={{ height: 20, width: 20 }}
-                  source={ require('../../assets/icons/trash.png')}
-                />
+      <Modal transparent animationType='slide' visible={ visible } >
+        <View style={[ Styles.absolute, Styles.flex ]}>
+          <TouchableOpacity
+            style={[ Styles.absolute ]}
+            onPress={ this.doCancel.bind(this) }
+          >
+            <View style={[ Styles.flex, Styles.overlay ]} />
+          </TouchableOpacity>
+          <View style={ Styles.content }>
+            <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
+              <View style={[ Styles.flexRow, Styles.outsideContent ]}>
+                { this.renderCancelButton() }
+                <View>
+                  <Text style={ Styles.text }>
+                    { this.props.note ? 'Edit Update' : 'New Update' }
+                  </Text>
+                  <Text style={ Styles.subText }>{ project.title }</Text>
+                </View>
+                { this.renderSaveButton() }
               </View>
-            </View>
-            <Note
-              autoFocus
-              onTextChange={ text => this.setState({ note: text }) }
-              note={ this.state.note }
-              placeHolder={ this.state.placeholder }
-            />
-            <View style={[ Styles.flexRow, Styles.navButtonContainer ]}>
-              { this.renderCancelButton() }
-              { this.renderSaveButton() }
-            </View>
-          </KeyboardAvoidingView>
+              <Note
+                autoFocus
+                onTextChange={ text => this.setState({ note: text }) }
+                note={ this.state.note }
+                placeHolder={ this.state.placeholder }
+              />
+              <View style={[ Styles.flexRow, Styles.outsideContent ]}>
+                <MarkComplete
+                  onPress={ () => this.toggleComplete() }
+                  complete={ this.state.complete }
+                />
+                <View>
+                  <Image
+                    style={{ height: 20, width: 20 }}
+                    source={ require('../../assets/icons/trash.png')}
+                  />
+                </View>
+              </View>
+            </KeyboardAvoidingView>
+          </View>
         </View>
       </Modal>
     );

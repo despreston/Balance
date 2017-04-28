@@ -14,12 +14,15 @@ export default class MarkComplete extends Component {
   }
   
   render () {
-    const text = this.props.complete ? 'Complete!' : 'Mark complete';
+    const text = this.props.complete ? 'Complete!' : 'Complete';
 
     return (
       <TouchableOpacity onPress={ () => this.props.onPress() }>
         <View style={ Styles.flexRow }>
-          <Text style={ Styles.text }>{ text }</Text>
+          {
+            !this.props.complete &&
+            <View style={ Styles.box } />
+          }
           {
             this.props.complete &&
             <Image
@@ -27,6 +30,7 @@ export default class MarkComplete extends Component {
               style={ Styles.checkmark }
             />
           }
+          <Text style={ Styles.text }>{ text }</Text>
         </View>
       </TouchableOpacity>
     )
