@@ -191,6 +191,7 @@ module.exports = ({ get, post, put }) => {
     .findOne({_id: params._id})
     .populate('author', 'userId username picture')
     .populate('project', 'title privacyLevel')
+    .populate('reactions', 'userId reaction')
     .populate({
       path: 'comments',
       populate: { path: 'commenter', select: 'userId username picture' }
