@@ -38,7 +38,7 @@ class ProjectDetail extends Component {
     this.state = {
       addUpdateVisible: false,
       refreshing: false,
-      notesToShow: 'Past'
+      notesToShow: 'Future'
     };
 
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
