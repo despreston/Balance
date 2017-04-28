@@ -6,8 +6,7 @@ import {
   Text
 } from 'react-native';
 
-// styles
-import { Styles } from './project-detail-style';
+import Styles from './project-detail-style';
 
 // Components
 import NoteListContainer from '../../note-list/note-list-container';
@@ -15,6 +14,7 @@ import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
 import Refresh from '../../refresh/refresh';
 import UpdateButton from './update-button/update-button';
+import NoteTypeSwitch from './note-type-switch/note-type-switch';
 
 class ProjectDetail extends Component {
 
@@ -35,7 +35,11 @@ class ProjectDetail extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { addUpdateVisible: false, refreshing: false };
+    this.state = {
+      addUpdateVisible: false,
+      refreshing: false,
+      notesToShow: 'Past'
+    };
 
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
   }
@@ -48,6 +52,10 @@ class ProjectDetail extends Component {
     this.props.nav('UserProfile', {
       userId: this.props.project.owner[0].userId
     });
+  }
+
+  onNoteContextChange (type) {
+    this.setState({ notesToShow: type });
   }
 
   notesSelector (type) {
@@ -93,9 +101,6 @@ class ProjectDetail extends Component {
     // hide edit buttons if project is Finished OR user is not the owner
     return (
       <View>
-        <Text style={ [Styles.finishedTitleText, Styles.bold] }>
-          Unfinished
-        </Text>
         <NoteListContainer
           showTypeText
           emptyState={ <EmptyCompletedNotes /> }
@@ -163,16 +168,12 @@ class ProjectDetail extends Component {
           </View>
           { this.renderNudgeStuff() }
           <View style={ Styles.container }>
+            <NoteTypeSwitch onPress={ val => this.onNoteContextChange(val) }/>
             {
-              project.status === 'active' &&
-              this.renderFutureNotes()
+              this.state.notesToShow === 'Future'
+                ? this.renderFutureNotes()
+                : this.renderPastNotes()
             }
-            <View style={ Styles.pastNotesView }>
-              <Text style={ [Styles.finishedTitleText, Styles.bold] }>
-                Completed
-              </Text>
-              { this.renderPastNotes() }
-            </View>
           </View>
         </View>
         <AddUpdateContainer

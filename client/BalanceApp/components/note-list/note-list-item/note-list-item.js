@@ -34,7 +34,7 @@ class NoteListItem extends Component {
 
   renderHeader () {
     const { note, showProjectName, showTypeText } = this.props;
-    let typeText = `${note.type === 'Future' ? 'Todo' : 'Did work'}`;
+    let typeText = `${note.type === 'Future' ? 'To do' : 'Did work'}`;
 
     return (
       <View style={[ Styles.flexRow, Styles.top ]}>

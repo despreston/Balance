@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import Colors from '../../colors';
 
-export const Styles = StyleSheet.create ({
+export default StyleSheet.create ({
 
   projectDetail: {
     backgroundColor: Colors.purple,
@@ -29,8 +29,7 @@ export const Styles = StyleSheet.create ({
   },
 
   container: {
-    flex: 1,
-    paddingTop: 10
+    flex: 1
   },
 
   emptyText: {
@@ -60,25 +59,8 @@ export const Styles = StyleSheet.create ({
     fontSize: 16
   },
 
-  pastNotesView: {
-    marginTop: 15
-  },
-
-  finishedTitleText: {
-    color: Colors.gray.tundora,
-    fontSize: 16,
-    padding: 10
-  },
-
   whiteText: {
     color: Colors.white
-  },
-
-  finishedProjectText: {
-    color: Colors.gray.tundora,
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center'
   },
 
   infoTextContainer: {
