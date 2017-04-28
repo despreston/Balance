@@ -57,7 +57,7 @@ export default StyleSheet.create  ({
 
   markStatus: {
     color: Colors.blue,
-    fontWeight: 'bold'
+    fontWeight: '600'
   },
 
   help: {

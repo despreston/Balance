@@ -140,38 +140,38 @@ export default class AddUpdate extends Component {
           >
             <View style={[ Styles.flex, Styles.overlay ]} />
           </TouchableOpacity>
-          <View style={ Styles.content }>
-            <KeyboardAvoidingView behavior='padding' style={ Styles.card }>
-              <View style={[ Styles.flexRow, Styles.outsideContent ]}>
-                { this.renderCancelButton() }
-                <View>
-                  <Text style={ Styles.text }>
-                    { this.props.note ? 'Edit Update' : 'New Update' }
-                  </Text>
-                  <Text style={ Styles.subText }>{ project.title }</Text>
+            <KeyboardAvoidingView behavior='height' style={[ Styles.flex, Styles.card ]}>
+              <View style={[ Styles.flex, Styles.content ]}>
+                <View style={[ Styles.flexRow, Styles.outsideContent ]}>
+                  { this.renderCancelButton() }
+                  <View>
+                    <Text style={ Styles.text }>
+                      { this.props.note ? 'Edit Update' : 'New Update' }
+                    </Text>
+                    <Text style={ Styles.subText }>{ project.title }</Text>
+                  </View>
+                  { this.renderSaveButton() }
                 </View>
-                { this.renderSaveButton() }
-              </View>
-              <Note
-                autoFocus
-                onTextChange={ text => this.setState({ note: text }) }
-                note={ this.state.note }
-                placeHolder={ this.state.placeholder }
-              />
-              <View style={[ Styles.flexRow, Styles.outsideContent ]}>
-                <MarkComplete
-                  onPress={ () => this.toggleComplete() }
-                  complete={ this.state.complete }
+                <Note
+                  autoFocus
+                  onTextChange={ text => this.setState({ note: text }) }
+                  note={ this.state.note }
+                  placeHolder={ this.state.placeholder }
                 />
-                <View>
-                  <Image
-                    style={{ height: 20, width: 20 }}
-                    source={ require('../../assets/icons/trash.png')}
+                <View style={[ Styles.flexRow, Styles.outsideContent ]}>
+                  <MarkComplete
+                    onPress={ () => this.toggleComplete() }
+                    complete={ this.state.complete }
                   />
+                  <View>
+                    <Image
+                      style={{ height: 20, width: 20 }}
+                      source={ require('../../assets/icons/trash.png')}
+                    />
+                  </View>
                 </View>
               </View>
             </KeyboardAvoidingView>
-          </View>
         </View>
       </Modal>
     );

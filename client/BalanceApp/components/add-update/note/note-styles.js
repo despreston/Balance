@@ -5,6 +5,7 @@ export default StyleSheet.create  ({
 
   note: {
     flex: 1,
+    // minHeight: 200,
     borderColor: Colors.white,
     backgroundColor: Colors.white,
     fontSize: 18,
