@@ -12,9 +12,6 @@ import AddUpdateContainer from '../../add-update/add-update-container';
 // styles
 import { Style } from './project-list-item-style';
 
-// utils
-import { formatDate } from '../../../utils/helpers';
-
 class ProjectListItem extends Component {
 
   static propTypes = {
@@ -34,21 +31,11 @@ class ProjectListItem extends Component {
   }
 
   getLastUpdated (project) {
-    const { Past, Future } = project;
-
-    if (Past && Future) {
-      return Past.lastUpdated.getTime() > Future.lastUpdated.getTime()
-        ? Past.lastUpdated
-        : Future.lastUpdated;
-    } else if (Past) {
-      return Past.lastUpdated;
-    } else if (Future) {
-      return Future.lastUpdated;
-    }
+    return project.Past ? project.Past.lastUpdated : null;
   }
 
   renderNote () {
-    const { Future, status } = this.props.project;
+    const { Past, status } = this.props.project;
 
     if (status === 'finished') {
       return (
@@ -58,11 +45,14 @@ class ProjectListItem extends Component {
       );
     }
 
-    if (Future) {
+    if (Past) {
       return (
-        <Text style={ Style.note } numberOfLines={ 2 }>
-          { Future.content }
-        </Text>
+        <View>
+          <Text style={ Style.text }>LATEST ACTIVITY</Text>
+          <Text style={ Style.note } numberOfLines={ 2 }>
+            { Past.content }
+          </Text>
+        </View>
       )
     }
 
@@ -85,20 +75,10 @@ class ProjectListItem extends Component {
 
   renderNudgeBtn () {
     if (this.props.hideNudgeBtn || this.props.project.status === 'finished') {
-      return <View />;
-    }
-
-    return <NudgeBtn style={ Style.nudgeBtn } project={ this.props.project._id } />;
-  }
-
-  renderUpdatedAt () {
-    if (!this.lastUpdated) {
       return null;
     }
 
-    return (
-      <Text style={ Style.text }>Updated { formatDate(this.lastUpdated) }</Text>
-    );
+    return <NudgeBtn style={ Style.nudgeBtn } project={ this.props.project._id } />;
   }
 
   renderStatusIcon () {
@@ -125,10 +105,7 @@ class ProjectListItem extends Component {
     return (
       <View style={ Style.projectListItem }>
         <View style={ Style.content }>
-          <View>
-            <Text style={ Style.title }>{ this.props.project.title }</Text>
-            { this.renderUpdatedAt() }
-          </View>
+          <Text style={ Style.title }>{ this.props.project.title }</Text>
           { this.renderNote() }
           <View style={ Style.footer }>
             <View style={ Style.footerIcons }>
@@ -149,14 +126,13 @@ class ProjectListItem extends Component {
       </View>
     );
   }
-  
 }
 
 const EmptyState = ({ addNote }) => {
   return (
     <View>
       <Text style={ Style.message }>
-        Nothing planned for this project.
+        Nothing done for this project
       </Text>
       {
         addNote &&

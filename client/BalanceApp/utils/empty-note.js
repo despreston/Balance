@@ -6,4 +6,4 @@ export default function emptyNote (project, type) {
     content: '',
     type
   };
-};
+}

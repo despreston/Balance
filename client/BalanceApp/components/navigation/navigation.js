@@ -25,7 +25,7 @@ import Colors from '../colors';
 
 // Default header for all stack navs
 const navigationOptions = {
-  header: ({ navigate }) => {
+  header: () => {
     const tintColor = Colors.white;
     const style = { backgroundColor: Colors.purple };
 

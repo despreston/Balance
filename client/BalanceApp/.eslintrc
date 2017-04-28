@@ -1,0 +1,29 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "plugins": [
+    "react",
+    "react-native"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+    "react/display-name": 0,
+    "react/prop-types": 0,
+    "react/jsx-no-duplicate-props": 2,
+    "react/jsx-pascal-case": 2,
+    "react-native/no-unused-styles": 2,
+    "react-native/no-color-literals": 2
+  },
+  "globals": {
+    "CONFIG": true,
+    "global": true,
+    "require": true,
+    "React": true
+  }
+}

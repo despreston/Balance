@@ -1,10 +1,11 @@
+/* eslint no-console: "off" */
 import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import Auth0Lock from 'react-native-lock';
 import { saveAuthToken, saveRefreshToken } from '../utils/auth';
+import Colors from '../components/colors';
 
 const LOGGED_IN_USER = 'LOGGED_IN_USER';
-const RESET_CURRENT_USER = 'RESET_CURRENT_USER';
 const RECEIVE_USERS = 'RECEIVE_USERS';
 
 export default {
@@ -60,7 +61,7 @@ export default {
       fields.client_id = CONFIG.clientId;
 
       return api(auth0url, fields, true)
-        .then(updatedUser => api(url, { method, body: user }))
+        .then(() => api(url, { method, body: user }))
         .then(user => dispatch(this.receiveUsers(user)))
         .catch(err => console.log('could not save user ', err));
     };
@@ -82,28 +83,51 @@ export default {
    */
   login () {
     const { clientId, domain } = CONFIG;
-    const lock = new Auth0Lock({ clientId, domain });
+
+    const style = {
+      ios: {
+        screenBackgroundColor: Colors.purple,
+        closeButtonTintColor: Colors.white,
+        primaryButtonNormalColor: Colors.green,
+        textFieldTextColor: Colors.gray.tundora,
+        textFieldIconColor: Colors.purple,
+        titleTextColor: Colors.white,
+        credentialBoxBorderColor: Colors.purple,
+        credentialBoxSeparatorColor: Colors.purple,
+        credentialBoxBackgroundColor: Colors.white,
+        secondaryButtonTextColor: Colors.white,
+        descriptionTextColor: Colors.white,
+        separatorTextColor: Colors.white
+      }
+    };
+
+    const lock = new Auth0Lock({ clientId, domain, style });
     const authParams = { scope: 'openid offline_access', device: 'my-device' };
 
     // show lock screen to prompt for login details
     return dispatch => {
-      lock.show({ authParams }, (err, profile, tokens) => {
+      lock.show({ closable: true, authParams }, (err, profile, tokens) => {
+        if (!tokens) {
+          return;
+        }
+
         if (err) {
           console.log('something went wrong ' + err);
         }
 
         // save tokens to local storage
-        saveRefreshToken(tokens.refreshToken)
+        return saveRefreshToken(tokens.refreshToken)
         .then(() => saveAuthToken(tokens.idToken))
+        .then(() => {
+          delete profile.extraInfo;
+
+          // send the user to the server
+          return api(`users`, { method: 'POST', body: profile })
+            .then(user => dispatch(this.setLoggedInUser(user)));
+        })
         .catch( err => {
-          console.log('could not save tokens ', err);
+          console.log('could not save new user ', err);
         });
-
-        delete profile.extraInfo;
-
-        // send the user to the server
-        return api(`users`, { method: 'POST', body: profile })
-          .then(user => dispatch(this.setLoggedInUser(user)));
       });
     }
   },

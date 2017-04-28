@@ -30,6 +30,6 @@ class FriendRequestList extends Component {
     );
   }
 
-};
+}
 
 export default FriendRequestList;

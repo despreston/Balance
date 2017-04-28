@@ -11,12 +11,6 @@ import CommentListItem from './comment-list-item/comment-list-item';
 
 class CommentList extends Component {
 
-  static mapDispatchToProps (dispatch) {
-    return {
-      deleteComment: comment => dispatch(actions.deleteComment(comment))
-    };
-  }
-
   static mapStateToProps (state) {
     return { loggedInUser: state.loggedInUser };
   }
@@ -24,7 +18,6 @@ class CommentList extends Component {
   static propTypes = {
     comments: PropTypes.array.isRequired,
     loggedInUser: PropTypes.string.isRequired,
-    deleteComment: PropTypes.func.isRequired,
     onUserSelect: PropTypes.func.isRequired
   };
 
@@ -38,7 +31,7 @@ class CommentList extends Component {
         <View key={ comment._id }>
           <CommentListItem
             onUserSelect={ this.props.onUserSelect }
-            onDelete={ comment => this.props.deleteComment(comment) }
+            onDelete={ comment => this.props.dispatch(actions.deleteComment(comment)) }
             comment={ comment }
             allowDelete={ (this.props.loggedInUser === comment.commenter.userId ) }
           />
@@ -57,7 +50,4 @@ class CommentList extends Component {
 
 }
 
-export default connect(
-  CommentList.mapStateToProps,
-  CommentList.mapDispatchToProps)
-(CommentList);
+export default connect(CommentList.mapStateToProps)(CommentList);

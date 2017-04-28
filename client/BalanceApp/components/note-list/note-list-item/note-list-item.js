@@ -1,6 +1,6 @@
 // vendors
-import React, { PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import React, { PropTypes, Component } from 'react';
+import { Image, View, Text } from 'react-native';
 
 // styles
 import { Styles } from './note-list-item-style';
@@ -12,55 +12,75 @@ import prettyDate from '../../../utils/fancy-date';
 import CommentButton from './comment-button/comment-button';
 import ReactionsContainer from '../../reactions/reactions-container';
 
-function NoteListItem ({ note, showProjectName }) {
+class NoteListItem extends Component {
 
-  function renderHeader () {
-    let typeText = `${note.type === 'Future' ? 'Reminder' : 'Did work'}`;
+  static propTypes = {
+    note: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      lastUpdated: PropTypes.instanceOf(Date).isRequired,
+      author: PropTypes.shape({
+        userId: PropTypes.string.isRequired
+      }).isRequired,
+      reactions: PropTypes.array
+    }).isRequired,
+    showTypeText: PropTypes.bool,
+    showProjectName: PropTypes.bool
+  }
+
+  constructor (props) {
+    super(props);
+  }
+
+  renderHeader () {
+    const { note, showProjectName, showTypeText } = this.props;
+    let typeText = `${note.type === 'Future' ? 'To do' : 'Did work'}`;
 
     return (
-      <View style={ Styles.top }>
-        <Text style={ Styles.createdAt }>
-          <Text style={ Styles.darker }>{ typeText }</Text>
-          {
-            showProjectName &&
-            <Text>
-              <Text style={ Styles.dark }> for </Text>
-              <Text style={ Styles.darker }>{ note.project.title } </Text>
-            </Text>
-          }
-        </Text>
-        <Text style={ Styles.createdAt }>{ prettyDate(note.createdAt) }</Text>
+      <View style={[ Styles.flexRow, Styles.top ]}>
+        <View style={[ Styles.flexRow, Styles.topLeft ]}>
+          <Image style={ Styles.picture } source={{ uri: note.author.picture }} />
+          <Text style={ Styles.smallLightText }>
+            {
+              showTypeText &&
+              <Text style={ Styles.darker }>{ typeText }</Text>
+            }
+            {
+              showProjectName &&
+              <Text>
+                <Text style={ Styles.dark }> for </Text>
+                <Text style={ Styles.darker }>{ note.project.title } </Text>
+              </Text>
+            }
+          </Text>
+        </View>
+        <Text style={ Styles.smallLightText }>{ prettyDate(note.lastUpdated) }</Text>
       </View>
     );
   }
 
-  return (
-    <View style={ Styles.container }>
-      { renderHeader() }
-      <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
-      <View style={ Styles.bottom }>
-        <View style={ Styles.comment }>
-          <CommentButton count={ note.commentCount || 0 } />
-        </View>
-        <ReactionsContainer
-          hideExpand
-          maxList={ 4 }
-          note={ note._id }
-          reactions={ note.reactions }
-        />
-      </View>
-    </View>
-  );
-}
+  render () {
+    const { note } = this.props;
 
-NoteListItem.propTypes = {
-  note: PropTypes.shape({
-    type: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired,
-    reactions: PropTypes.array
-  }).isRequired,
-  showProjectName: PropTypes.bool
-};
+    return (
+      <View style={ Styles.container }>
+        { this.renderHeader() }
+        <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
+        <View style={ Styles.flexRow }>
+          <View style={ Styles.comment }>
+            <CommentButton count={ note.commentCount || 0 } />
+          </View>
+          <ReactionsContainer
+            hideExpand
+            maxList={ 4 }
+            note={ note._id }
+            reactions={ note.reactions }
+          />
+        </View>
+      </View>
+    );
+  }
+
+}
 
 export default NoteListItem;

@@ -49,11 +49,7 @@ class ProjectListContainer extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const {
-      projects,
-      user,
-      dispatch
-    } = nextProps;
+    const { projects } = nextProps;
 
     this.loadFilterValue().then(filter => {
       if (filter === null) {

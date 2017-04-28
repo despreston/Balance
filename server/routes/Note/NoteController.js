@@ -142,14 +142,15 @@ module.exports = ({ get, post, put }) => {
 
     Note
     .create(body)
-    .then((newNote, err) => {
-      
-      if (err) {
-        res.send(500, err);
-      }
+    .then(newNote => {
 
-      newNote.commentCount = 0;
-      newNote.comments = [];
+      return Note
+        .findOne({ _id: newNote._id })
+        .populate('project', 'title privacyLevel')
+        .populate('author', 'userId username picture')
+        .exec();
+    })
+    .then(newNote => {
 
       return Project
         .findOne({ _id: newNote.project })
@@ -165,16 +166,22 @@ module.exports = ({ get, post, put }) => {
             nudges.forEach(user => {
               new NudgedProjectUpdated(user.userId, projectOwner, project._id).save();
             });
-          });
+          })
+          .catch(log.error);
 
           // reset nudges
           project.nudges = [];
           project.save();
           newNote.project = { _id: project._id, name: project.title };
           return newNote;
-        });
+        })
+        .catch(log.error);
     })
-    .then(newNote => res.send(200, newNote));
+    .then(newNote => res.send(200, newNote))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
   });
 
   put('notes/:_id', ({ body, params, user }, res) => {
@@ -182,6 +189,9 @@ module.exports = ({ get, post, put }) => {
 
     Note
     .findOne({_id: params._id})
+    .populate('author', 'userId username picture')
+    .populate('project', 'title privacyLevel')
+    .populate('reactions', 'userId reaction')
     .populate({
       path: 'comments',
       populate: { path: 'commenter', select: 'userId username picture' }
@@ -209,9 +219,6 @@ module.exports = ({ get, post, put }) => {
       if (Array.isArray(note.author)) {
         note.author = note.author[0];
       }
-
-      // Add properly formatted project object back to the note
-      note = Object.assign(note, { project: body.project });
 
       return res.send(200, note);
     })

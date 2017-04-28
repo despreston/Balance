@@ -69,8 +69,6 @@ class NotificationsContainer extends Component {
     );
   }
 
-};
+}
 
-export default connect(
-  NotificationsContainer.mapStateToProps
-)(NotificationsContainer);
+export default connect(NotificationsContainer.mapStateToProps)(NotificationsContainer);

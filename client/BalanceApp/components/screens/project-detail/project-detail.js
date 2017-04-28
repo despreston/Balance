@@ -3,22 +3,18 @@ import React, { Component, PropTypes } from 'react';
 import {
   ScrollView,
   View,
-  Text,
-  TouchableOpacity
+  Text
 } from 'react-native';
 
-// styles
-import { Styles } from './project-detail-style';
+import Styles from './project-detail-style';
 
 // Components
-import FutureNote from './future-note/future-note';
 import NoteListContainer from '../../note-list/note-list-container';
 import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
 import Refresh from '../../refresh/refresh';
-
-// utils
-import emptyNote from '../../../utils/empty-note';
+import UpdateButton from './update-button/update-button';
+import NoteTypeSwitch from './note-type-switch/note-type-switch';
 
 class ProjectDetail extends Component {
 
@@ -31,7 +27,6 @@ class ProjectDetail extends Component {
       owner: PropTypes.array.isRequired
     }),
     nav: PropTypes.func.isRequired,
-    notes: PropTypes.array,
     userIsOwner: PropTypes.bool,
     refreshing: PropTypes.bool.isRequired,
     onRefresh: PropTypes.func.isRequired
@@ -40,15 +35,13 @@ class ProjectDetail extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { addUpdateVisible: false, refreshing: false };
+    this.state = {
+      addUpdateVisible: false,
+      refreshing: false,
+      notesToShow: 'Future'
+    };
 
-    this.futureNotes = this.notesForType('Future');
-    this.futureNote = this.getFutureNote();
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
-  }
-
-  notesForType (type) {
-    return this.props.notes.filter(note => note.type === type);
   }
 
   toggleAddUpdateModal () {
@@ -61,53 +54,62 @@ class ProjectDetail extends Component {
     });
   }
 
-  getFutureNote () {
-    const { project } = this.props;
-
-    if (this.futureNotes.length > 0) {
-      return this.futureNotes.reduce((latest, note) => {
-        return note.lastUpdated.getTime() > latest.lastUpdated.getTime()
-          ? note
-          : latest;
-      }, this.futureNotes[0]);
-    }
-
-    else if (project.Future) {
-      return project.Future;
-    }
-    
-    return emptyNote(project, 'Future');
+  onNoteContextChange (type) {
+    this.setState({ notesToShow: type });
   }
 
-  renderPastNotes () {
-    function selector (notes, project) {
+  notesSelector (type) {
+    return (notes, project) => {
       return Object.keys(notes)
         .map(id => notes[id])
         .filter(note => {
           return (
             project._id === note.project._id &&
-            note.type === 'Past'
+            note.type === type
           );
         });
     }
+  }
 
+  renderPastNotes () {
     const {
       nav,
       status,
-      userIsOwner,
-      onEdit
+      userIsOwner
     } = this.props;
 
     // hide edit buttons if project is Finished OR user is not the owner
     return (
       <NoteListContainer
-        showContext
+        showTypeText
         emptyState={ <EmptyCompletedNotes /> }
         query={[{ project: this.props.project._id }, { type: 'Past' }]}
-        selector={ notes => selector(notes, this.props.project) }
+        selector={ notes => this.notesSelector('Past')(notes, this.props.project) }
         showEdit={ status !== 'finished' && userIsOwner }
         onSelect={ id => nav('Note', { id }) }
       />
+    );
+  }
+
+  renderFutureNotes () {
+    const {
+      nav,
+      status,
+      userIsOwner
+    } = this.props;
+
+    // hide edit buttons if project is Finished OR user is not the owner
+    return (
+      <View>
+        <NoteListContainer
+          showTypeText
+          emptyState={ <EmptyCompletedNotes /> }
+          query={[{ project: this.props.project._id }, { type: 'Future' }]}
+          selector={ notes => this.notesSelector('Future')(notes, this.props.project) }
+          showEdit={ status !== 'finished' && userIsOwner }
+          onSelect={ id => nav('Note', { id }) }
+        />
+      </View>
     );
   }
 
@@ -122,7 +124,7 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const { project, refreshing, saveNote, nav, userIsOwner } = this.props;
+    const { project, refreshing, userIsOwner } = this.props;
 
     const refreshProps = {
       refreshing,
@@ -140,7 +142,7 @@ class ProjectDetail extends Component {
         <View style={[ Styles.whiteBackground, Styles.main ]}>
           <View style={[ Styles.purpleBackground, Styles.info ]}>
             <View>
-              { project.status === 'finished' && <FinishedProjectText />}
+              { project.status === 'finished' && <FinishedProjectText /> }
               <Text style={ [Styles.title, Styles.whiteText] }>
                 { project.title }
               </Text>
@@ -159,20 +161,19 @@ class ProjectDetail extends Component {
                 { project.description }
               </Text>
             </View>
-            { userIsOwner && <UpdateButton press={ () => this.toggleAddUpdateModal() } /> }
+            {
+              userIsOwner && project.status !== 'finished' && 
+              <UpdateButton press={ () => this.toggleAddUpdateModal() } /> 
+            }
           </View>
           { this.renderNudgeStuff() }
           <View style={ Styles.container }>
+            <NoteTypeSwitch onPress={ val => this.onNoteContextChange(val) }/>
             {
-              project.status === 'active' &&
-              <FutureNote note={ this.futureNote }/>
+              this.state.notesToShow === 'Future'
+                ? this.renderFutureNotes()
+                : this.renderPastNotes()
             }
-            <View style={ Styles.pastNotesView }>
-              <Text style={ [Styles.finishedTitleText, Styles.bold] }>
-                Completed
-              </Text>
-              { this.renderPastNotes() }
-            </View>
           </View>
         </View>
         <AddUpdateContainer
@@ -183,30 +184,14 @@ class ProjectDetail extends Component {
       </ScrollView>
     );
   }
-
 }
 
 const FinishedProjectText = () => {
   return (
     <View>
       <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
-        This project has been marked as finished. {"\n"} Nice job! 🎉
+        This project has been finished!  🎉
       </Text>
-    </View>
-  );
-};
-
-const UpdateButton = ({ press }) => {
-  return (
-    <View style={ Styles.updateButtonContainer }>
-      <TouchableOpacity
-        onPress={ press }
-        style={ Styles.updateButton }>
-        <Text
-          style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
-          Add an update
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -215,6 +200,6 @@ const EmptyCompletedNotes = () => {
   return (
     <Text style={ Styles.emptyText }>No work has been done for this project.</Text>
   )
-}
+};
 
 export default ProjectDetail;

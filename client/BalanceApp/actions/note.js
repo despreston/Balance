@@ -1,3 +1,4 @@
+/* eslint no-console: "off" */
 import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import formatQueryParams from '../utils/query-params';
@@ -41,7 +42,7 @@ export default {
 
     return dispatch => {
       return api(url, { method, body: note })
-        .then(user => dispatch(this.receiveNotes));
+        .then(note => dispatch(this.receiveNotes(note)));
     };
   },
 

@@ -1,6 +1,6 @@
 // Vendors
 import React, { Component, PropTypes } from 'react';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native';
 
 // Components
 import ProjectListItem from './project-list-item/project-list-item';
@@ -19,7 +19,7 @@ class ProjectList extends Component {
   }
 
   constructor (props) {
-    super();
+    super(props);
     this.renderRow = this.renderRow.bind(this);
   }
 

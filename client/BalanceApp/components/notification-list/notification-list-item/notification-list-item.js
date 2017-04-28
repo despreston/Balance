@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image } from 'react-native';
 
 import prettyDate from '../../../utils/fancy-date';
 
@@ -29,7 +29,6 @@ class NotificationListItem extends Component {
 
   getText () {
     let props = { nav: this.nav, user: this.sender };
-    let icon;
 
     switch (this.type) {
       case 'new_comment':
@@ -56,6 +55,9 @@ class NotificationListItem extends Component {
 
   render () {
     const { notification } = this.props;
+
+    // TEMPORARY: friend requests need to be handled differently
+    if (this.type === 'new_friend_request') { return null; }
 
     const { text, icon } = this.getText();
 

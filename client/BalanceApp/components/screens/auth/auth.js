@@ -1,16 +1,17 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-native';
+import { TouchableOpacity, Text, View, Image } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 // actions
 import actions from '../../../actions/';
 
+import Styles from './auth-styles';
+
 // utils
 import {
   isLoggedIn,
   parseToken,
-  getRefreshToken,
   refreshIdToken
 } from '../../../utils/auth';
 
@@ -22,6 +23,8 @@ class Auth extends Component {
 
   constructor (props) {
     super(props);
+
+    this.state = { showLogin: false };
 
     this.handleAuth();
   }
@@ -44,7 +47,16 @@ class Auth extends Component {
             dispatch(actions.requestUser(token.sub, true))
           ]);
         })
-        .then(() => this.navigateToApp());
+        .then(() => {
+          if (this.state.showLogin) {
+            this.setState({ showLogin: false });
+          }
+          this.navigateToApp();
+        });
+      } else {
+        if (!this.state.showLogin) {
+          this.setState({ showLogin: true });
+        }
       }
     });
   }
@@ -63,8 +75,26 @@ class Auth extends Component {
   }
 
   render () {
+    const icon = require('../../../assets/icons/icon-white.png');
     const { dispatch } = this.props;
-    return <Button onPress={ () => dispatch(actions.login()) } title='Login' />;
+
+    return (
+      <View style={ Styles.container }>
+        <Image source={ icon } style={ Styles.icon }/>
+        <Text style={ Styles.title }>
+          Hello!
+        </Text>
+        <Text style={[ Styles.white, Styles.subtitle ]}>
+          Welcome to <Text style={ Styles.bold }>Balance</Text>
+        </Text>
+        {
+          this.state.showLogin &&
+          <TouchableOpacity style={ Styles.button } onPress={ () => dispatch(actions.login()) }>
+            <Text style={[ Styles.bold, Styles.white ]}>Get started</Text>
+          </TouchableOpacity>
+        }
+      </View>
+    );
   }
 
 }

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 
 // styles
 import Style from './avatar-collection-styles';

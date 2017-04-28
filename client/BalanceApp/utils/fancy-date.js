@@ -31,4 +31,4 @@ export default function prettyDate(date) {
   
   
   return `${round(daysSinceUpdate, 86400)}d`;
-};
+}

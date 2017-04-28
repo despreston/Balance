@@ -12,4 +12,4 @@ export default class Activity extends Component {
     );
   }
 
-};
+}

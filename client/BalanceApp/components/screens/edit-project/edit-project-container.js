@@ -91,6 +91,7 @@ class EditProjectContainer extends Component {
     });
 
     this.props.navigation.dispatch(resetAction);
+
     setTimeout(() => {
       this.props.dispatch(actions.deleteProject(this.state.project._id));
     }, 2000);

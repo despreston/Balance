@@ -121,7 +121,7 @@ const ProjectStatus = ({ project, onEdit }) => {
 
   return (
     <View style={ Styles.statusContainer }>
-      <Text>
+      <Text style={ [Styles.text, Styles.centerText ]}>
         Marking a project as finished makes the project read-only.
         You can always reopen the project any time.
       </Text>

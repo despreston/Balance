@@ -86,7 +86,7 @@ Project.virtual('Future', {
 Project.statics.latestFutureNote = {
   path: 'Future',
   match: { type: 'Future' },
-  options: { sort: { createdAt: -1 }, limit: 1 },
+  options: { sort: { lastUpdated: -1 }, limit: 1 },
   populate: {
     path: 'reactions',
     select: 'userId reaction'
@@ -96,7 +96,7 @@ Project.statics.latestFutureNote = {
 Project.statics.latestPastNote = {
   path: 'Past',
   match: { type: 'Past' },
-  options: { sort: { createdAt: -1 }, limit: 1 },
+  options: { sort: { lastUpdated: -1 }, limit: 1 },
   populate: {
     path: 'reactions',
     select: 'userId reaction'

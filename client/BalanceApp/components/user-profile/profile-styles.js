@@ -4,13 +4,15 @@ import Colors from '../colors';
 export default StyleSheet.create ({
 
   profile: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: 50
+    paddingTop: 25
   },
 
   profileInfo: {
-    marginBottom: 20
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.gray.porcelain
   },
 
   body: {

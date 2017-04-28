@@ -1,3 +1,4 @@
+/* eslint no-console: "off" */
 import convertDates from './convert-dates';
 import { getAuthToken } from './auth';
 
@@ -15,7 +16,7 @@ export function api (url, properties = {}, externalUrl = false) {
   }
   
   return getAuthToken()
-    .then(token => new Headers({ authorization: `Bearer ${token}` }) )
+    .then(token => new Headers({ authorization: `Bearer ${token}` }))
     .then(headers => {
       properties.headers = headers;
 
@@ -28,7 +29,7 @@ export function api (url, properties = {}, externalUrl = false) {
         .then(json => convertDates(json))
         .catch(err => console.log("ERROR ", err));
     });
-};
+}
 
 export function apiDispatch (url, action, properties = { method: 'GET' }) {
   return dispatch => {
@@ -40,4 +41,4 @@ export function apiDispatch (url, action, properties = { method: 'GET' }) {
       })
       .catch(err => console.log(err));
   };
-};
+}

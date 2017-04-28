@@ -100,6 +100,7 @@ class UserProfile extends Component {
         emptyState={ <EmptyLatest /> }
         onSelect={ id => this.props.nav('Note', { id }) }
         showProjectName
+        showTypeText
         query={[{ user: this.props.userId }]}
         selector={ notes => selector(notes, this.props.userId) }
       />
@@ -169,12 +170,9 @@ class UserProfile extends Component {
         <View style={ Styles.profileInfo }>
           <ProfileInfo
             user={ this.props.user }
-            showEmptyBio={ this.userIsLoggedInUser }
-            addBio={ () => this.props.nav('UserSettings') }
           />
           <UserProfileSwitch
-            user={ this.props.user }
-            hideProjects={ this.userIsLoggedInUser }
+            userId={ this.props.user.userId }
             selectedContext={ this.state.context }
             switchContext={ (context) => this.switchContext(context) }
           />

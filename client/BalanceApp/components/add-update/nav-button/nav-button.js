@@ -8,7 +8,9 @@ class NavButton extends Component {
   static propTypes = {
     label: PropTypes.string.isRequired,
     buttonStyle: PropTypes.number,
-    onPress: PropTypes.func.isRequired
+    textStyle: PropTypes.number,
+    onPress: PropTypes.func.isRequired,
+    disabled: PropTypes.bool
   }
 
   constructor (props) {
@@ -18,10 +20,11 @@ class NavButton extends Component {
   render () {
     return (
       <TouchableOpacity
+        disabled={ this.props.disabled }
         onPress={ () => this.props.onPress() }
         style={ [Styles.navButton, this.props.buttonStyle] }
       >
-        <Text style={ Styles.buttonText }>{ this.props.label }</Text>
+        <Text style={[ Styles.buttonText, this.props.textStyle ]}>{ this.props.label }</Text>
       </TouchableOpacity>
     );
   }

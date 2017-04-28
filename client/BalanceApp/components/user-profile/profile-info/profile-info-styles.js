@@ -8,8 +8,7 @@ const shared = {
 export default StyleSheet.create  ({
 
   ProfileInfo: {
-    alignSelf: 'center',
-    minHeight: 100
+    alignSelf: 'center'
   },
 
   row: {
@@ -34,7 +33,8 @@ export default StyleSheet.create  ({
     ...shared,
     fontSize: 14,
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingTop: 5
   },
 
   name: {
@@ -66,17 +66,18 @@ export default StyleSheet.create  ({
 
   contextOptionText: {
     ...shared,
-    fontSize: 13,
+    fontSize: 12,
+    color: Colors.gray.silver,
     textAlign: 'center',
     paddingBottom: 5
   },
 
-  selectedContext: {
-    ...shared,
-    fontWeight: 'bold'
+  contextOptionCount: {
+    fontWeight: 'bold',
+    fontSize: 18
   },
 
-  purpleText: {
+  selectedContext: {
     color: Colors.purple
   },
 

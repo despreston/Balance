@@ -6,4 +6,4 @@ export default function emptyProject (userId) {
     privacyLevel: 'global',
     status: 'active'
   };
-};
+}

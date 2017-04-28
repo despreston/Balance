@@ -26,13 +26,13 @@ export default StyleSheet.create  ({
   },
 
   rowLabel: {
+    paddingLeft: 10,
     fontWeight: 'bold',
     flex: 1
   },
 
   text: {
     color: Colors.gray.tundora,
-    paddingLeft: 10,
     fontSize: 15
   },
 
@@ -64,6 +64,10 @@ export default StyleSheet.create  ({
     fontWeight: 'bold',
     color: Colors.purple,
     paddingTop: 20
+  },
+
+  centerText: {
+    textAlign: 'center'
   }
 
 });

@@ -1,6 +1,6 @@
 // vendors
 import React, { Component, PropTypes } from 'react';
-import { ScrollView, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 
 import FriendRequests from './friend-requests/friend-requests';
 import Refresh from '../../refresh/refresh';
@@ -8,7 +8,7 @@ import NotificationList from '../../notification-list/notification-list';
 
 import Styles from './notifications-styles';
 
-export default class Notifications extends Component {
+class Notifications extends Component {
 
   static propTypes = {
     friendRequests: PropTypes.array.isRequired,
@@ -38,9 +38,28 @@ export default class Notifications extends Component {
             </TouchableOpacity>
           )
         }
-        <NotificationList nav={ this.props.nav } notifications={ notifications } />
+        {
+          notifications.length > 0 &&
+          <NotificationList nav={ this.props.nav } notifications={ notifications } />
+        }
+        {
+          friendRequests.length === 0 && notifications.length === 0 &&
+          <EmptyState />
+        }
       </ScrollView>
     );
   }
 
-};
+}
+
+const EmptyState = () => {
+  return (
+    <View style={ Styles.container }>
+      <Text style={ Styles.emptyText }>
+        You're all caught up! 🤘
+      </Text>
+    </View>
+  )
+}
+
+export default Notifications;

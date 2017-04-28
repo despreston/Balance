@@ -1,10 +1,9 @@
-// vendors
+  // vendors
 import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity
+  Image
 } from 'react-native';
 
 // components
@@ -17,9 +16,7 @@ class ProfileInfo extends Component  {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    customTextStyle: PropTypes.array,
-    showEmptyBio: PropTypes.bool,
-    addBio: PropTypes.func
+    customTextStyle: PropTypes.array
   }
 
   constructor (props) {
@@ -27,7 +24,7 @@ class ProfileInfo extends Component  {
   }
 
   render () {
-    const { user, customTextStyle = [], showEmptyBio, addBio } = this.props;
+    const { user, customTextStyle = [] } = this.props;
 
     return (
       <View style={ Styles.ProfileInfo }>
@@ -46,7 +43,7 @@ class ProfileInfo extends Component  {
             </Text>
           </View>
         </View>
-        <Bio bio={ user.bio } showEmptyBio={ showEmptyBio } onAdd={ addBio }/>
+        <Bio bio={ user.bio } />
         <View style={ Styles.friendButton }>
           <FriendButton userId={ user.userId } hideIfLoggedInUser={ true } />
         </View>
@@ -56,22 +53,12 @@ class ProfileInfo extends Component  {
 
 }
 
-const Bio = ({ bio, showEmptyBio, onAdd }) => {
-  if (bio && (bio.length > 0 || !showEmptyBio)) {
+const Bio = ({ bio }) => {
+  if (bio && bio.length > 0) {
     return (
       <Text style={ Styles.bio }>
         { bio }
       </Text>
-    );
-  }
-
-  if (showEmptyBio) {
-    return (
-      <TouchableOpacity onPress={ onAdd }>
-        <Text style={ [Styles.bio, Styles.purpleText] }>
-          Add a short bio
-        </Text>
-      </TouchableOpacity>
     );
   }
 

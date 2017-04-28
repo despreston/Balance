@@ -10,7 +10,7 @@
     "start": "nodemon",
     "debug": "NODE_DEBUG=info nodemon"
   },
-  "engines": { "node": "6.10.0" },
+  "engines": { "node": ">=6.10.0" },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/despreston/Balance.git"
@@ -26,7 +26,7 @@
     "logbro": "^1.2.0",
     "mongo": "^0.1.0",
     "mongodb": "2.2.22",
-    "mongoose": "^4.9.3",
+    "mongoose": "^4.9.6",
     "passport": "^0.3.2",
     "passport-auth0": "^0.6.0",
     "recursive-readdir": "^2.1.0",
