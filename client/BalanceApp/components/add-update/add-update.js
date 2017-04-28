@@ -33,8 +33,8 @@ export default class AddUpdate extends Component {
     super(props);
 
     this.scrollView = null;
-    this.pastNotePlaceholder = "Finished math homework";
-    this.futureNotePlaceholder = "Study for test on Tuesday";
+    this.pastNotePlaceholder = "What did you do?";
+    this.futureNotePlaceholder = "What do you need to do?";
     this.toggleComplete = this.toggleComplete.bind(this);
 
     this.state = {
