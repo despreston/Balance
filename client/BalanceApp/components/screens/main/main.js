@@ -26,7 +26,7 @@ class MainScene extends Component {
       title: (<Text style={[ styles.text, styles.title ]}>Projects</Text>),
       headerRight: (
         <NavBtn
-          onPress={() => navigation.state.params.newProject()}
+          onPress={() => navigation.navigate('EditProject')}
           title="✚"
         />
       )
@@ -41,18 +41,8 @@ class MainScene extends Component {
     this.nav = this.props.navigation.navigate;
   }
 
-  componentDidMount () {
-    this.props.navigation.setParams({
-      newProject: this.newProject.bind(this)
-    });
-  }
-
   openProject (project) {
     this.nav('Project', { project: project._id });
-  }
-
-  newProject () {
-    this.nav('EditProject');
   }
 
   render () {
