@@ -7,7 +7,7 @@ const log = require('logbro');
 const Notification = require('../../lib/notification/');
 const { NudgedProjectUpdated } = Notification;
 
-module.exports = ({ get, post, put }) => {
+module.exports = ({ get, post, put, del }) => {
 
   get('notes/:_id/reactions', ({ params, user }, res) => {
     Reaction
@@ -227,5 +227,22 @@ module.exports = ({ get, post, put }) => {
       return res.send(500);
     });
   });
+
+   del('notes/:_id', ({ params, user }, res) => {
+    Note
+    .findOne(params)
+    .then(note => {
+      if (note.user !== user.sub) {
+        return res.send(403);
+      }
+
+      note.remove();
+    })
+    .then(() => res.send(200, []))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
+  })
 
 };
