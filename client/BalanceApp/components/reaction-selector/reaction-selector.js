@@ -22,7 +22,6 @@ export default class ReactionSelector extends Component {
           visible={ this.props.visible }
           onTapOutside={ () => this.props.close() }
           horizontal
-          hideClearButton
           onEmojiSelected={ emoji => this.props.close(emoji) }
         />
       </Modal>

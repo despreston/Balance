@@ -177,6 +177,7 @@ class ProjectDetail extends Component {
           </View>
         </View>
         <AddUpdateContainer
+          reloadProject
           project={ project }
           visible={ this.state.addUpdateVisible }
           hideFn={ () => this.toggleAddUpdateModal() }

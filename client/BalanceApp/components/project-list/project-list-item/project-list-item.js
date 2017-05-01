@@ -7,7 +7,6 @@ import StatusIcon from '../../status-icon/StatusIcon';
 import Nudges from '../../nudges/nudges';
 import NudgeBtn from '../../nudges/nudge-button/nudge-button';
 import UpdateIcon from './update-icon/update-icon';
-import AddUpdateContainer from '../../add-update/add-update-container';
 
 // styles
 import { Style } from './project-list-item-style';
@@ -116,13 +115,6 @@ class ProjectListItem extends Component {
           </View>
         </View>
         { this.renderStatusIcon() }
-
-        <AddUpdateContainer
-          reloadProject={ true }
-          project={ this.props.project }
-          visible={ this.state.addUpdateVisible }
-          hideFn={ () => this.toggleAddUpdateModal() }
-        />
       </View>
     );
   }
