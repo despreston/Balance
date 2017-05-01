@@ -184,7 +184,10 @@ module.exports = ({ get, post, del, put }) => {
 
       user = Object.assign(user, body);
       user.save();
-      return res.send(200, user);
+
+      return Project.projectCountForUser(params.userId, ['global', 'friends', 'private'])
+        .then(project_count => Object.assign(user.toObject(), { project_count }))
+        .then(user => res.send(200, user));
     })
     .catch(err => res.send(500, err));
   });
