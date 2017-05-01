@@ -31,21 +31,18 @@ class EditProjectContainer extends Component {
     return { project };
   }
 
-  static navigationOptions = {
-    header: ({ goBack, state }, defaultHeader) => {
+  static navigationOptions = ({ navigation }) => {
+    const { goBack, state } = navigation;
 
-      const title = state.params && state.params.project
-        ? 'Edit Project'
-        : 'New Project';
+    const title = state.params && state.params.project
+      ? 'Edit Project'
+      : 'New Project';
 
-      const left = ( <NavBtn title='Cancel' onPress={ () => goBack() } /> );
+    const headerLeft = <NavBtn title='Cancel' onPress={ () => goBack() } />;
 
-      const right = (
-        <NavBtn title='Save' onPress={ () => state.params.saveProject() } />
-      );
+    const headerRight = <NavBtn title='Save' onPress={ () => state.params.saveProject() } />;
 
-      return { ...defaultHeader, left, right, title };
-    }
+    return { title, headerLeft, headerRight };
   };
   
   constructor (props) {

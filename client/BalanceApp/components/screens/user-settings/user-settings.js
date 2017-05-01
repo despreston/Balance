@@ -27,15 +27,12 @@ class UserSettings extends Component {
     };
   }
 
-  static navigationOptions = {
-    header: ({ goBack, state }, defaultHeader) => {
+  static navigationOptions = ({ navigation }) => {
+    const { state } = navigation;
+    const title = 'Settings';
+    const headerRight = <NavBtn title='Save' onPress={ () => state.params.save() }/>;
 
-      const title = 'Settings';
-
-      const right = <NavBtn title='Save' onPress={ () => state.params.save() }/>;
-
-      return { ...defaultHeader, right, title };
-    }
+    return { headerRight, title };
   }
   
   constructor (props) {
@@ -51,12 +48,12 @@ class UserSettings extends Component {
   }
 
   beforeLogout () {
-    // this.props.navigation.navigate('Login');
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
         NavigationActions.navigate({ routeName: 'Login' })
-      ]
+      ],
+      key: null
     });
 
     this.props.navigation.dispatch(resetAction);

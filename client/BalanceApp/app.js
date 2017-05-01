@@ -24,7 +24,7 @@ export default class BalanceApp extends Component {
   render () {
     return (
       <Provider store={ store }>
-        <MainNavigation />
+        <MainNavigation onNavigationStateChange={null} />
       </Provider>
     )
   }

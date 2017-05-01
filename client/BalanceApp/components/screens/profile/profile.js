@@ -12,27 +12,25 @@ class Profile extends Component {
     return { loggedInUser: state.loggedInUser };
   }
 
-  static navigationOptions = {
-    header: ({ state, navigate: nav, dispatch }, defaultHeader) => ({
-      
-      ...defaultHeader,
+  static navigationOptions = ({ navigation }) => {
+    const { navigate: nav } = navigation;
+    const title = 'Profile';
 
-      title: 'Profile',
-
-      left: (
-        <Icon
-          imagePath={ require('../../../assets/icons/users.png') }
-          onPress={ () => nav('UserSearch') }
-         />
-      ),
+    const headerLeft = (
+      <Icon
+        imagePath={ require('../../../assets/icons/users.png') }
+        onPress={ () => nav('UserSearch') }
+       />
+    );
       
-      right: (
-        <Icon
-          imagePath={ require('../../../assets/icons/settings.png') }
-          onPress={ () => nav('UserSettings') }
-         />
-      )
-    })
+    const headerRight = (
+      <Icon
+        imagePath={ require('../../../assets/icons/settings.png') }
+        onPress={ () => nav('UserSettings') }
+       />
+    );
+
+    return { title, headerLeft, headerRight };
   };
   
   render () {

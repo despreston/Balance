@@ -22,9 +22,7 @@ class NotificationsContainer extends Component {
   }
 
   static navigationOptions = {
-    header: ({ goBack, state }, defaultHeader) => {
-      return { ...defaultHeader, title: 'Notifications' };
-    }
+    title: 'Notifications'
   }
 
   constructor (props) {

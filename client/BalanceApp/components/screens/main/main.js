@@ -21,20 +21,16 @@ class MainScene extends Component {
     return { loggedInUser };
   }
 
-  static navigationOptions = {
-    header: ({ state, navigate, dispatch }, defaultHeader) => ({
-      
-      ...defaultHeader,
-      
-      title: <Text style={[ styles.text, styles.title ]}>Projects</Text>,
-      
-      right: (
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: (<Text style={[ styles.text, styles.title ]}>Projects</Text>),
+      headerRight: (
         <NavBtn
-          onPress={() => state.params.newProject()}
+          onPress={() => navigation.state.params.newProject()}
           title="✚"
         />
       )
-    })
+    };
   };
 
   constructor (props) {
