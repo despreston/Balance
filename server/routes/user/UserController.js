@@ -15,8 +15,8 @@ module.exports = ({ get, post, del, put }) => {
 
     User
     .find({ $or: [
-      { name: new RegExp(`^${params.q}`, 'i') },
-      { username: new RegExp(`^${params.q}`, 'i') }
+      { name: new RegExp(`\\b${params.q}`, 'i') },
+      { username: new RegExp(`\\b${params.q}`, 'i') }
     ]})
     .select('name userId picture friends username bio')
     .lean()
