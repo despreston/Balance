@@ -41,6 +41,10 @@ class AddUpdateContainer extends Component {
     return Promise.all(promises);
   }
 
+  remove () {
+    this.props.dispatch(actions.deleteNote(this.props.note._id));
+  }
+
   render () {
     const { hideFn, note, visible, project } = this.props;
 
@@ -49,6 +53,7 @@ class AddUpdateContainer extends Component {
         note={ note }
         hideFn={ hideFn }
         save={ this.save.bind(this) }
+        remove={ this.remove.bind(this) }
         visible={ visible }
         project={ project }
       />

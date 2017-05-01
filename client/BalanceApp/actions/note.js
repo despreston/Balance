@@ -4,6 +4,7 @@ import { arrayToObj } from '../utils/helpers';
 import formatQueryParams from '../utils/query-params';
 
 const RECEIVE_NOTES = 'RECEIVE_NOTES';
+const REMOVE_NOTE = 'REMOVE_NOTE';
 
 export default {
 
@@ -20,6 +21,18 @@ export default {
     return {
       type: RECEIVE_NOTES,
       notes: arrayToObj(notes, '_id')
+    };
+  },
+
+  /**
+   * removes a single note
+   * @param {String} note The _id of the note to remove
+   * @return {action}
+   */
+  removeNote (note) {
+    return {
+      type: REMOVE_NOTE,
+      note
     };
   },
 
@@ -75,6 +88,23 @@ export default {
       })
       .catch(err => console.log(err));
     }
+  },
+
+  /**
+   * Remove a note
+   * @param {String} note The _id of the note
+   * @return {Promise}
+   */
+  deleteNote (note) {
+    const opts = { method: 'DELETE' };
+
+    return dispatch => {
+      return api(`notes/${note}`, opts)
+        .then(result => {
+          dispatch(this.removeNote(note));
+          return dispatch(this.receiveNotes(result));
+        });
+    };
   }
 
 };

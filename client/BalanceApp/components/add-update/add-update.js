@@ -4,7 +4,6 @@ import {
   Text,
   KeyboardAvoidingView,
   View,
-  Image,
   TouchableOpacity
 } from 'react-native';
 
@@ -18,6 +17,7 @@ import Styles from './add-update-styles';
 import NavButton from './nav-button/nav-button';
 import Note from './note/note';
 import MarkComplete from './mark-complete/mark-complete';
+import Trash from './trash/trash';
 
 export default class AddUpdate extends Component {
 
@@ -26,6 +26,7 @@ export default class AddUpdate extends Component {
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
     save: PropTypes.func.isRequired,
+    remove: PropTypes.func.isRequired,
     note: PropTypes.object
   }
 
@@ -163,12 +164,10 @@ export default class AddUpdate extends Component {
                     onPress={ () => this.toggleComplete() }
                     complete={ this.state.complete }
                   />
-                  <View>
-                    <Image
-                      style={{ height: 20, width: 20 }}
-                      source={ require('../../assets/icons/trash.png')}
-                    />
-                  </View>
+                  {
+                    this.props.note &&
+                    <Trash remove={ () => this.props.remove() }/>
+                  }
                 </View>
               </View>
             </KeyboardAvoidingView>
