@@ -190,7 +190,7 @@ class ProjectDetail extends Component {
 const FinishedProjectText = () => {
   return (
     <View>
-      <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
+      <Text style={ [Styles.description, Styles.bold, Styles.whiteText] }>
         This project has been finished!  🎉
       </Text>
     </View>
