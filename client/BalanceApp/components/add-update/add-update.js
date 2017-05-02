@@ -147,7 +147,7 @@ export default class AddUpdate extends Component {
                   { this.renderCancelButton() }
                   <View>
                     <Text style={ Styles.text }>
-                      { this.props.note ? 'Edit Update' : 'New Update' }
+                      { this.props.note ? 'Edit Note' : 'New Note' }
                     </Text>
                     <Text style={ Styles.subText }>{ project.title }</Text>
                   </View>

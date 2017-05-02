@@ -8,13 +8,17 @@ class UnreadNotifications extends Component {
   
   static mapStateToProps (state) {
 
-    const count = Object.keys(state.notifications)
+    let notifications = Object.keys(state.notifications)
       .map(id => state.notifications[id])
       .reduce((acc, notification) => {
         return !notification.readAt ? acc + 1 : acc;
       }, 0);
 
-    return { count };
+    let friendRequests = state.users[state.loggedInUser].friends.reduce((acc, f) => {
+      return f.status === 'requested' ? acc + 1 : acc;
+    }, 0);
+
+    return { count: notifications + friendRequests };
   }
 
   constructor (props) {

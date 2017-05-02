@@ -10,7 +10,9 @@ export default StyleSheet.create ({
 
   text: {
     marginLeft: 5,
-    color: Colors.gray.tundora
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: Colors.purple
   },
 
   friendRequests: {
