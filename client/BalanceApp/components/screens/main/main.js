@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import ProjectListContainer from '../../project-list/project-list-container';
 import NavBtn from '../../navigation/nav-btn';
 
-// styles
-import { styles } from '../../navigation/navigation-styles';
 import MainStyle from './main-styles';
 
 class MainScene extends Component {
@@ -23,7 +21,7 @@ class MainScene extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      title: (<Text style={[ styles.text, styles.title ]}>Projects</Text>),
+      title: 'Projects',
       headerRight: (
         <NavBtn
           onPress={() => navigation.navigate('EditProject')}
