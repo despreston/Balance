@@ -12,7 +12,7 @@ export default class ActivityContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { screen: 'Global' };
+    this.state = { screen: 'Friends' };
 
     this.loadScreen().then(screen => this.setState({ screen }));
   }

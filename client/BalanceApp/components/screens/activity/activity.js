@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text } from 'react-native';
+import GlobalActivity from './global-activity/global-activity';
 
 class Activity extends Component {
 
@@ -10,7 +11,11 @@ class Activity extends Component {
   render () {
     return (
       <View>
-        <Text>TEsT</Text>
+        {
+          this.props.screen === 'Global'
+            ? <GlobalActivity />
+            : <Text>TEsT</Text>
+        }
       </View>
     );
   }

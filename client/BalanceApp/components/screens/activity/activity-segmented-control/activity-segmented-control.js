@@ -12,7 +12,7 @@ export default class ActivitySegmentedControl extends Component {
 
   constructor (props) {
     super(props);
-    this.values = [ 'Global', 'Friends' ];
+    this.values = [ 'Friends', 'Global' ];
   }
 
   render () {
