@@ -12,7 +12,11 @@ import { getAuthToken } from './auth';
 export function api (url, properties = {}, externalUrl = false) {
 
   if (properties.body) {
-    properties.body = JSON.stringify(properties.body);
+    try {
+      properties.body = JSON.stringify(properties.body);
+    } catch (e) {
+      console.log(e);
+    }
   }
   
   return getAuthToken()

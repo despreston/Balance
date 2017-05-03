@@ -32,13 +32,15 @@ class Auth extends Component {
   handleAuth () {
     const { user, dispatch } = this.props;
 
-    if (user) {
-      return;
-    }
-
     // is token valid?
     isLoggedIn().then(authenticated => {
       if (authenticated) {
+        
+        // user has already logged in
+        if (user) {
+          return this.navigateToApp();
+        }
+
         refreshIdToken()
         .then(parseToken)
         .then(token => {
@@ -66,9 +68,15 @@ class Auth extends Component {
   }
 
   navigateToApp () {
+    // prevent multiple navigations
+    if (this.props.navigation.state.routeName !== 'Login') {
+      return;
+    }
+
     const actionToDispatch = NavigationActions.reset({
       index: 0,
-      actions: [ NavigationActions.navigate({ routeName: 'App' }) ]
+      actions: [ NavigationActions.navigate({ routeName: 'App' }) ],
+      key: null
     });
 
     this.props.navigation.dispatch(actionToDispatch);

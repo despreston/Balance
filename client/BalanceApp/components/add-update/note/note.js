@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { TextInput } from 'react-native';
 
 import Styles from './note-styles';
+import Colors from '../../colors';
 
 export default class Note extends Component {
 
@@ -25,6 +26,7 @@ export default class Note extends Component {
         blurOnSubmit={ false }
         multiline
         placeholder={ placeHolder }
+        placeholderTextColor={ Colors.gray.silver }
         value={ note }
         onChange={ event => onTextChange(event.nativeEvent.text || '') }
         style={ Styles.note }

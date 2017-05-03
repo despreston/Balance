@@ -34,23 +34,22 @@ class ProjectDetailContainer extends Component {
     return { userIsOwner, project, notes };
   }
 
-  static navigationOptions = {
-    header: ({ state, navigate }, defaultHeader) => {
-      let right = null;
+  static navigationOptions = ({ navigation }) => {
+    const { state, navigate } = navigation;
+    let headerRight = null;
 
-      if (state.params.showEdit) {
-        right = (
-          <Icon
-            imagePath={ require('../../../assets/icons/edit-white.png') }
-            onPress={ () => {
-              navigate('EditProject', { project: state.params.project })
-            }}
-          />
-        );
-      }
-
-      return { ...defaultHeader, right };
+    if (state.params.showEdit) {
+      headerRight = (
+        <Icon
+          imagePath={ require('../../../assets/icons/edit-white.png') }
+          onPress={ () => {
+            navigate('EditProject', { project: state.params.project })
+          }}
+        />
+      );
     }
+
+    return { headerRight };
   };
 
   constructor (props) {

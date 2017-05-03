@@ -26,21 +26,20 @@ class NoteContainer extends Component {
     };
   }
 
-  static navigationOptions = {
-    header: ({ state, navigate }, defaultHeader) => {
-      let right = null;
+  static navigationOptions = ({ navigation }) => {
+    const { state } = navigation;
+    let headerRight = null;
 
-      if (state.params.showEdit) {
-        right = (
-          <Icon
-            imagePath={ require('../../../assets/icons/edit-white.png') }
-            onPress={ () => state.params.onEdit() }
-          />
-        );
-      }
-
-      return { ...defaultHeader, right, title: 'Note' };
+    if (state.params.showEdit) {
+      headerRight = (
+        <Icon
+          imagePath={ require('../../../assets/icons/edit-white.png') }
+          onPress={ () => state.params.onEdit() }
+        />
+      );
     }
+
+    return { headerRight, title: 'Note' };
   };
   
   constructor (props) {
