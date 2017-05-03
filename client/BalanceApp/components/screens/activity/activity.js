@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import GlobalActivity from './global-activity/global-activity';
+import FriendsActivity from './friends-activity/friends-activity';
 import Styles from './activity-styles';
 
 class Activity extends Component {
@@ -16,7 +17,7 @@ class Activity extends Component {
         {
           this.props.screen === 'Global'
             ? <GlobalActivity onSelect={ this.props.onSelect }/>
-            : <Text>TEsT</Text>
+            : <FriendsActivity />
         }
       </View>
     );
