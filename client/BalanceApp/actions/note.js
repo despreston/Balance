@@ -91,6 +91,13 @@ export default {
   },
 
   /**
+   * Fetches global activity
+   */
+  fetchGlobalActivity () {
+    return apiDispatch('notes/global_activity', this.receiveNotes);
+  },
+
+  /**
    * Remove a note
    * @param {String} note The _id of the note
    * @return {Promise}

@@ -25,7 +25,8 @@ class NoteListItem extends Component {
       reactions: PropTypes.array
     }).isRequired,
     showTypeText: PropTypes.bool,
-    showProjectName: PropTypes.bool
+    showProjectName: PropTypes.bool,
+    showUser: PropTypes.bool
   }
 
   constructor (props) {
@@ -33,7 +34,7 @@ class NoteListItem extends Component {
   }
 
   renderHeader () {
-    const { note, showProjectName, showTypeText } = this.props;
+    const { note, showProjectName, showTypeText, showUser } = this.props;
     let typeText = `${note.type === 'Future' ? 'To do' : 'Did work'}`;
 
     return (
@@ -41,6 +42,10 @@ class NoteListItem extends Component {
         <View style={[ Styles.flexRow, Styles.topLeft ]}>
           <Image style={ Styles.picture } source={{ uri: note.author.picture }} />
           <Text style={ Styles.smallLightText }>
+            {
+              showUser &&
+              <Text style={ Styles.blue }>{`${note.author.username}` }{`\n`}</Text>
+            }
             {
               showTypeText &&
               <Text style={ Styles.darker }>{ typeText }</Text>

@@ -47,6 +47,11 @@ export const Styles = StyleSheet.create  ({
     fontWeight: '600' 
   },
 
+  blue: {
+    color: Colors.blue,
+    fontWeight: '600'
+  },
+
   picture: {
     width: 25,
     height: 25,

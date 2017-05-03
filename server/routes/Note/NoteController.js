@@ -42,7 +42,7 @@ module.exports = ({ get, post, put, del }) => {
         $sort: { 'createdAt': -1 }
       },
       {
-        $limit: 10
+        $limit: 20
       }
     ])
     .then(notes => {
