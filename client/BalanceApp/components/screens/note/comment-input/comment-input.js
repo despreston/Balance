@@ -3,7 +3,8 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Text
+  Text,
+  Keyboard
 } from 'react-native';
 
 // styles
@@ -31,7 +32,7 @@ export default class CommentInput extends Component {
 
   send () {
     this.props.onSend(this.state.comment);
-
+    Keyboard.dismiss();
     this.setState({ comment: '', valid: false });
   }
 
