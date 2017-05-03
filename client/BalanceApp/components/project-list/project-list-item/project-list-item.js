@@ -48,7 +48,7 @@ class ProjectListItem extends Component {
     if (Past) {
       return (
         <View>
-          <Text style={ Style.text }>LATEST ACTIVITY</Text>
+          <Text style={ Style.text }>LATEST COMPLETED</Text>
           <Text style={ Style.note } numberOfLines={ 2 }>
             { Past.content }
           </Text>
