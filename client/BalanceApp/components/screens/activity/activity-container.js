@@ -16,7 +16,7 @@ export default class ActivityContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { screen: 'Friends' };
+    this.state = { screen: null };
 
     this.loadScreen().then(screen => {
       if (!screen) {
@@ -43,6 +43,10 @@ export default class ActivityContainer extends Component {
   }
   
   render () {
+    if (!this.state.screen) {
+      return null;
+    }
+    
     return (
       <View style={{flex: 1}}>
         <ActivitySegmentedControl
