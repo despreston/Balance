@@ -24,6 +24,109 @@ module.exports = ({ get, post, put, del }) => {
     });
   });
 
+  get('notes/global_activity', ({ params }, res) => {
+    Note
+    .aggregate([
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'project',
+          foreignField: '_id',
+          as: 'project'
+        }
+      },
+      {
+        $match: { 'project.privacyLevel': 'global' }
+      },
+      {
+        $sort: { 'createdAt': -1 }
+      },
+      {
+        $project: { _id: 1 }
+      },
+      {
+        $limit: 20
+      }
+    ])
+    .then(notes => {
+      return Note
+      .find({ _id: { $in: notes.map(n => n._id) } })
+      .populate('project', 'title privacyLevel')
+      .populate('reactions', 'userId reaction')
+      .then(results => {
+        return results.map(n => {
+          n = n.toObject();
+          delete n.comments;
+          delete n.user;
+          return n;
+        });
+      });
+    })
+    .then(notes => res.send(200, notes))
+    .catch(err => {
+      log.error(err);
+      return res.send(500, err);
+    });
+  });
+
+  get('notes/friend_activity', ({ params, user }, res) => {
+    User
+    .findOne({ userId: user.sub })
+    .select('userId friends')
+    .then(user => {
+      const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
+
+      return Note
+      .aggregate([
+        {
+          $lookup: {
+            from: 'projects',
+            localField: 'project',
+            foreignField: '_id',
+            as: 'project'
+          }
+        },
+        {
+          $match: {
+            'project.privacyLevel': { $ne: 'private' },
+            'user': { $in: friendsAndMe }
+          }
+        },
+        {
+          $sort: { 'createdAt': -1 }
+        },
+        {
+          $project: { _id: 1 }
+        },
+        {
+          $limit: 20
+        }
+      ])
+      .then(notes => {
+        return Note
+        .find({ _id: { $in: notes.map(n => n._id) } })
+        .populate('project', 'title privacyLevel')
+        .populate('reactions', 'userId reaction')
+        .then(results => {
+          return results.map(n => {
+            n = n.toObject();
+            delete n.comments;
+            delete n.user;
+            return n;
+          });
+        });
+      });
+    })
+    .then(notes => {
+      return notes;
+    })
+    .then(notes => res.send(200, notes))
+    .catch(err => {
+      log.error(err);
+      return res.send(500, err);
+    });
+  });
+
   get('notes/:_id', ({ params, user }, res) => {
     Note
     .findOne(params)
@@ -58,10 +161,8 @@ module.exports = ({ get, post, put, del }) => {
   });
 
   get('notes', ({ params, user }, res) => {
-    
     AccessControl.many(params, user.sub)
     .then(privacyLevel => {
-
         Note
         .find(params)
         .sort({'createdAt': -1})

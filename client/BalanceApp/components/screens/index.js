@@ -5,7 +5,7 @@
 import MainScene from './main/main';
 import ProjectDetailContainer from './project-detail/project-detail-container';
 import EditProjectContainer from './edit-project/edit-project-container';
-import Activity from './activity/activity';
+import ActivityContainer from './activity/activity-container';
 import Profile from './profile/profile';
 import NotificationsContainer from './notifications/notifications-container';
 import UserSettings from './user-settings/user-settings';
@@ -19,7 +19,7 @@ export {
   MainScene,
   ProjectDetailContainer,
   EditProjectContainer,
-  Activity,
+  ActivityContainer,
   NotificationsContainer,
   Profile,
   UserSettings,

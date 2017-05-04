@@ -43,6 +43,10 @@ class MainScene extends Component {
     this.nav('Project', { project: project._id });
   }
 
+  newProject () {
+    this.nav('EditProject');
+  }
+
   render () {
     return (
       <ProjectListContainer

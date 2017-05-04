@@ -1,7 +1,7 @@
 let jwt = require('restify-jwt');
 let config = require('./config.json');
 
-const skippedUrls = ['/', '_health', 'users/search'];
+const skippedUrls = ['/', '_health', 'users/search', 'notes/global_activity'];
 
 let jwtCheck = jwt({
   secret: config.auth.secret,

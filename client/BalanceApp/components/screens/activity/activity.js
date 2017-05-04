@@ -1,14 +1,28 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import React, { Component, PropTypes } from 'react';
+import { View } from 'react-native';
+import GlobalActivity from './global-activity/global-activity';
+import FriendsActivity from './friends-activity/friends-activity';
+import Styles from './activity-styles';
 
-export default class Activity extends Component {
+class Activity extends Component {
+
+  static propTypes = {
+    screen: PropTypes.string.isRequired,
+    onSelect: PropTypes.func.isRequired
+  }
   
   render () {
     return (
-      <View>
-        <Text>activity from global, friends, and yourself</Text>
+      <View style={ Styles.activity }>
+        {
+          this.props.screen === 'Global'
+            ? <GlobalActivity onSelect={ this.props.onSelect }/>
+            : <FriendsActivity onSelect={ this.props.onSelect }/>
+        }
       </View>
     );
   }
 
 }
+
+export default Activity;

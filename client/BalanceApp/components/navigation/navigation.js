@@ -8,7 +8,7 @@ import {
   MainScene,
   ProjectDetailContainer,
   EditProjectContainer,
-  Activity,
+  ActivityContainer,
   NotificationsContainer,
   Profile,
   UserSettings,
@@ -69,7 +69,7 @@ const ProjectsStack = StackNavigator({
 
 const ActivityStack = StackNavigator({
   ...defaultScreens,
-  Activity: { screen: Activity }
+  Activity: { screen: ActivityContainer }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarIcon: ({ focused }) => {
