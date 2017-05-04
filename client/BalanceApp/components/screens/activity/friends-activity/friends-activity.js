@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import actions from '../../../../actions';
 import NoteListContainer from '../../../note-list/note-list-container';
+import Refresh from '../../../refresh/refresh';
 
 class FriendsActivity extends Component {
 
@@ -14,24 +16,41 @@ class FriendsActivity extends Component {
 
     return { notes };
   }
+
+  static propTypes = {
+    notes: PropTypes.array,
+    onSelect: PropTypes.func.isRequired
+  }
   
   constructor (props) {
     super(props);
+    this.state = { loading: true };
     this.fetchActivity();
   }
 
   fetchActivity () {
-    this.props.dispatch(actions.fetchFriendActivity());
+    this.props.dispatch(actions.fetchFriendActivity())
+      .then(() => this.setState({ loading: false }));
   }
 
   render () {
+    const refreshProps = {
+      refreshing: this.state.loading,
+      onRefresh: this.fetchActivity.bind(this)
+    };
+
     return (
-      <NoteListContainer
-        showTypeText
-        showUser
-        showProjectName
-        { ...this.props }
-      />
+      <ScrollView
+        refreshControl={ <Refresh { ...refreshProps } /> }
+        keyboardShouldPersistTaps='handled'
+      >
+        <NoteListContainer
+          showTypeText
+          showUser
+          showProjectName
+          { ...this.props }
+        />
+      </ScrollView>
     );
   }
 

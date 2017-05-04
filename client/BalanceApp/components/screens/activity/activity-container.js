@@ -18,7 +18,12 @@ export default class ActivityContainer extends Component {
 
     this.state = { screen: 'Friends' };
 
-    this.loadScreen().then(screen => this.setState({ screen }));
+    this.loadScreen().then(screen => {
+      if (!screen) {
+        screen = 'Friends';
+      }
+      this.setState({ screen });
+    });
   }
 
   loadScreen () {
