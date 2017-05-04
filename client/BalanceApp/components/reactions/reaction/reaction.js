@@ -53,7 +53,7 @@ class Reaction extends Component {
         style={ this.containerStyles() }
         onPress={ () => this.onTap() }
       >
-        <Text>{ this.props.reaction }</Text>
+        <Text style={{ left: 1, bottom: 1 }}>{ this.props.reaction }</Text>
         {
           this.props.users.length > 1 &&
           <Text style={ this.countStyles() }>{ this.props.users.length }</Text>

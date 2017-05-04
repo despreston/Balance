@@ -48,7 +48,7 @@ module.exports = ({ get, post, put, del }) => {
       }
     ];
 
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       if (user) {
         return User
           .findOne({ userId: user.sub })
@@ -63,7 +63,10 @@ module.exports = ({ get, post, put, del }) => {
 
             resolve();
           })
-          .catch(reject);
+          .catch(err => {
+            log.error(err);
+            return res.send(500);
+          });
       }
       resolve();
     })
@@ -87,7 +90,7 @@ module.exports = ({ get, post, put, del }) => {
       .then(notes => res.send(200, notes))
       .catch(err => {
         log.error(err);
-        return res.send(500, err);
+        return res.send(500);
       });
     });
   });
@@ -143,7 +146,7 @@ module.exports = ({ get, post, put, del }) => {
     .then(notes => res.send(200, notes))
     .catch(err => {
       log.error(err);
-      return res.send(500, err);
+      return res.send(500);
     });
   });
 
@@ -176,7 +179,7 @@ module.exports = ({ get, post, put, del }) => {
     })
     .catch(err => {
       log.error(err);
-      return res.send(500, err);
+      return res.send(500);
     });
   });
 
