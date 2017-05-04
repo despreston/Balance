@@ -11,7 +11,6 @@ class GlobalActivity extends Component {
     // Grab the latest 20 notes
     notes = Object.keys(notes)
       .map(id => notes[id])
-      .filter(note => note.project.privacyLevel === 'global')
       .sort((a,b) => b.lastUpdated.getTime() - a.lastUpdated.getTime())
       .slice(0, 21);
 

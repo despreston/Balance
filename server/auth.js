@@ -9,6 +9,11 @@ let jwtCheck = jwt({
 });
 
 module.exports = (req, res, next) => {
+
+  if (req.headers.authorization) {
+    return jwtCheck(req, res, next);
+  }
+  
   if (skippedUrls.indexOf(req.route.path) < 0) {
     return jwtCheck(req, res, next);
   }

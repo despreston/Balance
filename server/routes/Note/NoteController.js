@@ -24,9 +24,8 @@ module.exports = ({ get, post, put, del }) => {
     });
   });
 
-  get('notes/global_activity', ({ params }, res) => {
-    Note
-    .aggregate([
+  get('notes/global_activity', ({ params, user }, res) => {
+    let aggregation = [
       {
         $lookup: {
           from: 'projects',
@@ -47,25 +46,49 @@ module.exports = ({ get, post, put, del }) => {
       {
         $limit: 20
       }
-    ])
-    .then(notes => {
-      return Note
-      .find({ _id: { $in: notes.map(n => n._id) } })
-      .populate('project', 'title privacyLevel')
-      .populate('reactions', 'userId reaction')
-      .then(results => {
-        return results.map(n => {
-          n = n.toObject();
-          delete n.comments;
-          delete n.user;
-          return n;
-        });
-      });
+    ];
+
+    new Promise((resolve, reject) => {
+      if (user) {
+        return User
+          .findOne({ userId: user.sub })
+          .select('userId friends')
+          .then(user => {
+            const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
+
+            aggregation[1]['$match'] = {
+              'project.privacyLevel': { $ne: 'private' },
+              'user': { $in: friendsAndMe }
+            };
+
+            resolve();
+          })
+          .catch(reject);
+      }
+      resolve();
     })
-    .then(notes => res.send(200, notes))
-    .catch(err => {
-      log.error(err);
-      return res.send(500, err);
+    .then(() => {
+      Note
+      .aggregate(aggregation)
+      .then(notes => {
+        return Note
+          .find({ _id: { $in: notes.map(n => n._id) } })
+          .populate('project', 'title privacyLevel')
+          .populate('reactions', 'userId reaction')
+          .then(results => {
+            return results.map(n => {
+              n = n.toObject();
+              delete n.comments;
+              delete n.user;
+              return n;
+            });
+          });
+      })
+      .then(notes => res.send(200, notes))
+      .catch(err => {
+        log.error(err);
+        return res.send(500, err);
+      });
     });
   });
 
@@ -77,48 +100,45 @@ module.exports = ({ get, post, put, del }) => {
       const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
 
       return Note
-      .aggregate([
-        {
-          $lookup: {
-            from: 'projects',
-            localField: 'project',
-            foreignField: '_id',
-            as: 'project'
+        .aggregate([
+          {
+            $lookup: {
+              from: 'projects',
+              localField: 'project',
+              foreignField: '_id',
+              as: 'project'
+            }
+          },
+          {
+            $match: {
+              'project.privacyLevel': { $ne: 'private' },
+              'user': { $in: friendsAndMe }
+            }
+          },
+          {
+            $sort: { 'createdAt': -1 }
+          },
+          {
+            $project: { _id: 1 }
+          },
+          {
+            $limit: 20
           }
-        },
-        {
-          $match: {
-            'project.privacyLevel': { $ne: 'private' },
-            'user': { $in: friendsAndMe }
-          }
-        },
-        {
-          $sort: { 'createdAt': -1 }
-        },
-        {
-          $project: { _id: 1 }
-        },
-        {
-          $limit: 20
-        }
-      ])
-      .then(notes => {
-        return Note
-        .find({ _id: { $in: notes.map(n => n._id) } })
-        .populate('project', 'title privacyLevel')
-        .populate('reactions', 'userId reaction')
-        .then(results => {
-          return results.map(n => {
-            n = n.toObject();
-            delete n.comments;
-            delete n.user;
-            return n;
-          });
+        ])
+        .then(notes => {
+          return Note
+            .find({ _id: { $in: notes.map(n => n._id) } })
+            .populate('project', 'title privacyLevel')
+            .populate('reactions', 'userId reaction')
+            .then(results => {
+              return results.map(n => {
+                n = n.toObject();
+                delete n.comments;
+                delete n.user;
+                return n;
+              });
+            });
         });
-      });
-    })
-    .then(notes => {
-      return notes;
     })
     .then(notes => res.send(200, notes))
     .catch(err => {
