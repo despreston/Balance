@@ -24,7 +24,7 @@ class Notifications extends Component {
   
   render () {
     const { friendRequests, nav, onRefresh, refreshing, notifications } = this.props;
-
+    
     return (
       <ScrollView 
         style={ Styles.notifications }

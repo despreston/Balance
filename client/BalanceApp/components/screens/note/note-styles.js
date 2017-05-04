@@ -22,10 +22,9 @@ export default StyleSheet.create ({
   },
 
   meta: {
-    paddingVertical: 20,
-    backgroundColor: Colors.white,
     flexDirection: 'row',
-    paddingBottom: 20
+    backgroundColor: Colors.white,
+    paddingVertical: 20
   },
 
   header: {
@@ -46,8 +45,8 @@ export default StyleSheet.create ({
   },
 
   info: {
-    paddingHorizontal: 20,
-    flex: 1
+    flex: 1,
+    paddingHorizontal: 20
   },
 
   purple: {

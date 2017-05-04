@@ -20,6 +20,8 @@ class NoteListContainer extends Component {
     // show the type text 'todo' or 'did work'
     showTypeText: PropTypes.bool,
 
+    showUser: PropTypes.bool,
+
     notes: PropTypes.array.isRequired,
 
     emptyState: PropTypes.object,
@@ -70,7 +72,8 @@ class NoteListContainer extends Component {
       notes,
       showProjectName,
       emptyState,
-      showTypeText
+      showTypeText,
+      showUser
     } = this.props;
 
     if (emptyState && notes.length < 1) {
@@ -79,10 +82,7 @@ class NoteListContainer extends Component {
 
     return (
       <NoteList
-        onSelect={ onSelect }
-        showTypeText={ showTypeText }
-        showProjectName={ showProjectName }
-        notes={ notes }
+        {...{ onSelect, showUser, showTypeText, showProjectName, notes } }
       />
     );
   }

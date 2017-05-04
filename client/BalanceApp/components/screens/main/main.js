@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import ProjectListContainer from '../../project-list/project-list-container';
 import NavBtn from '../../navigation/nav-btn';
 
-// styles
-import { styles } from '../../navigation/navigation-styles';
 import MainStyle from './main-styles';
 
 class MainScene extends Component {
@@ -21,20 +19,16 @@ class MainScene extends Component {
     return { loggedInUser };
   }
 
-  static navigationOptions = {
-    header: ({ state, navigate, dispatch }, defaultHeader) => ({
-      
-      ...defaultHeader,
-      
-      title: <Text style={[ styles.text, styles.title ]}>Projects</Text>,
-      
-      right: (
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Projects',
+      headerRight: (
         <NavBtn
-          onPress={() => state.params.newProject()}
+          onPress={() => navigation.navigate('EditProject')}
           title="✚"
         />
       )
-    })
+    };
   };
 
   constructor (props) {
@@ -43,12 +37,6 @@ class MainScene extends Component {
     this.state = { helpVisible: false };
 
     this.nav = this.props.navigation.navigate;
-  }
-
-  componentDidMount () {
-    this.props.navigation.setParams({
-      newProject: this.newProject.bind(this)
-    });
   }
 
   openProject (project) {

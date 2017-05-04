@@ -15,8 +15,8 @@ module.exports = ({ get, post, del, put }) => {
 
     User
     .find({ $or: [
-      { name: new RegExp(`^${params.q}`, 'i') },
-      { username: new RegExp(`^${params.q}`, 'i') }
+      { name: new RegExp(`\\b${params.q}`, 'i') },
+      { username: new RegExp(`\\b${params.q}`, 'i') }
     ]})
     .select('name userId picture friends username bio')
     .lean()
@@ -137,12 +137,13 @@ module.exports = ({ get, post, del, put }) => {
     User.findOne({ userId: body.userId })
     .then(newUser => newUser ? Object.assign(newUser, body) : new User(body))
     .then(newUser => {
-      return newUser.save(err => {
+      newUser.save(err => {
         if (err) {
           log.eror(err);
           return res.send(500);
         }
       });
+      return newUser;
     })
     .then(newUser => {
 
@@ -152,11 +153,9 @@ module.exports = ({ get, post, del, put }) => {
        * access-control
        */
       AccessControl.many({ user: body.userId }, user.sub)
-      .then(privacyLevel => {
-        return Project.projectCountForUser(newUser.userId, privacyLevel)
-          .then(project_count => Object.assign(newUser, { project_count }))
-          .then(user => res.send(201, user));
-      })
+      .then(privacyLevel => Project.projectCountForUser(user.sub, privacyLevel))
+      .then(project_count => Object.assign(newUser, { project_count }))
+      .then(user => res.send(201, user))
       .catch(err => {
         log.error(err);
         return res.send(500, err)
@@ -184,7 +183,10 @@ module.exports = ({ get, post, del, put }) => {
 
       user = Object.assign(user, body);
       user.save();
-      return res.send(200, user);
+
+      return Project.projectCountForUser(params.userId, ['global', 'friends', 'private'])
+        .then(project_count => Object.assign(user.toObject(), { project_count }))
+        .then(user => res.send(200, user));
     })
     .catch(err => res.send(500, err));
   });

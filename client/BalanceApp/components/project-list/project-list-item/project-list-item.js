@@ -48,7 +48,7 @@ class ProjectListItem extends Component {
     if (Past) {
       return (
         <View>
-          <Text style={ Style.text }>LATEST ACTIVITY</Text>
+          <Text style={ Style.text }>LATEST COMPLETED</Text>
           <Text style={ Style.note } numberOfLines={ 2 }>
             { Past.content }
           </Text>
@@ -116,12 +116,11 @@ class ProjectListItem extends Component {
           </View>
         </View>
         { this.renderStatusIcon() }
-
-        <AddUpdateContainer
-          reloadProject={ true }
-          project={ this.props.project }
-          visible={ this.state.addUpdateVisible }
-          hideFn={ () => this.toggleAddUpdateModal() }
+        <AddUpdateContainer   
+          reloadProject={ true }    
+          project={ this.props.project }    
+          visible={ this.state.addUpdateVisible }   
+          hideFn={ () => this.toggleAddUpdateModal() }    
         />
       </View>
     );

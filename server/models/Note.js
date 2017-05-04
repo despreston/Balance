@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const privacyLevel = require('./shared/privacy-level');
 
 let Note = new mongoose.Schema({
 
@@ -15,12 +14,14 @@ let Note = new mongoose.Schema({
   project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'project',
-    required: true
+    required: true,
+    index: true
   },
 
   user: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
 
   comments: [{
@@ -35,9 +36,7 @@ let Note = new mongoose.Schema({
 
   lastUpdated: Date,
 
-  createdAt: Date,
-
-  privacyLevel: privacyLevel
+  createdAt: Date
   
 }, {
   toObject: { virtuals: true },

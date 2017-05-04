@@ -7,7 +7,7 @@ const log = require('logbro');
 const Notification = require('../../lib/notification/');
 const { NudgedProjectUpdated } = Notification;
 
-module.exports = ({ get, post, put }) => {
+module.exports = ({ get, post, put, del }) => {
 
   get('notes/:_id/reactions', ({ params, user }, res) => {
     Reaction
@@ -21,6 +21,129 @@ module.exports = ({ get, post, put }) => {
     .catch(err => {
       log.error(err);
       return res.send(500);
+    });
+  });
+
+  get('notes/global_activity', ({ params, user }, res) => {
+    let aggregation = [
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'project',
+          foreignField: '_id',
+          as: 'project'
+        }
+      },
+      {
+        $match: { 'project.privacyLevel': 'global' }
+      },
+      {
+        $sort: { 'createdAt': -1 }
+      },
+      {
+        $project: { _id: 1 }
+      },
+      {
+        $limit: 20
+      }
+    ];
+
+    new Promise((resolve, reject) => {
+      if (user) {
+        return User
+          .findOne({ userId: user.sub })
+          .select('userId friends')
+          .then(user => {
+            const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
+
+            aggregation[1]['$match'] = {
+              'project.privacyLevel': { $ne: 'private' },
+              'user': { $in: friendsAndMe }
+            };
+
+            resolve();
+          })
+          .catch(reject);
+      }
+      resolve();
+    })
+    .then(() => {
+      Note
+      .aggregate(aggregation)
+      .then(notes => {
+        return Note
+          .find({ _id: { $in: notes.map(n => n._id) } })
+          .populate('project', 'title privacyLevel')
+          .populate('reactions', 'userId reaction')
+          .then(results => {
+            return results.map(n => {
+              n = n.toObject();
+              delete n.comments;
+              delete n.user;
+              return n;
+            });
+          });
+      })
+      .then(notes => res.send(200, notes))
+      .catch(err => {
+        log.error(err);
+        return res.send(500, err);
+      });
+    });
+  });
+
+  get('notes/friend_activity', ({ params, user }, res) => {
+    User
+    .findOne({ userId: user.sub })
+    .select('userId friends')
+    .then(user => {
+      const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
+
+      return Note
+        .aggregate([
+          {
+            $lookup: {
+              from: 'projects',
+              localField: 'project',
+              foreignField: '_id',
+              as: 'project'
+            }
+          },
+          {
+            $match: {
+              'project.privacyLevel': { $ne: 'private' },
+              'user': { $in: friendsAndMe }
+            }
+          },
+          {
+            $sort: { 'createdAt': -1 }
+          },
+          {
+            $project: { _id: 1 }
+          },
+          {
+            $limit: 20
+          }
+        ])
+        .then(notes => {
+          return Note
+            .find({ _id: { $in: notes.map(n => n._id) } })
+            .populate('project', 'title privacyLevel')
+            .populate('reactions', 'userId reaction')
+            .then(results => {
+              return results.map(n => {
+                n = n.toObject();
+                delete n.comments;
+                delete n.user;
+                return n;
+              });
+            });
+        });
+    })
+    .then(notes => res.send(200, notes))
+    .catch(err => {
+      log.error(err);
+      return res.send(500, err);
     });
   });
 
@@ -58,28 +181,23 @@ module.exports = ({ get, post, put }) => {
   });
 
   get('notes', ({ params, user }, res) => {
-    /**
-     * Note access control is a bit difference since the privacyLevel needs to
-     * come from the project associated with the note.
-     * Get the list of notes requested, look at the first note received to get
-     * project info, and use that with the AccessControl stuff.
-     */
-    Note
-    .find(params)
-    .sort({'createdAt': -1})
-    .populate('project', 'title privacyLevel')
-    .populate('reactions', 'userId reaction')
-    .then(notes => {
+    AccessControl.many(params, user.sub)
+    .then(privacyLevel => {
+        Note
+        .find(params)
+        .sort({'createdAt': -1})
+        .populate('project', 'title privacyLevel')
+        .populate('reactions', 'userId reaction')
+        .then(notes => {
+          
+          if (notes.length === 0) {
+            return notes;
+          }
 
-      if (notes.length === 0) {
-        return notes;
-      }
+          notes = notes.filter(note => {
+            return privacyLevel.indexOf(note.project.privacyLevel) > -1;
+          })
 
-      const owner = notes[0].user;
-      const { privacyLevel } = notes[0].project;
-
-      return AccessControl.single(owner, user.sub, privacyLevel)
-        .then(() => {
           return notes.map(n => {
             n = n.toObject();
             delete n.comments;
@@ -87,11 +205,10 @@ module.exports = ({ get, post, put }) => {
             return n;
           });
         })
-        .catch(err => res.send(403, err));
+        .then(notes => res.send(200, notes));
     })
-    .then(notes => res.send(200, notes))
     .catch(err => {
-      log.error(err)
+      log.error(err);
       return res.send(500);
     });
   });
@@ -227,5 +344,22 @@ module.exports = ({ get, post, put }) => {
       return res.send(500);
     });
   });
+
+   del('notes/:_id', ({ params, user }, res) => {
+    Note
+    .findOne(params)
+    .then(note => {
+      if (note.user !== user.sub) {
+        return res.send(403);
+      }
+
+      note.remove();
+    })
+    .then(() => res.send(200, []))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
+  })
 
 };

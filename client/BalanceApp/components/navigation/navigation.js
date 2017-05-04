@@ -8,7 +8,7 @@ import {
   MainScene,
   ProjectDetailContainer,
   EditProjectContainer,
-  Activity,
+  ActivityContainer,
   NotificationsContainer,
   Profile,
   UserSettings,
@@ -23,21 +23,17 @@ import UnreadNotifications from './unread-notifications/unread-notifications';
 
 import Colors from '../colors';
 
-// Default header for all stack navs
 const navigationOptions = {
-  header: () => {
-    const tintColor = Colors.white;
-    const style = { backgroundColor: Colors.purple };
-
-    return { tintColor, style };
-  }
+  headerTintColor: Colors.white,
+  headerStyle: { backgroundColor: Colors.purple }
 };
 
 // screens included in all nav stacks
 const defaultScreens = {
   UserProfile: { screen: UserProfile },
   Note: { screen: NoteContainer },
-  Project: { screen: ProjectDetailContainer }
+  Project: { screen: ProjectDetailContainer },
+  EditProject: { screen: EditProjectContainer }
 };
 
 function icon (path) {
@@ -59,16 +55,13 @@ const NotificationIcon = ({ focused }) => {
 
 const ProjectsStack = StackNavigator({
   ...defaultScreens,
-  Home: { screen: MainScene },
-  EditProject: { screen: EditProjectContainer }
+  Home: { screen: MainScene }
 }, {
-  navigationOptions: Object.assign({}, navigationOptions, { tabBar:
-    {
-      icon: ({ focused }) => {
-        return focused
-          ? icon(require('../../assets/icons/projects-tabbar-selected.png'))
-          : icon(require('../../assets/icons/projects-tabbar.png'));
-      }
+  navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarIcon: ({ focused }) => {
+      return focused
+        ? icon(require('../../assets/icons/projects-tabbar-selected.png'))
+        : icon(require('../../assets/icons/projects-tabbar.png'));
     }
   }),
   initialRouteName: 'Home'
@@ -76,15 +69,13 @@ const ProjectsStack = StackNavigator({
 
 const ActivityStack = StackNavigator({
   ...defaultScreens,
-  Activity: { screen: Activity }
+  Activity: { screen: ActivityContainer }
 }, {
-  navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
-    {
-      icon: ({ focused }) => {
-        return focused
-          ? icon(require('../../assets/icons/activity-tabbar-selected.png'))
-          : icon(require('../../assets/icons/activity-tabbar.png'));
-      }
+  navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarIcon: ({ focused }) => {
+      return focused
+        ? icon(require('../../assets/icons/activity-tabbar-selected.png'))
+        : icon(require('../../assets/icons/activity-tabbar.png'));
     }
   }),
   initialRouteName: 'Activity'
@@ -95,11 +86,9 @@ const NotificationsStack = StackNavigator({
   Notifications: { screen: NotificationsContainer },
   FriendRequests: { screen: FriendRequestList }
 }, {
-  navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
-    {
-      icon: ({ focused }) => {
-        return <NotificationIcon focused={ focused } />
-      }
+  navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarIcon: ({ focused }) => {
+      return <NotificationIcon focused={ focused } />
     }
   }), 
   initialRouteName: 'Notifications'
@@ -111,13 +100,11 @@ const ProfileStack = StackNavigator({
   UserSettings: { screen: UserSettings },
   UserSearch: { screen: UserSearch }
 }, {
-  navigationOptions: Object.assign({}, navigationOptions, { tabBar: 
-    {
-      icon: ({ focused }) => {
-        return focused
-          ? icon(require('../../assets/icons/profile-tabbar-selected.png'))
-          : icon(require('../../assets/icons/profile-tabbar.png'));
-      }
+  navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarIcon: ({ focused }) => {
+      return focused
+        ? icon(require('../../assets/icons/profile-tabbar-selected.png'))
+        : icon(require('../../assets/icons/profile-tabbar.png'));
     } 
   }), 
   initialRouteName: 'Profile'
@@ -136,7 +123,7 @@ const tabBarOptions = {
 };
 
 const App = TabNavigator(routes, {
-  lazyLoad: true,
+  lazy: true,
   backBehavior: 'none',
   tabBarOptions
 });
@@ -147,7 +134,7 @@ const RootNav = StackNavigator({
 }, {
   headerMode: 'screen',
   navigationOptions: {
-    header: { visible: false }
+    header: null
   }
 });
 

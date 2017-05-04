@@ -10,6 +10,17 @@ export default {
   },
 
   /**
+   * remove a note
+   */
+  REMOVE_NOTE (state, { note }) {
+    let notes = Object.assign({}, state.notes);
+
+    delete notes[note];
+
+    return Object.assign({}, state, { notes });
+  },
+
+  /**
    * Replace all reactions in the note
    */
   UPDATE_REACTIONS (state, { note, reactions }) {

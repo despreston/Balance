@@ -25,13 +25,6 @@ export default StyleSheet.create  ({
     opacity: 0.5
   },
 
-  content: {
-    borderRadius: 5,
-    marginHorizontal: 20,
-    marginVertical: 40,
-    backgroundColor: Colors.purple
-  },
-
   flexRow: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -39,12 +32,19 @@ export default StyleSheet.create  ({
   },
 
   outsideContent: {
-    padding: 10,
+    padding: 8,
     justifyContent: 'space-between'
   },
 
   card: {
-    height: 385
+    marginHorizontal: 10,
+    marginTop: 50,
+    paddingBottom: 10
+  },
+
+  content: {
+    borderRadius: 5,
+    backgroundColor: Colors.purple,
   },
 
   unimportantButton: {
@@ -67,13 +67,13 @@ export default StyleSheet.create  ({
 
   text: {
     ...defaultText,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600'
   },
 
   subText: {
     ...defaultText,
-    fontSize: 14
+    fontSize: 12.5
   }
 
 });

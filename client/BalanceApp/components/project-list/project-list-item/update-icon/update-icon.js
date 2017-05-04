@@ -35,6 +35,7 @@ export default class UpdateIcon extends Component {
         </TouchableOpacity>
 
         <AddUpdateContainer
+          reloadProject
           project={ this.props.project }
           visible={ this.state.addUpdateVisible }
           hideFn={ () => this.toggleAddUpdateModal() }

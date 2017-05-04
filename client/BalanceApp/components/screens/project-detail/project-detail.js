@@ -103,7 +103,7 @@ class ProjectDetail extends Component {
       <View>
         <NoteListContainer
           showTypeText
-          emptyState={ <EmptyCompletedNotes /> }
+          emptyState={ <EmptyFutureNotes /> }
           query={[{ project: this.props.project._id }, { type: 'Future' }]}
           selector={ notes => this.notesSelector('Future')(notes, this.props.project) }
           showEdit={ status !== 'finished' && userIsOwner }
@@ -177,6 +177,7 @@ class ProjectDetail extends Component {
           </View>
         </View>
         <AddUpdateContainer
+          reloadProject
           project={ project }
           visible={ this.state.addUpdateVisible }
           hideFn={ () => this.toggleAddUpdateModal() }
@@ -189,7 +190,7 @@ class ProjectDetail extends Component {
 const FinishedProjectText = () => {
   return (
     <View>
-      <Text style={ [Styles.finishedProjectText, Styles.bold, Styles.whiteText] }>
+      <Text style={ [Styles.description, Styles.bold, Styles.whiteText] }>
         This project has been finished!  🎉
       </Text>
     </View>
@@ -199,6 +200,12 @@ const FinishedProjectText = () => {
 const EmptyCompletedNotes = () => {
   return (
     <Text style={ Styles.emptyText }>No work has been done for this project.</Text>
+  )
+};
+
+const EmptyFutureNotes = () => {
+  return (
+    <Text style={ Styles.emptyText }>Nothing to do for this project.</Text>
   )
 };
 
