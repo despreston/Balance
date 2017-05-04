@@ -80,10 +80,8 @@ export default class Help extends Component {
               into the flow of things no matter how long of a break you take.
             </Text>
             <Text style={ Styles.text }>
-              Answer 2 questions every time you are finished working: 
-              What did you do this time? What do you want to work on next 
-              time? Next time you return to the project, you'll know exactly 
-              where you left off.
+              Create a new project and add a new update any time you work on the
+              project or want to add something to do later.
             </Text>
           </View>
           <View style={ Styles.answer }>
