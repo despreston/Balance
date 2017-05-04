@@ -17,7 +17,7 @@ class Activity extends Component {
         {
           this.props.screen === 'Global'
             ? <GlobalActivity onSelect={ this.props.onSelect }/>
-            : <FriendsActivity />
+            : <FriendsActivity onSelect={ this.props.onSelect }/>
         }
       </View>
     );

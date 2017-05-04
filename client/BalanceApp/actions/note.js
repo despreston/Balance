@@ -98,6 +98,13 @@ export default {
   },
 
   /**
+   * Fetches friends activity
+   */
+  fetchFriendActivity () {
+    return apiDispatch('notes/friend_activity', this.receiveNotes);
+  },
+
+  /**
    * Remove a note
    * @param {String} note The _id of the note
    * @return {Promise}
