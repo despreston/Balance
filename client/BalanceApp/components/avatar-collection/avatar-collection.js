@@ -55,7 +55,7 @@ export default class Nudges extends Component {
 
   render () {
     return (
-      <View>
+      <View style={ Style.container }>
         { this.renderImages() }
       </View>
     );

@@ -54,11 +54,19 @@ module.exports = ({ get, post, put, del }) => {
           .findOne({ userId: user.sub })
           .select('userId friends')
           .then(user => {
-            const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
+            const friends = user.friends.filter(f => f.status === 'accepted');
+            const friendsAndMe = friends.map(f => f.userId).concat(user.userId);
 
             aggregation[1]['$match'] = {
-              'project.privacyLevel': { $ne: 'private' },
-              'user': { $in: friendsAndMe }
+              $or: [
+                {
+                  'project.privacyLevel': { $ne: 'private' },
+                  'user': { $in: friendsAndMe }
+                },
+                {
+                  'project.privacyLevel': 'global'
+                }
+              ]
             };
 
             resolve();
@@ -92,6 +100,10 @@ module.exports = ({ get, post, put, del }) => {
         log.error(err);
         return res.send(500);
       });
+    })
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
     });
   });
 
@@ -100,7 +112,8 @@ module.exports = ({ get, post, put, del }) => {
     .findOne({ userId: user.sub })
     .select('userId friends')
     .then(user => {
-      const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
+      const friends = user.friends.filter(f => f.status === 'accepted');
+      const friendsAndMe = friends.map(f => f.userId).concat(user.userId);
 
       return Note
         .aggregate([
