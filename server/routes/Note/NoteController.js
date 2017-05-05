@@ -5,7 +5,7 @@ const AccessControl = require('../../utils/access-control');
 const Reaction = require('../../models/Reaction');
 const log = require('logbro');
 const Notification = require('../../lib/notification/');
-const { NudgedProjectUpdated } = Notification;
+const { NewReaction, NudgedProjectUpdated } = Notification;
 
 module.exports = ({ get, post, put, del }) => {
 
@@ -241,7 +241,6 @@ module.exports = ({ get, post, put, del }) => {
     Reaction
     .create(body)
     .then(reaction => {
-
       return Note
         .findByIdAndUpdate(
           { _id: body.note },
@@ -251,14 +250,28 @@ module.exports = ({ get, post, put, del }) => {
         .populate('project', 'title privacyLevel')
         .populate('author', 'userId username picture')
         .populate('reactions', 'userId reaction')
-        .exec();
-    })
-    .then(note => {
-      note = note.toObject();
-      delete note.user;
-      delete note.comments;
-      note.reactions.forEach(r => delete r.user);
-      return res.send(200, note);
+        .then(note => {
+
+          /**
+           * send notification to author of the note as long as the
+           * person sending the notification is not the author of the note
+           * i.e dont send notification to yourself!
+           */
+          if (note.author.userId !== user.sub) {
+            User
+            .findOne({ userId: user.sub })
+            .select('_id')
+            .then(user => {
+              new NewReaction(note.author.userId, user._id, note._id, reaction._id).save();
+            });
+          }
+
+          note = note.toObject();
+          delete note.user;
+          delete note.comments;
+          note.reactions.forEach(r => delete r.user);
+          return res.send(200, note);
+        });
     })
     .catch(err => {
       log.error(err);

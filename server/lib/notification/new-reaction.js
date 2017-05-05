@@ -9,7 +9,7 @@ class NewReaction extends Notification {
     });
   }
 
-  constructor (user, sender, note) {
+  constructor (user, sender, note, reaction) {
     
     const related = [
       {
@@ -19,6 +19,10 @@ class NewReaction extends Notification {
       {
         kind: 'note',
         item: note
+      },
+      {
+        kind: 'reaction',
+        item: reaction
       }
     ];
 
