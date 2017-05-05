@@ -43,7 +43,7 @@ export default class Nudges extends Component {
     switch (true) {
       case (numOfNudgers === 1) : return 'wants an';
       case (numOfNudgers < 6)   : return 'want an';
-      case (numOfNudgers > 6)   : return `+${numOfNudgers -5} others want an`;
+      case (numOfNudgers > 6)   : return `+${numOfNudgers -5} want an`;
       default                   : return null;
     }
   }

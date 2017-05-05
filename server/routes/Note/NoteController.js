@@ -48,22 +48,33 @@ module.exports = ({ get, post, put, del }) => {
       }
     ];
 
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       if (user) {
         return User
           .findOne({ userId: user.sub })
           .select('userId friends')
           .then(user => {
-            const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
+            const friends = user.friends.filter(f => f.status === 'accepted');
+            const friendsAndMe = friends.map(f => f.userId).concat(user.userId);
 
             aggregation[1]['$match'] = {
-              'project.privacyLevel': { $ne: 'private' },
-              'user': { $in: friendsAndMe }
+              $or: [
+                {
+                  'project.privacyLevel': { $ne: 'private' },
+                  'user': { $in: friendsAndMe }
+                },
+                {
+                  'project.privacyLevel': 'global'
+                }
+              ]
             };
 
             resolve();
           })
-          .catch(reject);
+          .catch(err => {
+            log.error(err);
+            return res.send(500);
+          });
       }
       resolve();
     })
@@ -87,8 +98,12 @@ module.exports = ({ get, post, put, del }) => {
       .then(notes => res.send(200, notes))
       .catch(err => {
         log.error(err);
-        return res.send(500, err);
+        return res.send(500);
       });
+    })
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
     });
   });
 
@@ -97,7 +112,8 @@ module.exports = ({ get, post, put, del }) => {
     .findOne({ userId: user.sub })
     .select('userId friends')
     .then(user => {
-      const friendsAndMe = user.friends.map(f => f.userId).concat(user.userId);
+      const friends = user.friends.filter(f => f.status === 'accepted');
+      const friendsAndMe = friends.map(f => f.userId).concat(user.userId);
 
       return Note
         .aggregate([
@@ -143,7 +159,7 @@ module.exports = ({ get, post, put, del }) => {
     .then(notes => res.send(200, notes))
     .catch(err => {
       log.error(err);
-      return res.send(500, err);
+      return res.send(500);
     });
   });
 
@@ -176,7 +192,7 @@ module.exports = ({ get, post, put, del }) => {
     })
     .catch(err => {
       log.error(err);
-      return res.send(500, err);
+      return res.send(500);
     });
   });
 

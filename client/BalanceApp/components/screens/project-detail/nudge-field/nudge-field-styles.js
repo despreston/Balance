@@ -12,7 +12,7 @@ export default StyleSheet.create ({
   },
 
   nudges: {
-    flex: 1
+    // flex: 1
   },
 
   center: {
@@ -25,8 +25,7 @@ export default StyleSheet.create ({
   },
 
   button: {
-    alignItems: 'center',
-    width: 50
+    alignItems: 'center'
   }
 
 });

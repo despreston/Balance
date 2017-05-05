@@ -7,10 +7,15 @@ import Refresh from '../../../refresh/refresh';
 
 class FriendsActivity extends Component {
 
-  static mapStateToProps ({ notes }) {
+  static mapStateToProps ({ notes, loggedInUser, users }) {
+    let friends = users[loggedInUser].friends
+      .filter(f => f.status === 'accepted')
+      .map(friend => friend.userId);
+
     // Grab the latest 20 notes
     notes = Object.keys(notes)
       .map(id => notes[id])
+      .filter(note => friends.indexOf(note.author.userId) > -1)
       .sort((a,b) => b.lastUpdated.getTime() - a.lastUpdated.getTime())
       .slice(0, 21);
 

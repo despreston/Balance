@@ -21,6 +21,7 @@ class MainScene extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
+      headerBackTitle: null,
       title: 'Projects',
       headerRight: (
         <NavBtn

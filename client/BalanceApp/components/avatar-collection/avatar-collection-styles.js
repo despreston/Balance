@@ -3,6 +3,10 @@ import Colors from '../colors';
 
 export default StyleSheet.create({
 
+  container: {
+    flexDirection: 'row'
+  },
+
   image: {
     borderWidth: 0.7,
     borderColor: Colors.white,

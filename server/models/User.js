@@ -2,7 +2,7 @@ const bro = require("logbro");
 const mongoose = require("mongoose");
 const friend = require("./shared/friend");
 const Notification = require('../lib/notification/');
-const { NewFriendRequest, AcceptedFriendRequest } = Notification;
+const { AcceptedFriendRequest } = Notification;
 
 let User = new mongoose.Schema({
 
@@ -116,7 +116,7 @@ User.statics.createFriendship = function (requester, receiver) {
             });
 
             // create notification for receiver
-            new NewFriendRequest(receiver, user._id).save();
+            // new NewFriendRequest(receiver, user._id).save();
 
             return requestedFriend.save()
               .then(updatedRequestedUser => [user, updatedRequestedUser])
