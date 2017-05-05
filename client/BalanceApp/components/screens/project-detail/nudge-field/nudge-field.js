@@ -44,7 +44,7 @@ export default class NudgeField extends Component {
           <NudgeBtn project={ this.props.project._id } />
         </View>)
       }
-        <View style={[ Styles.nudges, (this.props.hideButton && Styles.center) ]}>
+        <View style={(this.props.hideButton && Styles.center)}>
           { this.renderNudges() }
         </View>
       </View>
