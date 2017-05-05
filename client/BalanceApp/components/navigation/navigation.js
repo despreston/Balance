@@ -58,6 +58,7 @@ const ProjectsStack = StackNavigator({
   Home: { screen: MainScene }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarLabel: 'Projects',
     tabBarIcon: ({ focused }) => {
       return focused
         ? icon(require('../../assets/icons/projects-tabbar-selected.png'))
@@ -72,6 +73,7 @@ const ActivityStack = StackNavigator({
   Activity: { screen: ActivityContainer }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarLabel: 'Activity',
     tabBarIcon: ({ focused }) => {
       return focused
         ? icon(require('../../assets/icons/activity-tabbar-selected.png'))
@@ -87,6 +89,7 @@ const NotificationsStack = StackNavigator({
   FriendRequests: { screen: FriendRequestList }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarLabel: 'Notifications',
     tabBarIcon: ({ focused }) => {
       return <NotificationIcon focused={ focused } />
     }
@@ -101,6 +104,7 @@ const ProfileStack = StackNavigator({
   UserSearch: { screen: UserSearch }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarLabel: 'Profile',
     tabBarIcon: ({ focused }) => {
       return focused
         ? icon(require('../../assets/icons/profile-tabbar-selected.png'))
