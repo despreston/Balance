@@ -297,10 +297,9 @@ module.exports = ({ get, post, put, del }) => {
         .exec();
     })
     .then(newNote => {
-
       return Project
-        .findOne({ _id: newNote.project })
-        .select('title nudges')
+        .findOne({ _id: newNote.project._id })
+        .select('title nudges user')
         .then(project => {
 
           let { nudges } = project;
@@ -310,7 +309,7 @@ module.exports = ({ get, post, put, del }) => {
           .select('_id')
           .then(projectOwner => {
             nudges.forEach(user => {
-              new NudgedProjectUpdated(user.userId, projectOwner, project._id).save();
+              new NudgedProjectUpdated(user.userId, projectOwner._id, project._id).save();
             });
           })
           .catch(log.error);
