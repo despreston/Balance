@@ -73,7 +73,12 @@ export default class AddUpdate extends Component {
       let note;
 
       if (this.props.note) {
-        note = this.props.note;
+        note = {
+          _id: this.props.note._id,
+          user: this.props.note.user,
+          project: this.props.note.project
+        };
+
         note.type = this.state.complete ? 'Past' : 'Future';
       } else if (this.state.complete) {
         note = emptyNote(this.props.project, 'Past');
