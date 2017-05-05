@@ -53,6 +53,7 @@ class Auth extends Component {
           if (this.state.showLogin) {
             this.setState({ showLogin: false });
           }
+
           this.navigateToApp();
         });
       } else {

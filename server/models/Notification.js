@@ -20,7 +20,7 @@ let Notification = new mongoose.Schema ({
     kind: {
       type: String,
       required: true,
-      enum: [ 'project', 'user', 'note' ]
+      enum: [ 'project', 'user', 'note', 'reaction' ]
     },
     item: {
       type: mongoose.Schema.Types.ObjectId,

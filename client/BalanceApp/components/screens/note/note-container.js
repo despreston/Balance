@@ -77,7 +77,8 @@ class NoteContainer extends Component {
       content
     };
 
-    this.props.dispatch(actions.createComment(comment));
+    this.props.dispatch(actions.createComment(comment))
+    .then(() => this.props.dispatch(actions.fetchNote(this.props.note._id)));
   }
 
   toggleEditModal () {

@@ -5,7 +5,7 @@ const AccessControl = require('../../utils/access-control');
 const Reaction = require('../../models/Reaction');
 const log = require('logbro');
 const Notification = require('../../lib/notification/');
-const { NudgedProjectUpdated } = Notification;
+const { NewReaction, NudgedProjectUpdated } = Notification;
 
 module.exports = ({ get, post, put, del }) => {
 
@@ -241,7 +241,6 @@ module.exports = ({ get, post, put, del }) => {
     Reaction
     .create(body)
     .then(reaction => {
-
       return Note
         .findByIdAndUpdate(
           { _id: body.note },
@@ -251,14 +250,28 @@ module.exports = ({ get, post, put, del }) => {
         .populate('project', 'title privacyLevel')
         .populate('author', 'userId username picture')
         .populate('reactions', 'userId reaction')
-        .exec();
-    })
-    .then(note => {
-      note = note.toObject();
-      delete note.user;
-      delete note.comments;
-      note.reactions.forEach(r => delete r.user);
-      return res.send(200, note);
+        .then(note => {
+
+          /**
+           * send notification to author of the note as long as the
+           * person sending the notification is not the author of the note
+           * i.e dont send notification to yourself!
+           */
+          if (note.author.userId !== user.sub) {
+            User
+            .findOne({ userId: user.sub })
+            .select('_id')
+            .then(user => {
+              new NewReaction(note.author.userId, user._id, note._id, reaction._id).save();
+            });
+          }
+
+          note = note.toObject();
+          delete note.user;
+          delete note.comments;
+          note.reactions.forEach(r => delete r.user);
+          return res.send(200, note);
+        });
     })
     .catch(err => {
       log.error(err);
@@ -284,10 +297,9 @@ module.exports = ({ get, post, put, del }) => {
         .exec();
     })
     .then(newNote => {
-
       return Project
-        .findOne({ _id: newNote.project })
-        .select('title nudges')
+        .findOne({ _id: newNote.project._id })
+        .select('title nudges user')
         .then(project => {
 
           let { nudges } = project;
@@ -297,7 +309,7 @@ module.exports = ({ get, post, put, del }) => {
           .select('_id')
           .then(projectOwner => {
             nudges.forEach(user => {
-              new NudgedProjectUpdated(user.userId, projectOwner, project._id).save();
+              new NudgedProjectUpdated(user.userId, projectOwner._id, project._id).save();
             });
           })
           .catch(log.error);

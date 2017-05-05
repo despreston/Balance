@@ -11,10 +11,6 @@ export default StyleSheet.create ({
     justifyContent: 'center'
   },
 
-  nudges: {
-    // flex: 1
-  },
-
   center: {
     alignItems: 'center'
   },
