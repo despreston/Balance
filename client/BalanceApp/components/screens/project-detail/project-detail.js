@@ -24,6 +24,7 @@ class ProjectDetail extends Component {
       title: PropTypes.string.isRequired,
       status: PropTypes.string.isRequired,
       nudgeUsers: PropTypes.array,
+      privacyLevel: PropTypes.string.isRequired,
       owner: PropTypes.array.isRequired
     }),
     nav: PropTypes.func.isRequired,
@@ -68,6 +69,14 @@ class ProjectDetail extends Component {
             note.type === type
           );
         });
+    }
+  }
+
+  privacyLevelText () {
+    switch (this.props.project.privacyLevel) {
+      case 'global': return '🌎';
+      case 'friends': return '👥';
+      case 'private': return '🔒';
     }
   }
 
@@ -154,6 +163,7 @@ class ProjectDetail extends Component {
                 >
                   { ` ${project.owner[0].username}` }
                 </Text>
+                { ` ${this.privacyLevelText()}` }
               </Text>
             </View>
             <View style={ Styles.infoTextContainer }>
