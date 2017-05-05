@@ -177,9 +177,7 @@ class UserProfile extends Component {
             switchContext={ (context) => this.switchContext(context) }
           />
         </View>
-        <View style={ Styles.body }>
-          { this.renderBody() }
-        </View>
+        { this.renderBody() }
       </ScrollView>
     );
   }

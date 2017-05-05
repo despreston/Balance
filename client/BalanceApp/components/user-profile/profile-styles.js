@@ -5,18 +5,14 @@ export default StyleSheet.create ({
 
   profile: {
     backgroundColor: Colors.white,
-    paddingVertical: 25,
     flex: 1
   },
 
   profileInfo: {
+    paddingTop: 25,
     marginBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray.porcelain
-  },
-
-  body: {
-    flex: 1
   },
 
   userSearch: {
