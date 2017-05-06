@@ -85,6 +85,7 @@ class UserSettings extends Component {
           <View style={ Styles.inputRow }>
             <Text style={ [Styles.text, Styles.rowLabel] }>Username</Text>
             <TextInput
+              clearButtonMode='while-editing'
               value={ user.username }
               style={ [Styles.text, Styles.rowInput] }
               placeholder="@username"
@@ -94,6 +95,7 @@ class UserSettings extends Component {
           <View style={ Styles.inputRow }>
             <Text style={ [Styles.text, Styles.rowLabel] }>Email</Text>
             <TextInput
+              clearButtonMode='while-editing'
               keyboardType='email-address'
               autoCapitalize='none'
               autoCorrect={ false }
