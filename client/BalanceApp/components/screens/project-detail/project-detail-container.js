@@ -1,12 +1,7 @@
-// Vendors
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-
-// Components
 import ProjectDetail from './project-detail';
 import Icon from '../../navigation/icon';
-
-// actions
 import actions from '../../../actions/';
 
 class ProjectDetailContainer extends Component {
@@ -60,15 +55,21 @@ class ProjectDetailContainer extends Component {
     this.state = { refreshing: false };
   }
 
+  componentDidMount () {
+    this.load();
+  }
+
   componentWillMount () {
     this.props.navigation.setParams({ showEdit: this.props.userIsOwner });
   }
 
+  load () {
+    return this.props.dispatch(actions.fetchProject(this.props.navigation.state.params.project))
+  }
+
   refresh () {
     this.setState({ refreshing: true });
-
-    this.props.dispatch(actions.fetchProject(this.props.project))
-      .then(() => this.setState({ refreshing: false }));
+    this.load().then(() => this.setState({ refreshing: false }));
   }
 
   render () {

@@ -34,7 +34,7 @@ class AddUpdateContainer extends Component {
     }
 
     if (this.props.reloadProject) {
-      promises.push(this.props.dispatch(actions.fetchProject(this.props.project)));
+      promises.push(this.props.dispatch(actions.fetchProject(this.props.project._id)));
     }
 
     return Promise.all(promises);
