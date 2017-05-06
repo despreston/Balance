@@ -21,6 +21,7 @@ class ProjectDetailContainer extends Component {
   };
 
   static mapStateToProps (state, { navigation }) {
+    let userIsOwner;
     const project = state.projects[navigation.state.params.project];
 
     // notes for selected project
@@ -28,8 +29,10 @@ class ProjectDetailContainer extends Component {
       .map(id => state.notes[id])
       .filter(note => note.project._id === navigation.state.params.project);
 
-    // Logged-in user is the owner of the project
-    const userIsOwner = project.owner[0].userId === state.loggedInUser;
+    if (project) {
+      // Logged-in user is the owner of the project
+      userIsOwner = project.owner[0].userId === state.loggedInUser;
+    }
 
     return { userIsOwner, project, notes };
   }

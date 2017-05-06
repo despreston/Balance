@@ -1,16 +1,9 @@
-// vendors
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation'
-
-// actions
 import actions from '../../../actions/';
-
-// components
 import EditProject from './edit-project';
 import NavBtn from '../../navigation/nav-btn';
-
-// utils
 import emptyProject from '../../../utils/empty-project';
 
 class EditProjectContainer extends Component {
@@ -47,14 +40,13 @@ class EditProjectContainer extends Component {
   
   constructor (props) {
     super();
-
     this.state = { project: props.project };
   }
 
-  componentDidMount () {
-    setTimeout(() => this.props.navigation.setParams({
+  componentWillMount () {
+    this.props.navigation.setParams({
       saveProject: () => this.saveProject()
-    }), 500);
+    });
   }
 
   onProjectEdit = (property, value) => {
@@ -76,7 +68,6 @@ class EditProjectContainer extends Component {
 
     this.props.dispatch(actions.saveProject(this.state.project))
     .then(() => this.props.navigation.goBack());
-
   }
 
   delete = () => {
@@ -84,14 +75,12 @@ class EditProjectContainer extends Component {
       index: 0,
       actions: [
         NavigationActions.navigate({ routeName: 'Home' })
-      ]
+      ],
+      key: 'Home'
     });
 
     this.props.navigation.dispatch(resetAction);
-
-    setTimeout(() => {
-      this.props.dispatch(actions.deleteProject(this.state.project._id));
-    }, 2000);
+    this.props.dispatch(actions.deleteProject(this.state.project._id));
   }
 
   render () {
@@ -102,9 +91,6 @@ class EditProjectContainer extends Component {
         onRemove={ this.delete } />
     );
   }
-
 }
 
-export default connect(
-  EditProjectContainer.mapStateToProps
-)(EditProjectContainer);
+export default connect(EditProjectContainer.mapStateToProps)(EditProjectContainer);
