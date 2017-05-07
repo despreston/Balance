@@ -63,7 +63,9 @@ class MainScene extends Component {
 const EmptyState = ({ start }) => {
   return (
     <View style={ MainStyle.center }>
-      <Text style={ MainStyle.text }>Nothing started yet 😐</Text>
+      <Text style={ MainStyle.text }>
+        Track your hobby, class, DIY project, daily habits, and more.
+      </Text>
       <TouchableOpacity onPress={ start } style={ MainStyle.start }>
         <Text style={ MainStyle.buttonText }>Start a project</Text>
       </TouchableOpacity>

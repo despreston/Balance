@@ -6,7 +6,8 @@ export default StyleSheet.create  ({
   center: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 20
   },
 
   start: {
@@ -22,6 +23,8 @@ export default StyleSheet.create  ({
   text: {
     left: 2,
     fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 25,
     color: Colors.gray.tundora
   },
 
