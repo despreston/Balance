@@ -48,9 +48,9 @@ class Notification {
         if (err) {
           log.error('Could not populate notification items', err);
         }
-        
+
         try {
-          const e = PiperEvent(`user:${this.user}`, JSON.stringify(notification));
+          const e = PiperEvent('notification', `user:${this.user}`, JSON.stringify(notification));
           e.send();
         } catch (e) {
           log.error(e.message || e);
