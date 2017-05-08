@@ -23,8 +23,7 @@ class AddUpdateContainer extends Component {
 
   /**
    * Save the notes as long as the content is not blank
-   * @param {Object} past Past note to save. null to leave blank
-   * @param {Object} future Future note to save. null to leave blank
+   * @param {Object} note The note to save
    * @return {Promise}
    */
   save (note) {
@@ -35,7 +34,7 @@ class AddUpdateContainer extends Component {
     }
 
     if (this.props.reloadProject) {
-      promises.push(this.props.dispatch(actions.fetchProject(this.props.project)));
+      promises.push(this.props.dispatch(actions.fetchProject(this.props.project._id)));
     }
 
     return Promise.all(promises);

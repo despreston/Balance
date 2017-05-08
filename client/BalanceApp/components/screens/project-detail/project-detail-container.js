@@ -1,12 +1,7 @@
-// Vendors
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-
-// Components
 import ProjectDetail from './project-detail';
 import Icon from '../../navigation/icon';
-
-// actions
 import actions from '../../../actions/';
 
 class ProjectDetailContainer extends Component {
@@ -21,6 +16,7 @@ class ProjectDetailContainer extends Component {
   };
 
   static mapStateToProps (state, { navigation }) {
+    let userIsOwner;
     const project = state.projects[navigation.state.params.project];
 
     // notes for selected project
@@ -28,8 +24,10 @@ class ProjectDetailContainer extends Component {
       .map(id => state.notes[id])
       .filter(note => note.project._id === navigation.state.params.project);
 
-    // Logged-in user is the owner of the project
-    const userIsOwner = project.owner[0].userId === state.loggedInUser;
+    if (project) {
+      // Logged-in user is the owner of the project
+      userIsOwner = project.owner[0].userId === state.loggedInUser;
+    }
 
     return { userIsOwner, project, notes };
   }
@@ -57,15 +55,21 @@ class ProjectDetailContainer extends Component {
     this.state = { refreshing: false };
   }
 
+  componentDidMount () {
+    this.load();
+  }
+
   componentWillMount () {
     this.props.navigation.setParams({ showEdit: this.props.userIsOwner });
   }
 
+  load () {
+    return this.props.dispatch(actions.fetchProject(this.props.navigation.state.params.project))
+  }
+
   refresh () {
     this.setState({ refreshing: true });
-
-    this.props.dispatch(actions.fetchProject(this.props.project))
-      .then(() => this.setState({ refreshing: false }));
+    this.load().then(() => this.setState({ refreshing: false }));
   }
 
   render () {

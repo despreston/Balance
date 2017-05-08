@@ -84,7 +84,7 @@ export async function parseToken () {
 
 /**
  * Requests a new id_token using the refresh token, then saves the id_token
- * 
+ * @return {Promise}
  */
 export async function refreshIdToken () {
   const { clientId, domain } = CONFIG;

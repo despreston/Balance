@@ -56,11 +56,11 @@ export default {
 
   /**
    * Fetches single project from server
-   * @param {string} project Project ID
+   * @param {string} id Project _id
    * @return {Promise}
    */
-  fetchProject (project) {
-    return apiDispatch(`projects/${project._id}`, this.receiveProjects);
+  fetchProject (id) {
+    return apiDispatch(`projects/${id}`, this.receiveProjects);
   },
 
   /**

@@ -22,14 +22,6 @@ export default {
   },
 
   /**
-   * creates action for marking all notifications as read
-   * @return {object}
-   */
-  // read () {
-  //   return { type: MARK_AS_READ }
-  // },
-
-  /**
    * fetch notifications
    * @return {Promise}
    */
@@ -37,6 +29,9 @@ export default {
     return apiDispatch(`notifications`, this.receiveNotifications);
   },
 
+  /**
+   * mark all notifications as read
+   */
   markAsRead () {
     const opts = { method: 'POST' };
     return apiDispatch('notifications/read', null, opts);

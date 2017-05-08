@@ -120,6 +120,11 @@ export default {
         return saveRefreshToken(tokens.refreshToken)
         .then(() => saveAuthToken(tokens.idToken))
         .then(() => {
+
+          if (profile.extraInfo && profile.extraInfo.picture_large) {
+            profile.picture = profile.extraInfo.picture_large;
+          }
+
           delete profile.extraInfo;
 
           // send the user to the server

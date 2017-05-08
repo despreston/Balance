@@ -74,6 +74,7 @@ export default class EditProject extends Component {
           <View style={ Styles.inputRow }>
             <Text style={ [Styles.text, Styles.rowLabel] }>Title</Text>
             <TextInput
+              clearButtonMode='while-editing'
               autoCorrect={ false }
               value={ project.title }
               style={ [Styles.text, Styles.rowInput] }
@@ -83,6 +84,7 @@ export default class EditProject extends Component {
           <View style={ Styles.inputRow }>
             <Text style={ [Styles.text, Styles.rowLabel] }>Description</Text>
             <TextInput
+              clearButtonMode='while-editing'
               value={ project.description }
               style={ [Styles.text, Styles.rowInput] }
               placeholder="Description"

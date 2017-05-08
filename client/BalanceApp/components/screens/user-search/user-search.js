@@ -1,12 +1,7 @@
-// vendors
 import React, { Component } from 'react';
 import { TextInput, View, Text } from 'react-native';
 import { api } from '../../../utils/api';
-
-// components 
 import UserList from '../../user-list/user-list';
-
-// styles
 import Styles from './user-search-styles';
 
 class UserSearch extends Component {
@@ -37,23 +32,6 @@ class UserSearch extends Component {
     }
 
     this.submitTimeout = setTimeout(() => this.queryUsers(), 400);
-
-  }
-
-  renderUserList () {
-    const { navigate } = this.props.navigation;
-
-    if (this.state.query.length > 0 && this.state.users.length < 1 && !this.state.searching) {
-      return <Empty />;
-    }
-
-    return (
-      <UserList
-        users={ this.state.users }
-        onTextChange={ this.onTextChange.bind(this) }
-        onUserSelect={ userId => navigate('UserProfile', { userId }) }
-      />
-    );
   }
  
   render () {
@@ -70,18 +48,34 @@ class UserSearch extends Component {
             value={ this.state.query }
           />
         </View>
-        { this.renderUserList() }
+        <List
+          query={ this.state.query }
+          nav={ this.props.navigation.navigate }
+          searching={ this.state.searching }
+          users={ this.state.users }
+          onTextChange={ this.onTextChange.bind(this) }
+        />
       </View>
     )
   } 
 }
 
-const Empty = () => {
+const List = ({ query, nav, searching, users, onTextChange }) => {
+  if (query.length > 0 && users.length < 1 && !searching) {
+    return (
+      <View style={ Styles.center }>
+        <Text style={ Styles.text }>No results</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={ Styles.center }>
-      <Text style={ Styles.text }>No results</Text>
-    </View>
+    <UserList
+      users={ users }
+      onTextChange={ onTextChange }
+      onUserSelect={ userId => nav('UserProfile', { userId }) }
+    />
   );
-}
+};
 
 export default UserSearch;
