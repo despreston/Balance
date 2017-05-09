@@ -45,6 +45,7 @@ class Auth extends Component {
         .then(parseToken)
         .then(token => {
           return Promise.all([
+            dispatch(actions.connectToPiper(token.sub)),
             dispatch(actions.fetchNotifications()),
             dispatch(actions.requestUser(token.sub, true))
           ]);

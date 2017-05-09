@@ -5,6 +5,7 @@ import Auth0Lock from 'react-native-lock';
 import { saveAuthToken, saveRefreshToken } from '../utils/auth';
 import Colors from '../components/colors';
 import notificationActions from './notification';
+import sharedActions from './shared';
 
 const LOGGED_IN_USER = 'LOGGED_IN_USER';
 const RECEIVE_USERS = 'RECEIVE_USERS';
@@ -130,6 +131,7 @@ export default {
           // send the user to the server
           return api(`users`, { method: 'POST', body: profile })
             .then(user => {
+              dispatch(sharedActions.connectToPiper(user));
               dispatch(notificationActions.fetchNotifications());
               dispatch(this.setLoggedInUser(user));
             });
