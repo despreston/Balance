@@ -5,6 +5,7 @@ import config from './utils/set-config';
 global.CONFIG = config;
 
 import React, { Component } from 'react';
+import { View, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -21,7 +22,10 @@ export default class BalanceApp extends Component {
   render () {
     return (
       <Provider store={ store }>
-        <MainNavigation onNavigationStateChange={null} />
+        <View style={{flex: 1}}>
+          <StatusBar barStyle="light-content" />
+          <MainNavigation onNavigationStateChange={null} />
+        </View>
       </Provider>
     )
   }
