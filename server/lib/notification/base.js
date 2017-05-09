@@ -1,5 +1,6 @@
 const Model = require('../../models/Notification');
 const log = require('logbro');
+const PiperEvent = require('../piper-event/');
 
 class Notification {
 
@@ -12,7 +13,6 @@ class Notification {
   }
   
   constructor (user, type, related = []) {
-    
     if (!type || typeof type !== 'string') {
       throw 'Notification type should be a string.';
     }
@@ -39,7 +39,25 @@ class Notification {
     });
 
     notification
-    .save()
+    .save((err, notification) => {
+      if (err) {
+        log.error('Error saving notification: ', err);
+      }
+
+      notification.populate('related.item', (err) => {
+        if (err) {
+          log.error('Could not populate notification items', err);
+        }
+
+        try {
+          const e = PiperEvent('notification', `user:${this.user}`, JSON.stringify(notification));
+          e.send();
+        } catch (e) {
+          log.error(e.message || e);
+        }
+      });
+      
+    })
     .catch(err => log.error(err));
   }
 

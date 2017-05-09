@@ -1,4 +1,5 @@
 const RESET = 'RESET';
+const CONNECT_TO_PIPER = 'CONNECT_TO_PIPER';
 
 export default {
 
@@ -9,6 +10,14 @@ export default {
     return {
       type: RESET
     };
+  },
+
+  connectToPiper (user) {
+    return {
+      type: CONNECT_TO_PIPER,
+      url: CONFIG.piperSocket,
+      user
+    }
   }
 
 };

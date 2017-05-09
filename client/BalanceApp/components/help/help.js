@@ -103,12 +103,12 @@ export default class Help extends Component {
           <View style={ Styles.answer }>
             <Text style={ Styles.topic }>Project colors</Text>
             <Text style={ Styles.text}>
-              <Image source={ require('../../assets/project-status-color.png') } style={{ borderRadius: 4, width: 281, height: 110}}/>
+              <Image source={ require('../../assets/project-status-color.png') } style={{ borderRadius: 4, width: 281, height: 155}}/>
             </Text>
             <Text style={ Styles.text }>
-              The color bar on the right-hand-side in a list of projects 
+              The color on the right in the list of projects 
               corresponds to how long its been since the last update for that 
-              project.
+              project. Green: 2 days, Yellow: 8 days, Orange: 15 days, Red: Long time!
             </Text>
           </View>
           <View style={ Styles.answer }>

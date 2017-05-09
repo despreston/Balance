@@ -1,23 +1,20 @@
 /**
  * Balance
  */
+import config from './utils/set-config';
+global.CONFIG = config;
 
-// Vendors
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-
-// utils
-import config from './utils/set-config';
+import thunk from 'redux-thunk';
 import reducer from './reducers/index';
+import sockets from './utils/sockets';
 
 // Components
 import MainNavigation from './components/navigation/navigation';
 
-global.CONFIG = config;
-
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
+const store = createStore(reducer, applyMiddleware(thunk, sockets));
 
 export default class BalanceApp extends Component {
   
