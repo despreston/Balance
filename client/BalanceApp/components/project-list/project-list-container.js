@@ -51,13 +51,17 @@ class ProjectListContainer extends Component {
   componentWillReceiveProps (nextProps) {
     const { projects } = nextProps;
 
-    this.loadFilterValue().then(filter => {
-      if (filter === null) {
-        filter = 'All';
-      }
+    if (nextProps.showFilter) {
+      this.loadFilterValue().then(filter => {
+        if (filter === null) {
+          filter = 'All';
+        }
 
-      this.setProjectStates(projects, filter);
-    });
+        this.setProjectStates(projects, filter);
+      });
+    }
+
+    this.setProjectStates(projects, 'All');
   }
 
   loadFilterValue () {
