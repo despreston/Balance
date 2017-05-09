@@ -1,8 +1,14 @@
+/* eslint no-console: "off" */
 import actions from '../actions';
 import io from 'socket.io-client';
 
 const onNotification = store => data => {
-  store.dispatch(actions.receiveNotifications(data));
+  try {
+    data = JSON.parse(data);
+    store.dispatch(actions.receiveNotifications(data));
+  } catch (e) {
+    console.log("can't parse the notification: ", data);
+  }
 };
 
 const onOpen = (socket, user) => {
