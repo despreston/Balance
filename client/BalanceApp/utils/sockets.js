@@ -1,10 +1,12 @@
 /* eslint no-console: "off" */
 import actions from '../actions';
 import io from 'socket.io-client';
+import convertDates from './convert-dates';
 
 const onNotification = store => data => {
   try {
     data = JSON.parse(data);
+    data = convertDates(data);
     store.dispatch(actions.receiveNotifications(data));
   } catch (e) {
     console.log("can't parse the notification: ", data);
