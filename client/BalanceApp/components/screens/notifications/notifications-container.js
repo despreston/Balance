@@ -36,6 +36,17 @@ class NotificationsContainer extends Component {
     this.fetchAll();
   }
 
+  componentWillReceiveProps (nextProps) {
+    const oldFriendCount = this.props.user.friends.filter(f => f.status === 'requested').length;
+    const newFriendCount = nextProps.user.friends.filter(f => f.status === 'requested').length;
+
+    if (newFriendCount !== oldFriendCount) {
+      this.fetchFriendRequests().then(friend_requests => {
+        this.setState({ friend_requests });
+      });
+    }
+  }
+
   fetchAll () {
     return this.props.dispatch(actions.markAsRead())
     .then(() => this.props.dispatch(actions.fetchNotifications()))

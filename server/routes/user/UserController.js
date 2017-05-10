@@ -86,7 +86,6 @@ module.exports = ({ get, post, del, put }) => {
   });
 
   post("users/:userId/friends/:friend", ({ params, user }, res) => {
-
     if (params.userId !== user.sub) {
       return res.send(403);
     }
@@ -98,7 +97,7 @@ module.exports = ({ get, post, del, put }) => {
 
     User.createFriendship(params.userId, params.friend)
     .then(([ loggedInUser, otherUser ]) => {
-      loggedInUser =loggedInUser.toObject();
+      loggedInUser = loggedInUser.toObject();
       otherUser = otherUser.toObject();
 
       // Get project counts for both users
@@ -118,7 +117,6 @@ module.exports = ({ get, post, del, put }) => {
     })
     .then(updatedUsers => res.send(201, updatedUsers))
     .catch(err => res.send(500, err));
-
   });
 
   del("users/:userId/friends/:friend", ({ params, user }, res) => {
