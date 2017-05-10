@@ -97,6 +97,25 @@ module.exports = ({ get, post, del, put }) => {
     }
 
     User.createFriendship(params.userId, params.friend)
+    .then(([ loggedInUser, otherUser ]) => {
+      loggedInUser =loggedInUser.toObject();
+      otherUser = otherUser.toObject();
+
+      // Get project counts for both users
+      return Promise.all([
+        Project.projectCountForUser(user.sub, ['private', 'global', 'friends']),
+        Project.projectCountForUser(params.friend, ['global'])
+      ]).then(([ loggedInUserProjectCount, otherUserProjectCount ]) => {
+        loggedInUser.project_count = loggedInUserProjectCount;
+        otherUser.project_count = otherUserProjectCount;
+        return [loggedInUser, otherUser];
+      })
+      .catch(err => {
+        log.error('Could not get project count for users', err);
+        return res.send(500);
+      });
+
+    })
     .then(updatedUsers => res.send(201, updatedUsers))
     .catch(err => res.send(500, err));
 
