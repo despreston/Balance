@@ -4,6 +4,7 @@ import {
   Text,
   KeyboardAvoidingView,
   View,
+  Image,
   TouchableOpacity
 } from 'react-native';
 
@@ -18,7 +19,7 @@ import NavButton from './nav-button/nav-button';
 import Note from './note/note';
 import MarkComplete from './mark-complete/mark-complete';
 import Trash from './trash/trash';
-import PictureUpload from './picture-upload/picture-upload';
+import PictureUpload from '../picture-upload/picture-upload';
 
 export default class AddUpdate extends Component {
 
@@ -28,7 +29,9 @@ export default class AddUpdate extends Component {
     project: PropTypes.object.isRequired,
     save: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
-    note: PropTypes.object
+    note: PropTypes.object,
+    pictureUploadVisible: PropTypes.bool.isRequired,
+    togglePhotoUploader: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -135,8 +138,10 @@ export default class AddUpdate extends Component {
     });
   }
 
+  toggleImage
+
   render () {
-    const { visible, project } = this.props;
+    const { visible, project, pictureUploadVisible, togglePhotoUploader } = this.props;
 
     return (
       <Modal transparent animationType='slide' visible={ visible } >
@@ -171,7 +176,12 @@ export default class AddUpdate extends Component {
                     complete={ this.state.complete }
                   />
                   <View style={ Styles.flexRow }>
-                    <PictureUpload />
+                    <TouchableOpacity onPress={ () => togglePhotoUploader() }>
+                      <Image
+                        style={{ height: 23, width: 23 }}
+                        source={ require('../../assets/icons/camera.png')}
+                      />
+                    </TouchableOpacity>
                     {
                       this.props.note && (
                         <View style={ Styles.spacing }>
@@ -184,6 +194,7 @@ export default class AddUpdate extends Component {
               </View>
             </KeyboardAvoidingView>
         </View>
+        <PictureUpload visible={ pictureUploadVisible } />
       </Modal>
     );
   }

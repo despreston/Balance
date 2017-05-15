@@ -19,6 +19,8 @@ class AddUpdateContainer extends Component {
 
   constructor (props) {
     super(props);
+
+    this.state = { pictureUploadVisible: false };
   }
 
   /**
@@ -44,17 +46,20 @@ class AddUpdateContainer extends Component {
     this.props.dispatch(actions.deleteNote(this.props.note._id));
   }
 
+  togglePhotoUploader () {
+    this.setState({ pictureUploadVisible: !this.state.pictureUploadVisible });
+  }
+
   render () {
     const { hideFn, note, visible, project } = this.props;
+    const pictureUploadVisible = this.state.pictureUploadVisible;
 
     return (
       <AddUpdate
-        note={ note }
-        hideFn={ hideFn }
+        { ...{ note, hideFn, visible, pictureUploadVisible, project } }
         save={ this.save.bind(this) }
         remove={ this.remove.bind(this) }
-        visible={ visible }
-        project={ project }
+        togglePhotoUploader={ this.togglePhotoUploader.bind(this) }
       />
     );
   }
