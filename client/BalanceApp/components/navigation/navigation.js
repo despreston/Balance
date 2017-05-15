@@ -128,7 +128,6 @@ const tabBarOptions = {
 
 const App = TabNavigator(routes, {
   lazy: true,
-  backBehavior: 'none',
   tabBarOptions
 });
 
