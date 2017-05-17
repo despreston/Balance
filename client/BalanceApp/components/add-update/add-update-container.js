@@ -37,6 +37,14 @@ class AddUpdateContainer extends Component {
   save (note) {
     let promises = [];
 
+    /*
+    if (this.newPhoto) {
+      1. get a signed url from Balance server
+      2. set note.picture to the signed url
+      3. add the s3 upload to the promises array
+    }
+    */
+
     if (note.content !== '') {
       promises.push(this.props.dispatch(actions.saveNote(note)));
     }
