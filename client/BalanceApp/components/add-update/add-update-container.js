@@ -1,10 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux';
-
-// actions
 import actions from '../../actions/';
-
-// components
+import { api } from '../../utils/api';
 import AddUpdate from './add-update';
 
 class AddUpdateContainer extends Component {
@@ -37,23 +34,28 @@ class AddUpdateContainer extends Component {
   save (note) {
     let promises = [];
 
-    /*
-    if (this.newPhoto) {
-      1. get a signed url from Balance server
-      2. set note.picture to the signed url
-      3. add the s3 upload to the promises array
-    }
-    */
+    return new Promise((resolve) => {
+      if (this.newPhoto) {
+        const { picture } = this.state.note;
+        const fileType = picture.slice(picture.indexOf('ext=') + 4);
 
-    if (note.content !== '') {
-      promises.push(this.props.dispatch(actions.saveNote(note)));
-    }
+        return api(`signed-s3?fileType=${fileType}`).then(data => {
+          note.picture = data.url;
+          return resolve();
+        });
+      }
+    })
+    .then(() => {
+      if (note.content !== '') {
+        promises.push(this.props.dispatch(actions.saveNote(note)));
+      }
 
-    if (this.props.reloadProject) {
-      promises.push(this.props.dispatch(actions.fetchProject(this.props.project._id)));
-    }
+      if (this.props.reloadProject) {
+        promises.push(this.props.dispatch(actions.fetchProject(this.props.project._id)));
+      }
 
-    return Promise.all(promises);
+      return Promise.all(promises);
+    });
   }
 
   remove () {

@@ -5,7 +5,6 @@ import { getAuthToken } from './auth';
 /**
  * Sets up api calls.
  * @param {string} url
- * @param {function} action Action to dispatch with json after the fetch
  * @param {object} properties Fetch properties. (Method, body, etc) Body should be regular JS object
  * @param {Bool} externalUrl True if the URL needs to point to something outside of Balance host
  */
