@@ -20,7 +20,11 @@ class AddUpdateContainer extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { pictureUploadVisible: false };
+    this.state = { pictureUploadVisible: false, note: null };
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({ note: nextProps.note });
   }
 
   /**
@@ -50,16 +54,31 @@ class AddUpdateContainer extends Component {
     this.setState({ pictureUploadVisible: !this.state.pictureUploadVisible });
   }
 
+  onPhotoSelect (selectedPictures, picture) {
+    const note = Object.assign({}, this.state.note, { picture });
+    this.setState({ note });
+    this.togglePhotoUploader();
+  }
+
+  removePhoto () {
+    const note = Object.assign({}, this.state.note);
+    delete note.picture;
+    this.setState({ note });
+  }
+
   render () {
-    const { hideFn, note, visible, project } = this.props;
+    const { hideFn, visible, project } = this.props;
     const pictureUploadVisible = this.state.pictureUploadVisible;
 
     return (
       <AddUpdate
-        { ...{ note, hideFn, visible, pictureUploadVisible, project } }
+        { ...{ hideFn, visible, pictureUploadVisible, project } }
+        note={ this.state.note }
         save={ this.save.bind(this) }
         remove={ this.remove.bind(this) }
         togglePhotoUploader={ this.togglePhotoUploader.bind(this) }
+        onPhotoSelect={ this.onPhotoSelect.bind(this) }
+        removePhoto={ this.removePhoto.bind(this) }
       />
     );
   }

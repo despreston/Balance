@@ -20,6 +20,7 @@ import Note from './note/note';
 import MarkComplete from './mark-complete/mark-complete';
 import Trash from './trash/trash';
 import PictureUpload from '../picture-upload/picture-upload';
+import Picture from './picture/picture';
 
 export default class AddUpdate extends Component {
 
@@ -31,7 +32,9 @@ export default class AddUpdate extends Component {
     remove: PropTypes.func.isRequired,
     note: PropTypes.object,
     pictureUploadVisible: PropTypes.bool.isRequired,
-    togglePhotoUploader: PropTypes.func.isRequired
+    togglePhotoUploader: PropTypes.func.isRequired,
+    onPhotoSelect: PropTypes.func.isRequired,
+    removePhoto: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -138,10 +141,14 @@ export default class AddUpdate extends Component {
     });
   }
 
-  toggleImage
-
   render () {
-    const { visible, project, pictureUploadVisible, togglePhotoUploader } = this.props;
+    const {
+      visible,
+      project,
+      pictureUploadVisible,
+      togglePhotoUploader,
+      onPhotoSelect
+    } = this.props;
 
     return (
       <Modal transparent animationType='slide' visible={ visible } >
@@ -170,6 +177,13 @@ export default class AddUpdate extends Component {
                   note={ this.state.note }
                   placeHolder={ this.state.placeholder }
                 />
+                {
+                  this.props.note && this.props.note.picture &&
+                  <Picture
+                    uri={ this.props.note.picture.uri }
+                    remove={ this.props.removePhoto }
+                  />
+                }
                 <View style={[ Styles.flexRow, Styles.outsideContent ]}>
                   <MarkComplete
                     onPress={ () => this.toggleComplete() }
@@ -194,7 +208,11 @@ export default class AddUpdate extends Component {
               </View>
             </KeyboardAvoidingView>
         </View>
-        <PictureUpload visible={ pictureUploadVisible } />
+        <PictureUpload
+          toggleVisible={ togglePhotoUploader }
+          visible={ pictureUploadVisible }
+          onPhotoSelect={ onPhotoSelect }
+        />
       </Modal>
     );
   }
