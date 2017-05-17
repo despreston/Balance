@@ -21,9 +21,11 @@ class AddUpdateContainer extends Component {
     super(props);
 
     this.state = { pictureUploadVisible: false, note: null };
+    this.newPhoto = false;
   }
 
   componentWillReceiveProps (nextProps) {
+    this.newPhoto = false;
     this.setState({ note: nextProps.note });
   }
 
@@ -55,7 +57,8 @@ class AddUpdateContainer extends Component {
   }
 
   onPhotoSelect (selectedPictures, picture) {
-    const note = Object.assign({}, this.state.note, { picture });
+    const note = Object.assign({}, this.state.note, { picture: picture.uri });
+    this.newPhoto = true;
     this.setState({ note });
     this.togglePhotoUploader();
   }
@@ -63,6 +66,7 @@ class AddUpdateContainer extends Component {
   removePhoto () {
     const note = Object.assign({}, this.state.note);
     delete note.picture;
+    this.newPhoto = false;
     this.setState({ note });
   }
 

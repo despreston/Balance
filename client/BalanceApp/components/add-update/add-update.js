@@ -180,7 +180,7 @@ export default class AddUpdate extends Component {
                 {
                   this.props.note && this.props.note.picture &&
                   <Picture
-                    uri={ this.props.note.picture.uri }
+                    uri={ this.props.note.picture }
                     remove={ this.props.removePhoto }
                   />
                 }
