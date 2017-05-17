@@ -35,10 +35,12 @@ class AddUpdateContainer extends Component {
     let promises = [];
 
     return new Promise((resolve) => {
+      // New photo needs to be uploaded to S3
       if (this.newPhoto) {
         const { picture } = this.state.note;
         const fileType = picture.slice(picture.indexOf('ext=') + 4);
 
+        // get the signed url for upload to s3
         return api(`signed-s3?fileType=${fileType}`).then(data => {
           note.picture = data.url;
           return resolve();
