@@ -11,8 +11,8 @@ module.exports = ({ get }) => {
     }
 
     const s3 = new aws.S3();
-    const fileName = uuidV4();
     const fileType = params.fileType;
+    const fileName = `${uuidV4()}.${fileType}`;
 
     const s3Params = {
       Bucket: config.s3.Bucket,
@@ -29,7 +29,8 @@ module.exports = ({ get }) => {
 
       const response = {
         signedRequest: data,
-        url: `https://${config.s3.Bucket}.s3.amazonaws.com/${fileName}`
+        fileName,
+        url: `https://s3.amazonaws.com/${config.s3.Bucket}/${fileName}`
       };
 
       return res.send(200, response);

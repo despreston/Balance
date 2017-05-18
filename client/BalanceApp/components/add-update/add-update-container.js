@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux';
 import actions from '../../actions/';
 import { api } from '../../utils/api';
+import s3upload from '../../utils/s3-upload';
 import AddUpdate from './add-update';
 
 class AddUpdateContainer extends Component {
@@ -42,8 +43,9 @@ class AddUpdateContainer extends Component {
 
         // get the signed url for upload to s3
         return api(`signed-s3?fileType=${fileType}`).then(data => {
+          // set the url to the s3 path
           note.picture = data.url;
-          return resolve();
+          resolve(s3upload(data.fileName, picture, data.url));
         });
       }
     })
