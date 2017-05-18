@@ -1,13 +1,13 @@
-/* eslint no-console: "off" */
+import ImageResizer from 'react-native-image-resizer';
 
 /**
- * Uploads a picture to s3
+ * Uploads a jpg to s3
  * @param {string} filename The name generated from Balance API
- * @param {string} path URI of the file on the device
+ * @param {string} path URI of image location
  * @param {string} signedUri The signed Uri from Balance API
  * @return {promise}
  */
-export default (filename, path, signedUri) => {
+const upload = (filename, path, signedUri) => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
 
@@ -26,4 +26,17 @@ export default (filename, path, signedUri) => {
     xhr.setRequestHeader('Content-Type', 'image/jpeg');
     xhr.send({ uri: path, type: 'image/jpeg', name: filename });
   });
+};
+
+/**
+ * Resizes the image at path
+ * @param {string} path URI of image to resize. should be jpeg
+ * @return {Promise}
+ */
+const resize = (path) => {
+  return ImageResizer.createResizedImage(path, 1080, 1440, 'JPEG', 100);
+};
+
+export default (filename, path, signedUri) => {
+  return resize(path).then((resizedUri) => upload(filename, resizedUri, signedUri));
 }
