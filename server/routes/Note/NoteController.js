@@ -4,7 +4,7 @@ const Project = require('../../models/Project');
 const AccessControl = require('../../utils/access-control');
 const Reaction = require('../../models/Reaction');
 const log = require('logbro');
-const Notification = require('../../lib/notification/');
+const Notification = require('../../classes/notification/');
 const { NewReaction, NudgedProjectUpdated } = Notification;
 
 module.exports = ({ get, post, put, del }) => {

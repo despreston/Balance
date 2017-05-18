@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Note = require("./Note");
 const User = require('./User');
 const privacyLevel = require('./shared/privacy-level');
-const Notification = require('../lib/notification/');
+const Notification = require('../classes/notification/');
 const { NewNudge } = Notification;
 
 let Project = new mongoose.Schema({

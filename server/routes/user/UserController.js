@@ -3,7 +3,7 @@ const User = require('../../models/User');
 const Project = require('../../models/Project');
 const log = require('logbro');
 const AccessControl = require('../../utils/access-control');
-const Notification = require('../../lib/notification/');
+const Notification = require('../../classes/notification/');
 const NewFriendRequest = Notification.NewFriendRequest;
 
 module.exports = ({ get, post, del, put }) => {

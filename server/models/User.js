@@ -1,7 +1,7 @@
 const bro = require("logbro");
 const mongoose = require("mongoose");
 const friend = require("./shared/friend");
-const Notification = require('../lib/notification/');
+const Notification = require('../classes/notification/');
 const { AcceptedFriendRequest } = Notification;
 
 let User = new mongoose.Schema({
