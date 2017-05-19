@@ -56,7 +56,7 @@ class AddUpdateContainer extends Component {
       const { dispatch } = this.props;
 
       // Picture needs to be deleted
-      if (this.props.note.picture && !note.picture) {
+      if (this.props.note && this.props.note.picture && !note.picture) {
         promises.push(dispatch(actions.deletePictureFromNote(note._id)));
       }
 

@@ -72,6 +72,11 @@ export default StyleSheet.create ({
 
   comments: {
     marginTop: 20
+  },
+
+  picture: {
+    height: 200,
+    marginBottom: 10
   }
 
 });

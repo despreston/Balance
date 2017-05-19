@@ -22,7 +22,8 @@ class NoteListItem extends Component {
       author: PropTypes.shape({
         userId: PropTypes.string.isRequired
       }).isRequired,
-      reactions: PropTypes.array
+      reactions: PropTypes.array,
+      picture: PropTypes.string
     }).isRequired,
     showTypeText: PropTypes.bool,
     showProjectName: PropTypes.bool,
@@ -40,7 +41,7 @@ class NoteListItem extends Component {
     return (
       <View style={[ Styles.flexRow, Styles.top ]}>
         <View style={[ Styles.flexRow, Styles.topLeft ]}>
-          <Image style={ Styles.picture } source={{ uri: note.author.picture }} />
+          <Image style={ Styles.avatar } source={{ uri: note.author.picture }} />
           <Text style={ Styles.smallLightText }>
             {
               showUser &&
@@ -70,7 +71,13 @@ class NoteListItem extends Component {
     return (
       <View style={ Styles.container }>
         { this.renderHeader() }
-        <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
+        <View>
+          {
+            note.picture &&
+            <Image source={{ uri: note.picture }} style={ Styles.picture }/>
+          }
+          <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
+        </View>
         <View style={ Styles.flexRow }>
           <View style={ Styles.comment }>
             <CommentButton count={ note.commentCount || 0 } />
