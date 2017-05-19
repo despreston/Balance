@@ -46,7 +46,6 @@ class AddUpdateContainer extends Component {
         return api(`signed-s3?fileType=${fileType}`).then(data => {
           // set the url to the s3 path
           note.picture = data.url;
-
           return resolve(s3upload(data.fileName, picture, data.url));
         });
       }
@@ -54,6 +53,7 @@ class AddUpdateContainer extends Component {
       return resolve();
     })
     .then(() => {
+      this.newPhoto = false;
       const { dispatch } = this.props;
 
       // Picture needs to be deleted

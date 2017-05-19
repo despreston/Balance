@@ -80,8 +80,12 @@ export default class AddUpdate extends Component {
         note = {
           _id: this.props.note._id,
           user: this.props.note.user,
-          project: this.props.note.project
+          project: this.props.note.project,
         };
+
+        if (this.props.note.picture) {
+          note.picture = this.props.note.picture;
+        }
 
         note.type = this.state.complete ? 'Past' : 'Future';
       } else if (this.state.complete) {

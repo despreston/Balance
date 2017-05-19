@@ -6,7 +6,6 @@ const Reaction = require('../../models/Reaction');
 const log = require('logbro');
 const Notification = require('../../classes/notification/');
 const s3remove = require('../../utils/s3-remove');
-const config = require('../../config.json');
 
 const { NewReaction, NudgedProjectUpdated } = Notification;
 
@@ -348,6 +347,14 @@ module.exports = ({ get, post, put, del }) => {
         return res.send(403);
       }
 
+      // picture was replaced, so get rid of the old one
+      if (body.picture && note.picture && body.picture !== note.picture) {
+        return s3remove(note.picture).then(() => note).catch(() => res.send(500));
+      }
+
+      return note;
+    })
+    .then(note => {
       note = Object.assign(note, body);
       note.save();
       note = note.toObject();
@@ -391,12 +398,8 @@ module.exports = ({ get, post, put, del }) => {
       if (!note.picture) {
         return res.send(404);
       }
-      
-      // Get the Key from the filename
-      const lengthToSkip = config.s3.Bucket.length + 1;
-      const key = note.picture.slice(note.picture.indexOf(config.s3.Bucket + '/') + lengthToSkip);
 
-      return s3remove(key).then(() => note).catch(() => res.send(500));
+      return s3remove(note.picture).then(() => note).catch(() => res.send(500));
     })
     .then(note => {
       // Remove the picture from the database

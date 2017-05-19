@@ -23,15 +23,15 @@ class ProjectListItem extends Component {
     super(props);
 
     this.state = { addUpdateVisible: false };
-    this.lastUpdated = this.getLastUpdated(props.project);
+    this.lastUpdated = this.getCreatedAt(props.project);
   }
 
   componentWillReceiveProps (nextProps) {
-    this.lastUpdated = this.getLastUpdated(nextProps.project);
+    this.lastUpdated = this.getCreatedAt(nextProps.project);
   }
 
-  getLastUpdated (project) {
-    return project.Past ? project.Past.lastUpdated : null;
+  getCreatedAt (project) {
+    return project.Past ? project.Past.createdAt : null;
   }
 
   renderNote () {
