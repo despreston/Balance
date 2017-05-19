@@ -11,7 +11,7 @@ class NoteTypeSwitch extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { selected: 'Future' };
+    this.state = { selected: 'Past' };
   }
 
   select (type) {

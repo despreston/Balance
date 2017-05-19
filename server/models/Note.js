@@ -7,9 +7,7 @@ let Note = new mongoose.Schema({
     type: String
   },
 
-  content: {
-    type: String
-  },
+  content: String,
 
   project: {
     type: mongoose.Schema.Types.ObjectId,
@@ -33,6 +31,8 @@ let Note = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'reaction'
   }],
+
+  picture: String,
 
   lastUpdated: Date,
 

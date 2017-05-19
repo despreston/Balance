@@ -27,36 +27,15 @@ class ProjectDetail extends Component {
       privacyLevel: PropTypes.string.isRequired,
       owner: PropTypes.array.isRequired
     }),
-    nav: PropTypes.func.isRequired,
     userIsOwner: PropTypes.bool,
     refreshing: PropTypes.bool.isRequired,
-    onRefresh: PropTypes.func.isRequired
-  };
-
-  constructor (props) {
-    super(props);
-
-    this.state = {
-      addUpdateVisible: false,
-      refreshing: false,
-      notesToShow: 'Future'
-    };
-
-    this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
-  }
-
-  toggleAddUpdateModal () {
-    this.setState({ addUpdateVisible: !this.state.addUpdateVisible });
-  }
-
-  goToAuthor () {
-    this.props.nav('UserProfile', {
-      userId: this.props.project.owner[0].userId
-    });
-  }
-
-  onNoteContextChange (type) {
-    this.setState({ notesToShow: type });
+    onRefresh: PropTypes.func.isRequired,
+    notesToShow: PropTypes.string.isRequired,
+    addUpdateVisible: PropTypes.bool.isRequired,
+    goToAuthor: PropTypes.func.isRequired,
+    onNoteContextChange: PropTypes.func.isRequired,
+    goToNote: PropTypes.func.isRequired,
+    toggleAddUpdateModal: PropTypes.func.isRequired
   }
 
   notesSelector (type) {
@@ -82,9 +61,9 @@ class ProjectDetail extends Component {
 
   renderPastNotes () {
     const {
-      nav,
       status,
-      userIsOwner
+      userIsOwner,
+      goToNote
     } = this.props;
 
     // hide edit buttons if project is Finished OR user is not the owner
@@ -95,16 +74,16 @@ class ProjectDetail extends Component {
         query={[{ project: this.props.project._id }, { type: 'Past' }]}
         selector={ notes => this.notesSelector('Past')(notes, this.props.project) }
         showEdit={ status !== 'finished' && userIsOwner }
-        onSelect={ id => nav('Note', { id }) }
+        onSelect={ goToNote }
       />
     );
   }
 
   renderFutureNotes () {
     const {
-      nav,
       status,
-      userIsOwner
+      userIsOwner,
+      goToNote
     } = this.props;
 
     // hide edit buttons if project is Finished OR user is not the owner
@@ -116,7 +95,7 @@ class ProjectDetail extends Component {
           query={[{ project: this.props.project._id }, { type: 'Future' }]}
           selector={ notes => this.notesSelector('Future')(notes, this.props.project) }
           showEdit={ status !== 'finished' && userIsOwner }
-          onSelect={ id => nav('Note', { id }) }
+          onSelect={ goToNote }
         />
       </View>
     );
@@ -133,7 +112,16 @@ class ProjectDetail extends Component {
   }
 
   render () {
-    const { project, refreshing, userIsOwner } = this.props;
+    const {
+      project,
+      refreshing,
+      userIsOwner,
+      goToAuthor,
+      addUpdateVisible,
+      toggleAddUpdateModal,
+      onNoteContextChange,
+      notesToShow
+    } = this.props;
 
     const refreshProps = {
       refreshing,
@@ -158,7 +146,7 @@ class ProjectDetail extends Component {
               <Text style={ [Styles.author, Styles.whiteText] }>
                 Started by
                 <Text
-                  onPress={ () => this.goToAuthor() }
+                  onPress={ goToAuthor }
                   style={[ Styles.bold, { flex: 1 } ]}
                 >
                   { ` ${project.owner[0].username}` }
@@ -173,14 +161,14 @@ class ProjectDetail extends Component {
             </View>
             {
               userIsOwner && project.status !== 'finished' && 
-              <UpdateButton press={ () => this.toggleAddUpdateModal() } /> 
+              <UpdateButton press={ toggleAddUpdateModal } /> 
             }
           </View>
           { this.renderNudgeStuff() }
           <View style={ Styles.container }>
-            <NoteTypeSwitch onPress={ val => this.onNoteContextChange(val) }/>
+            <NoteTypeSwitch onPress={ onNoteContextChange }/>
             {
-              this.state.notesToShow === 'Future'
+              notesToShow === 'Future'
                 ? this.renderFutureNotes()
                 : this.renderPastNotes()
             }
@@ -189,8 +177,8 @@ class ProjectDetail extends Component {
         <AddUpdateContainer
           reloadProject
           project={ project }
-          visible={ this.state.addUpdateVisible }
-          hideFn={ () => this.toggleAddUpdateModal() }
+          visible={ addUpdateVisible }
+          hideFn={ () => toggleAddUpdateModal() }
         />
       </ScrollView>
     );

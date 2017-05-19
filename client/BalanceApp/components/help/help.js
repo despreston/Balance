@@ -59,7 +59,7 @@ export default class Help extends Component {
     const { visible, hideFn } = this.props;
 
     return (
-      <Modal animationType={ 'slide' } visible={ visible } >
+      <Modal animationType='slide' visible={ visible } >
         <ScrollView
           style={ Styles.content }
           ref={(scrollView) => { this.scrollView = scrollView; }}

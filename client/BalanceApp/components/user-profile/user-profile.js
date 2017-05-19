@@ -24,7 +24,7 @@ class UserProfile extends Component {
     userId: PropTypes.string.isRequired,
     friends: PropTypes.array,
     nav: PropTypes.func.isRequired
-  };
+  }
 
   static mapStateToProps (state, ownProps) {
     let userId, nav, friends;

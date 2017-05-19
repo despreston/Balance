@@ -58,7 +58,6 @@ class FriendsActivity extends Component {
       </ScrollView>
     );
   }
-
 }
 
 export default connect(FriendsActivity.mapStateToProps)(FriendsActivity);

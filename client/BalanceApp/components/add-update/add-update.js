@@ -4,6 +4,7 @@ import {
   Text,
   KeyboardAvoidingView,
   View,
+  Image,
   TouchableOpacity
 } from 'react-native';
 
@@ -18,6 +19,7 @@ import NavButton from './nav-button/nav-button';
 import Note from './note/note';
 import MarkComplete from './mark-complete/mark-complete';
 import Trash from './trash/trash';
+import Picture from './picture/picture';
 
 export default class AddUpdate extends Component {
 
@@ -27,7 +29,9 @@ export default class AddUpdate extends Component {
     project: PropTypes.object.isRequired,
     save: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
-    note: PropTypes.object
+    note: PropTypes.object,
+    togglePhotoUploader: PropTypes.func.isRequired,
+    removePhoto: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -76,8 +80,12 @@ export default class AddUpdate extends Component {
         note = {
           _id: this.props.note._id,
           user: this.props.note.user,
-          project: this.props.note.project
+          project: this.props.note.project,
         };
+
+        if (this.props.note.picture) {
+          note.picture = this.props.note.picture;
+        }
 
         note.type = this.state.complete ? 'Past' : 'Future';
       } else if (this.state.complete) {
@@ -135,7 +143,11 @@ export default class AddUpdate extends Component {
   }
 
   render () {
-    const { visible, project } = this.props;
+    const {
+      visible,
+      project,
+      togglePhotoUploader
+    } = this.props;
 
     return (
       <Modal transparent animationType='slide' visible={ visible } >
@@ -164,15 +176,33 @@ export default class AddUpdate extends Component {
                   note={ this.state.note }
                   placeHolder={ this.state.placeholder }
                 />
+                {
+                  this.props.note && this.props.note.picture &&
+                  <Picture
+                    uri={ this.props.note.picture }
+                    remove={ this.props.removePhoto }
+                  />
+                }
                 <View style={[ Styles.flexRow, Styles.outsideContent ]}>
                   <MarkComplete
                     onPress={ () => this.toggleComplete() }
                     complete={ this.state.complete }
                   />
-                  {
-                    this.props.note &&
-                    <Trash remove={ () => this.props.remove() }/>
-                  }
+                  <View style={ Styles.flexRow }>
+                    <TouchableOpacity onPress={ () => togglePhotoUploader() }>
+                      <Image
+                        style={{ height: 23, width: 23 }}
+                        source={ require('../../assets/icons/camera.png')}
+                      />
+                    </TouchableOpacity>
+                    {
+                      this.props.note && (
+                        <View style={ Styles.spacing }>
+                          <Trash remove={ () => this.props.remove() }/>
+                        </View>
+                      )
+                    }
+                  </View>
                 </View>
               </View>
             </KeyboardAvoidingView>

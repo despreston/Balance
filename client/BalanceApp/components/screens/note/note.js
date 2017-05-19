@@ -84,6 +84,10 @@ export default class Note extends Component {
                 { showMarkAsComplete && <MarkAsComplete note={ note }/> }
               </View>
             </View>
+            {
+              note.picture &&
+              <Image source={{ uri: note.picture }} style={ Styles.picture } />
+            }
             <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
             <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
             <ReactionsContainer

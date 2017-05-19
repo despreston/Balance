@@ -3,7 +3,7 @@ const User = require('../../models/User');
 const Project = require('../../models/Project');
 const log = require('logbro');
 const AccessControl = require('../../utils/access-control');
-const Notification = require('../../lib/notification/');
+const Notification = require('../../classes/notification/');
 const NewFriendRequest = Notification.NewFriendRequest;
 
 module.exports = ({ get, post, del, put }) => {
@@ -86,7 +86,6 @@ module.exports = ({ get, post, del, put }) => {
   });
 
   post("users/:userId/friends/:friend", ({ params, user }, res) => {
-
     if (params.userId !== user.sub) {
       return res.send(403);
     }
@@ -97,9 +96,27 @@ module.exports = ({ get, post, del, put }) => {
     }
 
     User.createFriendship(params.userId, params.friend)
+    .then(([ loggedInUser, otherUser ]) => {
+      loggedInUser = loggedInUser.toObject();
+      otherUser = otherUser.toObject();
+
+      // Get project counts for both users
+      return Promise.all([
+        Project.projectCountForUser(user.sub, ['private', 'global', 'friends']),
+        Project.projectCountForUser(params.friend, ['global'])
+      ]).then(([ loggedInUserProjectCount, otherUserProjectCount ]) => {
+        loggedInUser.project_count = loggedInUserProjectCount;
+        otherUser.project_count = otherUserProjectCount;
+        return [loggedInUser, otherUser];
+      })
+      .catch(err => {
+        log.error('Could not get project count for users', err);
+        return res.send(500);
+      });
+
+    })
     .then(updatedUsers => res.send(201, updatedUsers))
     .catch(err => res.send(500, err));
-
   });
 
   del("users/:userId/friends/:friend", ({ params, user }, res) => {

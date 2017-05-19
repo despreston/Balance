@@ -77,13 +77,10 @@ export default {
     return dispatch => {
       return api(`notes/${id}`)
       .then(note => {
-        let comments = [];
-
         if (note.comments) {
-          note.comments.forEach(c => comments.push(c));
+          dispatch(this.receiveComments(note.comments));
         }
 
-        dispatch(this.receiveComments(comments));
         return dispatch(this.receiveNotes(note));
       })
       .catch(err => console.log(err));
@@ -118,6 +115,24 @@ export default {
           dispatch(this.removeNote(note));
           return dispatch(this.receiveNotes(result));
         });
+    };
+  },
+
+  /**
+   * Deletes a picture from a note
+   * @param {string} id The _id of the note
+   * @return {promise}
+   */
+  deletePictureFromNote (id) {
+    return dispatch => {
+      return api(`notes/${id}/picture`, { method: 'DELETE' })
+      .then(note => {
+        if (note.comments) {
+          dispatch(this.receiveComments(note.comments));
+        }
+        return dispatch(this.receiveNotes(note));
+      })
+      .catch(err => console.log(err));
     };
   }
 

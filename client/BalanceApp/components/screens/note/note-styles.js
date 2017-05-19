@@ -18,7 +18,7 @@ export default StyleSheet.create ({
 
   scrollContainer: {
     paddingTop: 5,
-    paddingHorizontal: 20
+    paddingHorizontal: 10
   },
 
   meta: {
@@ -72,6 +72,11 @@ export default StyleSheet.create ({
 
   comments: {
     marginTop: 20
+  },
+
+  picture: {
+    height: 200,
+    marginBottom: 10
   }
 
 });

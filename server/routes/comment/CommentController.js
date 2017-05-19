@@ -1,7 +1,7 @@
 const Comment = require('../../models/Comment');
 const Note = require('../../models/Note');
 const log = require('logbro');
-const Notification = require('../../lib/notification/');
+const Notification = require('../../classes/notification/');
 const { NewComment } = Notification;
 
 module.exports = ({ post, del }) => {

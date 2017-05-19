@@ -74,6 +74,10 @@ export default StyleSheet.create  ({
   subText: {
     ...defaultText,
     fontSize: 12.5
+  },
+
+  spacing: {
+    marginLeft: 25
   }
 
 });
