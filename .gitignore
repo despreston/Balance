@@ -5,3 +5,4 @@ data/
 **/utils/set-config.js
 **/Pods
 config.json
+aws-config.json
