@@ -6,7 +6,7 @@ const Reaction = require('../../models/Reaction');
 const log = require('logbro');
 const Notification = require('../../classes/notification/');
 const s3remove = require('../../utils/s3-remove');
-const config = require('../config.json');
+const config = require('../../config.json');
 
 const { NewReaction, NudgedProjectUpdated } = Notification;
 
