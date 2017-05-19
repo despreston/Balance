@@ -19,7 +19,6 @@ import NavButton from './nav-button/nav-button';
 import Note from './note/note';
 import MarkComplete from './mark-complete/mark-complete';
 import Trash from './trash/trash';
-import PictureUpload from '../picture-upload/picture-upload';
 import Picture from './picture/picture';
 
 export default class AddUpdate extends Component {
@@ -31,9 +30,7 @@ export default class AddUpdate extends Component {
     save: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
     note: PropTypes.object,
-    pictureUploadVisible: PropTypes.bool.isRequired,
     togglePhotoUploader: PropTypes.func.isRequired,
-    onPhotoSelect: PropTypes.func.isRequired,
     removePhoto: PropTypes.func.isRequired
   }
 
@@ -145,9 +142,7 @@ export default class AddUpdate extends Component {
     const {
       visible,
       project,
-      pictureUploadVisible,
-      togglePhotoUploader,
-      onPhotoSelect
+      togglePhotoUploader
     } = this.props;
 
     return (
@@ -208,11 +203,6 @@ export default class AddUpdate extends Component {
               </View>
             </KeyboardAvoidingView>
         </View>
-        <PictureUpload
-          toggleVisible={ togglePhotoUploader }
-          visible={ pictureUploadVisible }
-          onPhotoSelect={ onPhotoSelect }
-        />
       </Modal>
     );
   }

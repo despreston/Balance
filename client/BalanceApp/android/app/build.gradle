@@ -126,6 +126,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-picker')
     compile project(':react-native-image-resizer')
     compile project(':react-native-lock')
     compile fileTree(dir: "libs", include: ["*.jar"])

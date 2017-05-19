@@ -4,6 +4,7 @@ import actions from '../../actions/';
 import { api } from '../../utils/api';
 import s3upload from '../../utils/s3-upload';
 import AddUpdate from './add-update';
+import ImagePicker from 'react-native-image-picker';
 
 class AddUpdateContainer extends Component {
 
@@ -79,14 +80,24 @@ class AddUpdateContainer extends Component {
   }
 
   togglePhotoUploader () {
-    this.setState({ pictureUploadVisible: !this.state.pictureUploadVisible });
+    const options = {
+      title: null,
+      noData: true,
+      mediaType: 'photo'
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (!response.didCancel && !response.error) {
+        let source = { uri: response.uri };
+        this.onPhotoSelect(source);
+      }
+    });
   }
 
-  onPhotoSelect (selectedPictures, picture) {
+  onPhotoSelect (picture) {
     const note = Object.assign({}, this.state.note, { picture: picture.uri });
     this.newPhoto = true;
     this.setState({ note });
-    this.togglePhotoUploader();
   }
 
   removePhoto () {
@@ -98,16 +109,14 @@ class AddUpdateContainer extends Component {
 
   render () {
     const { hideFn, visible, project } = this.props;
-    const pictureUploadVisible = this.state.pictureUploadVisible;
 
     return (
       <AddUpdate
-        { ...{ hideFn, visible, pictureUploadVisible, project } }
+        { ...{ hideFn, visible, project } }
         note={ this.state.note }
         save={ this.save.bind(this) }
         remove={ this.remove.bind(this) }
         togglePhotoUploader={ this.togglePhotoUploader.bind(this) }
-        onPhotoSelect={ this.onPhotoSelect.bind(this) }
         removePhoto={ this.removePhoto.bind(this) }
       />
     );
