@@ -353,11 +353,8 @@ module.exports = ({ get, post, put, del }) => {
       note = note.toObject();
 
       if (note.comments) {
-        note.comments.forEach(c => {
-          c.commenter = c.commenter[0];
-          delete c.user;
-        });
-
+        // no need for user since we have commenter
+        note.comments.forEach(c => delete c.user);
         note.commentCount = note.comments.length;
       }
 
@@ -409,11 +406,8 @@ module.exports = ({ get, post, put, del }) => {
       note = note.toObject();
 
       if (note.comments) {
-        note.comments.forEach(c => {
-          c.commenter = c.commenter[0];
-          delete c.user;
-        });
-
+        // no need for user since we have commenter
+        note.comments.forEach(c => delete c.user);
         note.commentCount = note.comments.length;
       }
 
@@ -421,7 +415,7 @@ module.exports = ({ get, post, put, del }) => {
       if (Array.isArray(note.author)) {
         note.author = note.author[0];
       }
-
+      
       return res.send(200, note);
     })
     .catch(err => {

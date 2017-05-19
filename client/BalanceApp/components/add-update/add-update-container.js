@@ -88,7 +88,7 @@ class AddUpdateContainer extends Component {
 
     ImagePicker.showImagePicker(options, (response) => {
       if (!response.didCancel && !response.error) {
-        let source = { uri: response.uri };
+        let source = { uri: response.origURL };
         this.onPhotoSelect(source);
       }
     });
