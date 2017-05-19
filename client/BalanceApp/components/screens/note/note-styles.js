@@ -18,7 +18,7 @@ export default StyleSheet.create ({
 
   scrollContainer: {
     paddingTop: 5,
-    paddingHorizontal: 20
+    paddingHorizontal: 10
   },
 
   meta: {
