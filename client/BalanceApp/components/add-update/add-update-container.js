@@ -18,7 +18,6 @@ class AddUpdateContainer extends Component {
 
   constructor (props) {
     super(props);
-
     this.state = { pictureUploadVisible: false, note: null };
     this.newPhoto = false;
   }

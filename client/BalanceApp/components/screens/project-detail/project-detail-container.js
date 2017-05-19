@@ -13,7 +13,7 @@ class ProjectDetailContainer extends Component {
     }),
     notes: PropTypes.array,
     userIsOwner: PropTypes.bool
-  };
+  }
 
   static mapStateToProps (state, { navigation }) {
     let userIsOwner;
@@ -48,11 +48,22 @@ class ProjectDetailContainer extends Component {
     }
 
     return { headerRight };
-  };
+  }
 
   constructor (props) {
     super(props);
-    this.state = { refreshing: false };
+
+    this.state = {
+      refreshing: false,
+      addUpdateVisible: false,
+      notesToShow: 'Past'
+    };
+
+    this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
+    this.goToAuthor = this.goToAuthor.bind(this);
+    this.onNoteContextChange = this.onNoteContextChange.bind(this);
+    this.goToNote = this.goToNote.bind(this);
+    this.nav = this.props.navigation.navigate;
   }
 
   componentDidMount () {
@@ -72,11 +83,28 @@ class ProjectDetailContainer extends Component {
     this.load().then(() => this.setState({ refreshing: false }));
   }
 
+  toggleAddUpdateModal () {
+    this.setState({ addUpdateVisible: !this.state.addUpdateVisible });
+  }
+
+  goToAuthor () {
+    this.nav('UserProfile', {
+      userId: this.props.project.owner[0].userId
+    });
+  }
+
+  goToNote (id) {
+    this.nav('Note', { id });
+  }
+
+  onNoteContextChange (type) {
+    this.setState({ notesToShow: type });
+  }
+
   render () {
     const {
       project,
       notes,
-      navigation: { navigate: nav },
       userIsOwner
     } = this.props;
 
@@ -90,10 +118,15 @@ class ProjectDetailContainer extends Component {
       <ProjectDetail
         onRefresh={ () => this.refresh() }
         refreshing={ this.state.refreshing }
-        nav={ nav }
         project={ project }
         notes={ notes }
         userIsOwner={ userIsOwner }
+        notesToShow={ this.state.notesToShow }
+        addUpdateVisible={ this.state.addUpdateVisible }
+        onNoteContextChange={ this.onNoteContextChange }
+        goToAuthor={ this.goToAuthor }
+        goToNote={ this.goToNote }
+        toggleAddUpdateModal={ this.toggleAddUpdateModal }
       />
     );
   }
