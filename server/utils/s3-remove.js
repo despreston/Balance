@@ -15,7 +15,7 @@ module.exports = (Key) => {
       },
     };
 
-    s3.deleteObjects(params, err => {
+    return s3.deleteObjects(params, err => {
       if (err) {
         return reject(`Could not delete ${Key} from s3`);
       }

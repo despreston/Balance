@@ -45,7 +45,7 @@ class AddUpdateContainer extends Component {
         return api(`signed-s3?fileType=${fileType}`).then(data => {
           // set the url to the s3 path
           note.picture = data.url;
-          
+
           return resolve(s3upload(data.fileName, picture, data.url));
         });
       }
@@ -53,14 +53,21 @@ class AddUpdateContainer extends Component {
       return resolve();
     })
     .then(() => {
+      const { dispatch } = this.props;
+
+      // Picture needs to be deleted
+      if (this.props.note.picture && !note.picture) {
+        promises.push(dispatch(actions.deletePictureFromNote(note._id)));
+      }
+
       // note content is not blank
       if (note.content !== '') {
-        promises.push(this.props.dispatch(actions.saveNote(note)));
+        promises.push(dispatch(actions.saveNote(note)));
       }
 
       // force reload of project
       if (this.props.reloadProject) {
-        promises.push(this.props.dispatch(actions.fetchProject(this.props.project._id)));
+        promises.push(dispatch(actions.fetchProject(this.props.project._id)));
       }
 
       return Promise.all(promises);
