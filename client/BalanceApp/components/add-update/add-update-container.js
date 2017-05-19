@@ -45,15 +45,20 @@ class AddUpdateContainer extends Component {
         return api(`signed-s3?fileType=${fileType}`).then(data => {
           // set the url to the s3 path
           note.picture = data.url;
-          resolve(s3upload(data.fileName, picture, data.url));
+          
+          return resolve(s3upload(data.fileName, picture, data.url));
         });
       }
+      
+      return resolve();
     })
     .then(() => {
+      // note content is not blank
       if (note.content !== '') {
         promises.push(this.props.dispatch(actions.saveNote(note)));
       }
 
+      // force reload of project
       if (this.props.reloadProject) {
         promises.push(this.props.dispatch(actions.fetchProject(this.props.project._id)));
       }
