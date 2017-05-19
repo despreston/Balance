@@ -4,6 +4,9 @@
 
 const aws = require('aws-sdk');
 const config = require('../config.json');
+
+aws.config.loadFromPath('./aws-config.json');
+
 const s3 = new aws.S3();
 
 module.exports = (url) => {
