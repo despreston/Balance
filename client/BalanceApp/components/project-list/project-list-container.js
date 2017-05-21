@@ -40,6 +40,7 @@ class ProjectListContainer extends Component {
       refreshing: true
     };
 
+    this.onFilterChange = this.onFilterChange.bind(this);
     this.loadProjects(props.user);
   }
 
@@ -124,7 +125,7 @@ class ProjectListContainer extends Component {
           this.props.showFilter &&
           <ProjectFilter
             filter={ this.state.filter }
-            onChange={ this.onFilterChange.bind(this) }
+            onChange={ this.onFilterChange }
           />
         }
         { this.renderList() }
