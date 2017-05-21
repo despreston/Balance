@@ -9,6 +9,7 @@ import ImagePicker from 'react-native-image-picker';
 class AddUpdateContainer extends Component {
 
   static propTypes = {
+    isNew: PropTypes.bool,
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
@@ -59,11 +60,8 @@ class AddUpdateContainer extends Component {
       if (this.props.note && this.props.note.picture && !note.picture) {
         promises.push(dispatch(actions.deletePictureFromNote(note._id)));
       }
-
-      // note content is not blank
-      if (note.content !== '') {
-        promises.push(dispatch(actions.saveNote(note)));
-      }
+      
+      promises.push(dispatch(actions.saveNote(note)));
 
       // force reload of project
       if (this.props.reloadProject) {
@@ -107,11 +105,11 @@ class AddUpdateContainer extends Component {
   }
 
   render () {
-    const { hideFn, visible, project } = this.props;
+    const { hideFn, visible, project, isNew } = this.props;
 
     return (
       <AddUpdate
-        { ...{ hideFn, visible, project } }
+        { ...{ hideFn, visible, project, isNew } }
         note={ this.state.note }
         save={ this.save.bind(this) }
         remove={ this.remove.bind(this) }

@@ -24,6 +24,7 @@ import Picture from './picture/picture';
 export default class AddUpdate extends Component {
 
   static propTypes = {
+    isNew: PropTypes.bool,
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
@@ -76,7 +77,7 @@ export default class AddUpdate extends Component {
     function saveAndClose () {
       let note;
 
-      if (this.props.note) {
+      if (!this.props.isNew) {
         note = {
           _id: this.props.note._id,
           user: this.props.note.user,
@@ -100,7 +101,9 @@ export default class AddUpdate extends Component {
         .then(this.props.hideFn);
     }
 
-    const disabled = this.state.note === '';
+    // note is empty and there is no picture selected
+    const disabled = this.state.note === '' &&
+      !(this.props.note && this.props.note.picture);
 
     return (
       <NavButton
@@ -164,7 +167,7 @@ export default class AddUpdate extends Component {
                   { this.renderCancelButton() }
                   <View>
                     <Text style={ Styles.text }>
-                      { this.props.note ? 'Edit Note' : 'New Note' }
+                      { this.props.isNew ? 'New Note' : 'Edit Note' }
                     </Text>
                     <Text style={ Styles.subText }>{ project.title }</Text>
                   </View>

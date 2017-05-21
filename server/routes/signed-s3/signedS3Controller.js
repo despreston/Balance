@@ -30,7 +30,7 @@ module.exports = ({ get }) => {
       const response = {
         signedRequest: data,
         fileName,
-        url: `https://s3.amazonaws.com/${config.s3.Bucket}/${fileName}`
+        url: `https://${config.s3.Bucket}.s3.amazonaws.com/${fileName}`
       };
 
       return res.send(200, response);
