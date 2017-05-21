@@ -29,7 +29,11 @@ export const Styles = StyleSheet.create  ({
     color: Colors.gray.tundora,
     fontSize: 14,
     lineHeight: 20,
-    paddingVertical: 15
+    paddingBottom: 10
+  },
+
+  body: {
+    paddingTop: 10
   },
 
   comment: {
@@ -53,8 +57,8 @@ export const Styles = StyleSheet.create  ({
   },
 
   picture: {
-    marginTop: 5,
-    height: 100
+    height: 100,
+    marginBottom: 10
   },
 
   avatar: {

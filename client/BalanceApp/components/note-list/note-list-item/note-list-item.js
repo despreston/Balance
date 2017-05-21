@@ -71,12 +71,15 @@ class NoteListItem extends Component {
     return (
       <View style={ Styles.container }>
         { this.renderHeader() }
-        <View>
+        <View style={ Styles.body }>
           {
             note.picture &&
             <Image source={{ uri: note.picture }} style={ Styles.picture }/>
           }
-          <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
+          {
+            !!note.content &&
+            <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
+          }
         </View>
         <View style={ Styles.flexRow }>
           <View style={ Styles.comment }>
