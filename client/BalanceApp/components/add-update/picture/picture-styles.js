@@ -22,6 +22,7 @@ export default StyleSheet.create({
   },
 
   picture: {
+    backgroundColor: Colors.gray.porcelain,
     width: 160,
     height: 120
   }
