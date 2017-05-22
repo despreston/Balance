@@ -2,6 +2,7 @@ import { apiDispatch } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 
 const RECEIVE_NOTIFICATIONS = 'RECEIVE_NOTIFICATIONS';
+const SHOW_NOTIFICATION_TOASTER = 'SHOW_NOTIFICATION_TOASTER';
 
 export default {
 
@@ -18,6 +19,17 @@ export default {
     return {
       type: RECEIVE_NOTIFICATIONS,
       notifications: arrayToObj(notifications, '_id')
+    };
+  },
+
+  /**
+   * @param {string} id _id of the notification to display in the toaster
+   * @return {object}
+   */
+  showNotificationToaster (id) {
+    return {
+      type: SHOW_NOTIFICATION_TOASTER,
+      id
     };
   },
 

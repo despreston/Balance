@@ -7,6 +7,13 @@ export default {
     return Object.assign({}, state, {
       notifications: { ...state.notifications, ...notifications }
     });
+  },
+
+  /**
+   * set notificationForToaster
+   */
+  SHOW_NOTIFICATION_TOASTER (state, { id }) {
+    return Object.assign({}, state, { notificationForToaster: id });
   }
 
 };

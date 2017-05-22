@@ -8,6 +8,7 @@ const onNotification = store => data => {
     data = JSON.parse(data);
     data = convertDates(data);
     store.dispatch(actions.receiveNotifications(data));
+    store.dispatch(actions.showNotificationToaster(data._id));
   } catch (e) {
     console.log("can't parse the notification: ", data);
   }

@@ -20,7 +20,6 @@ class NotificationListItem extends Component {
 
   constructor (props) {
     super(props);
-
     this.related = props.notification.related;
     this.sender = this.related.find(n => n.kind === 'user').item;
     this.nav = props.nav;
