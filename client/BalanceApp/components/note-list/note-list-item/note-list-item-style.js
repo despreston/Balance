@@ -57,6 +57,7 @@ export const Styles = StyleSheet.create  ({
   },
 
   picture: {
+    backgroundColor: Colors.gray.porcelain,
     height: 100,
     marginBottom: 10
   },
