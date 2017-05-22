@@ -74,7 +74,7 @@ class NoteListItem extends Component {
         <View style={ Styles.body }>
           {
             note.picture &&
-            <Image source={{ uri: note.picture }} style={ Styles.picture }/>
+            <Image source={{ uri: note.picture, cache: 'force-cache' }} style={ Styles.picture }/>
           }
           {
             !!note.content &&
