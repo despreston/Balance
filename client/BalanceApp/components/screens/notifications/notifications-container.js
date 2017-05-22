@@ -27,12 +27,9 @@ class NotificationsContainer extends Component {
 
   constructor (props) {
     super(props);
-
     this.state = { friend_requests: [], refreshing: false };
-
     this.fetchAll = this.fetchAll.bind(this);
     this.refresh = this.refresh.bind(this);
-
     this.fetchAll();
   }
 
@@ -60,9 +57,7 @@ class NotificationsContainer extends Component {
 
   refresh () {
     this.setState({ refreshing: true });
-
-    this.fetchAll()
-    .then(() => this.setState({ refreshing: false }));
+    this.fetchAll().then(() => this.setState({ refreshing: false }));
   }
   
   render () {

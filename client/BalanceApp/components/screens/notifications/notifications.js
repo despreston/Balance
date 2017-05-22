@@ -1,11 +1,8 @@
-// vendors
 import React, { Component, PropTypes } from 'react';
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
-
 import FriendRequests from './friend-requests/friend-requests';
 import Refresh from '../../refresh/refresh';
 import NotificationList from '../../notification-list/notification-list';
-
 import Styles from './notifications-styles';
 
 class Notifications extends Component {
@@ -16,10 +13,6 @@ class Notifications extends Component {
     onRefresh: PropTypes.func.isRequired,
     refreshing: PropTypes.bool.isRequired,
     notifications: PropTypes.array.isRequired
-  }
-
-  constructor (props) {
-    super(props);
   }
   
   render () {

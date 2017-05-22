@@ -13,7 +13,7 @@ class MainScene extends Component {
 
   static propTypes = {
     loggedInUser: PropTypes.string.isRequired
-  };
+  }
 
   static mapStateToProps ({ loggedInUser }) {
     return { loggedInUser };
@@ -30,13 +30,11 @@ class MainScene extends Component {
         />
       )
     };
-  };
+  }
 
   constructor (props) {
     super(props);
-
     this.state = { helpVisible: false };
-
     this.nav = this.props.navigation.navigate;
   }
 
