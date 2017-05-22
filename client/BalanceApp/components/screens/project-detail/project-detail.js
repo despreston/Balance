@@ -175,6 +175,7 @@ class ProjectDetail extends Component {
           </View>
         </View>
         <AddUpdateContainer
+          isNew
           reloadProject
           project={ project }
           visible={ addUpdateVisible }

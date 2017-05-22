@@ -56,7 +56,7 @@ class ProjectDetailContainer extends Component {
     this.state = {
       refreshing: false,
       addUpdateVisible: false,
-      notesToShow: 'Past'
+      notesToShow: 'Future'
     };
 
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);

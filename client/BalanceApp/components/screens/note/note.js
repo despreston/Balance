@@ -86,7 +86,10 @@ export default class Note extends Component {
             </View>
             {
               note.picture &&
-              <Image source={{ uri: note.picture }} style={ Styles.picture } />
+              <Image
+                source={{ uri: note.picture, cache: 'force-cache' }}
+                style={ Styles.picture }
+              />
             }
             <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
             <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>

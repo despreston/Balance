@@ -5,10 +5,12 @@ import { api } from '../../utils/api';
 import s3upload from '../../utils/s3-upload';
 import AddUpdate from './add-update';
 import ImagePicker from 'react-native-image-picker';
+import emptyNote from '../../utils/empty-note';
 
 class AddUpdateContainer extends Component {
 
   static propTypes = {
+    isNew: PropTypes.bool,
     hideFn: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
@@ -18,27 +20,84 @@ class AddUpdateContainer extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { pictureUploadVisible: false, note: null };
+
+    this.state = {
+      pictureUploadVisible: false,
+      content: '',
+      picture: null,
+      complete: false
+    };
+
     this.newPhoto = false;
+    this.save = this.save.bind(this);
+    this.remove = this.remove.bind(this);
+    this.togglePhotoUploader = this.togglePhotoUploader.bind(this);
+    this.removePhoto = this.removePhoto.bind(this);
+    this.onContentChange = this.onContentChange.bind(this);
+    this.toggleComplete = this.toggleComplete.bind(this);
   }
 
   componentWillReceiveProps (nextProps) {
+    if (!nextProps.isNew) {
+      this.setState({
+        content: nextProps.note.content,
+        picture: nextProps.note.picture || null,
+        complete: nextProps.note && nextProps.note.type === 'Past'
+      });
+    } else {
+      this.reset();
+    }
+
     this.newPhoto = false;
-    this.setState({ note: nextProps.note });
+  }
+
+  reset () {
+    this.setState({
+      content: '',
+      picture: null,
+      complete: false,
+      pictureUploadVisible: false
+    });
+  }
+
+  constructNoteObject () {
+    let note;
+
+    if (!this.props.isNew) {
+      note = {
+        _id: this.props.note._id,
+        user: this.props.note.user,
+        project: this.props.note.project,
+      };
+
+      note.type = this.state.complete ? 'Past' : 'Future';
+    } else if (this.state.complete) {
+      note = emptyNote(this.props.project, 'Past');
+    } else {
+      note = emptyNote(this.props.project, 'Future');
+    }
+
+    note.content = this.state.content;
+
+    if (this.state.picture) {
+      note.picture = this.state.picture;
+    }
+
+    return note;
   }
 
   /**
    * Save the notes as long as the content is not blank
-   * @param {Object} note The note to save
    * @return {Promise}
    */
-  save (note) {
+  save () {
+    let note = this.constructNoteObject(note);
     let promises = [];
 
     return new Promise((resolve) => {
       // New photo needs to be uploaded to S3
       if (this.newPhoto) {
-        const { picture } = this.state.note;
+        const { picture } = note;
         const fileType = picture.slice(picture.indexOf('ext=') + 4);
 
         // get the signed url for upload to s3
@@ -59,11 +118,8 @@ class AddUpdateContainer extends Component {
       if (this.props.note && this.props.note.picture && !note.picture) {
         promises.push(dispatch(actions.deletePictureFromNote(note._id)));
       }
-
-      // note content is not blank
-      if (note.content !== '') {
-        promises.push(dispatch(actions.saveNote(note)));
-      }
+      
+      promises.push(dispatch(actions.saveNote(note)));
 
       // force reload of project
       if (this.props.reloadProject) {
@@ -71,7 +127,7 @@ class AddUpdateContainer extends Component {
       }
 
       return Promise.all(promises);
-    });
+    }).then(() => this.props.hideFn());
   }
 
   remove () {
@@ -93,30 +149,37 @@ class AddUpdateContainer extends Component {
     });
   }
 
-  onPhotoSelect (picture) {
-    const note = Object.assign({}, this.state.note, { picture: picture.uri });
+  onPhotoSelect ({ uri: picture }) {
     this.newPhoto = true;
-    this.setState({ note });
+    this.setState({ picture });
   }
 
   removePhoto () {
-    const note = Object.assign({}, this.state.note);
-    delete note.picture;
     this.newPhoto = false;
-    this.setState({ note });
+    this.setState({ picture: null });
+  }
+
+  toggleComplete () {
+    this.setState({ complete: !this.state.complete });
+  }
+
+  onContentChange (text) {
+    this.setState({ content: text });
   }
 
   render () {
-    const { hideFn, visible, project } = this.props;
+    const { hideFn, visible, project, isNew } = this.props;
+    const { content, picture, complete } = this.state;
 
     return (
       <AddUpdate
-        { ...{ hideFn, visible, project } }
-        note={ this.state.note }
-        save={ this.save.bind(this) }
-        remove={ this.remove.bind(this) }
-        togglePhotoUploader={ this.togglePhotoUploader.bind(this) }
-        removePhoto={ this.removePhoto.bind(this) }
+        { ...{ hideFn, visible, project, isNew, content, picture, complete } }
+        save={ this.save }
+        remove={ this.remove }
+        togglePhotoUploader={ this.togglePhotoUploader }
+        removePhoto={ this.removePhoto }
+        onContentChange={ this.onContentChange }
+        toggleComplete={ this.toggleComplete }
       />
     );
   }

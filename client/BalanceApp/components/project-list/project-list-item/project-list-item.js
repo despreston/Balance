@@ -116,7 +116,8 @@ class ProjectListItem extends Component {
           </View>
         </View>
         { this.renderStatusIcon() }
-        <AddUpdateContainer   
+        <AddUpdateContainer
+          isNew
           reloadProject={ true }    
           project={ this.props.project }    
           visible={ this.state.addUpdateVisible }   
