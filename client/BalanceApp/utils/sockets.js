@@ -28,6 +28,11 @@ export default store => next => action => {
       socket.on('notification', onNotification(store));
       break;
 
+    case 'DISCONNECT_FROM_PIPER':
+      socket = io(action.url, { transports: [ 'websocket' ] });
+      socket.emit('leave_room', `user:${action.user}`);
+      break;
+
     default:
       return next(action);
   }

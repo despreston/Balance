@@ -131,7 +131,7 @@ export default {
           // send the user to the server
           return api(`users`, { method: 'POST', body: profile })
             .then(user => {
-              dispatch(sharedActions.connectToPiper(user));
+              dispatch(sharedActions.connectToPiper(user.userId));
               dispatch(notificationActions.fetchNotifications());
               dispatch(this.setLoggedInUser(user));
             });

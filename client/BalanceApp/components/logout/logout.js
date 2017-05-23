@@ -7,6 +7,10 @@ import Styles from './logout-styles';
 
 class Logout extends Component {
 
+  static mapStateToProps (state) {
+    return { loggedInUser: state.loggedInUser };
+  }
+
   static propTypes = {
     beforeLogoutHook: PropTypes.func
   };
@@ -22,6 +26,10 @@ class Logout extends Component {
     
     removeRefreshToken()
     .then(removeAuthToken)
+    .then(() => {
+      const { loggedInUser } = this.props;
+      return this.props.dispatch(actions.disconnectFromPiper(loggedInUser));
+    })
     .then( err => {  
       if (err) {
         throw "Could not log out";
@@ -42,4 +50,4 @@ class Logout extends Component {
   }
 }
 
-export default connect()(Logout);
+export default connect(Logout.mapStateToProps)(Logout);
