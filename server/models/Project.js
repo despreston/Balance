@@ -4,7 +4,7 @@ const Note = require("./Note");
 const User = require('./User');
 const privacyLevel = require('./shared/privacy-level');
 const Notification = require('../classes/notification/');
-const { NewNudge } = Notification;
+const { NewNudge, NudgedProjectUpdated } = Notification;
 
 let Project = new mongoose.Schema({
 
@@ -274,6 +274,34 @@ Project.statics.removeExcludedFields = function (project) {
 
   return copy;
 }
+
+/**
+ * Clears all nudge users from a project
+ * Sends NudgedProjectUpdated notifications to all of those users
+ * @param {string} id The _id of the project
+ * @return {Promise}
+ */
+Project.statics.clearNudges = function (id) {
+  return this
+    .findOne({ _id: id })
+    .select('title nudges user')
+    .then(project => {
+      let { nudges } = project;
+
+      User
+      .findOne({ userId: project.user })
+      .select('_id')
+      .then(projectOwner => {
+        nudges.forEach(user => {
+          new NudgedProjectUpdated(user.userId, projectOwner._id, project._id).save();
+        });
+      });
+
+      // reset nudges
+      project.nudges = [];
+      project.save();
+    });
+};
 
 Project.pre('find', function () {
   this.populate('owner', 'userId username');

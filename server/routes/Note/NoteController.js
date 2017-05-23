@@ -7,7 +7,7 @@ const log = require('logbro');
 const Notification = require('../../classes/notification/');
 const s3remove = require('../../utils/s3-remove');
 
-const { NewReaction, NudgedProjectUpdated } = Notification;
+const { NewReaction } = Notification;
 
 module.exports = ({ get, post, put, del }) => {
 
@@ -290,39 +290,20 @@ module.exports = ({ get, post, put, del }) => {
 
     Note
     .create(body)
-    .then(newNote => {
+    .then(note => {
       return Note
-        .findOne({ _id: newNote._id })
+        .findOne({ _id: note._id })
         .populate('project', 'title privacyLevel')
         .populate('author', 'userId username picture')
         .exec();
     })
-    .then(newNote => {
-      return Project
-        .findOne({ _id: newNote.project._id })
-        .select('title nudges user')
-        .then(project => {
-          let { nudges } = project;
-
-          User
-          .findOne({ userId: project.user })
-          .select('_id')
-          .then(projectOwner => {
-            nudges.forEach(user => {
-              new NudgedProjectUpdated(user.userId, projectOwner._id, project._id).save();
-            });
-          })
-          .catch(log.error);
-
-          // reset nudges
-          project.nudges = [];
-          project.save();
-          newNote.project = { _id: project._id, name: project.title };
-          return newNote;
-        })
-        .catch(log.error);
+    .then(note => Project.clearNudges(note.project._id))
+    .then(note => {
+      // for some reason I decided to rename this
+      //note.project.name = project.title;
+      return note;
     })
-    .then(newNote => res.send(200, newNote))
+    .then(note => res.send(200, note))
     .catch(err => {
       log.error(err);
       return res.send(500);
@@ -343,13 +324,21 @@ module.exports = ({ get, post, put, del }) => {
     })
     .then(note => {
       // trying to edit a note that does not belong to you
-      if (note.user !== user.sub) {
-        return res.send(403);
-      }
-
+      if (note.user !== user.sub) return res.send(403);
+      else return note;
+    })
+    .then(note => {
       // picture was replaced, so get rid of the old one
       if (body.picture && note.picture && body.picture !== note.picture) {
         return s3remove(note.picture).then(() => note).catch(() => res.send(500));
+      }
+
+      return note;
+    })
+    .then(note => {
+      // If note was marked complete, clear nudges on the project
+      if (note.type === 'Future' && body.type && body.type === 'Past') {
+        return Project.clearNudges(note.project._id);
       }
 
       return note;
