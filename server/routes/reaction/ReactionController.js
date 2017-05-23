@@ -1,6 +1,6 @@
 const Reaction = require('../../models/Reaction');
 const log = require('logbro');
-const Notification = require('../classes/notification/');
+const Notification = require('../../classes/notification/');
 const { NewReaction } = Notification;
 
 module.exports = ({ del }) => {

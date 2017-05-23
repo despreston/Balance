@@ -20,7 +20,7 @@ class Toaster extends Component {
   constructor (props) {
     super(props);
     this.startYPos = 150;
-    this.state = { y: new Animated.Value(this.startYPos), visible: false };
+    this.state = { y: new Animated.Value(this.startYPos) };
   }
 
   componentWillReceiveProps (nextProps) {
