@@ -12,12 +12,17 @@ class ProjectListItem extends Component {
 
   static mapStateToProps (state, props) {
     let mostRecentPastNote = null;
+
     let notesForProject = Object.keys(state.notes)
       .map(id => state.notes[id])
-      .filter(note => note.project._id === props.project._id && note.type === 'Past');
+      .filter(note => {
+        return note.project._id === props.project._id && note.type === 'Past';
+      });
 
     if (notesForProject.length > 0) {
-      notesForProject.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      notesForProject.sort((a, b) => {
+        return b.lastUpdated.getTime() - a.lastUpdated.getTime();
+      });
       mostRecentPastNote = notesForProject.pop();
     }
 
@@ -33,15 +38,15 @@ class ProjectListItem extends Component {
   constructor (props) {
     super(props);
     this.state = { addUpdateVisible: false };
-    this.lastUpdated = this.getCreatedAt(props.mostRecentPastNote);
+    this.lastUpdated = this.getLastUpdated(props.mostRecentPastNote);
   }
 
   componentWillReceiveProps (nextProps) {
-    this.lastUpdated = this.getCreatedAt(nextProps.mostRecentPastNote);
+    this.lastUpdated = this.getLastUpdated(nextProps.mostRecentPastNote);
   }
 
-  getCreatedAt (note) {
-    return note ? note.createdAt : null;
+  getLastUpdated (note) {
+    return note ? note.lastUpdated : null;
   }
 
   renderNote () {
