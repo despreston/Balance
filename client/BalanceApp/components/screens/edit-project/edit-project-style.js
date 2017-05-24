@@ -63,7 +63,7 @@ export default StyleSheet.create  ({
   help: {
     fontWeight: 'bold',
     color: Colors.purple,
-    paddingTop: 20
+    paddingTop: 10
   },
 
   centerText: {

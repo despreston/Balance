@@ -1,4 +1,5 @@
 import ImageResizer from 'react-native-image-resizer';
+import { api } from './api';
 
 /**
  * Uploads a jpg to s3
@@ -31,12 +32,22 @@ const upload = (filename, path, signedUri) => {
 /**
  * Resizes the image at path
  * @param {string} path URI of image to resize. should be jpeg
+ * @param {number} width
+ * @param {number} height
  * @return {Promise}
  */
-const resize = (path) => {
-  return ImageResizer.createResizedImage(path, 1080, 1440, 'JPEG', 100);
+const resize = (path, width, height) => {
+  return ImageResizer.createResizedImage(path, width, height, 'JPEG', 100);
 };
 
-export default (filename, path, signedUri) => {
-  return resize(path).then((resizedUri) => upload(filename, resizedUri, signedUri));
-}
+export default (source, width = 1080, height = 1440) => {
+  let url;
+
+  return api(`signed-s3?fileType=JPG`)
+    .then(data => {
+      url = data.url;
+      return resize(source, width, height)
+        .then(resizedUri => upload(data.fileName, resizedUri, data.url));
+    })
+    .then(() => url);
+};

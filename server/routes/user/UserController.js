@@ -3,6 +3,7 @@ const User = require('../../models/User');
 const Project = require('../../models/Project');
 const log = require('logbro');
 const AccessControl = require('../../utils/access-control');
+const s3remove = require('../../utils/s3-remove');
 const Notification = require('../../classes/notification/');
 const NewFriendRequest = Notification.NewFriendRequest;
 
@@ -120,7 +121,6 @@ module.exports = ({ get, post, del, put }) => {
   });
 
   del("users/:userId/friends/:friend", ({ params, user }, res) => {
-
     if (params.userId !== user.sub) {
       return res.send(403);
     }
@@ -152,7 +152,18 @@ module.exports = ({ get, post, del, put }) => {
      * - send the user with 201 status
      */
     User.findOne({ userId: body.userId })
-    .then(newUser => newUser ? Object.assign(newUser, body) : new User(body))
+    .then(newUser => {
+      if (newUser) {
+        // user already has a picture. Don't override it
+        if (newUser.picture) {
+          delete body.picture;
+        }
+
+        return Object.assign(newUser, body);
+      }
+      
+      return new User(body);
+    })
     .then(newUser => {
       newUser.save(err => {
         if (err) {
@@ -163,7 +174,6 @@ module.exports = ({ get, post, del, put }) => {
       return newUser;
     })
     .then(newUser => {
-
       /** 
        * At the moment this includes all privacy levels, but I'd rather it follow
        * the same pattern as the other routes in case something changes in
@@ -198,6 +208,12 @@ module.exports = ({ get, post, del, put }) => {
         return res.send(404);
       }
 
+      if (body.picture && user.picture && body.picture !== user.picture) {
+        return s3remove(user.picture).then(() => user);
+      }
+
+      return user;
+    }).then(user => {
       user = Object.assign(user, body);
       user.save();
 
@@ -205,7 +221,10 @@ module.exports = ({ get, post, del, put }) => {
         .then(project_count => Object.assign(user.toObject(), { project_count }))
         .then(user => res.send(200, user));
     })
-    .catch(err => res.send(500, err));
+    .catch(err => {
+      log.error(err);
+      return res.send(500, err);
+    });
   });
 
 };

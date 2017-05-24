@@ -326,7 +326,6 @@ Project.pre('save', function (next) {
   this.lastUpdated = new Date();
   
   next();
-
 });
 
 Project.pre('remove', function (next) {
@@ -335,9 +334,13 @@ Project.pre('remove', function (next) {
   Note
   .find({ project: this._id })
   .then(notes => notes.forEach(note => note.remove()));
+
+  // remove all notifications for the project
+  Notification
+  .find({ 'related.item': this._id })
+  .then(notifications => notifications.forEach(n => n.remove()));
   
   next();
-
 });
 
 module.exports = mongoose.model("project", Project);

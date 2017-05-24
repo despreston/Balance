@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux';
 import actions from '../../actions/';
-import { api } from '../../utils/api';
 import s3upload from '../../utils/s3-upload';
 import AddUpdate from './add-update';
 import ImagePicker from 'react-native-image-picker';
@@ -97,14 +96,9 @@ class AddUpdateContainer extends Component {
     return new Promise((resolve) => {
       // New photo needs to be uploaded to S3
       if (this.newPhoto) {
-        const { picture } = note;
-        const fileType = picture.slice(picture.indexOf('ext=') + 4);
-
-        // get the signed url for upload to s3
-        return api(`signed-s3?fileType=${fileType}`).then(data => {
-          // set the url to the s3 path
-          note.picture = data.url;
-          return resolve(s3upload(data.fileName, picture, data.url));
+        return s3upload(note.picture).then(url => {
+          note.picture = url;
+          return resolve();
         });
       }
       
