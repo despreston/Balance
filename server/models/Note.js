@@ -1,4 +1,7 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const Comment  = require('./Comment');
+const Notification = require('./Notification');
+const Reaction = require('./Reaction');
 
 let Note = new mongoose.Schema({
 
@@ -66,7 +69,6 @@ Note.pre('findOne', function () {
 });
 
 Note.pre('save', function(next) {
-
   if (!this.createdAt) {
     this.createdAt = new Date();
   } else {
@@ -80,7 +82,25 @@ Note.pre('save', function(next) {
   this.lastUpdated = new Date();
 
   next();
+});
+
+Note.pre('remove', function (next) {
+  // remove all comments for the note
+  Comment
+  .find({ note: this._id })
+  .then(comments => comments.forEach(comment => comment.remove()));
+
+  // remove all notifications related to the note
+  Notification
+  .find({ 'related.item': this._id })
+  .then(notifications => notifications.forEach(n => n.remove()));
   
+  // remove all reactions for the note
+  Reaction
+  .find({ 'note': this._id })
+  .then(reactions => reactions.forEach(reaction => reaction.remove()));
+
+  next();
 });
 
 module.exports = mongoose.model("note", Note);

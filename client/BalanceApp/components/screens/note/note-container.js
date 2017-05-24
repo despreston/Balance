@@ -44,11 +44,8 @@ class NoteContainer extends Component {
   
   constructor (props) {
     super(props);
-
     this.state = { editModalVisible: false };
-
     this.toggleEditModal = this.toggleEditModal.bind(this);
-
     props.dispatch(actions.fetchNote(props.navigation.state.params.id));
   }
 

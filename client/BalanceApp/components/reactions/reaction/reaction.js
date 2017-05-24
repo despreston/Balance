@@ -18,15 +18,23 @@ class Reaction extends Component {
     loggedInUser: PropTypes.string.isRequired
   }
 
+  constructor (props) {
+    super(props);
+    this.state = { disabled: false };
+  }
+
   onTap () {
+    this.setState({ disabled: true });
     const { dispatch } = this.props;
     let userReactionPair = this.isSelected();
 
-    if (userReactionPair) {
-      dispatch(actions.deleteReaction(userReactionPair[1], this.props.note));
-    } else {
-      dispatch(actions.addReaction(this.props.reaction, this.props.note));
-    }
+    new Promise(() => {
+      if (userReactionPair) {
+        return dispatch(actions.deleteReaction(userReactionPair[1], this.props.note));
+      }
+
+      return dispatch(actions.addReaction(this.props.reaction, this.props.note));
+    }).then(() => this.setState({ disabled: false }));
   }
 
   isSelected () {
@@ -50,6 +58,7 @@ class Reaction extends Component {
   render () {
     return (
       <TouchableOpacity
+        disabled={ this.state.disabled }
         style={ this.containerStyles() }
         onPress={ () => this.onTap() }
       >

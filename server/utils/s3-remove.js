@@ -11,8 +11,7 @@ const s3 = new aws.S3();
 
 module.exports = (url) => {
   return new Promise((resolve, reject) => {
-    const lengthToSkip = config.s3.Bucket.length + 1;
-    const Key = url.slice(url.indexOf(config.s3.Bucket + '/') + lengthToSkip);
+    const Key = url.slice(url.indexOf('.com/') + 5);
 
     const params = {
       Bucket: config.s3.Bucket,

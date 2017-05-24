@@ -26,7 +26,7 @@ class Profile extends Component {
     const headerRight = (
       <Icon
         imagePath={ require('../../../assets/icons/settings.png') }
-        onPress={ () => nav('UserSettings') }
+        onPress={ () => nav('UserSettingsContainer') }
        />
     );
 

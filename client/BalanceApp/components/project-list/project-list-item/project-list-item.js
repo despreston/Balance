@@ -1,43 +1,56 @@
-// Vendors
 import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
-
-// Components
+import { connect } from 'react-redux';
 import StatusIcon from '../../status-icon/StatusIcon';
 import Nudges from '../../nudges/nudges';
 import NudgeBtn from '../../nudges/nudge-button/nudge-button';
 import UpdateIcon from './update-icon/update-icon';
 import AddUpdateContainer from '../../add-update/add-update-container';
-
-// styles
 import { Style } from './project-list-item-style';
 
 class ProjectListItem extends Component {
 
+  static mapStateToProps (state, props) {
+    let mostRecentPastNote = null;
+
+    let notesForProject = Object.keys(state.notes)
+      .map(id => state.notes[id])
+      .filter(note => {
+        return note.project._id === props.project._id && note.type === 'Past';
+      });
+
+    if (notesForProject.length > 0) {
+      notesForProject.sort((a, b) => {
+        return b.lastUpdated.getTime() - a.lastUpdated.getTime();
+      });
+      mostRecentPastNote = notesForProject.pop();
+    }
+
+    return { mostRecentPastNote };
+  }
+
   static propTypes = {
     project: PropTypes.object.isRequired,
-    hideNudgeBtn: PropTypes.bool
+    hideNudgeBtn: PropTypes.bool,
+    mostRecentPastNote: PropTypes.object
   }
 
   constructor (props) {
     super(props);
-
     this.state = { addUpdateVisible: false };
-    this.lastUpdated = this.getCreatedAt(props.project);
+    this.lastUpdated = this.getLastUpdated(props.mostRecentPastNote);
   }
 
   componentWillReceiveProps (nextProps) {
-    this.lastUpdated = this.getCreatedAt(nextProps.project);
+    this.lastUpdated = this.getLastUpdated(nextProps.mostRecentPastNote);
   }
 
-  getCreatedAt (project) {
-    return project.Past ? project.Past.createdAt : null;
+  getLastUpdated (note) {
+    return note ? note.lastUpdated : null;
   }
 
   renderNote () {
-    const { Past, status } = this.props.project;
-
-    if (status === 'finished') {
+    if (this.props.project.status === 'finished') {
       return (
         <Text style={ Style.message }>
           This project is finished!
@@ -45,12 +58,12 @@ class ProjectListItem extends Component {
       );
     }
 
-    if (Past) {
+    if (this.props.mostRecentPastNote) {
       return (
         <View>
           <Text style={ Style.text }>LATEST COMPLETED</Text>
           <Text style={ Style.note } numberOfLines={ 2 }>
-            { Past.content }
+            { this.props.mostRecentPastNote.content }
           </Text>
         </View>
       )
@@ -146,4 +159,4 @@ const EmptyState = ({ addNote }) => {
   );
 };
 
-export default ProjectListItem;
+export default connect(ProjectListItem.mapStateToProps)(ProjectListItem);

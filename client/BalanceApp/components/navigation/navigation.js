@@ -11,7 +11,7 @@ import {
   ActivityContainer,
   NotificationsContainer,
   Profile,
-  UserSettings,
+  UserSettingsContainer,
   UserProfile,
   UserSearch,
   NoteContainer,
@@ -100,7 +100,7 @@ const NotificationsStack = StackNavigator({
 const ProfileStack = StackNavigator({
   ...defaultScreens,
   Profile: { screen: Profile },
-  UserSettings: { screen: UserSettings },
+  UserSettingsContainer: { screen: UserSettingsContainer },
   UserSearch: { screen: UserSearch }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
