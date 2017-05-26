@@ -8,6 +8,7 @@ const onNotification = store => data => {
     data = JSON.parse(data);
     data = convertDates(data);
     store.dispatch(actions.receiveNotifications(data));
+    store.dispatch(actions.showNotificationToaster(data._id));
   } catch (e) {
     console.log("can't parse the notification: ", data);
   }
@@ -25,6 +26,11 @@ export default store => next => action => {
       socket = io(action.url, { transports: [ 'websocket' ] });
       socket.on('connect', onOpen.bind(this, socket, action.user));
       socket.on('notification', onNotification(store));
+      break;
+
+    case 'DISCONNECT_FROM_PIPER':
+      socket = io(action.url, { transports: [ 'websocket' ] });
+      socket.emit('leave_room', `user:${action.user}`);
       break;
 
     default:

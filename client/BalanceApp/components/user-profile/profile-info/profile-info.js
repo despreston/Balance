@@ -45,7 +45,7 @@ class ProfileInfo extends Component  {
         </View>
         <Bio bio={ user.bio } />
         <View style={ Styles.friendButton }>
-          <FriendButton userId={ user.userId } hideIfLoggedInUser={ true } />
+          <FriendButton userId={ user.userId } hideIfLoggedInUser />
         </View>
       </View>
     );

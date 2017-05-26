@@ -38,6 +38,12 @@ export default class AddUpdate extends Component {
     this.state = { placeholder: this.futureNotePlaceholder };
   }
 
+  componentWillReceiveProps (nextProps) {
+    this.setState({
+      placeholder: nextProps.complete ? this.pastNotePlaceholder : this.futureNotePlaceholder
+    });
+  }
+
   renderCancelButton () {
     return (
       <NavButton

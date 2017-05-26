@@ -1,11 +1,9 @@
-// vendors
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-
 import { api } from '../../../utils/api';
 import actions from '../../../actions/';
-
 import Notifications from './notifications';
+import NavBtn from '../../navigation/nav-btn';
 
 class NotificationsContainer extends Component {
 
@@ -21,8 +19,17 @@ class NotificationsContainer extends Component {
     notifications: PropTypes.array.isRequired
   }
 
-  static navigationOptions = {
-    title: 'Notifications'
+  static navigationOptions = ({ navigation }) => {
+    const { state } = navigation;
+
+    let headerRight = (
+      <NavBtn
+        title='Clear'
+        onPress={ () => state.params.clear() }
+      />
+    );
+
+    return { headerRight, title: 'Notifications' };
   }
 
   constructor (props) {
@@ -42,6 +49,12 @@ class NotificationsContainer extends Component {
         this.setState({ friend_requests });
       });
     }
+  }
+
+  componentWillMount () {
+    this.props.navigation.setParams({
+      clear: this.props.dispatch.bind(this,actions.clearNotifications())
+    });
   }
 
   fetchAll () {

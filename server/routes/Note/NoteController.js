@@ -322,13 +322,21 @@ module.exports = ({ get, post, put, del }) => {
     })
     .then(note => {
       // trying to edit a note that does not belong to you
-      if (note.user !== user.sub) {
-        return res.send(403);
-      }
-
+      if (note.user !== user.sub) return res.send(403);
+      else return note;
+    })
+    .then(note => {
       // picture was replaced, so get rid of the old one
       if (body.picture && note.picture && body.picture !== note.picture) {
         return s3remove(note.picture).then(() => note).catch(() => res.send(500));
+      }
+
+      return note;
+    })
+    .then(note => {
+      // If note was marked complete, clear nudges on the project
+      if (note.type === 'Future' && body.type && body.type === 'Past') {
+        return Project.clearNudges(note.project._id);
       }
 
       return note;

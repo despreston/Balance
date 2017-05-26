@@ -4,7 +4,7 @@ import Colors from '../colors';
 export default StyleSheet.create({
 
   text: {
-    marginTop: 40,
+    marginTop: 20,
     color: Colors.blue,
     fontSize: 16,
     fontWeight: 'bold',

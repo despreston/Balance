@@ -1,5 +1,7 @@
 const Reaction = require('../../models/Reaction');
 const log = require('logbro');
+const Notification = require('../../classes/notification/');
+const { NewReaction } = Notification;
 
 module.exports = ({ del }) => {
 
@@ -11,7 +13,9 @@ module.exports = ({ del }) => {
         return res.send(403);
       }
 
-      reaction.remove();
+      return reaction.remove().then(() => {
+        return NewReaction.remove(reaction.userId, reaction.note, user.sub);
+      });
     })
     .then(() => res.send(200, []))
     .catch(err => {

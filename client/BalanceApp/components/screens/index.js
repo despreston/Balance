@@ -8,7 +8,7 @@ import EditProjectContainer from './edit-project/edit-project-container';
 import ActivityContainer from './activity/activity-container';
 import Profile from './profile/profile';
 import NotificationsContainer from './notifications/notifications-container';
-import UserSettings from './user-settings/user-settings';
+import UserSettingsContainer from './user-settings/user-settings-container';
 import UserProfile from '../user-profile/user-profile';
 import UserSearch from './user-search/user-search';
 import NoteContainer from './note/note-container';
@@ -22,7 +22,7 @@ export {
   ActivityContainer,
   NotificationsContainer,
   Profile,
-  UserSettings,
+  UserSettingsContainer,
   UserProfile,
   UserSearch,
   NoteContainer,
