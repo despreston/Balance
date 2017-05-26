@@ -60,7 +60,6 @@ class EditProjectContainer extends Component {
 
   // Handles any form validation before saving
   saveProject () {
-
     // Empty project title
     if (!this.state.project.title || this.state.project.title === '') {
       return;
