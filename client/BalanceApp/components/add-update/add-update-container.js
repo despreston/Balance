@@ -121,7 +121,8 @@ class AddUpdateContainer extends Component {
       }
 
       return Promise.all(promises);
-    }).then(() => this.props.hideFn());
+    })
+    .then(() => this.props.hideFn());
   }
 
   remove () {

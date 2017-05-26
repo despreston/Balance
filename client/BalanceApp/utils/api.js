@@ -26,7 +26,7 @@ export function api (url, properties = {}, externalUrl = false) {
       if (!externalUrl) {
         url = CONFIG.apiUrl + url;
       }
-
+      
       return fetch(url, properties)
         .then(response => response.json())
         .then(json => convertDates(json))

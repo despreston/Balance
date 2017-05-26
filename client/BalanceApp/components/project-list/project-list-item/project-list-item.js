@@ -21,7 +21,7 @@ class ProjectListItem extends Component {
 
     if (notesForProject.length > 0) {
       notesForProject.sort((a, b) => {
-        return b.lastUpdated.getTime() - a.lastUpdated.getTime();
+        return a.lastUpdated.getTime() - b.lastUpdated.getTime();
       });
       mostRecentPastNote = notesForProject.pop();
     }

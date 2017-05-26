@@ -4,6 +4,31 @@ const AccessControl = require('../../utils/access-control');
 const log = require('logbro');
 
 module.exports = ({ get, post, del, put }) => {
+  
+  get('projects/:_id', ({ params, user }, res) => {
+    Project
+    .findOne(params)
+    .populate(Project.latestPastNote)
+    .populate(Project.latestFutureNote)
+    .populate('nudgeUsers', 'userId picture')
+    .then(project => project.toObject({ virtuals: true }))
+    .then(project => Project.futureAndPastNotes(project))
+    .then(project => Project.removeExcludedFields(project))
+    .then(project => {
+      const owner = project.owner[0].userId;
+
+      return AccessControl.single(owner, user.sub, project.privacyLevel)
+        .then(() => res.send(200, project))
+        .catch(err => {
+          log.error(err);
+          return res.send(403, err);
+        });
+    })
+    .catch(err => {
+      log.error(err);
+      return res.send(500, err);
+    })
+  });
 
   get('projects', ({ params, user }, res) => {
     if (!params.user) {
@@ -31,31 +56,6 @@ module.exports = ({ get, post, del, put }) => {
         });
 
       }).catch(err => res.send(403, 'Failed: ' + err));
-  });
-
-  get('projects/:_id', ({ params, user }, res) => {
-    Project
-    .findOne(params)
-    .populate(Project.latestPastNote)
-    .populate(Project.latestFutureNote)
-    .populate('nudgeUsers', 'userId picture')
-    .then(project => project.toObject({ virtuals: true }))
-    .then(project => Project.futureAndPastNotes(project))
-    .then(project => Project.removeExcludedFields(project))
-    .then(project => {
-      const owner = project.owner[0]._id.toString();
-
-      return AccessControl.single(owner, user.sub, project.privacyLevel)
-        .then(() => res.send(200, project))
-        .catch(err => {
-          log.error(err);
-          return res.send(403, err);
-        });
-    })
-    .catch(err => {
-      log.error(err);
-      return res.send(500, err);
-    })
   });
 
   post('projects/:_id/nudges', ({ params, user }, res) => {

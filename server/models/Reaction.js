@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Note = require('./Note');
+const Notification = require('./Notification');
 
 let Reaction = new mongoose.Schema ({
 
@@ -41,6 +42,9 @@ Reaction.post('remove', function(reaction, next) {
     { _id: reaction.note },
     { $pull: { reactions: reaction._id } }
   ).exec();
+
+  // Remove all related notifications for this Reaction
+  Notification.remove({ 'related.item': this._id });
 
   next();
 });
