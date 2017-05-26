@@ -40,7 +40,7 @@ const resize = (path, width, height) => {
   return ImageResizer.createResizedImage(path, width, height, 'JPEG', 100);
 };
 
-export default (source, width = 1080, height = 1440) => {
+export default (source, width = 1024, height = 512) => {
   let url;
 
   return api(`signed-s3?fileType=JPG`)
