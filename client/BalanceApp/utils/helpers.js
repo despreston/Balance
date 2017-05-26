@@ -12,8 +12,9 @@ export function arrayToObj (array, key) {
   if (array.length === 0) {
     return {};
   }
-  
+
   return Object.assign(...array.map(el => {
+    if (!el[key]) throw 'Error in arrayToObj';
     return { [el[key]] : el }; 
   }));
 }
