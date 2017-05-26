@@ -92,12 +92,16 @@ class UserSettingsContainer extends Component {
       title: null,
       noData: true,
       mediaType: 'photo',
-      allowsEditing: true
+      allowsEditing: true,
+      cameraType: 'front',
+      storageOptions: {
+        waitUntilSaved: true
+      }
     };
 
     ImagePicker.showImagePicker(options, (response) => {
       if (!response.didCancel && !response.error) {
-        let source = { uri: response.origURL };
+        let source = { uri: response.uri };
         this.onPhotoSelect(source);
       }
     });
