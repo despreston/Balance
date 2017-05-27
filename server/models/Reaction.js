@@ -43,8 +43,10 @@ Reaction.post('remove', function(reaction, next) {
     { $pull: { reactions: reaction._id } }
   ).exec();
 
-  // Remove all related notifications for this Reaction
-  Notification.remove({ 'related.item': this._id });
+  // remove all notifications for the reaction
+  Notification
+  .find({ 'related.item': this._id })
+  .then(notifications => notifications.forEach(n => n.remove()));
 
   next();
 });
