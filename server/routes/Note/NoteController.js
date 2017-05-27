@@ -297,10 +297,7 @@ module.exports = ({ get, post, put, del }) => {
         .populate('author', 'userId username picture')
         .exec();
     })
-    .then(note => {
-      Project.clearNudges(note.project._id);
-      return note;
-    })
+    .then(note => Project.clearNudges(note.project._id).then(() => note))
     .then(note => res.send(200, note))
     .catch(err => {
       log.error(err);
@@ -336,7 +333,7 @@ module.exports = ({ get, post, put, del }) => {
     .then(note => {
       // If note was marked complete, clear nudges on the project
       if (note.type === 'Future' && body.type && body.type === 'Past') {
-        return Project.clearNudges(note.project._id);
+        return Project.clearNudges(note.project._id).then(() => note);
       }
 
       return note;

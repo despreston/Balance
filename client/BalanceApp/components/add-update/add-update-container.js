@@ -133,12 +133,15 @@ class AddUpdateContainer extends Component {
     const options = {
       title: null,
       noData: true,
-      mediaType: 'photo'
+      mediaType: 'photo',
+      storageOptions: {
+        waitUntilSaved: true
+      }
     };
 
     ImagePicker.showImagePicker(options, (response) => {
       if (!response.didCancel && !response.error) {
-        let source = { uri: response.origURL };
+        let source = { uri: response.uri };
         this.onPhotoSelect(source);
       }
     });

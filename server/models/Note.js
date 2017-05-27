@@ -85,15 +85,15 @@ Note.pre('save', function(next) {
 });
 
 Note.pre('remove', function (next) {
-  // remove all comments for the note
-  Comment
-  .find({ note: this._id })
-  .then(comments => comments.forEach(comment => comment.remove()));
-
   // remove all notifications related to the note
   Notification
   .find({ 'related.item': this._id })
   .then(notifications => notifications.forEach(n => n.remove()));
+
+  // remove all comments for the note
+  Comment
+  .find({ 'note': this._id })
+  .then(comments => comments.forEach(comment => comment.remove()));
   
   // remove all reactions for the note
   Reaction

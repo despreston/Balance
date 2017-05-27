@@ -1,4 +1,3 @@
-// vendors
 import React, { Component, PropTypes } from 'react';
 import {
   View,
@@ -7,18 +6,14 @@ import {
   Image,
   KeyboardAvoidingView
 } from 'react-native';
-
-// utils
 import { formatDate } from '../../../utils/helpers';
-
-// styles
 import Styles from './note-styles';
-
-// components
+import Colors from '../../colors';
 import CommentInput from './comment-input/comment-input';
 import CommentList from '../../comment-list/comment-list';
 import ReactionsContainer from '../../reactions/reactions-container';
 import MarkAsComplete from './mark-as-complete/mark-as-complete';
+import Refresh from '../../refresh/refresh';
 
 export default class Note extends Component {
 
@@ -28,7 +23,9 @@ export default class Note extends Component {
     goToProject: PropTypes.func.isRequired,
     goToUser: PropTypes.func.isRequired,
     sendComment: PropTypes.func.isRequired,
-    showMarkAsComplete: PropTypes.bool
+    showMarkAsComplete: PropTypes.bool,
+    refreshing: PropTypes.bool.isRequired,
+    refresh: PropTypes.func.isRequired
   }
   
   constructor (props) {
@@ -50,8 +47,15 @@ export default class Note extends Component {
       goToUser,
       goToProject,
       sendComment,
-      showMarkAsComplete
+      showMarkAsComplete,
+      refreshing
     } = this.props;
+
+    const refreshProps = {
+      refreshing,
+      onRefresh: this.props.refresh,
+      tintColor: Colors.purple
+    };
 
     return (
       <KeyboardAvoidingView
@@ -59,7 +63,10 @@ export default class Note extends Component {
         behavior='padding'
         style={ Styles.container }
       >
-        <ScrollView style={ Styles.scrollContainer }>
+        <ScrollView
+          style={ Styles.scrollContainer }
+          refreshControl={ <Refresh { ...refreshProps }/> }
+        >
           <View>
             <View style={ Styles.meta }>
               <Image

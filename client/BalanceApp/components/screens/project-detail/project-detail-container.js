@@ -39,7 +39,7 @@ class ProjectDetailContainer extends Component {
     if (state.params.showEdit) {
       headerRight = (
         <Icon
-          imagePath={ require('../../../assets/icons/edit-white.png') }
+          imagePath={ require('../../../assets/icons/settings.png') }
           onPress={ () => {
             navigate('EditProject', { project: state.params.project })
           }}

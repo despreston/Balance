@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-
-// actions
 import actions from '../../../actions/';
-
-// components
 import Icon from '../../navigation/icon';
 import Note from './note';
 import AddUpdateContainer from '../../add-update/add-update-container';
@@ -22,7 +18,8 @@ class NoteContainer extends Component {
     return {
       note: state.notes[noteId],
       comments,
-      loggedInUser: state.loggedInUser
+      loggedInUser: state.loggedInUser,
+      refreshing: false
     };
   }
 
@@ -82,6 +79,12 @@ class NoteContainer extends Component {
     this.setState({ editModalVisible: !this.state.editModalVisible });
   }
 
+  refresh () {
+    this.setState({ refreshing: true });
+    this.props.dispatch(actions.fetchNote(this.props.note._id))
+      .then(() => this.setState({ refreshing: false }));
+  }
+
   render () {
     const author = this.props.note.author.userId;
     const showMarkAsComplete = author === this.props.loggedInUser && this.props.note.type === 'Future';
@@ -94,6 +97,8 @@ class NoteContainer extends Component {
           goToProject={ () => this.goToProject() }
           goToUser={ user => this.goToUser(user) }
           sendComment={ content => this.sendComment(content) }
+          refreshing={ this.props.refreshing }
+          refresh={ () => this.refresh() }
         />
         <AddUpdateContainer
           note={ this.props.note }
@@ -107,6 +112,4 @@ class NoteContainer extends Component {
 
 }
 
-export default connect(
-  NoteContainer.mapStateToProps,
-)(NoteContainer);
+export default connect(NoteContainer.mapStateToProps)(NoteContainer);
