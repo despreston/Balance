@@ -42,12 +42,7 @@ let User = new mongoose.Schema({
 
   createdAt: Date,
 
-  bio: String,
-
-  devices: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'device'
-  }]
+  bio: String
 
 });
 
