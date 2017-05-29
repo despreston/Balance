@@ -25,7 +25,9 @@ const initialState = {
   notifications: {},
 
   // Set this to a notification _id to show that notification in the toaster
-  notificationForToaster: null
+  notificationForToaster: null,
+
+  devices: {}
   
 };
 
