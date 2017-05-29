@@ -6,7 +6,8 @@ let Reaction = new mongoose.Schema ({
 
   userId: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
 
   reaction: {
@@ -16,7 +17,8 @@ let Reaction = new mongoose.Schema ({
 
   note: {
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'note'
+    ref: 'note',
+    index: true
   },
 
   createdAt: Date
