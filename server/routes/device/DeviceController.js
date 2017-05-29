@@ -2,7 +2,17 @@ const Device = require('../../models/Device');
 const User = require('../../models/User');
 const log = require('logbro');
 
-module.exports = ({ post, put }) => {
+module.exports = ({ post, put, get }) => {
+
+  get('devices', ({ params, user }, res) => {
+    Device
+    .find({ userId: user.sub })
+    .then(devices => res.send(200, devices))
+    .catch(err => {
+      log.error(err);
+      return res.send(500);
+    });
+  });
 
   put('devices/:_id', ({ params, user }, res) => {
     Device
