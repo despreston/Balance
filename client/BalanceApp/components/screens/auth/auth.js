@@ -74,8 +74,10 @@ class Auth extends Component {
     });
   }
 
-  shouldComponentUpdate (nextProps) {
-    return this.props.user !== nextProps.user;
+  shouldComponentUpdate (nextProps, nextState) {
+    const userUpdated = this.props.user !== nextProps.user;
+    const showLoginChanged = this.state.showLogin !== nextState.showLogin;
+    return userUpdated || showLoginChanged;
   }
 
   componentDidUpdate () {

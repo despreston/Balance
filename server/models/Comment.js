@@ -37,11 +37,13 @@ Comment.virtual('commenter', {
 Comment.post('remove', function(comment, next) {
 
   // Remove the comment from the Note
-  Note
-  .update(
-    { _id: comment.note },
-    { $pull: { comments: comment._id } }
-  ).exec();
+  if (Note.update) {
+    Note
+    .update(
+      { _id: comment.note },
+      { $pull: { comments: comment._id } }
+    ).exec();
+  }
 
   next();
 });
