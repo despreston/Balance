@@ -39,11 +39,13 @@ Reaction.post('remove', function(reaction, next) {
 
   // Remove the reaction from the Note. Using 'update' so the pre 'save' hooks
   // on the Note model are not triggered
-  Note
-  .update(
-    { _id: reaction.note },
-    { $pull: { reactions: reaction._id } }
-  ).exec();
+  if (Note.update) {
+    Note
+    .update(
+      { _id: reaction.note },
+      { $pull: { reactions: reaction._id } }
+    ).exec();
+  }
 
   // remove all notifications for the reaction
   Notification

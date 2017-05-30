@@ -10,7 +10,6 @@ class NudgedProjectUpdated extends Notification {
   }
 
   constructor (user, owner, project) {
-    
     const related = [
       {
         kind: 'user',
@@ -23,6 +22,13 @@ class NudgedProjectUpdated extends Notification {
     ];
 
     super(user, 'nudged_project_updated', related);
+  }
+
+  getPushNotificationText (notification) {
+    const projectOwner = notification.related.find(r => r.kind === 'user').item;
+    const project = notification.related.find(r => r.kind === 'project').item;
+
+    return `${projectOwner.username} listened to your nudge! ${project.title} was recently updated.`;
   }
 
 }

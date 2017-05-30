@@ -2,10 +2,10 @@ const Notification = require('./base');
 
 class NewReaction extends Notification {
 
-  static remove (user, note, sender) {
+  static remove (user, note) {
     super.remove({
       userId: user,
-      $and: [{ 'related.item': note }, { 'related.item': sender }]
+      'related.item': note
     });
   }
 
@@ -27,6 +27,13 @@ class NewReaction extends Notification {
     ];
 
     super(user, 'new_reaction', related);
+  }
+
+  getPushNotificationText (notification) {
+    const sender = notification.related.find(item => item.kind === 'user').item;
+    const reaction = notification.related.find(item => item.kind === 'reaction').item;
+
+    return `${sender.username} reacted to your note. ${reaction.reaction}`;
   }
 
 }

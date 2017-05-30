@@ -10,7 +10,6 @@ class NewNudge extends Notification {
   }
 
   constructor (user, nudger, project) {
-    
     const related = [
       {
         kind: 'user',
@@ -23,6 +22,13 @@ class NewNudge extends Notification {
     ];
 
     super(user, 'new_nudge', related);
+  }
+
+  getPushNotificationText (notification) {
+    const sender = notification.related.find(item => item.kind === 'user').item;
+    const project = notification.related.find(item => item.kind === 'project').item;
+
+    return `${sender.username} wants you to work on ${project.title}.`;
   }
 
 }

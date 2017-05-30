@@ -209,15 +209,9 @@ Project.methods.addNudge = function (userId) {
       }
 
       // Get the updated list of nudgeUsers
-      this.populate('nudgeUsers', 'userId picture', err => {
-        if (err) {
-          reject('Could not add nudge');
-        }
-
+      this.populate('nudgeUsers', 'userId picture', () => {
         const nudger = this.nudgeUsers.find(user => user.userId === userId);
-
         new NewNudge(this.user, nudger, this._id).save();
-
         resolve(this);
       });
     });

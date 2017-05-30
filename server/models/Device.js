@@ -10,7 +10,11 @@ let Device = new mongoose.Schema ({
   deviceToken: {
     type: String,
     required: true
-  }
+  },
+
+  createdAt: Date,
+
+  lastUpdated: Date
 
 });
 
@@ -21,6 +25,8 @@ Device.pre('save', function(next) {
   } else {
     delete this.createdAt;
   }
+
+  this.lastUpdated = new Date();
 
   next();
 });

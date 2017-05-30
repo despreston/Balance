@@ -1,5 +1,4 @@
 const Device = require('../../models/Device');
-const User = require('../../models/User');
 const log = require('logbro');
 
 module.exports = ({ post, put, get }) => {
@@ -32,21 +31,17 @@ module.exports = ({ post, put, get }) => {
     });
   });
 
-  post('devices', ({ params, user }, res) => {
-    params.userId = user.sub;
+  post('devices', ({ body, user }, res) => {
+    try {
+      body = JSON.parse(body);
+      body.userId = user.sub;
+    } catch (e) {
+      log.error(e);
+      return res.send(403);
+    }
 
     Device
-    .create(params)
-    .then(device => {
-      // Add the device to the User's doc
-      return User
-      .findOne({ userId: user.sub })
-      .then(user => {
-        user.devices.push(device);
-        user.save();
-        return device;
-      });
-    })
+    .create(body)
     .then(device => res.send(201, device))
     .catch(err => {
       log.error(err);

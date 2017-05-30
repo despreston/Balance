@@ -22,6 +22,26 @@ export default {
   },
 
   /**
+   * Save device
+   * POST if _new field exists, otherwise PUT
+   * @param {Object} device
+   * @return {Promise}
+   */
+  saveDevice (device) {
+    let method, url = 'devices';
+
+    if (device._new) {
+      method = 'POST';
+      delete device._new;
+    } else {
+      method = 'PUT';
+      url += `/${device._id}`;
+    }
+
+    return apiDispatch(url, this.receiveDevices, { method, body: device });
+  },
+
+  /**
    * fetch devices
    * @return {Promise}
    */

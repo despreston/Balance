@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { TouchableOpacity, Text, View, Image } from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  View,
+  Image,
+  PushNotificationIOS
+} from 'react-native';
 import { NavigationActions } from 'react-navigation';
-
-// actions
 import actions from '../../../actions/';
-
 import Styles from './auth-styles';
-
-// utils
 import {
   isLoggedIn,
   parseToken,
@@ -18,14 +19,20 @@ import {
 class Auth extends Component {
 
   static mapStateToProps (state) {
-    return { user: state.users[state.loggedInUser] };
+    return {
+      user: state.users[state.loggedInUser],
+      devices: state.devices
+    };
+  }
+
+  static propTypes = {
+    user: PropTypes.object,
+    devices: PropTypes.object
   }
 
   constructor (props) {
     super(props);
-
     this.state = { showLogin: false };
-
     this.handleAuth();
   }
 
@@ -47,9 +54,11 @@ class Auth extends Component {
           return Promise.all([
             dispatch(actions.connectToPiper(token.sub)),
             dispatch(actions.fetchNotifications()),
-            dispatch(actions.requestUser(token.sub, true))
+            dispatch(actions.requestUser(token.sub, true)),
+            dispatch(actions.fetchDevices())
           ]);
         })
+        .then(() => this.initPushNotifications())
         .then(() => {
           if (this.state.showLogin) {
             this.setState({ showLogin: false });
@@ -65,8 +74,24 @@ class Auth extends Component {
     });
   }
 
+  shouldComponentUpdate (nextProps) {
+    return this.props.user !== nextProps.user;
+  }
+
   componentDidUpdate () {
     this.handleAuth();
+  }
+
+  initPushNotifications () {
+    PushNotificationIOS.addEventListener('register', deviceToken => {
+      const devicesArray = Object.keys(this.props.devices).map(id => this.props.devices[id]);
+      const tokenExists = devicesArray.find(d => d.deviceToken === deviceToken);
+      let token = tokenExists || { _new: true, deviceToken };
+
+      this.props.dispatch(actions.saveDevice(token));
+    });
+
+    PushNotificationIOS.requestPermissions();
   }
 
   navigateToApp () {
