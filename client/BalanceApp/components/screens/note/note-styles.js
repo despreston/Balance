@@ -76,7 +76,7 @@ export default StyleSheet.create ({
 
   picture: {
     backgroundColor: Colors.gray.porcelain,
-    height: 200,
+    height: 300,
     marginBottom: 10
   }
 
