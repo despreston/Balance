@@ -2,15 +2,17 @@ const Notification = require('./base');
 
 class NewReaction extends Notification {
 
-  static remove (user, note) {
+  static remove (user, note, sender) {
     super.remove({
-      userId: user,
-      'related.item': note
+      $and: [
+        { userId: user },
+        { 'related.item': note },
+        { 'related.item': sender }
+      ]
     });
   }
 
   constructor (user, sender, note, reaction) {
-    
     const related = [
       {
         kind: 'user',

@@ -11,6 +11,11 @@ const options = {
 
 const apnProvider = new apn.Provider(options);
 
+/**
+ * Create and call send() to send a push notification
+ * @param {string} receiver The userId of the person to receive the push notification
+ * @param {string} alert The message to send
+ */
 class PushNotification {
 
   constructor (receiver, alert) {
@@ -23,7 +28,7 @@ class PushNotification {
   }
 
   /**
-   * Sets the badge number to the number of unread notifications
+   * Augments this.note w/ the badge number
    * @return {Promise}
    */
   setBadge () {

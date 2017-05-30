@@ -45,10 +45,8 @@ module.exports = ({ get, post, del, put }) => {
   });
 
   get("users/:userId/friends/requests", ({ params }, res) => {
-    const query = Object.assign({}, params, { 'friends.status': 'requested' });
-
     User
-    .findOne(query)
+    .findOne({ userId: params.userId })
     .select('friends')
     .lean()
     .then(user => {
@@ -56,7 +54,9 @@ module.exports = ({ get, post, del, put }) => {
         return res.send(200, []);
       }
       
-      const friendIds = user.friends.map(f => f.userId);
+      const friendIds = user.friends
+        .filter(f => f.status === 'requested')
+        .map(f => f.userId);
 
       return User
         .find({ userId: { $in: friendIds } })

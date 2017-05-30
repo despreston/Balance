@@ -34,6 +34,7 @@ class Auth extends Component {
     super(props);
     this.state = { showLogin: false };
     this.handleAuth();
+    this.navigated = false;
   }
 
   handleAuth () {
@@ -58,7 +59,6 @@ class Auth extends Component {
             dispatch(actions.fetchDevices())
           ]);
         })
-        .then(() => this.initPushNotifications())
         .then(() => {
           if (this.state.showLogin) {
             this.setState({ showLogin: false });
@@ -96,9 +96,13 @@ class Auth extends Component {
     PushNotificationIOS.requestPermissions();
   }
 
+  afterLogin () {
+    this.initPushNotifications();
+  }
+
   navigateToApp () {
-    // prevent multiple navigations
-    if (this.props.navigation.state.routeName !== 'Login') {
+    // prevent multiple navigation dispatches
+    if (this.navigated) {
       return;
     }
 
@@ -108,6 +112,8 @@ class Auth extends Component {
       key: null
     });
 
+    this.navigated = true;
+    this.afterLogin();
     this.props.navigation.dispatch(actionToDispatch);
   }
 

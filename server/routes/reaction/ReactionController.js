@@ -1,6 +1,7 @@
-const Reaction = require('../../models/Reaction');
-const log = require('logbro');
-const Notification = require('../../classes/notification/');
+const Reaction        = require('../../models/Reaction');
+const User            = require('../../models/User');
+const log             = require('logbro');
+const Notification    = require('../../classes/notification/');
 const { NewReaction } = Notification;
 
 module.exports = ({ del }) => {
@@ -14,7 +15,12 @@ module.exports = ({ del }) => {
       }
 
       return reaction.remove().then(() => {
-        return NewReaction.remove(reaction.userId, reaction.note, user.sub);
+        return User
+        .findOne({ userId: user.sub })
+        .select('_id')
+        .then(user => {
+          return NewReaction.remove(reaction.userId, reaction.note, user._id);
+        });
       });
     })
     .then(() => res.send(200, []))
