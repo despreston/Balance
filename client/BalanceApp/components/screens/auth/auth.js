@@ -5,7 +5,8 @@ import {
   Text,
   View,
   Image,
-  PushNotificationIOS
+  PushNotificationIOS,
+  AppState
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import actions from '../../../actions/';
@@ -35,6 +36,18 @@ class Auth extends Component {
     this.state = { showLogin: false };
     this.handleAuth();
     this.navigated = false;
+    this.appState = AppState.currentState;
+
+    AppState.addEventListener('change', this.onAppStateChange.bind(this));
+  }
+
+  onAppStateChange (nextAppState) {
+    // App was reopened from the background
+    if (this.appState === 'background' && nextAppState === 'active') {
+      this.props.dispatch(actions.fetchNotifications());
+    }
+
+    this.appState = nextAppState;
   }
 
   handleAuth () {
