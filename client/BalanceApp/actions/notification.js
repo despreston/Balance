@@ -1,5 +1,6 @@
 import { apiDispatch } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
+import { PushNotificationIOS } from 'react-native';
 
 const RECEIVE_NOTIFICATIONS = 'RECEIVE_NOTIFICATIONS';
 const SHOW_NOTIFICATION_TOASTER = 'SHOW_NOTIFICATION_TOASTER';
@@ -55,6 +56,7 @@ export default {
    * mark all notifications as read
    */
   markAsRead () {
+    PushNotificationIOS.setApplicationIconBadgeNumber(0);
     const opts = { method: 'POST' };
     return apiDispatch('notifications/read', null, opts);
   },

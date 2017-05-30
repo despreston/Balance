@@ -10,7 +10,6 @@ class NewComment extends Notification {
   }
 
   constructor (user, commenter, note) {
-    
     const related = [
       {
         kind: 'user',
@@ -23,6 +22,12 @@ class NewComment extends Notification {
     ];
 
     super(user, 'new_comment', related);
+  }
+
+  getPushNotificationText (notification) {
+    const sender = notification.related.find(item => item.kind === 'user').item;
+
+    return `${sender.username} commented on your note.`;
   }
 
 }

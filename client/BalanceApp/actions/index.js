@@ -5,6 +5,7 @@ import comment      from './comment';
 import reaction     from './reaction';
 import notification from './notification';
 import shared       from './shared';
+import device       from './device';
 
 export default Object.assign({},
   user,
@@ -13,5 +14,6 @@ export default Object.assign({},
   comment,
   reaction,
   notification,
-  shared
+  shared,
+  device
 );

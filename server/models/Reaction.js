@@ -6,7 +6,8 @@ let Reaction = new mongoose.Schema ({
 
   userId: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
 
   reaction: {
@@ -16,7 +17,8 @@ let Reaction = new mongoose.Schema ({
 
   note: {
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'note'
+    ref: 'note',
+    index: true
   },
 
   createdAt: Date
@@ -37,11 +39,13 @@ Reaction.post('remove', function(reaction, next) {
 
   // Remove the reaction from the Note. Using 'update' so the pre 'save' hooks
   // on the Note model are not triggered
-  Note
-  .update(
-    { _id: reaction.note },
-    { $pull: { reactions: reaction._id } }
-  ).exec();
+  if (Note.update) {
+    Note
+    .update(
+      { _id: reaction.note },
+      { $pull: { reactions: reaction._id } }
+    ).exec();
+  }
 
   // remove all notifications for the reaction
   Notification

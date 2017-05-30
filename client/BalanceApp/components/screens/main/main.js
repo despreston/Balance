@@ -1,12 +1,8 @@
-// Vendors
 import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-
-// Components
 import ProjectListContainer from '../../project-list/project-list-container';
 import NavBtn from '../../navigation/nav-btn';
-
 import MainStyle from './main-styles';
 
 class MainScene extends Component {
