@@ -4,11 +4,16 @@ import Colors from '../../../colors';
 export default StyleSheet.create ({
   
   container: {
-    flexDirection: 'row',
     padding: 10,
     borderBottomWidth: 1.5,
     borderBottomColor: Colors.gray.porcelain,
     justifyContent: 'center'
+  },
+
+  content: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginHorizontal: 10
   },
 
   center: {
