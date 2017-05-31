@@ -41,6 +41,10 @@ class Auth extends Component {
     AppState.addEventListener('change', this.onAppStateChange.bind(this));
   }
 
+  componentWillUnmount () {
+    AppState.removeEventListener('change', this.onAppStateChange.bind(this));
+  }
+
   onAppStateChange (nextAppState) {
     // App was reopened from the background
     if (this.appState === 'background' && nextAppState === 'active') {
