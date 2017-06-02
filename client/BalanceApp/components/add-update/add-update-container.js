@@ -91,7 +91,6 @@ class AddUpdateContainer extends Component {
    */
   save () {
     let note = this.constructNoteObject(note);
-    let promises = [];
 
     return new Promise((resolve) => {
       // New photo needs to be uploaded to S3
@@ -105,24 +104,23 @@ class AddUpdateContainer extends Component {
       return resolve();
     })
     .then(() => {
+      this.props.hideFn();
       this.newPhoto = false;
       const { dispatch } = this.props;
 
-      // Picture needs to be deleted
-      if (this.props.note && this.props.note.picture && !note.picture) {
-        promises.push(dispatch(actions.deletePictureFromNote(note._id)));
-      }
-      
-      promises.push(dispatch(actions.saveNote(note)));
+      return dispatch(actions.saveNote(note))
+      .then(() => {
+        // force reload of project
+        if (this.props.reloadProject) {
+          dispatch(actions.fetchProject(this.props.project._id));
+        }
 
-      // force reload of project
-      if (this.props.reloadProject) {
-        promises.push(dispatch(actions.fetchProject(this.props.project._id)));
-      }
-
-      return Promise.all(promises);
-    })
-    .then(() => this.props.hideFn());
+        // Picture needs to be deleted
+        if (this.props.note && this.props.note.picture && !note.picture) {
+          dispatch(actions.deletePictureFromNote(note._id));
+        }
+      });
+    });
   }
 
   remove () {

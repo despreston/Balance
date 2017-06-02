@@ -38,14 +38,16 @@ export default class NudgeField extends Component {
   render () {
     return (
       <View style={ Styles.container }>
-      {
-        !this.props.hideButton &&
-        (<View style={ Styles.button }>
-          <NudgeBtn project={ this.props.project._id } />
-        </View>)
-      }
-        <View style={(this.props.hideButton && Styles.center)}>
-          { this.renderNudges() }
+        <View style={ Styles.content }>
+          {
+            !this.props.hideButton &&
+            (<View style={ Styles.button }>
+              <NudgeBtn project={ this.props.project._id } />
+            </View>)
+          }
+          <View style={(this.props.hideButton && Styles.center)}>
+            { this.renderNudges() }
+          </View>
         </View>
       </View>
     );

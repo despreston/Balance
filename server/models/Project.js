@@ -1,6 +1,5 @@
 'use strict';
 const mongoose = require("mongoose");
-const Note = require("./Note");
 const User = require('./User');
 const privacyLevel = require('./shared/privacy-level');
 const Notification = require('../classes/notification/');
@@ -43,7 +42,14 @@ let Project = new mongoose.Schema({
   description: {
     type: String,
     trim: true
-  }
+  },
+
+  bookmarkers: [{
+    userId: {
+      type: String,
+      required: true
+    }
+  }]
   
 });
 
@@ -129,7 +135,6 @@ Project.statics.projectCountForUser = function (userId, privacyLevels) {
  * @return {Object}
  */
 function augmentNotesWithProject (p) {
-
     let fullObject = { 
       _id: p._id,
       title: p.title,
@@ -148,7 +153,6 @@ function augmentNotesWithProject (p) {
     }
 
     return p;
-
 }
 
 /**
@@ -157,16 +161,14 @@ function augmentNotesWithProject (p) {
  * @return {Object}
  */
 function commentCountForNotes (project) {
-
   function commentCount (noteFromProject) {
     let note = Object.assign({}, noteFromProject);
 
-    if (!note.comments) {
-      return;
+    if (note.comments) {
+      note.commentCount = note.comments.length;
+      delete note.comments;
     }
 
-    note.commentCount = note.comments.length;
-    delete note.comments;
     return note;
   }
 
@@ -179,7 +181,6 @@ function commentCountForNotes (project) {
   }
 
   return project;
-
 }
 
 /**
@@ -199,7 +200,6 @@ Project.statics.futureAndPastNotes = function (project) {
  * @return {Promise} resolves with updated project
  */
 Project.methods.addNudge = function (userId) {
-
   return new Promise((resolve, reject) => {
     this.nudges.push({ userId, sentAt: new Date() });
 
@@ -216,7 +216,6 @@ Project.methods.addNudge = function (userId) {
       });
     });
   });
-
 };
 
 /**
@@ -225,7 +224,6 @@ Project.methods.addNudge = function (userId) {
  * @return {Promise} resolves with updated project
  */
 Project.methods.removeNudge = function (userId) {
-
   return new Promise((resolve, reject) => {
     const nudgeIdx = this.nudges.findIndex(n => n.userId === userId);
 
@@ -257,7 +255,6 @@ Project.methods.removeNudge = function (userId) {
       resolve(this);
     });
   });
-
 };
 
 Project.statics.removeExcludedFields = function (project) {
@@ -306,7 +303,6 @@ Project.pre('findOne', function () {
 });
 
 Project.pre('save', function (next) {
-
   if (!this.createdAt) {
     this.createdAt = new Date();
   } else {
@@ -323,18 +319,17 @@ Project.pre('save', function (next) {
 });
 
 Project.pre('remove', function (next) {
-
   // remove all notes for project
-  Note
+  return mongoose.models['note']
   .find({ project: this._id })
-  .then(notes => notes.forEach(note => note.remove()));
-
-  // remove all notifications for the project
-  Notification
-  .find({ 'related.item': this._id })
-  .then(notifications => notifications.forEach(n => n.remove()));
-  
-  next();
+  .then(notes => Promise.all(notes.map(note => note.remove())))
+  .then(() => {
+    // remove all notifications for the project
+    return mongoose.models['notification']
+    .find({ 'related.item': this._id })
+    .then(notifications => Promise.all(notifications.map(n => n.remove())));
+  })
+  .then(() => next());
 });
 
 module.exports = mongoose.model("project", Project);

@@ -1,7 +1,4 @@
-const mongoose = require('mongoose');
-const Comment  = require('./Comment');
-const Notification = require('./Notification');
-const Reaction = require('./Reaction');
+const mongoose     = require('mongoose');
 
 let Note = new mongoose.Schema({
 
@@ -86,21 +83,22 @@ Note.pre('save', function(next) {
 
 Note.pre('remove', function (next) {
   // remove all notifications related to the note
-  Notification
+  return mongoose.models['notification']
   .find({ 'related.item': this._id })
-  .then(notifications => notifications.forEach(n => n.remove()));
-
-  // remove all comments for the note
-  Comment
-  .find({ 'note': this._id })
-  .then(comments => comments.forEach(comment => comment.remove()));
-  
-  // remove all reactions for the note
-  Reaction
-  .find({ 'note': this._id })
-  .then(reactions => reactions.forEach(reaction => reaction.remove()));
-
-  next();
+  .then(notifications => Promise.all(notifications.map(n => n.remove())))
+  .then(() => {
+    // remove all reactions for the note
+    return mongoose.models['reaction']
+    .find({ 'note': this._id })
+    .then(reactions => Promise.all(reactions.map(reaction => reaction.remove())))
+  })
+  .then(() => {
+    // remove all comments for the note
+    return mongoose.models['comment']
+    .find({ 'note': this._id })
+    .then(comments => Promise.all(comments.map(comment => comment.remove())));
+  })
+  .then(() => next());
 });
 
 module.exports = mongoose.model("note", Note);

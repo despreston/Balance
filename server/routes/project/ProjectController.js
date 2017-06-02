@@ -58,6 +58,14 @@ module.exports = ({ get, post, del, put }) => {
       }).catch(err => res.send(403, 'Failed: ' + err));
   });
 
+  // post('projects/:_id/bookmarkers', ({ params, user }, res) => {
+  //   Project
+  //   .findOne(params)
+  //   .populate(Project.latestPastNote)
+  //   .populate(Project.latestFutureNote)
+  //   .then(project =>)
+  // });
+
   post('projects/:_id/nudges', ({ params, user }, res) => {
     Project
     .findOne(params)
@@ -140,7 +148,6 @@ module.exports = ({ get, post, del, put }) => {
       project = project.toObject({ virtuals: true });
 
       return Project.futureAndPastNotes(project);
-
     })
     .then(project => Project.removeExcludedFields(project))
     .then(project => res.send(200, project))
