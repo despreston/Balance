@@ -82,12 +82,10 @@ Note.pre('save', function(next) {
 });
 
 Note.pre('remove', function (next) {
-  return new Promise(() => {
-    // remove all notifications related to the note
-    return mongoose.models['notification']
-    .find({ 'related.item': this._id })
-    .then(notifications => Promise.all(notifications.map(n => n.remove())));
-  })
+  // remove all notifications related to the note
+  return mongoose.models['notification']
+  .find({ 'related.item': this._id })
+  .then(notifications => Promise.all(notifications.map(n => n.remove())))
   .then(() => {
     // remove all reactions for the note
     return mongoose.models['reaction']

@@ -33,6 +33,14 @@ Comment.virtual('commenter', {
   justOne: true
 });
 
+Comment.pre('remove', function(next) {
+  // remove related notifications
+  return mongoose.models['notification']
+  .find({ 'related.item': this._id })
+  .then(notifications => Promise.all(notifications.map(n => n.remove())))
+  .then(() => next());
+});
+
 Comment.post('remove', function(comment, next) {
 
   // Remove the comment from the Note
