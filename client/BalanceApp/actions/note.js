@@ -55,7 +55,7 @@ export default {
 
     return dispatch => {
       return api(url, { method, body: note })
-        .then(note => dispatch(this.receiveNotes(note)));
+      .then(note => dispatch(this.receiveNotes(note)));
     };
   },
 
