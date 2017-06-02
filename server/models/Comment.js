@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Note = require('./Note');
 
 let Comment = new mongoose.Schema ({
 
@@ -37,13 +36,11 @@ Comment.virtual('commenter', {
 Comment.post('remove', function(comment, next) {
 
   // Remove the comment from the Note
-  if (Note.update) {
-    Note
-    .update(
-      { _id: comment.note },
-      { $pull: { comments: comment._id } }
-    ).exec();
-  }
+  mongoose.models['note']
+  .update(
+    { _id: comment.note },
+    { $pull: { comments: comment._id } }
+  ).exec();
 
   next();
 });
