@@ -6,66 +6,55 @@ const { NewComment } = Notification;
 
 module.exports = ({ post, del }) => {
 
-  post('comments', ({ body, user }, res) => {
-    body = JSON.parse(body);
+  post('comments', async ({ body, user }, res) => {
+    try {
+      body = JSON.parse(body);
+      let comment = await Comment.create(body);
 
-    Comment
-    .create(body)
-    .then((comment, err) => {
+      let note = await Note
+        .findByIdAndUpdate(
+          { _id: body.note },
+          { $push: { comments: comment._id } },
+          { new: true }
+        );
 
-      if (err) {
-        log.error(err);
-        return res.send(500);
-      }
+      let noteAuthor = note.user;
 
-      Note
-      .findByIdAndUpdate(
-        { _id: body.note },
-        { $push: { comments: comment._id } },
-        { new: true }
-      )
-      .then(note => {
-        let noteAuthor = note.user;
-        return Comment
+      comment = await Comment
         .findOne({ _id: comment._id })
         .populate('commenter', 'userId username picture')
-        .lean()
-        .then(comment => {
-          
-          // Create notification for author if the comment is by someone other
-          // than the author.
-          if (noteAuthor !== comment.commenter.userId) {
-            new NewComment(noteAuthor, comment.commenter._id, comment.note).save();
-          }
+        .lean();
 
-          delete comment.user;
-          return res.send(201, comment)
-        });
-      });
-    })
-    .catch(err => {
-      log.error(err);
+      // Create notification for author if the comment is by someone other
+      // than the author.
+      if (noteAuthor !== comment.commenter.userId) {
+        new NewComment(noteAuthor, comment.commenter._id, comment.note).save();
+      }
+
+      delete comment.user;
+
+      return res.send(201, comment);
+    } catch (e) {
+      log.error(e);
       return res.send(500);
-    });
-
+    }
   });
 
-  del('comments/:_id', ({ params, user }, res) => {
+  del('comments/:_id', async ({ params, user }, res) => {
+    try {
+      const comment = await Comment.findOne(params);
 
-    Comment
-    .findOne(params)
-    .then(comment => {
       if (comment.user !== user.sub) {
         return res.send(403);
       }
 
       comment.remove();
-    })
-    .then(() => res.send(200, []))
-    .catch(err => {
-      log.error(err);
+
+      return res.send(200, []);
+    } catch (e) {
+      log.error(e);
       return res.send(500);
-    });
-  })
+    }
+  });
 
 };
