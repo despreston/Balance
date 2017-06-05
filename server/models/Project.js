@@ -42,14 +42,7 @@ let Project = new mongoose.Schema({
   description: {
     type: String,
     trim: true
-  },
-
-  bookmarkers: [{
-    userId: {
-      type: String,
-      required: true
-    }
-  }]
+  }
   
 });
 

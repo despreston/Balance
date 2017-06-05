@@ -58,14 +58,6 @@ module.exports = ({ get, post, del, put }) => {
       }).catch(err => res.send(403, 'Failed: ' + err));
   });
 
-  // post('projects/:_id/bookmarkers', ({ params, user }, res) => {
-  //   Project
-  //   .findOne(params)
-  //   .populate(Project.latestPastNote)
-  //   .populate(Project.latestFutureNote)
-  //   .then(project =>)
-  // });
-
   post('projects/:_id/nudges', ({ params, user }, res) => {
     Project
     .findOne(params)

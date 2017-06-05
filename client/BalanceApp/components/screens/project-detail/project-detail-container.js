@@ -130,7 +130,6 @@ class ProjectDetailContainer extends Component {
       />
     );
   }
-
 }
 
 export default connect(ProjectDetailContainer.mapStateToProps)(ProjectDetailContainer);

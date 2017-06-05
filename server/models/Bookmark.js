@@ -9,7 +9,7 @@ let Bookmark = new mongoose.Schema ({
   },
 
   project: {
-    index: true
+    index: true,
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'project'
   },
