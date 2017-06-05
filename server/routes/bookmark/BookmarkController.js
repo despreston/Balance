@@ -1,6 +1,5 @@
 const Bookmark = require('../../models/Bookmark');
 const log = require('logbro');
-// const Notification = require('../../classes/notification/');
 
 module.exports = ({ post, del }) => {
 

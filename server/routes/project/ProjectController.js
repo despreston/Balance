@@ -21,10 +21,13 @@ module.exports = ({ get, post, del, put }) => {
       
       try {
         await AccessControl.single(owner, user.sub, project.privacyLevel);
-        return res.send(200, project);
       } catch (e) {
         return res.send(403);
       }
+
+      project.bookmark_count = await Bookmark.count({ project: params._id });
+
+      return res.send(200, project);
     } catch (e) {
       log.error(e);
       return res.send(500, e);

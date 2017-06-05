@@ -41,8 +41,10 @@ module.exports = ({ get, post, del, put }) => {
 
       const privacyLevel = await AccessControl.many({ user: params.userId }, user.sub);
       const project_count = await Project.projectCountForUser(result.userId, privacyLevel);
+      const bookmark_count = await Bookmark.count({ userId: user.sub });
+      const payload = Object.assign(result, { project_count, bookmark_count });
 
-      return res.send(200, Object.assign(result, { project_count }));
+      return res.send(200, payload);
     } catch (e) {
       log.error(e);
       return res.send(500);
@@ -181,14 +183,17 @@ module.exports = ({ get, post, del, put }) => {
 
   put('users/:userId', async ({ params, body, user }, res) => {
     try {
+      // trying to update another user
       if (params.userId !== user.sub) return res.send(403);
       
       body = JSON.parse(body);
       
       let userToUpdate = await User.findOne({ userId: params.userId });
 
+      // user does not exist
       if (!userToUpdate) return res.send(404);
 
+      // need to update the picture
       if (body.picture && userToUpdate.picture && body.picture !== userToUpdate.picture) {
         await s3remove(userToUpdate.picture);
       }
@@ -197,8 +202,14 @@ module.exports = ({ get, post, del, put }) => {
       userToUpdate.save();
 
       const project_count = await Project.projectCountForUser(params.userId, ['global', 'friends', 'private']);
+      const bookmark_count = await Bookmark.count({ userId: user.sub });
+      
+      const payload = Object.assign(userToUpdate.toObject(), {
+        project_count,
+        bookmark_count
+      });
 
-      return res.send(200, Object.assign(userToUpdate.toObject(), { project_count }));
+      return res.send(200, payload);
     } catch (e) {
       log.error(e);
       return res.send(500);
