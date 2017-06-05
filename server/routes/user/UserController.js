@@ -1,5 +1,6 @@
 'use strict';
 const User             = require('../../models/User');
+const Bookmark         = require('../../models/Bookmark');
 const Project          = require('../../models/Project');
 const log              = require('logbro');
 const AccessControl    = require('../../utils/access-control');
@@ -67,6 +68,18 @@ module.exports = ({ get, post, del, put }) => {
         .lean();
 
       return res.send(200, friends);
+    } catch (e) {
+      log.error(e);
+      return res.send(500);
+    }
+  });
+
+  get("users/:userId:/bookmarks", async ({ params, user }, res) => {
+    try {
+      const bookmarks = await Bookmark.find({ userId: params.userId })
+        .populate('userId', 'userId username picture');
+
+      return res.send(200, bookmarks);
     } catch (e) {
       log.error(e);
       return res.send(500);

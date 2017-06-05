@@ -1,5 +1,6 @@
 'use strict';
 const Project       = require('../../models/Project');
+const Bookmark      = require('../../models/Bookmark');
 const AccessControl = require('../../utils/access-control');
 const log           = require('logbro');
 
@@ -27,6 +28,28 @@ module.exports = ({ get, post, del, put }) => {
     } catch (e) {
       log.error(e);
       return res.send(500, e);
+    }
+  });
+
+  get('projects/:_id/bookmarks', async ({ params, user }, res) => {
+    try {
+      let project = await Project.findOne({ _id: params._id });
+      project = project.toObject({ virtuals: true });
+      const owner = project.owner[0].userId;
+
+      try {
+        await AccessControl.single(owner, user.sub, project.privacyLevel);
+      } catch (e) {
+        return res.send(403);
+      }
+
+      let bookmarks = await Bookmark.find({ project: params._id })
+        .populate('userId', 'userId username picture');
+
+      return res.send(200, bookmarks);
+    } catch (e) {
+      log.error(e);
+      return res.send(500, e); 
     }
   });
 
@@ -70,7 +93,7 @@ module.exports = ({ get, post, del, put }) => {
       project = Project.futureAndPastNotes(project);
       project = Project.removeExcludedFields(project);
 
-      return res.send(200, project);
+      return res.send(201, project);
     } catch (e) {
       log.error(e);
       return res.send(500);
