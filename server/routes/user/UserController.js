@@ -33,9 +33,7 @@ module.exports = ({ get, post, del, put }) => {
 
   get("users/:userId", async ({ params, user}, res) => {
     try {
-      let result = await User
-        .findOne(params)
-        .lean();
+      let result = await User.findOne(params).lean();
 
       if (!result) return res.send(404);
 

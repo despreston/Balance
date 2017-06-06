@@ -4,7 +4,11 @@ import Colors from '../../colors';
 export const Styles = StyleSheet.create  ({
 
   container: {
-    flexDirection: 'column'
+    backgroundColor: Colors.white,
+    flexDirection: 'column',
+    borderWidth: 1,
+    borderRadius: 6,
+    borderColor: Colors.gray.porcelain
   },
 
   flexRow: {
@@ -12,6 +16,9 @@ export const Styles = StyleSheet.create  ({
   },
 
   top: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.gray.porcelain,
     alignItems: 'center',
     justifyContent: 'space-between'
   },
@@ -26,14 +33,15 @@ export const Styles = StyleSheet.create  ({
   },
 
   content: {
+    paddingTop: 0,
+    padding: 10,
     color: Colors.gray.tundora,
     fontSize: 14,
-    lineHeight: 20,
-    paddingBottom: 10
+    lineHeight: 20
   },
 
   body: {
-    paddingTop: 10
+    paddingTop: 15
   },
 
   comment: {
@@ -67,6 +75,13 @@ export const Styles = StyleSheet.create  ({
     height: 25,
     borderRadius: 12.5,
     marginRight: 5
+  },
+
+  bottom: {
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderTopWidth: 1,
+    borderTopColor: Colors.gray.porcelain
   }
   
 });

@@ -6,7 +6,6 @@ export default StyleSheet.create ({
   noteContext: {
     flexDirection: 'row',
     paddingTop: 10,
-    marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray.porcelain
   },

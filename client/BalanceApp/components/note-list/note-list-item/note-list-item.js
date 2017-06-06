@@ -81,7 +81,7 @@ class NoteListItem extends Component {
             <Text numberOfLines={ 2 } style={ Styles.content }>{ note.content }</Text>
           }
         </View>
-        <View style={ Styles.flexRow }>
+        <View style={[ Styles.flexRow, Styles.bottom ]}>
           <View style={ Styles.comment }>
             <CommentButton count={ note.commentCount || 0 } />
           </View>

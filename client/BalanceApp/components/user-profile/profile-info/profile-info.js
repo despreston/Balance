@@ -1,15 +1,10 @@
-  // vendors
 import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
   Image
 } from 'react-native';
-
-// components
 import FriendButton from '../../friend-button/friend-button';
-
-// styles
 import Styles from './profile-info-styles';
 
 class ProfileInfo extends Component  {
@@ -17,10 +12,6 @@ class ProfileInfo extends Component  {
   static propTypes = {
     user: PropTypes.object.isRequired,
     customTextStyle: PropTypes.array
-  }
-
-  constructor (props) {
-    super(props);
   }
 
   render () {
@@ -42,6 +33,10 @@ class ProfileInfo extends Component  {
               @{ user.username }
             </Text>
           </View>
+        </View>
+        <View style={ Styles.row }>
+          <Image source={require('../../../assets/icons/star-filled.png')} style={{width: 15, height: 15}} />
+          <Text>{ user.bookmark_count } bookmarks</Text>
         </View>
         <Bio bio={ user.bio } />
         <View style={ Styles.friendButton }>

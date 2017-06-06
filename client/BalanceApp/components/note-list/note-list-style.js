@@ -3,11 +3,13 @@ import Colors from '../colors';
 
 export const Styles = StyleSheet.create ({
 
+  container: {
+    backgroundColor: Colors.gray.porcelain
+  },
+
   noteListItem: {
-    paddingVertical: 15,
     marginHorizontal: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.gray.porcelain
+    paddingVertical: 7
   }
   
 });

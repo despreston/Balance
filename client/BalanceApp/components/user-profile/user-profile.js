@@ -151,7 +151,6 @@ class UserProfile extends Component {
 
   refresh () {
     this.setState({ refreshing: true });
-
     this.loadUser().then(() => this.setState({ refreshing: false }));
   }
 

@@ -28,7 +28,7 @@ function NoteList ({ notes, showProjectName, onSelect, showTypeText, showUser })
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={ Styles.container }>
       { renderNotes() }
     </ScrollView>
   );
