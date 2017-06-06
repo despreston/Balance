@@ -4,11 +4,14 @@ import Colors from '../../colors';
 export const Styles = StyleSheet.create  ({
 
   container: {
+    shadowColor: Colors.gray.tundora,
+    shadowOffset: { width: 0.05, height: 0.05 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
     backgroundColor: Colors.white,
     flexDirection: 'column',
-    borderWidth: 1,
     borderRadius: 6,
-    borderColor: Colors.gray.porcelain
+    paddingHorizontal: 10
   },
 
   flexRow: {
@@ -16,7 +19,7 @@ export const Styles = StyleSheet.create  ({
   },
 
   top: {
-    padding: 10,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray.porcelain,
     alignItems: 'center',
@@ -34,7 +37,7 @@ export const Styles = StyleSheet.create  ({
 
   content: {
     paddingTop: 0,
-    padding: 10,
+    paddingBottom: 10,
     color: Colors.gray.tundora,
     fontSize: 14,
     lineHeight: 20
@@ -78,8 +81,7 @@ export const Styles = StyleSheet.create  ({
   },
 
   bottom: {
-    paddingHorizontal: 10,
-    paddingVertical: 7,
+    paddingVertical: 10,
     borderTopWidth: 1,
     borderTopColor: Colors.gray.porcelain
   }
