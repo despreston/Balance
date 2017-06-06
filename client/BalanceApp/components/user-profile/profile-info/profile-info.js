@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import FriendButton from '../../friend-button/friend-button';
 import Styles from './profile-info-styles';
@@ -34,10 +35,7 @@ class ProfileInfo extends Component  {
             </Text>
           </View>
         </View>
-        <View style={ Styles.row }>
-          <Image source={require('../../../assets/icons/star-filled.png')} style={{width: 15, height: 15}} />
-          <Text>{ user.bookmark_count } bookmarks</Text>
-        </View>
+        <Bookmarks count={ user.bookmark_count } />
         <Bio bio={ user.bio } />
         <View style={ Styles.friendButton }>
           <FriendButton userId={ user.userId } hideIfLoggedInUser />
@@ -47,6 +45,21 @@ class ProfileInfo extends Component  {
   }
 
 }
+
+const Bookmarks = ({ count }) => {
+  const text = (count > 1 || count === 0) ? 'Bookmarks' : 'Bookmark';
+  return (
+    <TouchableOpacity style={[ Styles.row, Styles.bookmarkContainer ]}>
+      <Image
+        source={require('../../../assets/icons/star-filled.png')}
+        style={{width: 15, height: 15}}
+      />
+      <Text style={[ Styles.selectedContext, Styles.bold ]}>
+        {` ${count} ${text}`}
+      </Text>
+    </TouchableOpacity>
+  )
+};
 
 const Bio = ({ bio }) => {
   if (bio && bio.length > 0) {
@@ -58,6 +71,6 @@ const Bio = ({ bio }) => {
   }
 
   return null;
-}
+};
 
 export default ProfileInfo;

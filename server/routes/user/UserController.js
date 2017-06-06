@@ -39,7 +39,7 @@ module.exports = ({ get, post, del, put }) => {
 
       const privacyLevel = await AccessControl.many({ user: params.userId }, user.sub);
       const project_count = await Project.projectCountForUser(result.userId, privacyLevel);
-      const bookmark_count = await Bookmark.count({ userId: user.sub });
+      const bookmark_count = await Bookmark.count({ userId: params.userId });
       const payload = Object.assign(result, { project_count, bookmark_count });
 
       return res.send(200, payload);

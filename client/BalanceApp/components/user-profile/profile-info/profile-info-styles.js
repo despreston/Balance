@@ -25,7 +25,7 @@ export default StyleSheet.create  ({
   info: {
     marginLeft: 25,
     height: 60,
-    marginBottom: 20,
+    marginBottom: 15,
     justifyContent: 'center'
   },
 
@@ -77,6 +77,10 @@ export default StyleSheet.create  ({
     fontSize: 18
   },
 
+  bold: {
+    fontWeight: 'bold'
+  },
+
   selectedContext: {
     color: Colors.purple
   },
@@ -84,6 +88,10 @@ export default StyleSheet.create  ({
   border: {
     borderBottomWidth: 2,
     borderBottomColor: Colors.purple
+  },
+
+  bookmarkContainer: {
+    paddingBottom: 10
   }
 
 });
