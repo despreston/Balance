@@ -15,7 +15,9 @@ module.exports = ({ post, del }) => {
       });
 
       bookmark = await Bookmark.findOne({ _id: bookmark._id })
-        .populate('userId', 'userId username picture');
+        .populate('bookmarker', 'userId username picture');
+
+      bookmark = bookmark.toObject({ virtuals: true });
 
       return res.send(201, bookmark);
     } catch (e) {

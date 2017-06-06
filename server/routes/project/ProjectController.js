@@ -6,6 +6,24 @@ const log           = require('logbro');
 
 module.exports = ({ get, post, del, put }) => {
 
+  get('projects/:_id/bookmark', async ({ params, user }, res) => {
+    try {
+      const bookmark = await Bookmark
+        .findOne({
+          userId: user.sub,
+          project: params._id
+        })
+        .populate('bookmarker', 'userId username picture');
+
+      if (bookmark) return res.send(200, bookmark.toObject({ virtuals: true }));
+
+      return res.send(200, []);
+    } catch (e) {
+      log.error(e);
+      return res.send(500);
+    }
+  });
+
   get('projects/:_id', async ({ params, user }, res) => {
     try {
       let project = await Project
@@ -43,11 +61,13 @@ module.exports = ({ get, post, del, put }) => {
       try {
         await AccessControl.single(owner, user.sub, project.privacyLevel);
       } catch (e) {
-        return res.send(403);
+        return res.send(401);
       }
 
       let bookmarks = await Bookmark.find({ project: params._id })
-        .populate('userId', 'userId username picture');
+        .populate('bookmarker', 'userId username picture');
+
+      bookmarks = bookmarks.toObject({ virtuals: true });
 
       return res.send(200, bookmarks);
     } catch (e) {

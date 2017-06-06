@@ -18,6 +18,16 @@ let Bookmark = new mongoose.Schema ({
 
 });
 
+/**
+ * Ref to bookmarker
+ */
+Bookmark.virtual('bookmarker', {
+  ref: 'user',
+  localField: 'userId',
+  foreignField: 'userId',
+  justOne: true
+});
+
 Bookmark.pre('save', function(next) {
 
   if (!this.createdAt) {

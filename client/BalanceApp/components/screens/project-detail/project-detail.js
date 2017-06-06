@@ -1,14 +1,10 @@
-// Vendors
 import React, { Component, PropTypes } from 'react';
 import {
   ScrollView,
   View,
   Text
 } from 'react-native';
-
 import Styles from './project-detail-style';
-
-// Components
 import NoteListContainer from '../../note-list/note-list-container';
 import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
