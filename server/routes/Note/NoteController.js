@@ -18,7 +18,7 @@ module.exports = ({ get, post, put, del }) => {
         .populate('user', 'userId username picture')
         .lean();
 
-      reactions = reactions.forEach(r => delete r.userId);
+      reactions.forEach(r => delete r.userId);
 
       return res.send(200, reactions);
     } catch (e) {
