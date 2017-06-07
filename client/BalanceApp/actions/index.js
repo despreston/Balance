@@ -6,6 +6,7 @@ import reaction     from './reaction';
 import notification from './notification';
 import shared       from './shared';
 import device       from './device';
+import bookmark     from './bookmark';
 
 export default Object.assign({},
   user,
@@ -15,5 +16,6 @@ export default Object.assign({},
   reaction,
   notification,
   shared,
-  device
+  device,
+  bookmark
 );

@@ -25,7 +25,7 @@ export default StyleSheet.create  ({
   info: {
     marginLeft: 25,
     height: 60,
-    marginBottom: 20,
+    marginBottom: 15,
     justifyContent: 'center'
   },
 
@@ -75,6 +75,10 @@ export default StyleSheet.create  ({
   contextOptionCount: {
     fontWeight: 'bold',
     fontSize: 18
+  },
+
+  bold: {
+    fontWeight: 'bold'
   },
 
   selectedContext: {

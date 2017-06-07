@@ -4,7 +4,14 @@ import Colors from '../../colors';
 export const Styles = StyleSheet.create  ({
 
   container: {
-    flexDirection: 'column'
+    shadowColor: Colors.gray.tundora,
+    shadowOffset: { width: 0.05, height: 0.05 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    backgroundColor: Colors.white,
+    flexDirection: 'column',
+    borderRadius: 6,
+    paddingHorizontal: 10
   },
 
   flexRow: {
@@ -12,6 +19,9 @@ export const Styles = StyleSheet.create  ({
   },
 
   top: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.gray.porcelain,
     alignItems: 'center',
     justifyContent: 'space-between'
   },
@@ -26,14 +36,15 @@ export const Styles = StyleSheet.create  ({
   },
 
   content: {
+    paddingTop: 0,
+    paddingBottom: 10,
     color: Colors.gray.tundora,
     fontSize: 14,
-    lineHeight: 20,
-    paddingBottom: 10
+    lineHeight: 20
   },
 
   body: {
-    paddingTop: 10
+    paddingTop: 15
   },
 
   comment: {
@@ -67,6 +78,12 @@ export const Styles = StyleSheet.create  ({
     height: 25,
     borderRadius: 12.5,
     marginRight: 5
+  },
+
+  bottom: {
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: Colors.gray.porcelain
   }
   
 });

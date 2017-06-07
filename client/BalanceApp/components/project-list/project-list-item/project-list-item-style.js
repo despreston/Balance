@@ -4,7 +4,7 @@ import Colors from '../../colors';
 export const Style = StyleSheet.create({
 
   projectListItem: {
-    borderRadius: 4,
+    borderRadius: 6,
     height: 170,
     borderColor: Colors.white,
     backgroundColor: Colors.white,

@@ -16,7 +16,8 @@ import {
   UserSearch,
   NoteContainer,
   Auth,
-  FriendRequestList
+  FriendRequestList,
+  UserBookmarksContainer
 } from '../screens';
 
 import UnreadNotifications from './unread-notifications/unread-notifications';
@@ -33,7 +34,8 @@ const defaultScreens = {
   UserProfile: { screen: UserProfile },
   Note: { screen: NoteContainer },
   Project: { screen: ProjectDetailContainer },
-  EditProject: { screen: EditProjectContainer }
+  EditProject: { screen: EditProjectContainer },
+  UserBookmarks: { screen: UserBookmarksContainer }
 };
 
 function icon (path) {

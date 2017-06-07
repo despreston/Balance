@@ -1,14 +1,10 @@
-// Vendors
 import React, { Component, PropTypes } from 'react';
 import {
   ScrollView,
   View,
   Text
 } from 'react-native';
-
 import Styles from './project-detail-style';
-
-// Components
 import NoteListContainer from '../../note-list/note-list-container';
 import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
@@ -63,16 +59,23 @@ class ProjectDetail extends Component {
     const {
       status,
       userIsOwner,
-      goToNote
+      goToNote,
+      project
     } = this.props;
+
+    const query = [
+      { user: project.owner[0].userId },
+      { project: project._id },
+      { type: 'Future' }
+    ];
 
     // hide edit buttons if project is Finished OR user is not the owner
     return (
       <NoteListContainer
         showTypeText
         emptyState={ <EmptyCompletedNotes /> }
-        query={[{ project: this.props.project._id }, { type: 'Past' }]}
-        selector={ notes => this.notesSelector('Past')(notes, this.props.project) }
+        query={ query }
+        selector={ notes => this.notesSelector('Past')(notes, project) }
         showEdit={ status !== 'finished' && userIsOwner }
         onSelect={ goToNote }
       />
@@ -83,8 +86,15 @@ class ProjectDetail extends Component {
     const {
       status,
       userIsOwner,
-      goToNote
+      goToNote,
+      project
     } = this.props;
+
+    const query = [
+      { user: project.owner[0].userId },
+      { project: project._id },
+      { type: 'Future' }
+    ];
 
     // hide edit buttons if project is Finished OR user is not the owner
     return (
@@ -92,7 +102,7 @@ class ProjectDetail extends Component {
         <NoteListContainer
           showTypeText
           emptyState={ <EmptyFutureNotes /> }
-          query={[{ project: this.props.project._id }, { type: 'Future' }]}
+          query={ query }
           selector={ notes => this.notesSelector('Future')(notes, this.props.project) }
           showEdit={ status !== 'finished' && userIsOwner }
           onSelect={ goToNote }

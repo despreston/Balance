@@ -14,38 +14,36 @@ module.exports = {
    * @param {String} privacyLevel privacy level for the requested entity
    * @return {Promise} rejects if there is a permissions issue
    */
-  single (owner, requester, privacyLevel) {
+  async single (owner, requester, privacyLevel) {
 
     if (typeof owner !== 'string') {
       throw ("owner needs to be a string");
     }
+
     if (typeof requester !== 'string') {
       throw ("requester needs to be a string");
     }
+
     if (typeof privacyLevel !== 'string') {
       throw ('privacyLevel needs to be a string');
     }
-    
-    return new Promise ((resolve, reject) => {
 
-      if (owner !== requester && privacyLevel !== 'global') {
-        
-        if (privacyLevel === 'private') {
-          reject('Permission denied');
-        }
-
-        User.areFriends(requester, owner).then(isFriend => {
-          if (!isFriend) {
-            reject('Permission denied');
-          }
-          resolve();
-        });
-
-      } else {
-        resolve();
+    if (owner !== requester && privacyLevel !== 'global') {
+      
+      if (privacyLevel === 'private') {
+        throw 'Permission denied';
       }
 
-    });
+      const isFriend = await User.areFriends(requester, owner);
+
+      if (!isFriend) {
+        throw 'Permission denied';
+      }
+      
+      return;
+    }
+
+    return;
   },
 
   /**
@@ -64,38 +62,34 @@ module.exports = {
    * @param {String} requester userId of the user requesting access
    * @return {Promise} resolves with array of accessible privacy levels
    */
-  many (query, requester) {
+  async many (query, requester) {
     if (typeof requester !== 'string') {
-      throw ('requestor needs to be a String');
+      throw 'requestor needs to be a String';
+    }
+    
+    if (query.user === requester) {
+      if (query.privacyLevel) {
+        return [query.privacyLevel];
+      } else {
+        return ['global', 'friends', 'private'];
+      }
     }
 
-    return new Promise ((resolve, reject) => {
+    // requesting private entities that do not belong to logged-in user
+    if (query.privacyLevel && query.privacyLevel === 'private') {
+      throw "Can't view private entities for another user.";
+    }
 
-      if (query.user === requester) {
-        if (query.privacyLevel) {
-          resolve([query.privacyLevel]);
-        } else {
-          resolve(['global', 'friends', 'private']);
-        }
+    const isFriend = await User.areFriends(requester, query.user);
+    
+    if (!isFriend) {
+      if (query.privacyLevel && query.privacyLevel !== 'global') {
+        throw 'Not friends';
       }
-
-      // requesting private entities that do not belong to logged-in user
-      if (query.privacyLevel && query.privacyLevel === 'private') {
-        reject("Can't view private entities for another user.");
-      }
-
-      User.areFriends(requester, query.user).then(isFriend => {
-        if (!isFriend) {
-          if (query.privacyLevel && query.privacyLevel !== 'global') {
-            reject('Not friends');
-          }
-          resolve(['global']);
-        } else {
-          resolve(query.privacyLevel ? [query.privacyLevel] : ['friends', 'global']);
-        }
-      });
-
-    });
+      return ['global'];
+    } else {
+      return (query.privacyLevel ? [query.privacyLevel] : ['friends', 'global']);
+    }
   }
 
 };

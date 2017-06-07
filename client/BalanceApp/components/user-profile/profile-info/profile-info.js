@@ -1,30 +1,23 @@
-  // vendors
 import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
   Image
 } from 'react-native';
-
-// components
 import FriendButton from '../../friend-button/friend-button';
-
-// styles
 import Styles from './profile-info-styles';
+import Bookmarks from '../bookmarks/bookmarks';
 
 class ProfileInfo extends Component  {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    customTextStyle: PropTypes.array
-  }
-
-  constructor (props) {
-    super(props);
+    customTextStyle: PropTypes.array,
+    onBookmarksPress: PropTypes.func.isRequired
   }
 
   render () {
-    const { user, customTextStyle = [] } = this.props;
+    const { user, customTextStyle = [], onBookmarksPress } = this.props;
 
     return (
       <View style={ Styles.ProfileInfo }>
@@ -43,6 +36,7 @@ class ProfileInfo extends Component  {
             </Text>
           </View>
         </View>
+        <Bookmarks count={ user.bookmark_count } onPress={ onBookmarksPress }/>
         <Bio bio={ user.bio } />
         <View style={ Styles.friendButton }>
           <FriendButton userId={ user.userId } hideIfLoggedInUser />
@@ -63,6 +57,6 @@ const Bio = ({ bio }) => {
   }
 
   return null;
-}
+};
 
 export default ProfileInfo;

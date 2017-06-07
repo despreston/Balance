@@ -3,7 +3,7 @@ import users         from './users';
 import notes         from './notes';
 import comments      from './comments';
 import notifications from './notifications';
-import devices       from './devices';
+import bookmarks     from './bookmarks';
 
 const initialState = {
   // Users key'd by userId
@@ -28,14 +28,15 @@ const initialState = {
   // Set this to a notification _id to show that notification in the toaster
   notificationForToaster: null,
 
-  devices: {}
+  // Bookmarks by _id
+  bookmarks: {}
   
 };
 
 export default function reducer (state = initialState, action) {
 
   let handlers = Object.assign({},
-    projects, notes, users, comments, notifications, devices
+    projects, notes, users, comments, notifications, bookmarks
   );
 
   if (action.type === 'RESET') {

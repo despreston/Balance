@@ -90,9 +90,9 @@ export default {
 
     return Object.assign({}, state, {
       projects,
-      notes: arrayToObj(notes),
-      notifications: arrayToObj(notifications),
-      comments: arrayToObj(comments)
+      notes: arrayToObj(notes, '_id'),
+      notifications: arrayToObj(notifications, '_id'),
+      comments: arrayToObj(comments, '_id')
     });
   }
 

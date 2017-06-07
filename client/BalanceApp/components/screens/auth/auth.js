@@ -20,15 +20,11 @@ import {
 class Auth extends Component {
 
   static mapStateToProps (state) {
-    return {
-      user: state.users[state.loggedInUser],
-      devices: state.devices
-    };
+    return { user: state.users[state.loggedInUser] };
   }
 
   static propTypes = {
-    user: PropTypes.object,
-    devices: PropTypes.object
+    user: PropTypes.object
   }
 
   constructor (props) {
@@ -72,8 +68,7 @@ class Auth extends Component {
           return Promise.all([
             dispatch(actions.connectToPiper(token.sub)),
             dispatch(actions.fetchNotifications()),
-            dispatch(actions.requestUser(token.sub, true)),
-            dispatch(actions.fetchDevices())
+            dispatch(actions.requestUser(token.sub, true))
           ]);
         })
         .then(() => {
@@ -103,11 +98,7 @@ class Auth extends Component {
 
   initPushNotifications () {
     PushNotificationIOS.addEventListener('register', deviceToken => {
-      const devicesArray = Object.keys(this.props.devices).map(id => this.props.devices[id]);
-      const tokenExists = devicesArray.find(d => d.deviceToken === deviceToken);
-      let token = tokenExists || { _new: true, deviceToken };
-
-      this.props.dispatch(actions.saveDevice(token));
+      this.props.dispatch(actions.saveDevice(deviceToken));
     });
 
     PushNotificationIOS.requestPermissions();

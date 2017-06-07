@@ -6,28 +6,25 @@ const { NewReaction } = Notification;
 
 module.exports = ({ del }) => {
 
-  del('reactions/:_id', ({ params, user }, res) => {
-    Reaction
-    .findOne(params)
-    .then(reaction => {
-      if (reaction.userId !== user.sub) {
-        return res.send(403);
-      }
+  del('reactions/:_id', async ({ params, user }, res) => {
+    try {
+      const reaction = await Reaction.findOne(params);
 
-      return reaction.remove().then(() => {
-        return User
+      if (reaction.userId !== user.sub) return res.send(403);
+
+      await reaction.remove();
+
+      const reactionUser = await User
         .findOne({ userId: user.sub })
-        .select('_id')
-        .then(user => {
-          return NewReaction.remove(reaction.userId, reaction.note, user._id);
-        });
-      });
-    })
-    .then(() => res.send(200, []))
-    .catch(err => {
-      log.error(err);
+        .select('_id');
+
+      await NewReaction.remove(reaction.userId, reaction.note, reactionUser._id);
+
+      return res.send(200, []);
+    } catch (e) {
+      log.error(e);
       return res.send(500);
-    });
+    }
   })
 
 };

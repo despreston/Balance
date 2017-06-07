@@ -14,6 +14,7 @@ import UserSearch from './user-search/user-search';
 import NoteContainer from './note/note-container';
 import Auth from './auth/auth';
 import FriendRequestList from './friend-request-list/friend-request-list';
+import UserBookmarksContainer from './user-bookmarks/user-bookmarks-container';
 
 export {
   MainScene,
@@ -27,5 +28,6 @@ export {
   UserSearch,
   NoteContainer,
   Auth,
-  FriendRequestList
+  FriendRequestList,
+  UserBookmarksContainer
 };

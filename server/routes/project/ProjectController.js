@@ -1,143 +1,184 @@
 'use strict';
-const Project = require('../../models/Project');
+const Project       = require('../../models/Project');
+const Bookmark      = require('../../models/Bookmark');
 const AccessControl = require('../../utils/access-control');
-const log = require('logbro');
+const log           = require('logbro');
 
 module.exports = ({ get, post, del, put }) => {
-  
-  get('projects/:_id', ({ params, user }, res) => {
-    Project
-    .findOne(params)
-    .populate(Project.latestPastNote)
-    .populate(Project.latestFutureNote)
-    .populate('nudgeUsers', 'userId picture')
-    .then(project => project.toObject({ virtuals: true }))
-    .then(project => Project.futureAndPastNotes(project))
-    .then(project => Project.removeExcludedFields(project))
-    .then(project => {
-      const owner = project.owner[0].userId;
 
-      return AccessControl.single(owner, user.sub, project.privacyLevel)
-        .then(() => res.send(200, project))
-        .catch(err => {
-          log.error(err);
-          return res.send(403, err);
-        });
-    })
-    .catch(err => {
-      log.error(err);
-      return res.send(500, err);
-    })
+  get('projects/:_id/bookmark', async ({ params, user }, res) => {
+    try {
+      const bookmark = await Bookmark
+        .findOne({
+          userId: user.sub,
+          project: params._id
+        })
+        .populate('bookmarker', 'userId username picture');
+
+      if (bookmark) return res.send(200, bookmark.toObject({ virtuals: true }));
+
+      return res.send(200, []);
+    } catch (e) {
+      log.error(e);
+      return res.send(500);
+    }
   });
 
-  get('projects', ({ params, user }, res) => {
+  get('projects/:_id', async ({ params, user }, res) => {
+    try {
+      let project = await Project
+        .findOne(params)
+        .populate(Project.latestPastNote)
+        .populate(Project.latestFutureNote)
+        .populate('nudgeUsers', 'userId picture');
+
+      project = project.toObject({ virtuals: true });
+      project = Project.futureAndPastNotes(project);
+      project = Project.removeExcludedFields(project);
+      const owner = project.owner[0].userId;
+      
+      try {
+        await AccessControl.single(owner, user.sub, project.privacyLevel);
+      } catch (e) {
+        return res.send(403);
+      }
+
+      project.bookmark_count = await Bookmark.count({ project: params._id });
+
+      return res.send(200, project);
+    } catch (e) {
+      log.error(e);
+      return res.send(500, e);
+    }
+  });
+
+  get('projects/:_id/bookmarks', async ({ params, user }, res) => {
+    try {
+      let project = await Project.findOne({ _id: params._id });
+      project = project.toObject({ virtuals: true });
+      const owner = project.owner[0].userId;
+
+      try {
+        await AccessControl.single(owner, user.sub, project.privacyLevel);
+      } catch (e) {
+        return res.send(401);
+      }
+
+      let bookmarks = await Bookmark.find({ project: params._id })
+        .populate('bookmarker', 'userId username picture');
+
+      bookmarks = bookmarks.toObject({ virtuals: true });
+
+      return res.send(200, bookmarks);
+    } catch (e) {
+      log.error(e);
+      return res.send(500, e); 
+    }
+  });
+
+  get('projects', async ({ params, user }, res) => {
     if (!params.user) {
       return res.send(400, 'Missing user parameter');
     }
 
-    AccessControl.many(params, user.sub)
-      .then(privacyLevel => {
+    try {
+      const privacyLevel = await AccessControl.many(params, user.sub);
+      
+      const query = Object.assign({}, params,
+        { privacyLevel: { $in: privacyLevel }
+      });
 
-        privacyLevel = { privacyLevel: { $in: privacyLevel } };
-        const query = Object.assign({}, params, privacyLevel);
-
-        Project
+      let projects = await Project
         .find(query)
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
-        .populate('nudgeUsers', 'userId picture')
-        .then(projects => projects.map(p => p.toObject({ virtuals: true })))
-        .then(projects => projects.map(Project.futureAndPastNotes))
-        .then(projects => projects.map(Project.removeExcludedFields))
-        .then(projects => res.send(200, projects))
-        .catch(err => {
-          log.error(err);
-          return res.send(500);
-        });
+        .populate('nudgeUsers', 'userId picture');
 
-      }).catch(err => res.send(403, 'Failed: ' + err));
-  });
+      projects = projects.map(p => p.toObject({ virtuals: true }));
+      projects = projects.map(Project.futureAndPastNotes);
 
-  // post('projects/:_id/bookmarkers', ({ params, user }, res) => {
-  //   Project
-  //   .findOne(params)
-  //   .populate(Project.latestPastNote)
-  //   .populate(Project.latestFutureNote)
-  //   .then(project =>)
-  // });
-
-  post('projects/:_id/nudges', ({ params, user }, res) => {
-    Project
-    .findOne(params)
-    .populate(Project.latestPastNote)
-    .populate(Project.latestFutureNote)
-    .then(project => project.addNudge(user.sub))
-    .then(project => project.toObject({ virtuals: true }))
-    .then(project => Project.futureAndPastNotes(project))
-    .then(project => Project.removeExcludedFields(project))
-    .then(project => res.send(200, project))
-    .catch(err => {
-      log.error(err);
+      return res.send(200, projects);
+    } catch (e) {
+      log.error(e);
       return res.send(500);
-    });
+    }
   });
 
-  del('projects/:project/nudges/:user', ({ params, user }, res) => {
+  post('projects/:_id/nudges', async ({ params, user }, res) => {
+    try {
+      let project = await Project
+        .findOne(params)
+        .populate(Project.latestPastNote)
+        .populate(Project.latestFutureNote);
+
+      project = await project.addNudge(user.sub);
+      project = project.toObject({ virtuals: true });
+      project = Project.futureAndPastNotes(project);
+      project = Project.removeExcludedFields(project);
+
+      return res.send(201, project);
+    } catch (e) {
+      log.error(e);
+      return res.send(500);
+    }
+  });
+
+  del('projects/:project/nudges/:user', async ({ params, user }, res) => {
     if (params.user !== user.sub) {
       return res.send(403);
     }
 
-    Project
-    .findOne({ '_id': params.project })
-    .populate(Project.latestPastNote)
-    .populate(Project.latestFutureNote)
-    .populate('nudgeUsers', 'userId picture')
-    .then(project => project.removeNudge(user.sub))
-    .then(project => project.toObject({ virtuals: true }))
-    .then(project => Project.futureAndPastNotes(project))
-    .then(project => Project.removeExcludedFields(project))
-    .then(project => res.send(200, project))
-    .catch(err => {
-      log.error(err);
+    try {
+      let project = await Project
+        .findOne({ '_id': params.project })
+        .populate(Project.latestPastNote)
+        .populate(Project.latestFutureNote)
+        .populate('nudgeUsers', 'userId picture');
+
+      project = await project.removeNudge(user.sub);
+      project = project.toObject({ virtuals: true });
+      project = Project.futureAndPastNotes(project);
+      project = Project.removeExcludedFields(project);
+
+      return res.send(200, project);
+    } catch (e) {
+      log.error(e);
       return res.send(500);
-    });
-  });
-
-  post('projects', ({ body, user }, res) => {
-    body = JSON.parse(body);
-
-    if (body.user && body.user !== user.sub) {
-      return res.send(403);
     }
-    
-    Project
-    .create(body)
-    .then(newProject => {
-      Project.findOne({ _id: newProject._id })
-      .populate('nudgeUsers', 'userId picture')
-      .then(project => {
-
-        project = project.toObject({ virtuals: true });
-        project.Past = null;
-        project.Future = null;
-        
-        project = Project.removeExcludedFields(project);
-
-        return res.send(201, project);
-      });
-    })
-    .catch(() => res.send(500));
   });
 
-  put('projects/:_id', ({ params, body, user }, res) => {
-    body = JSON.parse(body);
+  post('projects', async ({ body, user }, res) => {
+    try {
+      body = JSON.parse(body);
 
-    Project
-    .findOne({_id: params._id})
-    .populate(Project.latestPastNote)
-    .populate(Project.latestFutureNote)
-    .populate('nudgeUsers', 'userId picture')
-    .then(project => {
+      if (body.user && body.user !== user.sub) {
+        return res.send(403);
+      }
+
+      let project = await Project.create(body);
+
+      project = await Project.findOne({ _id: project._id })
+        .populate('nudgeUsers', 'userId picture');
+
+      project = project.toObject({ virtuals: true });
+      project.Past = null;
+      project.Future = null;
+      project = Project.removeExcludedFields(project);
+
+      return res.send(201, project);
+    } catch (e) {
+      return res.send(500);
+    }
+  });
+
+  put('projects/:_id', async ({ params, body, user }, res) => {
+    try {
+      body = JSON.parse(body);
+      let project = await Project
+        .findOne({_id: params._id})
+        .populate(Project.latestPastNote)
+        .populate(Project.latestFutureNote)
+        .populate('nudgeUsers', 'userId picture');
 
       if (project.user !== user.sub) {
         return res.send(403);
@@ -146,23 +187,27 @@ module.exports = ({ get, post, del, put }) => {
       project = Object.assign(project, body);
       project.save();
       project = project.toObject({ virtuals: true });
-
-      return Project.futureAndPastNotes(project);
-    })
-    .then(project => Project.removeExcludedFields(project))
-    .then(project => res.send(200, project))
-    .catch(err => {
-      log.error(err);
+      project = Project.futureAndPastNotes(project);
+      project = Project.removeExcludedFields(project);
+     
+      return res.send(200, project); 
+    } catch (e) {
+      log.error(e);
       return res.send(500);
-    });
+    }
   });
 
-  del('projects/:_id', (req, res) => {
-    Project
-    .findOne({ _id: req.params._id })
-    .then(project => project.remove())
-    .then(() => res.send(200, []))
-    .catch(err => res.send(500, err));
+  del('projects/:_id', async (req, res) => {
+    try {
+      let project = await Project
+        .findOne({ _id: req.params._id });
+
+      project.remove();
+
+      return res.send(200, [])
+    } catch (e) {
+      return res.send(500);
+    }
   });
 
 };

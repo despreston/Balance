@@ -91,7 +91,7 @@ class ProjectListItem extends Component {
       return null;
     }
 
-    return <NudgeBtn style={ Style.nudgeBtn } project={ this.props.project._id } />;
+    return <NudgeBtn style={ Style.nudgeBtn } project={ this.props.project } />;
   }
 
   renderStatusIcon () {

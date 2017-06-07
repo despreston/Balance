@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ProjectDetail from './project-detail';
 import Icon from '../../navigation/icon';
 import actions from '../../../actions/';
+import BookmarkButton from '../../bookmark-button/bookmark-button';
 
 class ProjectDetailContainer extends Component {
 
@@ -16,7 +17,7 @@ class ProjectDetailContainer extends Component {
   }
 
   static mapStateToProps (state, { navigation }) {
-    let userIsOwner;
+    let userIsOwner = false;
     const project = state.projects[navigation.state.params.project];
 
     // notes for selected project
@@ -34,20 +35,9 @@ class ProjectDetailContainer extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { state, navigate } = navigation;
-    let headerRight = null;
-
-    if (state.params.showEdit) {
-      headerRight = (
-        <Icon
-          imagePath={ require('../../../assets/icons/settings.png') }
-          onPress={ () => {
-            navigate('EditProject', { project: state.params.project })
-          }}
-        />
-      );
-    }
-
-    return { headerRight };
+    return {
+      headerRight: headerRight(navigate, state.params.showEdit, state.params.project)
+    };
   }
 
   constructor (props) {
@@ -71,11 +61,12 @@ class ProjectDetailContainer extends Component {
   }
 
   componentWillMount () {
-    this.props.navigation.setParams({ showEdit: this.props.userIsOwner });
+    this.props.navigation.setParams({ showEdit: !!this.props.userIsOwner });
   }
 
   load () {
-    return this.props.dispatch(actions.fetchProject(this.props.navigation.state.params.project))
+    const { project } = this.props.navigation.state.params;
+    return this.props.dispatch(actions.fetchProject(project));
   }
 
   refresh () {
@@ -130,7 +121,22 @@ class ProjectDetailContainer extends Component {
       />
     );
   }
-
 }
+
+const headerRight = (navigate, showEdit, project) => {
+  if (showEdit) {
+    return (
+      <Icon
+        imagePath={ require('../../../assets/icons/settings.png') }
+        onPress={ () => {
+          navigate('EditProject', { project })
+        }}
+      />
+    );
+  } else if (showEdit === false) {
+    return <BookmarkButton project={ project } />;
+  }
+  return null;
+};
 
 export default connect(ProjectDetailContainer.mapStateToProps)(ProjectDetailContainer);
