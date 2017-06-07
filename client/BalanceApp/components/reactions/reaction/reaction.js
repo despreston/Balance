@@ -28,12 +28,12 @@ class Reaction extends Component {
     const { dispatch } = this.props;
     let userReactionPair = this.isSelected();
 
-    new Promise(() => {
+    new Promise((resolve) => {
       if (userReactionPair) {
-        return dispatch(actions.deleteReaction(userReactionPair[1], this.props.note));
+        return resolve(dispatch(actions.deleteReaction(userReactionPair[1], this.props.note)));
       }
 
-      return dispatch(actions.addReaction(this.props.reaction, this.props.note));
+      return resolve(dispatch(actions.addReaction(this.props.reaction, this.props.note)));
     }).then(() => this.setState({ disabled: false }));
   }
 

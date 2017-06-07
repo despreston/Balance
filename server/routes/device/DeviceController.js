@@ -32,11 +32,14 @@ module.exports = ({ post, put, get }) => {
   post('devices', async ({ body, user }, res) => {
     try {
       body = JSON.parse(body);
-      body.userId = user.sub;
 
-      const device = await Device.create(body);
+      Device.update(
+        { deviceToken: body, userId: user.sub },
+        { $set: { deviceToken: body, lastUpdated: new Date() } },
+        { upsert: true }
+      ).exec();
 
-      return res.send(201, device);
+      return res.send(201, {});
     } catch (e) {
       log.error(e);
       return res.send(403);

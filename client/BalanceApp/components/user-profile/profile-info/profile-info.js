@@ -49,15 +49,17 @@ class ProfileInfo extends Component  {
 const Bookmarks = ({ count }) => {
   const text = (count > 1 || count === 0) ? 'Bookmarks' : 'Bookmark';
   return (
-    <TouchableOpacity style={[ Styles.row, Styles.bookmarkContainer ]}>
-      <Image
-        source={require('../../../assets/icons/star-filled.png')}
-        style={{width: 15, height: 15}}
-      />
-      <Text style={[ Styles.selectedContext, Styles.bold ]}>
-        {` ${count} ${text}`}
-      </Text>
-    </TouchableOpacity>
+    <View style={ Styles.row }>
+      <TouchableOpacity style={[ Styles.row, Styles.bookmarkContainer ]}>
+        <Image
+          source={require('../../../assets/icons/star-filled.png')}
+          style={{width: 15, height: 15}}
+        />
+        <Text style={[ Styles.selectedContext, Styles.bold ]}>
+          {` ${count} ${text}`}
+        </Text>
+      </TouchableOpacity>
+    </View>
   )
 };
 

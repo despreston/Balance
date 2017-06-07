@@ -9,7 +9,7 @@ export const Styles = StyleSheet.create ({
 
   noteListItem: {
     marginHorizontal: 10,
-    paddingVertical: 7
+    paddingVertical: 10
   }
   
 });
