@@ -66,7 +66,6 @@ class ProjectDetailContainer extends Component {
 
   load () {
     const { project } = this.props.navigation.state.params;
-
     return this.props.dispatch(actions.fetchProject(project));
   }
 

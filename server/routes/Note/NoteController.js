@@ -177,6 +177,8 @@ module.exports = ({ get, post, put, del }) => {
 
   get('notes', async ({ params, user }, res) => {
     try {
+      // To get private notes, you MUST include a `user` in the params
+      // This is because AccessControl compares that param to `user.sub`
       const privacyLevels = await AccessControl.many(params, user.sub);
 
       let notes = await Note
