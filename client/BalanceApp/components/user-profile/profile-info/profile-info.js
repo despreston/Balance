@@ -2,8 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity
+  Image
 } from 'react-native';
 import FriendButton from '../../friend-button/friend-button';
 import Styles from './profile-info-styles';

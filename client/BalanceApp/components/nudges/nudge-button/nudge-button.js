@@ -13,7 +13,7 @@ import actions from '../../../actions/';
 // styles
 import Style from './nudge-button-style';
 
-function mapStateToProps ({ loggedInUser }, ownProps) {
+function mapStateToProps ({ loggedInUser }) {
   return { user: loggedInUser };
 }
 
