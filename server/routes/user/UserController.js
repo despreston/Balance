@@ -74,12 +74,22 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  get("users/:userId:/bookmarks", async ({ params, user }, res) => {
+  get("users/:userId/bookmarks", async ({ params, user }, res) => {
     try {
-      const bookmarks = await Bookmark.find({ userId: params.userId })
-        .populate('userId', 'userId username picture');
+      const bookmarks = await Bookmark
+        .find({ userId: params.userId })
+        .select('project');
 
-      return res.send(200, bookmarks);
+      let projects = await Project
+        .find({ _id: { $in: bookmarks.map(bookmark => bookmark.project) } })
+        .populate(Project.latestPastNote)
+        .populate(Project.latestFutureNote)
+        .populate('nudgeUsers', 'userId picture');
+
+      projects = projects.map(p => p.toObject({ virtuals: true }));
+      projects = projects.map(Project.futureAndPastNotes);
+
+      return res.send(200, projects);
     } catch (e) {
       log.error(e);
       return res.send(500);

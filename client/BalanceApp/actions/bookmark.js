@@ -76,15 +76,6 @@ export default {
    */
   bookmarksForProject (id) {
     return apiDispatch(`projects/${id}/bookmarks`, this.receiveBookmarks);
-  },
-
-  /**
-   * Request bookmarks for user
-   * @param {String} userId The userId of the user
-   * @return {Promise}
-   */
-  bookmarksForUser (userId) {
-    return apiDispatch(`users/${userId}/bookmarks`, this.receiveBookmarks);
   }
 
 };

@@ -13,32 +13,32 @@ import actions from '../../../actions/';
 // styles
 import Style from './nudge-button-style';
 
-function mapStateToProps ({ projects, loggedInUser }, ownProps) {
-  let fullProj = projects[ownProps.project];
-
-  let isSelected = fullProj.nudgeUsers
-    ? fullProj.nudgeUsers.some(u => u.userId === loggedInUser)
-    : false;
-
-  return { user: loggedInUser, isSelected };
+function mapStateToProps ({ loggedInUser }, ownProps) {
+  return { user: loggedInUser };
 }
 
 class NudgeBtn extends Component {
 
   static propTypes = {
-    isSelected: PropTypes.bool.isRequired,
-    project: PropTypes.string.isRequired,
+    project: PropTypes.object.isRequired,
     useWhite: PropTypes.bool
   };
 
   constructor (props) {
     super(props);
+    this.state = { isSelected: this.isSelected(props.project, props.user) };
+  }
 
-    this.state = { isSelected: props.isSelected };
+  isSelected (project, user) {
+    return project.nudgeUsers
+      ? project.nudgeUsers.some(u => u.userId === user)
+      : false;
   }
 
   componentWillReceiveProps (nextProps) {
-    this.setState({ isSelected: nextProps.isSelected });
+    this.setState({
+      isSelected: this.isSelected(nextProps.project, nextProps.user)
+    });
   }
 
   renderButton () {

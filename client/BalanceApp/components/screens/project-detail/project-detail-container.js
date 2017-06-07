@@ -17,7 +17,7 @@ class ProjectDetailContainer extends Component {
   }
 
   static mapStateToProps (state, { navigation }) {
-    let userIsOwner;
+    let userIsOwner = false;
     const project = state.projects[navigation.state.params.project];
 
     // notes for selected project

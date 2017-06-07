@@ -1,19 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-
-// components
 import ProfileInfo from './profile-info/profile-info';
 import UserList from '../user-list/user-list';
 import ProjectListContainer from '../project-list/project-list-container';
 import NoteListContainer from '../note-list/note-list-container';
 import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 import Refresh from '../refresh/refresh';
-
-// actions
 import actions from '../../actions/';
-
-// styles
 import Styles from './profile-styles';
 
 class UserProfile extends Component {
@@ -75,7 +69,7 @@ class UserProfile extends Component {
     };
 
     this.loadUser();
-
+    this.onBookmarksPress = this.onBookmarksPress.bind(this);
     this.userIsLoggedInUser = props.userId === props.loggedInUser;
   }
 
@@ -86,6 +80,10 @@ class UserProfile extends Component {
   fetchFriendsList () {
     return this.props.dispatch(actions.fetchFriendsForUser(this.props.userId))
       .then(() => this.setState({ loadingContext: false }));
+  }
+
+  onBookmarksPress () {
+    this.props.nav('UserBookmarks');
   }
 
   renderLatest () {
@@ -149,6 +147,8 @@ class UserProfile extends Component {
     }
   }
 
+
+
   refresh () {
     this.setState({ refreshing: true });
     this.loadUser().then(() => this.setState({ refreshing: false }));
@@ -168,6 +168,7 @@ class UserProfile extends Component {
       <ScrollView style={ Styles.profile } refreshControl={ <Refresh { ...refreshProps } /> }>
         <View style={ Styles.profileInfo }>
           <ProfileInfo
+            onBookmarksPress={ this.onBookmarksPress }
             user={ this.props.user }
           />
           <UserProfileSwitch

@@ -88,10 +88,6 @@ export default StyleSheet.create  ({
   border: {
     borderBottomWidth: 2,
     borderBottomColor: Colors.purple
-  },
-
-  bookmarkContainer: {
-    paddingBottom: 10
   }
 
 });
