@@ -1,5 +1,4 @@
-import { apiDispatch, api } from '../utils/api';
-import { arrayToObj } from '../utils/helpers';
+import { api } from '../utils/api';
 
 export default {
 
@@ -9,7 +8,7 @@ export default {
    * @return {Promise}
    */
   saveDevice (deviceToken) {
-    return dispatch => api('devices', { method: 'POST', body: deviceToken });
+    return () => api('devices', { method: 'POST', body: deviceToken });
   }
 
 };
