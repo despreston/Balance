@@ -17,7 +17,7 @@ class Bookmarks extends Component {
       <View style={ styles.center }>
         <TouchableOpacity
           onPress={ onPress }
-          style={[ styles.center, styles.Container ]}
+          style={[ styles.center, styles.container ]}
         >
           <Image
             source={require('../../../assets/icons/star-filled.png')}
