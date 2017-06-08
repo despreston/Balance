@@ -4,8 +4,12 @@ class NudgedProjectUpdated extends Notification {
 
   static remove (user, project, owner) {
     super.remove({
-      userId: user,
-      $and: [{ 'related.item': project }, { 'related.item': owner }]
+      $and: [
+        { 'related.item': project },
+        { 'related.item': owner },
+        { 'userId': user },
+        { 'type': 'nudged_project_updated' }
+      ]
     });
   }
 
