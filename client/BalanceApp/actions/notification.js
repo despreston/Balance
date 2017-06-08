@@ -1,4 +1,4 @@
-import { apiDispatch } from '../utils/api';
+import { apiDispatch, api } from '../utils/api';
 import { arrayToObj } from '../utils/helpers';
 import { PushNotificationIOS } from 'react-native';
 
@@ -49,7 +49,13 @@ export default {
    * @return {Promise}
    */
   fetchNotifications () {
-    return apiDispatch(`notifications`, this.receiveNotifications);
+    return dispatch => {
+      return api('notifications')
+        .then(notifications => {
+          dispatch(this.clearNotificationsFromRedux());
+          return dispatch(this.receiveNotifications(notifications));
+        });
+    };
   },
 
   /**
