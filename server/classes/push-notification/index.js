@@ -6,7 +6,7 @@ const config       = require('../../config.json');
 const options = {
   cert: config.apn.certLocation,
   key: config.apn.keyLocation,
-  production: false
+  production: true
 };
 
 const apnProvider = new apn.Provider(options);
@@ -59,9 +59,13 @@ class PushNotification {
     try {
       await this.setBadge();
       const deviceTokens = await this.getDeviceTokens();
-      apnProvider.send(this.note, deviceTokens);
+      const result = await apnProvider.send(this.note, deviceTokens);
+      
+      if (result.failed.length > 0) {
+        throw 'Failed to send notification through apnProvider';
+      }
     } catch (e) {
-      throw 'error sending push notification';
+      throw 'Error sending push notification: ' + e;
     }
   }
 
