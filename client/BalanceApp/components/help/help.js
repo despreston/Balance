@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import Dimensions from 'Dimensions';
 import Styles from './help-styles';
-import ProfileInfo from '../user-profile/profile-info/profile-info';
 
 export default class Help extends Component {
 
@@ -20,17 +19,8 @@ export default class Help extends Component {
 
   constructor (props) {
     super(props);
-
     this.state = { showHideBtn: false };
-
     this.scrollView = null;
-
-    this.me = {
-      userId: 'twitter|15740537',
-      picture: 'https://pbs.twimg.com/profile_images/579124755392962560/G_z-2pJz_normal.jpg',
-      name: 'Des Preston',
-      username: 'des'
-    };
   }
 
   /**
@@ -69,7 +59,6 @@ export default class Help extends Component {
             { this.topic('Nudges', 2) }
             { this.topic('Project colors', 3) }
             { this.topic('How can I find other users?', 4) }
-            { this.topic('Who made this?', 5) }
           </View>
 
           <View style={ Styles.answer }>
@@ -120,19 +109,6 @@ export default class Help extends Component {
               tapping the { }
               <Image source={ require('../../assets/icons/users.png') } style={{ width: 20, height: 20}}/>
               { } icon in the top left corner.
-            </Text>
-          </View>
-          <View style={ Styles.answer }>
-            <Text style={ Styles.topic }>Who made this?</Text>
-            <ProfileInfo user={ this.me } customTextStyle={[ Styles.me ]}/>
-            <Text style={[ Styles.text, { paddingTop: 20 } ]}>
-              Hi, my name's Des Preston. I created Balance to manage my own 
-              projects in 2016. Since then I've worked some long hours so I can
-              see what my friends are also working on.
-            </Text>
-            <Text style={ Styles.text }>
-              Feel free to get in touch with me on Twitter
-              <Text style={ Styles.twitterHandle }> @despreston</Text>
             </Text>
           </View>
         </ScrollView>

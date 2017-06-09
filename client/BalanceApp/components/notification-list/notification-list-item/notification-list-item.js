@@ -5,11 +5,12 @@ import prettyDate from '../../../utils/fancy-date';
 
 import Styles from './notification-list-item-styles';
 
-import NewComment            from './types/NewComment';
-import NewReaction           from './types/NewReaction';
-import AcceptedFriendRequest from './types/AcceptedFriendRequest';
-import NewNudge              from './types/NewNudge';
-import NudgedProjectUpdated  from './types/NudgedProjectUpdated';
+import NewComment               from './types/new-comment';
+import NewReaction              from './types/new-reaction';
+import AcceptedFriendRequest    from './types/accepted-friend-request';
+import NewNudge                 from './types/new-nudge';
+import NudgedProjectUpdated     from './types/nudged-project-updated';
+import BookmarkedProjectUpdated from './types/bookmarked-project-updated';
 
 class NotificationListItem extends Component {
 
@@ -49,6 +50,10 @@ class NotificationListItem extends Component {
         props.note = this.related.find(r => r.kind === 'note').item._id;
         props.reaction = this.related.find(r => r.kind === 'reaction').item.reaction;
         return { text: (<NewReaction { ...props }/>), icon: NewReaction.icon };
+
+      case 'bookmarked_project_updated':
+        props.project = this.related.find(r => r.kind === 'project').item;
+        return { text: (<BookmarkedProjectUpdated { ...props } />), icon: BookmarkedProjectUpdated.icon };
     }
   }
 

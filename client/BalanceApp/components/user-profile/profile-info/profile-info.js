@@ -12,12 +12,11 @@ class ProfileInfo extends Component  {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    customTextStyle: PropTypes.array,
     onBookmarksPress: PropTypes.func.isRequired
   }
 
   render () {
-    const { user, customTextStyle = [], onBookmarksPress } = this.props;
+    const { user, onBookmarksPress } = this.props;
 
     return (
       <View style={ Styles.ProfileInfo }>
@@ -27,11 +26,11 @@ class ProfileInfo extends Component  {
             <Text
               adjustsFontSizeToFit
               minimumFontScale={ 0.8 }
-              style={ [Styles.name, ...customTextStyle] }
+              style={ Styles.name }
             >
               { user.name }
             </Text>
-            <Text style={ [Styles.username, ...customTextStyle] }>
+            <Text style={ Styles.username }>
               @{ user.username }
             </Text>
           </View>

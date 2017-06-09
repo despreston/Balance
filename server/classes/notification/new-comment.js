@@ -4,8 +4,12 @@ class NewComment extends Notification {
 
   static remove (user, note, commenter) {
     super.remove({
-      userId: user,
-      $and: [{ 'related.item': note }, { 'related.item': commenter }]
+      $and: [
+        { 'related.item': note },
+        { 'related.item': commenter },
+        { 'userId': user },
+        { 'type': 'new_comment' }
+      ]
     });
   }
 

@@ -7,7 +7,8 @@ class NewReaction extends Notification {
       $and: [
         { userId: user },
         { 'related.item': note },
-        { 'related.item': sender }
+        { 'related.item': sender },
+        { type: 'new_reaction' }
       ]
     });
   }
