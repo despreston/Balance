@@ -98,7 +98,6 @@ class ProjectDetail extends Component {
 
     // hide edit buttons if project is Finished OR user is not the owner
     return (
-      <View>
         <NoteListContainer
           showTypeText
           emptyState={ <EmptyFutureNotes /> }
@@ -107,7 +106,6 @@ class ProjectDetail extends Component {
           showEdit={ status !== 'finished' && userIsOwner }
           onSelect={ goToNote }
         />
-      </View>
     );
   }
 

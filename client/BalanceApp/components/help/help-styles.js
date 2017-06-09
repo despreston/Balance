@@ -51,20 +51,12 @@ export default StyleSheet.create  ({
     fontWeight: 'bold'
   },
 
-  me: {
-    color: Colors.white
-  },
-
   top: {
     height: 50,
     width: 50,
     position: 'absolute',
     right: 20,
     bottom: 10
-  },
-
-  twitterHandle: {
-    fontWeight: 'bold'
   }
 
 });
