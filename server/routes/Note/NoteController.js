@@ -187,7 +187,7 @@ module.exports = ({ get, post, put, del }) => {
         .populate('project', 'title privacyLevel')
         .populate('reactions', 'userId reaction');
 
-      if (notes.length === 0) return notes;
+      if (notes.length === 0) return res.send(200, notes);
 
       notes = notes.filter(note => {
         return privacyLevels.indexOf(note.project.privacyLevel) > -1;
