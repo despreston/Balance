@@ -18,6 +18,8 @@ export default {
 
   yellow: '#F1C40F',
 
-  orange: '#F39C12'
+  orange: '#F39C12',
+
+  black: '#000000'
 
 };

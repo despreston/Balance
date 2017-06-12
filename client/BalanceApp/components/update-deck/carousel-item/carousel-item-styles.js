@@ -5,16 +5,16 @@ export default StyleSheet.create  ({
 
   container: {
     flex: 1,
-    borderRadius: 5,
-    backgroundColor: Colors.purple
+    borderRadius: 5
   },
 
   picture: {
     borderRadius: 5,
-    height: 300
+    height: 350
   },
 
   placeholder: {
+    backgroundColor: Colors.purple,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -29,15 +29,27 @@ export default StyleSheet.create  ({
   },
 
   contentContainer: {
-    flex: 1,
-    padding: 5,
-    borderBottomLeftRadius: 5,
+    bottom: 80,
+    height: 80,
+    padding: 10
+  },
+
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    backgroundColor: Colors.black,
+    opacity: 0.5,
     borderBottomRightRadius: 5,
-    backgroundColor: Colors.white,
+    borderBottomLeftRadius: 5
   },
 
   content: {
-    flex: 1
+    color: Colors.white,
+    flex: 1,
+    lineHeight: 19
   }
 
 });

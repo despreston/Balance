@@ -37,7 +37,10 @@ class CarouselItem extends Component {
           </View>
         }
         <View style={ styles.contentContainer }>
-          <Text style={ styles.content }>{ note.content }</Text>
+          <View style={ styles.overlay } />
+          <Text style={ styles.content } numberOfLines={ 3 }>
+            { note.content }
+          </Text>
         </View>
       </TouchableOpacity>
     );
