@@ -10,7 +10,7 @@ export default StyleSheet.create  ({
 
   picture: {
     borderRadius: 5,
-    height: 350
+    height: 400
   },
 
   placeholder: {
@@ -29,8 +29,8 @@ export default StyleSheet.create  ({
   },
 
   contentContainer: {
-    bottom: 80,
-    height: 80,
+    bottom: 110,
+    height: 110,
     padding: 10
   },
 
@@ -50,6 +50,12 @@ export default StyleSheet.create  ({
     color: Colors.white,
     flex: 1,
     lineHeight: 19
+  },
+
+  date: {
+    color: Colors.white,
+    fontStyle: 'italic',
+    paddingBottom: 3
   }
 
 });

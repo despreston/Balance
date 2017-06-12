@@ -20,7 +20,7 @@ export const Style = StyleSheet.create({
 
   content: {
     flex: 1,
-    paddingLeft: 15,
+    paddingHorizontal: 15,
     paddingVertical: 10,
     justifyContent: 'space-between'
   },

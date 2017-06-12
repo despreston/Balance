@@ -24,7 +24,7 @@ export default StyleSheet.create  ({
   },
 
   content: {
-    height: 350
+    height: 400
   }
 
 });

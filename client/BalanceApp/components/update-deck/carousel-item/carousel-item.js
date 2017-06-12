@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './carousel-item-styles';
+import { formatDate } from '../../../utils/helpers';
 
 class CarouselItem extends Component {
 
@@ -38,6 +39,7 @@ class CarouselItem extends Component {
         }
         <View style={ styles.contentContainer }>
           <View style={ styles.overlay } />
+          <Text style={ styles.date }>{ formatDate(note.lastUpdated) }</Text>
           <Text style={ styles.content } numberOfLines={ 3 }>
             { note.content }
           </Text>
