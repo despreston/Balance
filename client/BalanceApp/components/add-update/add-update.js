@@ -98,6 +98,7 @@ export default class AddUpdate extends Component {
       <Modal transparent animationType='slide' visible={ visible } >
         <View style={[ Styles.absolute, Styles.flex ]}>
           <TouchableOpacity
+            activeOpacity={ 1 }
             style={[ Styles.absolute ]}
             onPress={ hideFn }
           >
