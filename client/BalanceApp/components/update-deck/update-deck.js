@@ -8,6 +8,7 @@ import {
 import Styles from './update-deck-styles';
 import Carousel from 'react-native-snap-carousel';
 import CarouselItem from './carousel-item/carousel-item';
+import EmptyMessage from './empty-message/empty-message';
 
 class UpdateDeck extends Component {
 
@@ -45,15 +46,22 @@ class UpdateDeck extends Component {
           >
             <View style={[ Styles.flex, Styles.overlay ]} />
           </TouchableOpacity>
-          <View style={ Styles.content }>
-            <Carousel
-              ref={(carousel) => { this._carousel = carousel; }}
-              sliderWidth={ sliderWidth }
-              itemWidth={ itemWidth }
-            >
-              { this.notes(itemWidth) }
-            </Carousel>
-          </View>
+          {
+            this.props.notes.length > 0 &&
+            <View style={ Styles.content }>
+              <Carousel
+                ref={(carousel) => { this._carousel = carousel; }}
+                sliderWidth={ sliderWidth }
+                itemWidth={ itemWidth }
+              >
+                { this.notes(itemWidth) }
+              </Carousel>
+            </View>
+          }
+          {
+            this.props.notes.length < 1 &&
+            <EmptyMessage />
+          }
         </View>
       </Modal>
     );

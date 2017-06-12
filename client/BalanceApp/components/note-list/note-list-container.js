@@ -52,7 +52,7 @@ class NoteListContainer extends Component {
     super(props);
 
     this.state = { loading: !!props.query };
-
+    
     if (props.query) {
       this.requestNotes(props.query);
     }
