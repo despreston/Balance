@@ -6,11 +6,11 @@ import ProjectList from '../../project-list/project-list';
 class UserBookmarksContainer extends Component {
 
   static mapStateToProps (state) {
-    return { user: state.loggedInUser };
+    return { loggedInUser: state.loggedInUser };
   }
 
   static propTypes = {
-    user: PropTypes.string.isRequired
+    loggedInUser: PropTypes.string.isRequired
   }
 
   constructor (props) {
@@ -22,7 +22,9 @@ class UserBookmarksContainer extends Component {
   }
 
   load () {
-    api(`users/${this.props.user}/bookmarks`).then(projects => {
+    const { user } = this.props.navigation.state.params;
+
+    api(`users/${user}/bookmarks`).then(projects => {
       this.setState({ projects });
     });
   }
@@ -37,7 +39,7 @@ class UserBookmarksContainer extends Component {
       <ProjectList
         onProjectTap={ this.onProjectTap }
         projects={ this.state.projects }
-        loggedInUser={ this.props.user }
+        loggedInUser={ this.props.loggedInUser }
         refreshing={ this.state.refreshing }
         onRefresh={ () => null }
       />

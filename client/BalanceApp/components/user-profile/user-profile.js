@@ -83,7 +83,7 @@ class UserProfile extends Component {
   }
 
   onBookmarksPress () {
-    this.props.nav('UserBookmarks');
+    this.props.nav('UserBookmarks', { user: this.props.userId });
   }
 
   renderLatest () {

@@ -1,6 +1,6 @@
 const Notification = require('./base');
 
-class NudgedProjectUpdated extends Notification {
+class BookmarkedProjectUpdated extends Notification {
 
   static remove (user, project, owner) {
     super.remove({
@@ -8,7 +8,7 @@ class NudgedProjectUpdated extends Notification {
         { 'related.item': project },
         { 'related.item': owner },
         { 'userId': user },
-        { 'type': 'nudged_project_updated' }
+        { 'type': 'bookmarked_project_updated' }
       ]
     });
   }
@@ -25,16 +25,16 @@ class NudgedProjectUpdated extends Notification {
       }
     ];
 
-    super(user, 'nudged_project_updated', related);
+    super(user, 'bookmarked_project_updated', related);
   }
 
   getPushNotificationText (notification) {
     const projectOwner = notification.related.find(r => r.kind === 'user').item;
     const project = notification.related.find(r => r.kind === 'project').item;
 
-    return `${projectOwner.username} listened to your nudge! ${project.title} was recently updated.`;
+    return `${projectOwner.username} updated ${project.title}`;
   }
 
 }
 
-module.exports = NudgedProjectUpdated;
+module.exports = BookmarkedProjectUpdated;

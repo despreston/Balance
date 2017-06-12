@@ -128,15 +128,27 @@ module.exports = ({ get, post, del, put }) => {
         return res.send(403);
       }
 
-      let [ loggedInUser, otherUser ] = await User.createFriendship(params.userId, params.friend);
-      loggedInUser = loggedInUser.toObject();
-      otherUser = otherUser.toObject();
+      let updatedUsers = await User.createFriendship(params.userId, params.friend);
 
-      // project counts for both users
-      loggedInUser.project_count = await Project.projectCountForUser(user.sub, ['private', 'global', 'friends']);
-      otherUser.project_count = await Project.projectCountForUser(params.friend, ['global']);
+      // If its blank, it means no users were updated (maybe users were already
+      // friends?)
+      if (updatedUsers.length > 0) {
+        let [ loggedInUser, otherUser ] = updatedUsers;
+        loggedInUser = loggedInUser.toObject();
+        otherUser = otherUser.toObject();
 
-      return res.send(201, [loggedInUser, otherUser]);
+        // project counts for both users
+        loggedInUser.project_count = await Project.projectCountForUser(loggedInUser.userId, ['private', 'global', 'friends']);
+        otherUser.project_count = await Project.projectCountForUser(params.friend, ['global']);
+
+        // bookmark count for both users
+        loggedInUser.bookmark_count = await Bookmark.count({ userId: loggedInUser.userId });
+        otherUser.bookmark_count = await Bookmark.count({ userId: otherUser.userId });
+
+        updatedUsers = [ loggedInUser, otherUser ];
+      }
+
+      return res.send(201, updatedUsers);
     } catch (e) {
       log.error(e);
       return res.send(500);
@@ -147,13 +159,24 @@ module.exports = ({ get, post, del, put }) => {
     try {
       if (params.userId !== user.sub) return res.send(403);
 
-      const updatedUsers = await User.removeFriendship(params.userId, params.friend);
+      let [ loggedInUser, otherUser ] = await User.removeFriendship(params.userId, params.friend);
+
+      loggedInUser = loggedInUser.toObject();
+      otherUser = otherUser.toObject();
+
+      // project counts for both users
+      loggedInUser.project_count = await Project.projectCountForUser(user.sub, ['private', 'global', 'friends']);
+      otherUser.project_count = await Project.projectCountForUser(params.friend, ['global']);
+
+      // bookmark count for both users
+      loggedInUser.bookmark_count = await Bookmark.count({ userId: loggedInUser.userId });
+      otherUser.bookmark_count = await Bookmark.count({ userId: otherUser.userId });
 
       // remove any lingering notifications from friend request
-      NewFriendRequest.remove(params.friend, updatedUsers[1]._id);
-      NewFriendRequest.remove(params.friend, updatedUsers[0]._id);
+      NewFriendRequest.remove(params.friend, loggedInUser._id);
+      NewFriendRequest.remove(params.friend, otherUser._id);
 
-      return res.send(200, updatedUsers);  
+      return res.send(200, [ loggedInUser, otherUser ]);
     } catch (e) {
       log.error(e);
       return res.send(500);

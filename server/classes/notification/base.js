@@ -52,7 +52,7 @@ class Notification {
         log.error('Error saving notification: ', err);
       }
 
-      notification.populate('related.item', (err) => {
+      notification.populate('related.item', async (err) => {
         if (err) {
           log.error('Could not populate notification items', err);
         }
@@ -62,7 +62,7 @@ class Notification {
           e.send();
 
           const pushNotificationText = this.getPushNotificationText(notification);
-          PushNotification(this.user, pushNotificationText).send();
+          await PushNotification(this.user, pushNotificationText).send();
         } catch (e) {
           log.error(e.message || e);
         }

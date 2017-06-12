@@ -59,9 +59,9 @@ class NudgeBtn extends Component {
     const { dispatch, project, user } = this.props;
 
     if (this.state.isSelected) {
-      dispatch(actions.removeNudge(project, user));
+      dispatch(actions.removeNudge(project._id, user));
     } else {
-      dispatch(actions.nudge(project));
+      dispatch(actions.nudge(project._id));
     }
 
     this.setState({ isSelected: !this.state.isSelected });

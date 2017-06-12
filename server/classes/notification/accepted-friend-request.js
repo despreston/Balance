@@ -2,6 +2,16 @@ const Notification = require('./base');
 
 class AcceptedFriendRequest extends Notification {
 
+  static remove (user, sender) {
+    super.remove({
+      $and: [
+        { 'related.item': sender },
+        { 'userId': user },
+        { 'type': 'accepted_friend_request' }
+      ]
+    });
+  }
+
   constructor (user, sender) {
     const related = [{
       kind: 'user',
