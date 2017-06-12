@@ -41,7 +41,7 @@ export default StyleSheet.create  ({
     right: 0,
     left: 0,
     backgroundColor: Colors.black,
-    opacity: 0.5,
+    opacity: 0.2,
     borderBottomRightRadius: 5,
     borderBottomLeftRadius: 5
   },
