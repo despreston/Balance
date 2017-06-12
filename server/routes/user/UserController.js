@@ -201,11 +201,13 @@ module.exports = ({ get, post, del, put }) => {
       }
 
       newUser.save();
+      newUser = newUser.toObject();
 
       const privacyLevels = await AccessControl.many({ user: body.userId }, user.sub);
-      const project_count = await Project.projectCountForUser(user.sub, privacyLevels);
+      newUser.project_count = await Project.projectCountForUser(user.sub, privacyLevels);
+      newUser.bookmark_count = await Bookmark.count({ userId: newUser.userId });
 
-      return res.send(201, Object.assign(newUser, { project_count }));
+      return res.send(201, newUser);
     } catch (e) {
       log.error(e);
       return res.send(500);
