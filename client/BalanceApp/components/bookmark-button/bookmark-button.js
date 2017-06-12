@@ -25,12 +25,14 @@ class BookmarkButton extends Component {
 
   constructor (props) {
     super(props);
+    this.state = { loaded: false };
     this.toggleBookmark = this.toggleBookmark.bind(this);
     this.load();
   }
 
   load () {
-    this.props.dispatch(actions.bookmarkForProject(this.props.project));
+    this.props.dispatch(actions.bookmarkForProject(this.props.project))
+      .then(() => this.setState({ loaded: true }));
   }
 
   toggleBookmark () {
@@ -42,6 +44,8 @@ class BookmarkButton extends Component {
   }
 
   render () {
+    if (!this.state.loaded) return null;
+    
     return (
       <TouchableOpacity onPress={ this.toggleBookmark } style={ styles.touchable }> 
         <Image
