@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { View } from 'react-native';
 import ProjectDetail from './project-detail';
 import Icon from '../../navigation/icon';
 import actions from '../../../actions/';
@@ -35,8 +36,9 @@ class ProjectDetailContainer extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { state, navigate } = navigation;
+
     return {
-      headerRight: headerRight(navigate, state.params.showEdit, state.params.project)
+      headerRight: headerRight(navigate, state.params.showEdit, state.params.project, state.params.showUpdateDeck)
     };
   }
 
@@ -46,13 +48,16 @@ class ProjectDetailContainer extends Component {
     this.state = {
       refreshing: false,
       addUpdateVisible: false,
-      notesToShow: 'Future'
+      notesToShow: 'Future',
+      updateDeckVisible: false
     };
 
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
     this.goToAuthor = this.goToAuthor.bind(this);
     this.onNoteContextChange = this.onNoteContextChange.bind(this);
     this.goToNote = this.goToNote.bind(this);
+    this.toggleUpdateDeck = this.toggleUpdateDeck.bind(this);
+    this.onUpdateDeckPress = this.onUpdateDeckPress.bind(this);
     this.nav = this.props.navigation.navigate;
   }
 
@@ -61,7 +66,10 @@ class ProjectDetailContainer extends Component {
   }
 
   componentWillMount () {
-    this.props.navigation.setParams({ showEdit: !!this.props.userIsOwner });
+    this.props.navigation.setParams({
+      showEdit: !!this.props.userIsOwner,
+      showUpdateDeck: this.toggleUpdateDeck
+    });
   }
 
   load () {
@@ -74,8 +82,17 @@ class ProjectDetailContainer extends Component {
     this.load().then(() => this.setState({ refreshing: false }));
   }
 
+  onUpdateDeckPress (note) {
+    this.toggleUpdateDeck();
+    this.goToNote(note);
+  }
+
   toggleAddUpdateModal () {
     this.setState({ addUpdateVisible: !this.state.addUpdateVisible });
+  }
+
+  toggleUpdateDeck () {
+    this.setState({ updateDeckVisible: !this.state.updateDeckVisible });
   }
 
   goToAuthor () {
@@ -118,25 +135,36 @@ class ProjectDetailContainer extends Component {
         goToAuthor={ this.goToAuthor }
         goToNote={ this.goToNote }
         toggleAddUpdateModal={ this.toggleAddUpdateModal }
+        updateDeckVisible={ this.state.updateDeckVisible }
+        toggleUpdateDeck={ this.toggleUpdateDeck }
+        onUpdateDeckPress={ this.onUpdateDeckPress }
       />
     );
   }
 }
 
-const headerRight = (navigate, showEdit, project) => {
-  if (showEdit) {
-    return (
+const headerRight = (navigate, showEdit, project, showUpdateDeck) => {
+  // navigation is still loading. dont show anything
+  if (!showEdit && showEdit !== false) return null;
+
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {
+        showEdit &&
+        <Icon
+          imagePath={ require('../../../assets/icons/settings.png') }
+          onPress={ () => navigate('EditProject', { project }) }
+        />
+      }
+      {
+        !showEdit && <BookmarkButton project={ project } />
+      }
       <Icon
-        imagePath={ require('../../../assets/icons/settings.png') }
-        onPress={ () => {
-          navigate('EditProject', { project })
-        }}
+        imagePath={ require('../../../assets/icons/photo-stack.png') }
+        onPress={ showUpdateDeck }
       />
-    );
-  } else if (showEdit === false) {
-    return <BookmarkButton project={ project } />;
-  }
-  return null;
+    </View>
+  );
 };
 
 export default connect(ProjectDetailContainer.mapStateToProps)(ProjectDetailContainer);

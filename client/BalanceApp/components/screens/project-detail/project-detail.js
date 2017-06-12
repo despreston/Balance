@@ -11,6 +11,7 @@ import NudgeField from './nudge-field/nudge-field';
 import Refresh from '../../refresh/refresh';
 import UpdateButton from './update-button/update-button';
 import NoteTypeSwitch from './note-type-switch/note-type-switch';
+import UpdateDeckContainer from '../../update-deck/update-deck-container';
 
 class ProjectDetail extends Component {
 
@@ -31,7 +32,10 @@ class ProjectDetail extends Component {
     goToAuthor: PropTypes.func.isRequired,
     onNoteContextChange: PropTypes.func.isRequired,
     goToNote: PropTypes.func.isRequired,
-    toggleAddUpdateModal: PropTypes.func.isRequired
+    toggleAddUpdateModal: PropTypes.func.isRequired,
+    updateDeckVisible: PropTypes.bool.isRequired,
+    toggleUpdateDeck: PropTypes.func.isRequired,
+    onUpdateDeckPress: PropTypes.func.isRequired
   }
 
   notesSelector (type) {
@@ -66,7 +70,7 @@ class ProjectDetail extends Component {
     const query = [
       { user: project.owner[0].userId },
       { project: project._id },
-      { type: 'Future' }
+      { type: 'Past' }
     ];
 
     // hide edit buttons if project is Finished OR user is not the owner
@@ -98,6 +102,7 @@ class ProjectDetail extends Component {
 
     // hide edit buttons if project is Finished OR user is not the owner
     return (
+      <View style={ Styles.container }>
         <NoteListContainer
           showTypeText
           emptyState={ <EmptyFutureNotes /> }
@@ -106,6 +111,7 @@ class ProjectDetail extends Component {
           showEdit={ status !== 'finished' && userIsOwner }
           onSelect={ goToNote }
         />
+      </View>
     );
   }
 
@@ -125,10 +131,13 @@ class ProjectDetail extends Component {
       refreshing,
       userIsOwner,
       goToAuthor,
+      onUpdateDeckPress,
       addUpdateVisible,
       toggleAddUpdateModal,
       onNoteContextChange,
-      notesToShow
+      notesToShow,
+      updateDeckVisible,
+      toggleUpdateDeck
     } = this.props;
 
     const refreshProps = {
@@ -188,6 +197,12 @@ class ProjectDetail extends Component {
           project={ project }
           visible={ addUpdateVisible }
           hideFn={ () => toggleAddUpdateModal() }
+        />
+        <UpdateDeckContainer
+          onNoteTap={ onUpdateDeckPress }
+          project={ project }
+          visible={ updateDeckVisible }
+          onHide={ toggleUpdateDeck }
         />
       </ScrollView>
     );
