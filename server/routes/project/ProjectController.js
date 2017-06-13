@@ -32,6 +32,10 @@ module.exports = ({ get, post, del, put }) => {
         .populate(Project.latestFutureNote)
         .populate('nudgeUsers', 'userId picture');
 
+      if (!project) {
+        return res.send(404);
+      }
+      
       project = project.toObject({ virtuals: true });
       project = Project.futureAndPastNotes(project);
       project = Project.removeExcludedFields(project);
