@@ -2,7 +2,13 @@ import React from 'react';
 import { Text } from 'react-native';
 import Styles from '../notification-list-item-styles';
 
-const NewComment = ({ user, note, nav }) => {
+const NewComment = ({ user, comment, nav }) => {
+  let short = comment.content.slice(0, 60);
+
+  if (comment.content.length > 60) {
+    short += '...';
+  }
+
   return (
     <Text>
       <Text
@@ -12,9 +18,10 @@ const NewComment = ({ user, note, nav }) => {
         { user.username }
       </Text>
       <Text style={ Styles.text }> commented on your </Text>
-      <Text onPress={ () => nav('Note', { id: note }) } style={ Styles.link }>
+      <Text onPress={ () => nav('Note', { id: comment.note }) } style={ Styles.link }>
         note
       </Text>
+      <Text style={ Styles.text }>{`: "${short}"`}</Text>
     </Text>
   );
 };

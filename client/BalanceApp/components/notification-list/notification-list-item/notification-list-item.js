@@ -32,7 +32,7 @@ class NotificationListItem extends Component {
 
     switch (this.type) {
       case 'new_comment':
-        props.note = this.related.find(r => r.kind === 'note').item._id;
+        props.comment = this.related.find(r => r.kind === 'comment').item;
         return { text: (<NewComment { ...props } />), icon: NewComment.icon };
 
       case 'accepted_friend_request':

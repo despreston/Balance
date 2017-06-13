@@ -2,10 +2,10 @@ const Notification = require('./base');
 
 class NewComment extends Notification {
 
-  static remove (user, note, commenter) {
+  static remove (user, comment, commenter) {
     super.remove({
       $and: [
-        { 'related.item': note },
+        { 'related.item': comment },
         { 'related.item': commenter },
         { 'userId': user },
         { 'type': 'new_comment' }
@@ -13,15 +13,15 @@ class NewComment extends Notification {
     });
   }
 
-  constructor (user, commenter, note) {
+  constructor (user, commenter, comment) {
     const related = [
       {
         kind: 'user',
         item: commenter
       },
       {
-        kind: 'note',
-        item: note
+        kind: 'comment',
+        item: comment
       }
     ];
 
@@ -30,8 +30,14 @@ class NewComment extends Notification {
 
   getPushNotificationText (notification) {
     const sender = notification.related.find(item => item.kind === 'user').item;
+    const comment = notification.related.find(item => item.kind === 'comment').item;
+    let short = comment.content.slice(0, 60);
 
-    return `${sender.username} commented on your note.`;
+    if (comment.content.length > 60) {
+      short += '...';
+    }
+
+    return `${sender.username} commented on your note: "${short}"`;
   }
 
 }
