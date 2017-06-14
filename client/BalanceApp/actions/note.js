@@ -90,15 +90,15 @@ export default {
   /**
    * Fetches global activity
    */
-  fetchGlobalActivity () {
-    return apiDispatch('notes/global_activity', this.receiveNotes);
+  fetchGlobalActivity (params) {
+    return apiDispatch(`notes/global_activity${formatQueryParams(params)}`, this.receiveNotes);
   },
 
   /**
    * Fetches friends activity
    */
-  fetchFriendActivity () {
-    return apiDispatch('notes/friend_activity', this.receiveNotes);
+  fetchFriendActivity (params) {
+    return apiDispatch(`notes/friend_activity${formatQueryParams(params)}`, this.receiveNotes);
   },
 
   /**

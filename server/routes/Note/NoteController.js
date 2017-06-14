@@ -29,6 +29,9 @@ module.exports = ({ get, post, put, del }) => {
 
   get('notes/global_activity', async ({ params, user }, res) => {
     try {
+      const limit = parseInt(params.limit) || 30;
+      const skip = parseInt(params.skip) || 0;
+
       let aggregation = [
         {
           $lookup: {
@@ -48,7 +51,10 @@ module.exports = ({ get, post, put, del }) => {
           $project: { _id: 1 }
         },
         {
-          $limit: 20
+          $skip: skip
+        },
+        {
+          $limit: limit
         }
       ];
 
@@ -96,6 +102,9 @@ module.exports = ({ get, post, put, del }) => {
 
   get('notes/friend_activity', async ({ params, user }, res) => {
     try {
+      const limit = parseInt(params.limit) || 30;
+      const skip = parseInt(params.skip) || 0;
+      
       let loggedInUser = await User
         .findOne({ userId: user.sub })
         .select('userId friends');
@@ -126,7 +135,10 @@ module.exports = ({ get, post, put, del }) => {
             $project: { _id: 1 }
           },
           {
-            $limit: 20
+            $skip: skip
+          },
+          {
+            $limit: limit
           }
         ]);
 

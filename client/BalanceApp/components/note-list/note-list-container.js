@@ -32,7 +32,13 @@ class NoteListContainer extends Component {
     // selector to use when getting notes from redux
     // @param {object} notes from redux state
     // @return {array}
-    selector: PropTypes.func
+    selector: PropTypes.func,
+
+    // function to call when end of the list is reached
+    onEndReached: PropTypes.func, 
+
+    // component to use for pull-to-refresh
+    refreshControl: PropTypes.object
   }
 
   static mapStateToProps (state, ownProps) {
@@ -51,11 +57,26 @@ class NoteListContainer extends Component {
   constructor (props) {
     super(props);
 
+    this.limit = props.query && props.query.limit ? props.query.limit : 30;
+    this.skip = props.query && props.query.skip ? props.query.skip : 0;
+
     this.state = { loading: !!props.query };
+    this.onEndReached = this.onEndReached.bind(this);
     
     if (props.query) {
       this.requestNotes(props.query);
     }
+  }
+
+  onEndReached () {
+    if (this.props.onEndReached) return this.props.onEndReached();
+
+    let query = this.props.query ? this.props.query : [];
+
+    query.push({ limit: this.limit });
+    query.push({ skip: this.limit + this.skip });
+
+    this.requestNotes(query);
   }
 
   requestNotes (query) {
@@ -73,7 +94,8 @@ class NoteListContainer extends Component {
       showProjectName,
       emptyState,
       showTypeText,
-      showUser
+      showUser,
+      refreshControl
     } = this.props;
 
     if (emptyState && notes.length < 1) {
@@ -82,7 +104,8 @@ class NoteListContainer extends Component {
 
     return (
       <NoteList
-        {...{ onSelect, showUser, showTypeText, showProjectName, notes } }
+        onEndReached={ this.onEndReached }
+        {...{ refreshControl, onSelect, showUser, showTypeText, showProjectName, notes } }
       />
     );
   }
