@@ -32,13 +32,21 @@ module.exports = ({ get, post, del, put }) => {
         .populate(Project.latestFutureNote)
         .populate('nudgeUsers', 'userId picture');
 
+      if (!project) {
+        return res.send(404);
+      }
+      
       project = project.toObject({ virtuals: true });
       project = Project.futureAndPastNotes(project);
       project = Project.removeExcludedFields(project);
       const owner = project.owner[0].userId;
       
       try {
-        await AccessControl.single(owner, user.sub, project.privacyLevel);
+        if (user) {
+          await AccessControl.single(owner, user.sub, project.privacyLevel);
+        } else if (project.privacyLevel !== 'global') {
+          throw 'Access denied';
+        }
       } catch (e) {
         return res.send(403);
       }

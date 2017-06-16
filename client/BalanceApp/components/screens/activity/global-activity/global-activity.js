@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import actions from '../../../../actions';
 import NoteListContainer from '../../../note-list/note-list-container';
@@ -11,8 +10,7 @@ class GlobalActivity extends Component {
     // Grab the latest 20 notes
     notes = Object.keys(notes)
       .map(id => notes[id])
-      .sort((a,b) => b.lastUpdated.getTime() - a.lastUpdated.getTime())
-      .slice(0, 21);
+      .sort((a,b) => b.lastUpdated.getTime() - a.lastUpdated.getTime());
 
     return { notes };
   }
@@ -25,11 +23,24 @@ class GlobalActivity extends Component {
   constructor (props) {
     super(props);
     this.state = { loading: true };
+    this.limit = 30;
+    this.skip = 0;
+    this.onEndReached = this.onEndReached.bind(this);
     this.fetchActivity();
   }
 
+  onEndReached () {
+    // Haven't hit the scroll limit. no need to load more
+    if (this.props.notes.length < this.limit) return;
+    
+    if (!this.state.loading) {
+      this.skip += this.limit;
+      this.fetchActivity();
+    }
+  }
+
   fetchActivity () {
-    this.props.dispatch(actions.fetchGlobalActivity())
+    this.props.dispatch(actions.fetchGlobalActivity([{ skip: this.skip }]))
       .then(() => this.setState({ loading: false }));
   }
   
@@ -40,17 +51,14 @@ class GlobalActivity extends Component {
     };
 
     return (
-      <ScrollView
+      <NoteListContainer
         refreshControl={ <Refresh { ...refreshProps } /> }
-        keyboardShouldPersistTaps='handled'
-      >
-        <NoteListContainer
-          showTypeText
-          showUser
-          showProjectName
-          { ...this.props }
-        />
-      </ScrollView>
+        onEndReached={ this.onEndReached }
+        showTypeText
+        showUser
+        showProjectName
+        { ...this.props }
+      />
     );
   }
 

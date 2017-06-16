@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const log = require('logbro');
 
 let Comment = new mongoose.Schema ({
 
@@ -33,12 +34,17 @@ Comment.virtual('commenter', {
   justOne: true
 });
 
-Comment.pre('remove', function(next) {
-  // remove related notifications
-  return mongoose.models['notification']
-  .find({ 'related.item': this._id })
-  .then(notifications => Promise.all(notifications.map(n => n.remove())))
-  .then(() => next());
+Comment.pre('remove', async function(next) {
+  try {
+    const notifications = await mongoose.models['notification']
+      .find({ 'related.item': this._id });
+
+    await Promise.all(notifications.map(n => n.remove()));
+
+    next();
+  } catch (e) {
+    log.error(`Could not erase dependencies for comment ${this._id}: ${e}`);
+  }
 });
 
 Comment.post('remove', function(comment, next) {

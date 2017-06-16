@@ -42,6 +42,10 @@ export default StyleSheet.create  ({
     fontWeight: 'bold'
   },
 
+  authorComment: {
+    color: Colors.green
+  },
+
   subtext: {
     color: Colors.gray.silver,
     fontSize: 12

@@ -106,12 +106,13 @@ export default class Note extends Component {
                 maxList={ 4 }
               />
             {
-              note.comments &&
+              comments &&
               <View style={ Styles.comments }>
                 <CommentList
                   style={ Styles.comments }
                   comments={ comments }
                   onUserSelect={ user => goToUser(user) }
+                  noteAuthor={ note.author.userId }
                 />
               </View>
             }

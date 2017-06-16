@@ -14,7 +14,8 @@ export default class CommentListItem extends Component {
     comment: PropTypes.object.isRequired,
     allowDelete: PropTypes.bool.isRequired,
     onDelete: PropTypes.func.isRequired,
-    onUserSelect: PropTypes.func.isRequired
+    onUserSelect: PropTypes.func.isRequired,
+    isNoteAuthor: PropTypes.bool
   };
 
   constructor (props) {
@@ -22,17 +23,22 @@ export default class CommentListItem extends Component {
   }
 
   render () {
-    const { onUserSelect, comment, allowDelete, onDelete } = this.props;
+    const { onUserSelect, comment, isNoteAuthor, allowDelete, onDelete } = this.props;
+
+    const commenterStyles = [
+      Styles.commenter,
+      (isNoteAuthor && Styles.authorComment)
+    ];
 
     return (
       <View style={ Styles.container }>
         <Image source={{ uri: comment.commenter.picture }} style={ Styles.picture } />
         <View style={ Styles.right }>
           <View style={ Styles.top }>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={ () => onUserSelect(comment.commenter.userId) }
             >
-              <Text style={ Styles.commenter }>
+              <Text style={ commenterStyles }>
                 { comment.commenter.username }
               </Text>
             </TouchableOpacity>
