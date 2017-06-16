@@ -45,12 +45,6 @@ Comment.pre('remove', async function(next) {
   } catch (e) {
     log.error(`Could not erase dependencies for comment ${this._id}: ${e}`);
   }
-  // remove related notifications
-  // return mongoose.models['notification']
-  // .find({ 'related.item': this._id })
-  // .then(notifications => Promise.all(notifications.map(n => n.remove())))
-  // .then(() => next());
-
 });
 
 Comment.post('remove', function(comment, next) {
