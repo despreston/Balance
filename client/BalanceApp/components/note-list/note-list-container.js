@@ -59,7 +59,6 @@ class NoteListContainer extends Component {
 
     this.limit = props.query && props.query.limit ? props.query.limit : 30;
     this.skip = props.query && props.query.skip ? props.query.skip : 0;
-
     this.state = { loading: !!props.query };
     this.onEndReached = this.onEndReached.bind(this);
     
@@ -69,9 +68,12 @@ class NoteListContainer extends Component {
   }
 
   onEndReached () {
+    // Haven't hit the scroll limit. no need to load more
+    if (this.props.notes.length < this.limit || this.state.loading) return;
+
     if (this.props.onEndReached) return this.props.onEndReached();
 
-    let query = this.props.query ? this.props.query : [];
+    let query = this.props.query ? Array.from(this.props.query) : [];
 
     query.push({ limit: this.limit });
     query.push({ skip: this.limit + this.skip });

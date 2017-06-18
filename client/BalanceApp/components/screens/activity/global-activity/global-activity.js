@@ -30,9 +30,6 @@ class GlobalActivity extends Component {
   }
 
   onEndReached () {
-    // Haven't hit the scroll limit. no need to load more
-    if (this.props.notes.length < this.limit) return;
-    
     if (!this.state.loading) {
       this.skip += this.limit;
       this.fetchActivity();
