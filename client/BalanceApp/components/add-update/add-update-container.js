@@ -132,18 +132,9 @@ class AddUpdateContainer extends Component {
     // if this changes, navigation will have to passed to this component
     if (!this.props.nav) return;
 
-    // this.props.dispatch(actions.deleteNote(this.props.note._id));
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Project', params: {
-          project: this.props.note.project._id
-        }})
-      ],
-      key: 'Home'
-    });
+    const backAction = NavigationActions.back();
 
-    this.props.nav.dispatch(resetAction);
+    this.props.nav.dispatch(backAction);
     this.props.hideFn();
 
     setTimeout(() => {
