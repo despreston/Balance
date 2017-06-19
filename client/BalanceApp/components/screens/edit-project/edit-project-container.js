@@ -79,7 +79,10 @@ class EditProjectContainer extends Component {
     });
 
     this.props.navigation.dispatch(resetAction);
-    this.props.dispatch(actions.deleteProject(this.state.project._id));
+
+    setTimeout(() => {
+      this.props.dispatch(actions.deleteProject(this.state.project._id));
+    }, 1000);
   }
 
   render () {
