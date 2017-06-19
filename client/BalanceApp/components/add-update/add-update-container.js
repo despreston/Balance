@@ -144,6 +144,7 @@ class AddUpdateContainer extends Component {
     });
 
     this.props.nav.dispatch(resetAction);
+    this.props.hideFn();
 
     setTimeout(() => {
       this.props.dispatch(actions.deleteNote(this.props.note._id));
