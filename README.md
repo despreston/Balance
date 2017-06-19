@@ -37,3 +37,12 @@ Note: if you get an error about permission denied. Run `chmod +x clean.sh` then 
 
 1. run `node index` in /server. This starts the server. Leave this open.
 2. Separately, run `react-native run-ios` in /client/BalanceApp. This starts the xcode simulator and the iOS app.
+
+### Communication with Piper-Socket
+Balance sends notifications over websockets by POSTing notifications to a server called Piper-Socket. More info about Piper-Socket is available in the readme for that repo. Piper-Socket config info is available to change in config.json. Piper-Socket (and websocket notifications) are optional when running Balance.
+
+### IOS Push Notifications
+Push notifications through APN require certificates. The location of these certifications can be set in config.json.
+
+### Code-Push
+The Balance IOS app uses Code Push (https://microsoft.github.io/code-push/) to hot push updates. 
