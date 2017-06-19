@@ -4,6 +4,7 @@
 import config from './utils/set-config';
 global.CONFIG = config;
 
+import codePush from "react-native-code-push";
 import React, { Component } from 'react';
 import { View, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
@@ -16,7 +17,7 @@ import MainNavigation from './components/navigation/navigation';
 
 const store = createStore(reducer, applyMiddleware(thunk, sockets));
 
-export default class BalanceApp extends Component {
+class BalanceApp extends Component {
 
   navigate () {
     if (this.navigator) {
@@ -41,3 +42,5 @@ export default class BalanceApp extends Component {
   }
   
 }
+
+export default codePush(BalanceApp);

@@ -101,6 +101,7 @@ class NoteContainer extends Component {
           refresh={ () => this.refresh() }
         />
         <AddUpdateContainer
+          nav={ this.props.navigation }
           note={ this.props.note }
           project={ this.props.note.project }
           hideFn={ () => this.toggleEditModal() }

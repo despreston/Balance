@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import actions from '../../actions/';
 import s3upload from '../../utils/s3-upload';
@@ -14,7 +15,8 @@ class AddUpdateContainer extends Component {
     visible: PropTypes.bool.isRequired,
     project: PropTypes.object.isRequired,
     reloadProject: PropTypes.bool,
-    note: PropTypes.object
+    note: PropTypes.object,
+    nav: PropTypes.object
   }
 
   constructor (props) {
@@ -124,7 +126,20 @@ class AddUpdateContainer extends Component {
   }
 
   remove () {
-    this.props.dispatch(actions.deleteNote(this.props.note._id));
+    // For now, you can only edit an existing note through the Note screen.
+    // In other add-update-container locations, the nav prop is not required b/c
+    // the delete button is not shown.
+    // if this changes, navigation will have to passed to this component
+    if (!this.props.nav) return;
+
+    const backAction = NavigationActions.back();
+
+    this.props.nav.dispatch(backAction);
+    this.props.hideFn();
+
+    setTimeout(() => {
+      this.props.dispatch(actions.deleteNote(this.props.note._id));
+    }, 1000);
   }
 
   togglePhotoUploader () {
