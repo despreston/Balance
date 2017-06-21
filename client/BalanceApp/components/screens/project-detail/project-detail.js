@@ -160,7 +160,7 @@ class ProjectDetail extends Component {
               <Text style={ [Styles.title, Styles.whiteText] }>
                 { project.title }
               </Text>
-              <Text style={ [Styles.author, Styles.whiteText] }>
+              <Text style={ [Styles.smallText, Styles.whiteText] }>
                 Started by
                 <Text
                   onPress={ goToAuthor }
@@ -168,9 +168,11 @@ class ProjectDetail extends Component {
                 >
                   { ` ${project.owner[0].username}` }
                 </Text>
-                { ` ${this.privacyLevelText()}` }
               </Text>
             </View>
+            <Text style={[ Styles.smallText, Styles.whiteText, Styles.category ]}>
+              { `${this.privacyLevelText()} ${project.category}` }
+            </Text>
             <View style={ Styles.infoTextContainer }>
               <Text style={ [Styles.whiteText, Styles.description] }>
                 { project.description }

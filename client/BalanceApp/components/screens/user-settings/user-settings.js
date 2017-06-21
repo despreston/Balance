@@ -11,6 +11,7 @@ import Styles from '../edit-project/edit-project-style';
 import UserSettingsStyles from './user-settings-styles';
 import Help from '../../help/help';
 import Logout from '../../logout/logout';
+import FormListItem from '../../form-list-item/form-list-item';
 
 class UserSettings extends Component {
 
@@ -41,8 +42,7 @@ class UserSettings extends Component {
         </TouchableOpacity>
         <View style={ Styles.editProject }>
           <View style={ Styles.formContainer }>
-            <View style={ Styles.inputRow }>
-              <Text style={ [Styles.text, Styles.rowLabel] }>Username</Text>
+            <FormListItem label='Username'>
               <TextInput
                 clearButtonMode='while-editing'
                 value={ user.username }
@@ -50,9 +50,8 @@ class UserSettings extends Component {
                 placeholder="@username"
                 autoCorrect={ false }
                 onChangeText={ value => onEdit('username', value) } />
-            </View>
-            <View style={ Styles.inputRow }>
-              <Text style={ [Styles.text, Styles.rowLabel] }>Email</Text>
+            </FormListItem>
+            <FormListItem label='Email'>
               <TextInput
                 clearButtonMode='while-editing'
                 keyboardType='email-address'
@@ -62,28 +61,27 @@ class UserSettings extends Component {
                 style={ [Styles.text, Styles.rowInput] }
                 placeholder="email address"
                 onChangeText={ value => onEdit('email', value) } />
-            </View>
-            <View style={ Styles.inputRow }>
-              <Text style={ [Styles.text, Styles.rowLabel] }>Bio</Text>
+            </FormListItem>
+            <FormListItem label='Bio'>
               <TextInput
                 value={ user.bio }
                 style={ [Styles.text, Styles.rowInput] }
                 placeholder="A short bio"
                 onChangeText={ value => onEdit('bio', value) } />
-            </View>
-            <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+            </FormListItem>
+            <FormListItem style={{ borderBottomWidth: 0 }}>
               <Text style={[ Styles.text, { textAlign: 'center' } ]}>
                 Other users can search for you by name or username.
               </Text>
-            </View>
+            </FormListItem>
             <Logout beforeLogoutHook={ beforeLogout }/>
-            <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+            <FormListItem style={{ borderBottomWidth: 0 }}>
               <TouchableOpacity onPress={ toggleHelp }>
                 <Text style={ [Styles.text, Styles.help] }>
                   What is this app?
                 </Text>
               </TouchableOpacity>
-            </View>
+            </FormListItem>
           </View>
           <Help
             visible={ helpVisible }

@@ -21,11 +21,19 @@ export default StyleSheet.create ({
     paddingBottom: 10,
   },
 
-  author: {
+  smallText: {
     fontSize: 12,
     opacity: 0.9,
-    paddingBottom: 20,
     textAlign: 'center'
+  },
+
+  category: {
+    borderWidth: 1,
+    borderColor: Colors.white,
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    marginVertical: 10
   },
 
   container: {

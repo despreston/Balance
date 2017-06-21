@@ -1,4 +1,3 @@
-// vendors
 import React, { Component, PropTypes } from 'react';
 import {
   View,
@@ -6,27 +5,22 @@ import {
   Text,
   TextInput
 } from 'react-native';
-
-// styles
 import Styles from './edit-project-style';
-
-// components
 import PrivacyPicker from '../../privacy-picker/privacy-picker';
+import FormListItem from '../../form-list-item/form-list-item';
 
 export default class EditProject extends Component {
 
   static propTypes = {
     project: PropTypes.object.isRequired,
     onEdit: PropTypes.func.isRequired,
-    onRemove: PropTypes.func.isRequired
+    onRemove: PropTypes.func.isRequired,
+    navToCategories: PropTypes.func.isRequired
   };
 
   constructor (props) {
     super(props);
-
-    this.state = {
-      confirmDelete: false
-    }
+    this.state = { confirmDelete: false };
   }
 
   renderRemoveButton () {
@@ -36,7 +30,7 @@ export default class EditProject extends Component {
     
     if (this.state.confirmDelete) {
       return (
-        <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+        <FormListItem style={{ borderBottomWidth: 0 }}>
           <Text style={ Styles.rowLabel, { padding: 10 } }>Are you sure?</Text>
           <TouchableOpacity
             style={ Styles.removeButton }
@@ -50,53 +44,59 @@ export default class EditProject extends Component {
             onPress={ () => this.setState({ confirmDelete: false }) }>
             <Text style={ [Styles.text, Styles.rowLabel] }>Cancel</Text>
           </TouchableOpacity>
-        </View>
+        </FormListItem>
       );
     }
 
     return (
-      <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+      <FormListItem style={{ borderBottomWidth: 0 }}>
         <TouchableOpacity
           style={ Styles.removeButton }
           onPress={ () => this.setState({ confirmDelete: true }) }>
           <Text style={ Styles.removeButtonText }>Remove Project</Text>
         </TouchableOpacity>
-      </View>
+      </FormListItem>
     );
   }
 
   render () {
     const { project, onEdit } = this.props;
+    const inputStyles = [ Styles.text, Styles.rowInput ];
 
     return (
       <View style={ Styles.editProject }>
         <View style={ Styles.formContainer }>
-          <View style={ Styles.inputRow }>
-            <Text style={ [Styles.text, Styles.rowLabel] }>Title</Text>
+          <FormListItem label='Title'>
             <TextInput
               clearButtonMode='while-editing'
               autoCorrect={ false }
               value={ project.title }
-              style={ [Styles.text, Styles.rowInput] }
+              style={ inputStyles }
               placeholder="Project Title (required)"
               onChangeText={ value => onEdit('title', value) } />
-          </View>
-          <View style={ Styles.inputRow }>
-            <Text style={ [Styles.text, Styles.rowLabel] }>Description</Text>
+          </FormListItem>
+          <FormListItem label='Category' touchable>
+            <TouchableOpacity
+              onPress={ this.props.navToCategories }
+              style={ Styles.rowInput }
+            >
+              <Text style={ Styles.text }>{ project.category }</Text>
+            </TouchableOpacity>
+          </FormListItem>
+          <FormListItem label='Description'>
             <TextInput
               clearButtonMode='while-editing'
               value={ project.description }
-              style={ [Styles.text, Styles.rowInput] }
+              style={ inputStyles }
               placeholder="Description"
               onChangeText={ value => onEdit('description', value) } />
-          </View>
-          <View style={ Styles.inputRow }>
-            <Text style={ [Styles.text, Styles.rowLabel] }>Share with</Text>
+          </FormListItem>
+          <FormListItem label='Share with'>
             <PrivacyPicker
-              textStyle={ [Styles.text, Styles.rowInput] }
+              textStyle={ inputStyles }
               initLevel={ project.privacyLevel }
               onChange={ val => onEdit('privacyLevel', val) } />
-          </View>
+          </FormListItem>
           <ProjectStatus project={ project } onEdit={ onEdit }/>
           { this.renderRemoveButton() }
         </View>
@@ -127,11 +127,11 @@ const ProjectStatus = ({ project, onEdit }) => {
         Marking a project as finished makes the project read-only.
         You can always reopen the project any time.
       </Text>
-      <View style={ [Styles.inputRow, { borderBottomWidth: 0 }] }>
+      <FormListItem style={{ borderBottomWidth: 0 }}>
         <TouchableOpacity onPress={ () => onEdit('status', statusOption) }>
           <Text style={ Styles.markStatus }>{ text }</Text>
         </TouchableOpacity>
-      </View>
+      </FormListItem>
     </View>
   );
 };
