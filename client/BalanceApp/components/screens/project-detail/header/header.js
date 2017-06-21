@@ -36,7 +36,7 @@ class Header extends Component {
     const { project, userIsOwner, goToAuthor, toggleAddUpdateModal } = this.props;
 
     return (
-      <View>
+      <View style={ styles.header}>
         <Carousel
           inactiveSlideScale={ 1 }
           inactiveSlideOpacity={ 1 }
