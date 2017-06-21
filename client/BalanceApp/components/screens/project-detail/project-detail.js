@@ -9,9 +9,9 @@ import NoteListContainer from '../../note-list/note-list-container';
 import AddUpdateContainer from '../../add-update/add-update-container';
 import NudgeField from './nudge-field/nudge-field';
 import Refresh from '../../refresh/refresh';
-import UpdateButton from './update-button/update-button';
 import NoteTypeSwitch from './note-type-switch/note-type-switch';
 import UpdateDeckContainer from '../../update-deck/update-deck-container';
+import Header from './header/header';
 
 class ProjectDetail extends Component {
 
@@ -48,14 +48,6 @@ class ProjectDetail extends Component {
             note.type === type
           );
         });
-    }
-  }
-
-  privacyLevelText () {
-    switch (this.props.project.privacyLevel) {
-      case 'global': return '🌎';
-      case 'friends': return '👥';
-      case 'private': return '🔒';
     }
   }
 
@@ -129,8 +121,6 @@ class ProjectDetail extends Component {
     const {
       project,
       refreshing,
-      userIsOwner,
-      goToAuthor,
       onUpdateDeckPress,
       addUpdateVisible,
       toggleAddUpdateModal,
@@ -154,35 +144,7 @@ class ProjectDetail extends Component {
         refreshControl={ <Refresh { ...refreshProps }/> }
       >
         <View style={[ Styles.whiteBackground, Styles.main ]}>
-          <View style={[ Styles.purpleBackground, Styles.info ]}>
-            <View>
-              { project.status === 'finished' && <FinishedProjectText /> }
-              <Text style={ [Styles.title, Styles.whiteText] }>
-                { project.title }
-              </Text>
-              <Text style={ [Styles.smallText, Styles.whiteText] }>
-                Started by
-                <Text
-                  onPress={ goToAuthor }
-                  style={[ Styles.bold, { flex: 1 } ]}
-                >
-                  { ` ${project.owner[0].username}` }
-                </Text>
-              </Text>
-            </View>
-            <Text style={[ Styles.smallText, Styles.whiteText, Styles.category ]}>
-              { `${this.privacyLevelText()} ${project.category}` }
-            </Text>
-            <View style={ Styles.infoTextContainer }>
-              <Text style={ [Styles.whiteText, Styles.description] }>
-                { project.description }
-              </Text>
-            </View>
-            {
-              userIsOwner && project.status !== 'finished' && 
-              <UpdateButton press={ toggleAddUpdateModal } /> 
-            }
-          </View>
+          <Header { ...this.props } />
           { this.renderNudgeStuff() }
           <View style={ Styles.container }>
             <NoteTypeSwitch onPress={ onNoteContextChange }/>
@@ -210,16 +172,6 @@ class ProjectDetail extends Component {
     );
   }
 }
-
-const FinishedProjectText = () => {
-  return (
-    <View>
-      <Text style={ [Styles.description, Styles.bold, Styles.whiteText] }>
-        This project has been finished!  🎉
-      </Text>
-    </View>
-  );
-};
 
 const EmptyCompletedNotes = () => {
   return (

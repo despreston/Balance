@@ -12,30 +12,6 @@ export default StyleSheet.create ({
     minHeight: Dimensions.get('window').height-110
   },
 
-  title: {
-    textAlign: 'center',
-    fontSize: 26,
-    fontWeight: '300',
-    paddingHorizontal: 10,
-    letterSpacing: 0.8,
-    paddingBottom: 10,
-  },
-
-  smallText: {
-    fontSize: 12,
-    opacity: 0.9,
-    textAlign: 'center'
-  },
-
-  category: {
-    borderWidth: 1,
-    borderColor: Colors.white,
-    borderRadius: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    marginVertical: 10
-  },
-
   container: {
     flex: 1
   },
@@ -69,24 +45,6 @@ export default StyleSheet.create ({
 
   whiteText: {
     color: Colors.white
-  },
-
-  infoTextContainer: {
-    flex: 1,
-    justifyContent: 'center'
-  },
-
-  description: {
-    textAlign: 'center',
-    lineHeight: 19,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
-
-  info: {
-    minHeight: 130,
-    alignItems: 'center',
-    justifyContent: 'space-between'
   },
 
   bold: {
