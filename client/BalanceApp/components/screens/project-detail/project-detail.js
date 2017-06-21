@@ -171,8 +171,7 @@ class ProjectDetail extends Component {
               </Text>
             </View>
             <Text style={[ Styles.smallText, Styles.whiteText, Styles.category ]}>
-              { `${this.privacyLevelText()} ` }
-              { project.category }
+              { `${this.privacyLevelText()} ${project.category}` }
             </Text>
             <View style={ Styles.infoTextContainer }>
               <Text style={ [Styles.whiteText, Styles.description] }>
