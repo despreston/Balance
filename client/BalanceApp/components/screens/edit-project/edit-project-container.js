@@ -41,6 +41,8 @@ class EditProjectContainer extends Component {
   constructor (props) {
     super();
     this.state = { project: props.project };
+    this.navToCategories = this.navToCategories.bind(this);
+    this.onProjectEdit = this.onProjectEdit.bind(this);
   }
 
   componentWillMount () {
@@ -49,12 +51,18 @@ class EditProjectContainer extends Component {
     });
   }
 
-  onProjectEdit = (property, value) => {
+  onProjectEdit (property, value) {
     this.setState({ 
       project: {
         ...this.state.project,
         [property]: value 
       }
+    });
+  }
+
+  navToCategories () {
+    this.props.navigation.navigate('ProjectCategory', {
+      selectCategory: category => this.onProjectEdit('category', category)
     });
   }
 
@@ -88,6 +96,7 @@ class EditProjectContainer extends Component {
   render () {
     return (
       <EditProject
+        navToCategories={ this.navToCategories }
         project={ this.state.project }
         onEdit={ this.onProjectEdit }
         onRemove={ this.delete } />

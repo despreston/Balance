@@ -1,9 +1,8 @@
-// Vendors
 import React from 'react';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { View, Image } from 'react-native';
-
-// Screens
+import UnreadNotifications from './unread-notifications/unread-notifications';
+import Colors from '../colors';
 import {
   MainScene,
   ProjectDetailContainer,
@@ -17,12 +16,9 @@ import {
   NoteContainer,
   Auth,
   FriendRequestList,
-  UserBookmarksContainer
+  UserBookmarksContainer,
+  ProjectCategoryContainer
 } from '../screens';
-
-import UnreadNotifications from './unread-notifications/unread-notifications';
-
-import Colors from '../colors';
 
 const navigationOptions = {
   headerTintColor: Colors.white,
@@ -35,7 +31,8 @@ const defaultScreens = {
   Note: { screen: NoteContainer },
   Project: { screen: ProjectDetailContainer },
   EditProject: { screen: EditProjectContainer },
-  UserBookmarks: { screen: UserBookmarksContainer }
+  UserBookmarks: { screen: UserBookmarksContainer },
+  ProjectCategory: { screen: ProjectCategoryContainer }
 };
 
 function icon (path) {

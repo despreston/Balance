@@ -15,6 +15,7 @@ import NoteContainer from './note/note-container';
 import Auth from './auth/auth';
 import FriendRequestList from './friend-request-list/friend-request-list';
 import UserBookmarksContainer from './user-bookmarks/user-bookmarks-container';
+import ProjectCategoryContainer from './project-category/project-category-container';
 
 export {
   MainScene,
@@ -29,5 +30,6 @@ export {
   NoteContainer,
   Auth,
   FriendRequestList,
-  UserBookmarksContainer
+  UserBookmarksContainer,
+  ProjectCategoryContainer
 };

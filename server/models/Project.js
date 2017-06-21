@@ -48,6 +48,13 @@ let Project = new mongoose.Schema({
   description: {
     type: String,
     trim: true
+  },
+
+  category: {
+    type: String,
+    trim: true,
+    default: 'Other',
+    enum: ['Other', 'Technology', 'Household', 'Arts and Crafts', 'Education']
   }
   
 });
