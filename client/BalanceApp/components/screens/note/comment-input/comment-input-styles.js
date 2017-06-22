@@ -18,7 +18,7 @@ export default StyleSheet.create ({
     paddingHorizontal: 10,
     marginVertical: 10,
     borderRadius: 8,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.white
   },
 
   send: {

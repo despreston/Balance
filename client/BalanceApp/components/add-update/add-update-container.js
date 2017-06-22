@@ -68,7 +68,7 @@ class AddUpdateContainer extends Component {
       note = {
         _id: this.props.note._id,
         user: this.props.note.user,
-        project: this.props.note.project,
+        project: this.props.note.project
       };
 
       note.type = this.state.complete ? 'Past' : 'Future';

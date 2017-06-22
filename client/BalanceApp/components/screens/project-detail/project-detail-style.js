@@ -56,7 +56,7 @@ export default StyleSheet.create ({
   },
 
   whiteBackground: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.white
   }
   
 });

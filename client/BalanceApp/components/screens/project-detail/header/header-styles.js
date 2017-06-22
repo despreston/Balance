@@ -15,12 +15,16 @@ export default StyleSheet.create ({
     fontWeight: '300',
     paddingHorizontal: 10,
     letterSpacing: 0.8,
-    paddingBottom: 10,
+    paddingBottom: 10
   },
 
   smallText: {
     fontSize: 12,
     textAlign: 'center'
+  },
+
+  shit: {
+    fontSize: 12
   },
 
   categoryContainer: {
@@ -68,7 +72,7 @@ export default StyleSheet.create ({
   },
 
   whiteBackground: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.white
   }
   
 });

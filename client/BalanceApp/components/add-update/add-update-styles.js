@@ -44,7 +44,7 @@ export default StyleSheet.create  ({
 
   content: {
     borderRadius: 5,
-    backgroundColor: Colors.purple,
+    backgroundColor: Colors.purple
   },
 
   unimportantButton: {
