@@ -54,7 +54,7 @@ export default StyleSheet.create  ({
     borderRadius: 5,
     alignSelf: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.blue
   },
 
   closeText: {

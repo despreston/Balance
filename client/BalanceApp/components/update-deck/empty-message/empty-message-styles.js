@@ -24,7 +24,7 @@ export default StyleSheet.create ({
 
   text: {
     color: Colors.white,
-    fontSize: 18,
+    fontSize: 18
   }
 
 });

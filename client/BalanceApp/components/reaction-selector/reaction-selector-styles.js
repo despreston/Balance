@@ -8,6 +8,6 @@ export default StyleSheet.create ({
     marginHorizontal: 10,
     borderRadius: 5,
     backgroundColor: Colors.white
-  },
+  }
 
 });

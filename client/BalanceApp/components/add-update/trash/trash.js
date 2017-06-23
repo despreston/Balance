@@ -18,7 +18,7 @@ class Trash extends Component {
       'Are you sure you want to delete this note?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', onPress: () => this.props.remove(), style: 'destructive' },
+        { text: 'Delete', onPress: () => this.props.remove(), style: 'destructive' }
       ]
     );
   }

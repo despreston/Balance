@@ -19,7 +19,8 @@ class CommentList extends Component {
     comments: PropTypes.array.isRequired,
     loggedInUser: PropTypes.string.isRequired,
     onUserSelect: PropTypes.func.isRequired,
-    noteAuthor: PropTypes.string
+    noteAuthor: PropTypes.string,
+    onReply: PropTypes.func.isRequired
   };
 
   constructor (props) {
@@ -36,6 +37,7 @@ class CommentList extends Component {
             onDelete={ comment => this.props.dispatch(actions.deleteComment(comment)) }
             comment={ comment }
             allowDelete={ (this.props.loggedInUser === comment.commenter.userId ) }
+            onReply={ this.props.onReply }
           />
         </View>
       );

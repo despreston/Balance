@@ -11,7 +11,7 @@ import FriendButton from '../../friend-button/friend-button';
 export default class UserListItem extends Component {
 
   static propTypes = {
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
   };
 
   constructor (props) {

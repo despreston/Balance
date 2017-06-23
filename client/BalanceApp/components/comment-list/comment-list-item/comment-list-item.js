@@ -15,7 +15,8 @@ export default class CommentListItem extends Component {
     allowDelete: PropTypes.bool.isRequired,
     onDelete: PropTypes.func.isRequired,
     onUserSelect: PropTypes.func.isRequired,
-    isNoteAuthor: PropTypes.bool
+    isNoteAuthor: PropTypes.bool,
+    onReply: PropTypes.func.isRequired
   };
 
   constructor (props) {
@@ -44,12 +45,32 @@ export default class CommentListItem extends Component {
             </TouchableOpacity>
             <Text style={ Styles.subtext }>{ fancyDate(comment.createdAt) }</Text>
           </View>
-          <Text style={ Styles.content }>{ comment.content }</Text>
+          <View style={ Styles.contentContainer }>
+            { 
+              comment.replyingToUser &&
+              (
+                <TouchableOpacity
+                  onPress={ () => onUserSelect(comment.replyingToUser.userId) }
+                >
+                  <Text style={ Styles.commenter }>
+                    {`@${comment.replyingToUser.username} `}
+                  </Text>
+                </TouchableOpacity>
+              )
+            }
+            <Text style={ Styles.contentText }>{ comment.content }</Text>
+          </View>
           {
-            allowDelete &&
-            <TouchableOpacity onPress={ () => onDelete(comment._id) }>
-              <Text style={[ Styles.subtext, Styles.bold ]}>delete</Text>
-            </TouchableOpacity>
+            allowDelete
+            ? (
+              <TouchableOpacity onPress={ () => onDelete(comment._id) }>
+                <Text style={[ Styles.subtext, Styles.bold ]}>delete</Text>
+              </TouchableOpacity>
+              )
+            : (<TouchableOpacity onPress={ () => this.props.onReply(comment.commenter) }>
+                <Text style={[ Styles.subtext, Styles.bold ]}>reply</Text>
+              </TouchableOpacity>
+              )
           }
         </View>
       </View>

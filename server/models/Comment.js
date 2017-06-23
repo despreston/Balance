@@ -18,6 +18,8 @@ let Comment = new mongoose.Schema ({
     ref: 'note'
   },
 
+  replyingTo: String,
+
   createdAt: Date
 
 }, {
@@ -30,6 +32,16 @@ let Comment = new mongoose.Schema ({
 Comment.virtual('commenter', {
   ref: 'user',
   localField: 'user',
+  foreignField: 'userId',
+  justOne: true
+});
+
+/**
+ * Ref to the user that the comment is replying to
+ */
+Comment.virtual('replyingToUser', {
+  ref: 'user',
+  localField: 'replyingTo',
   foreignField: 'userId',
   justOne: true
 });

@@ -5,7 +5,7 @@ export default StyleSheet.create ({
 
   flexRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
 
   text: {

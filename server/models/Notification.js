@@ -12,7 +12,8 @@ let Notification = new mongoose.Schema ({
       'nudged_project_updated',
       'new_reaction',
       'new_comment',
-      'bookmarked_project_updated'
+      'bookmarked_project_updated',
+      'new_comment_reply'
     ]
   },
 

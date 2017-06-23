@@ -23,11 +23,17 @@ export default StyleSheet.create  ({
     paddingLeft: 20
   },
 
-  content: {
+  contentContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    paddingVertical: 6
+  },
+
+  contentText: {
     color: Colors.gray.tundora,
     lineHeight: 20,
-    fontSize: 14,
-    paddingVertical: 6
+    fontSize: 14
   },
 
   top: {
