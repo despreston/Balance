@@ -41,8 +41,10 @@ class NoteContainer extends Component {
   
   constructor (props) {
     super(props);
-    this.state = { editModalVisible: false };
+    this.state = { editModalVisible: false, replyingTo: null };
     this.toggleEditModal = this.toggleEditModal.bind(this);
+    this.reply = this.reply.bind(this);
+    this.resetReply = this.resetReply.bind(this);
     props.dispatch(actions.fetchNote(props.navigation.state.params.id));
   }
 
@@ -71,6 +73,10 @@ class NoteContainer extends Component {
       content
     };
 
+    if (this.state.replyingTo) {
+      comment.replyingTo = this.state.replyingTo.userId;
+    }
+
     this.props.dispatch(actions.createComment(comment))
     .then(() => this.props.dispatch(actions.fetchNote(this.props.note._id)));
   }
@@ -85,9 +91,20 @@ class NoteContainer extends Component {
       .then(() => this.setState({ refreshing: false }));
   }
 
+  reply (user) {
+    this.setState({ replyingTo: user });
+    this.commentInput.focus();
+  }
+
+  resetReply () {
+    this.setState({ replyingTo: null });
+  }
+
   render () {
     const author = this.props.note.author.userId;
-    const showMarkAsComplete = author === this.props.loggedInUser && this.props.note.type === 'Future';
+    const showMarkAsComplete = author === this.props.loggedInUser &&
+      this.props.note.type === 'Future';
+
     return (
       <View style={{ flex: 1 }}>
         <Note
@@ -99,6 +116,10 @@ class NoteContainer extends Component {
           sendComment={ content => this.sendComment(content) }
           refreshing={ this.props.refreshing }
           refresh={ () => this.refresh() }
+          reply={ this.reply }
+          resetReply={ this.resetReply }
+          commentInputRef={ r => this.commentInput = r }
+          replyingTo={ this.state.replyingTo }
         />
         <AddUpdateContainer
           nav={ this.props.navigation }

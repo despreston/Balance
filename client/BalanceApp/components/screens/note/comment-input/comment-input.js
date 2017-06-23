@@ -6,19 +6,19 @@ import {
   Text,
   Keyboard
 } from 'react-native';
-
-// styles
 import Styles from './comment-input-styles';
 
 export default class CommentInput extends Component {
 
   static propTypes = {
-    onSend: PropTypes.func.isRequired
+    onSend: PropTypes.func.isRequired,
+    onRef: PropTypes.func.isRequired,
+    replyingTo: PropTypes.object,
+    onBlur: PropTypes.func.isRequired
   }
 
   constructor (props) {
     super(props);
-
     this.state = { comment: '', valid: false };
   }
 
@@ -39,18 +39,30 @@ export default class CommentInput extends Component {
   render () {
     return (
       <View style={ Styles.container }>
-        <TextInput
-          placeholder='Write a comment'
-          value={ this.state.comment }
-          onChange={ event => this.onChange(event.nativeEvent.text || '') }
-          style={ Styles.input }
-        />
-        <TouchableOpacity
-          onPress={ () => this.send() }
-          disabled={ !this.state.valid }
-        >
-          <Text style={[ Styles.send, this.sendBtnStyle() ]}>Send</Text>
-        </TouchableOpacity>
+        {
+          this.props.replyingTo &&
+          (
+            <Text style={ Styles.replyingTo }>
+              Replying to { this.props.replyingTo.username }
+            </Text>
+          )
+        }
+        <View style={ Styles.inputContainer }>
+          <TextInput
+            ref={ this.props.onRef }
+            placeholder='Write a comment'
+            value={ this.state.comment }
+            onBlur={ this.props.onBlur }
+            onChange={ event => this.onChange(event.nativeEvent.text || '') }
+            style={ Styles.input }
+          />
+          <TouchableOpacity
+            onPress={ () => this.send() }
+            disabled={ !this.state.valid }
+          >
+            <Text style={[ Styles.send, this.sendBtnStyle() ]}>Send</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }

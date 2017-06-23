@@ -25,7 +25,11 @@ export default class Note extends Component {
     sendComment: PropTypes.func.isRequired,
     showMarkAsComplete: PropTypes.bool,
     refreshing: PropTypes.bool.isRequired,
-    refresh: PropTypes.func.isRequired
+    refresh: PropTypes.func.isRequired,
+    reply: PropTypes.func.isRequired,
+    resetReply: PropTypes.func.isRequired,
+    commentInputRef: PropTypes.func.isRequired,
+    replyingTo: PropTypes.object
   }
   
   constructor (props) {
@@ -48,7 +52,11 @@ export default class Note extends Component {
       goToProject,
       sendComment,
       showMarkAsComplete,
-      refreshing
+      refreshing,
+      reply,
+      resetReply,
+      commentInputRef,
+      replyingTo
     } = this.props;
 
     const refreshProps = {
@@ -101,10 +109,10 @@ export default class Note extends Component {
             <Text style={[ Styles.note, Styles.text ]}>{ note.content }</Text>
             <Text style={ Styles.date }>{ formatDate(note.lastUpdated) }</Text>
             <ReactionsContainer
-                note={ note._id }
-                reactions={ note.reactions }
-                maxList={ 4 }
-              />
+              note={ note._id }
+              reactions={ note.reactions }
+              maxList={ 4 }
+            />
             {
               comments &&
               <View style={ Styles.comments }>
@@ -113,12 +121,18 @@ export default class Note extends Component {
                   comments={ comments }
                   onUserSelect={ user => goToUser(user) }
                   noteAuthor={ note.author.userId }
+                  onReply={ reply }
                 />
               </View>
             }
             </View>
         </ScrollView>
-        <CommentInput onSend={ sendComment }/>
+        <CommentInput
+          onBlur={ resetReply }
+          replyingTo={ replyingTo }
+          onRef={ commentInputRef }
+          onSend={ sendComment }
+        />
       </KeyboardAvoidingView>
     );
   }

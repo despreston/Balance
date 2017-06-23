@@ -167,7 +167,10 @@ module.exports = ({ get, post, put, del }) => {
         .findOne(params)
         .populate({
           path: 'comments',
-          populate: { path: 'commenter', select: 'userId username picture' }
+          populate: {
+            path: 'commenter replyingToUser',
+            select: 'userId username picture'
+          }
         })
         .populate('project', 'title privacyLevel')
         .populate('reactions', 'userId reaction');
@@ -298,7 +301,10 @@ module.exports = ({ get, post, put, del }) => {
         .populate('reactions', 'userId reaction')
         .populate({
           path: 'comments',
-          populate: { path: 'commenter', select: 'userId username picture' }
+          populate: {
+            path: 'commenter replyingToUser',
+            select: 'userId username picture'
+          }
         });
 
       if (note.user !== user.sub) return res.send(403);
@@ -344,7 +350,10 @@ module.exports = ({ get, post, put, del }) => {
         .populate('reactions', 'userId reaction')
         .populate({
           path: 'comments',
-          populate: { path: 'commenter', select: 'userId username picture' }
+          populate: {
+            path: 'commenter replyingToUser',
+            select: 'userId username picture'
+          }
         });
 
       // trying to edit a note that does not belong to you

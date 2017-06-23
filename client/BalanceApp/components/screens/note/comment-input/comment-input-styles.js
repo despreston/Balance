@@ -4,17 +4,28 @@ import Colors from '../../../colors';
 export default StyleSheet.create ({
 
   container: {
-    flexDirection: 'row',
-    height: 50,
+    backgroundColor: Colors.gray.porcelain,
+    paddingHorizontal: 10
+  },
+
+  replyingTo: {
+    marginTop: 10,
+    color: Colors.gray.tundora,
+    opacity: 0.7,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+
+  inputContainer: {
     alignItems: 'center',
-    backgroundColor: Colors.gray.porcelain
+    height: 50,
+    flexDirection: 'row'
   },
 
   input: {
     flex: 1,
     fontSize: 15,
     color: Colors.gray.tundora,
-    marginLeft: 10,
     paddingHorizontal: 10,
     marginVertical: 10,
     borderRadius: 8,
@@ -22,7 +33,7 @@ export default StyleSheet.create ({
   },
 
   send: {
-    paddingHorizontal: 10,
+    paddingLeft: 10,
     fontWeight: 'bold',
     fontSize: 16
   },
