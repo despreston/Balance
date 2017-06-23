@@ -24,7 +24,6 @@ class NotificationListItem extends Component {
     this.related = props.notification.related;
     this.sender = this.related.find(n => n.kind === 'user').item;
     this.nav = props.nav;
-    this.getNotificationForType = this.getNotificationForType.bind(this);
   }
 
   getNotificationForType (type) {
