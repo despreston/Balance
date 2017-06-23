@@ -2,7 +2,7 @@ const Comment = require('../../models/Comment');
 const Note = require('../../models/Note');
 const log = require('logbro');
 const Notification = require('../../classes/notification/');
-const { NewComment } = Notification;
+const { NewComment, NewCommentReply } = Notification;
 
 module.exports = ({ post, del }) => {
 
@@ -23,12 +23,22 @@ module.exports = ({ post, del }) => {
       comment = await Comment
         .findOne({ _id: comment._id })
         .populate('commenter', 'userId username picture')
+        .populate('replyingToUser', 'userId username')
         .lean();
 
       // Create notification for author if the comment is by someone other
       // than the author.
       if (noteAuthor !== comment.commenter.userId) {
         new NewComment(noteAuthor, comment.commenter._id, comment._id).save();
+      }
+
+      // Notification for person that comment is replying to
+      if (comment.replyingToUser) {
+        new NewCommentReply(
+          comment.replyingToUser.userId,
+          comment.commenter._id,
+          comment._id
+        ).save();
       }
 
       delete comment.user;
