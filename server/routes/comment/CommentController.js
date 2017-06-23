@@ -26,14 +26,19 @@ module.exports = ({ post, del }) => {
         .populate('replyingToUser', 'userId username')
         .lean();
 
-      // Create notification for author if the comment is by someone other
-      // than the author.
+      // is the commenter also the author of the note?
       if (noteAuthor !== comment.commenter.userId) {
-        new NewComment(noteAuthor, comment.commenter._id, comment._id).save();
-      }
-
-      // Notification for person that comment is replying to
-      if (comment.replyingToUser) {
+        // commenter is replying to another comment
+        if (comment.replyingToUser) {
+          new NewCommentReply(
+            comment.replyingToUser.userId,
+            comment.commenter._id,
+            comment._id
+          ).save();
+        } else {
+          new NewComment(noteAuthor, comment.commenter._id, comment._id).save();
+        }
+      } else if (comment.replyingToUser) {
         new NewCommentReply(
           comment.replyingToUser.userId,
           comment.commenter._id,

@@ -49,7 +49,11 @@ class NoteContainer extends Component {
   }
 
   componentWillMount () {
-    let showEdit = this.props.note.author.userId === this.props.loggedInUser;
+    let showEdit = false;
+
+    if (this.props.note) {
+      showEdit = this.props.note.author.userId === this.props.loggedInUser;
+    }
 
     this.props.navigation.setParams({
       showEdit,
@@ -101,6 +105,8 @@ class NoteContainer extends Component {
   }
 
   render () {
+    if (!this.props.note) return null;
+    
     const author = this.props.note.author.userId;
     const showMarkAsComplete = author === this.props.loggedInUser &&
       this.props.note.type === 'Future';

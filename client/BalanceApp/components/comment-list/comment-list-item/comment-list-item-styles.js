@@ -25,6 +25,7 @@ export default StyleSheet.create  ({
 
   contentContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     paddingVertical: 6
   },

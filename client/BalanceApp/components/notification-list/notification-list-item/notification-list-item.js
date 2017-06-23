@@ -1,16 +1,17 @@
-import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
-
-import prettyDate from '../../../utils/fancy-date';
-
-import Styles from './notification-list-item-styles';
-
+import React, {
+  Component,
+  PropTypes
+}                               from 'react';
+import { View, Text, Image }    from 'react-native';
+import prettyDate               from '../../../utils/fancy-date';
+import Styles                   from './notification-list-item-styles';
 import NewComment               from './types/new-comment';
 import NewReaction              from './types/new-reaction';
 import AcceptedFriendRequest    from './types/accepted-friend-request';
 import NewNudge                 from './types/new-nudge';
 import NudgedProjectUpdated     from './types/nudged-project-updated';
 import BookmarkedProjectUpdated from './types/bookmarked-project-updated';
+import NewCommentReply          from './types/new-comment-reply';
 
 class NotificationListItem extends Component {
 
@@ -53,6 +54,18 @@ class NotificationListItem extends Component {
           return <NewComment { ...getPropsForNotification() } />;
         },
         icon: NewComment.icon
+      },
+
+      new_comment_reply: {
+        get props () {
+          return {
+            comment: related.find(r => r.kind === 'comment').item
+          };
+        },
+        get text () {
+          return <NewCommentReply { ...getPropsForNotification() } />;
+        },
+        icon: NewCommentReply.icon
       },
 
       new_nudge: {
