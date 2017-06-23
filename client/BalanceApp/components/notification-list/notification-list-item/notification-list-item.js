@@ -24,42 +24,105 @@ class NotificationListItem extends Component {
     this.related = props.notification.related;
     this.sender = this.related.find(n => n.kind === 'user').item;
     this.nav = props.nav;
-    this.type = props.notification.type;
+    this.getNotificationForType = this.getNotificationForType.bind(this);
   }
 
-  getText () {
-    let props = { nav: this.nav, user: this.sender };
-
-    switch (this.type) {
-      case 'new_comment':
-        props.comment = this.related.find(r => r.kind === 'comment').item;
-        return { text: (<NewComment { ...props } />), icon: NewComment.icon };
-
-      case 'accepted_friend_request':
-        return { text: (<AcceptedFriendRequest { ...props } />), icon: AcceptedFriendRequest.icon };
-
-      case 'new_nudge':
-        props.project = this.related.find(r => r.kind === 'project').item;
-        return { text: (<NewNudge { ...props } />), icon: NewNudge.icon };
-
-      case 'nudged_project_updated':
-        props.project = this.related.find(r => r.kind === 'project').item;
-        return { text: (<NudgedProjectUpdated { ...props } />), icon: NudgedProjectUpdated.icon };
-
-      case 'new_reaction':
-        props.note = this.related.find(r => r.kind === 'note').item._id;
-        props.reaction = this.related.find(r => r.kind === 'reaction').item.reaction;
-        return { text: (<NewReaction { ...props }/>), icon: NewReaction.icon };
-
-      case 'bookmarked_project_updated':
-        props.project = this.related.find(r => r.kind === 'project').item;
-        return { text: (<BookmarkedProjectUpdated { ...props } />), icon: BookmarkedProjectUpdated.icon };
+  getNotificationForType (type) {
+    function getPropsForNotification () {
+      return {
+        ...notificationProps,
+        ...notifications[type].props
+      };
     }
+
+    const notifications = {
+      accepted_friend_request: {
+        get props () { return {}; },
+        get text () {
+          return <AcceptedFriendRequest { ...getPropsForNotification() } />;
+        },
+        icon: AcceptedFriendRequest.icon
+      },
+
+      new_comment: {
+        get props () {
+          return {
+            comment: related.find(r => r.kind === 'comment').item
+          };
+        },
+        get text () { 
+          return <NewComment { ...getPropsForNotification() } />;
+        },
+        icon: NewComment.icon
+      },
+
+      new_nudge: {
+        get props () {
+          return {
+            project: related.find(r => r.kind === 'project').item
+          };
+        },
+        get text () {
+          return <NewNudge { ...getPropsForNotification() } />;
+        },
+        icon: NewNudge.icon
+      },
+
+      nudged_project_updated: {
+        get props () {
+          return {
+            project: related.find(r => r.kind === 'project').item
+          };
+        },
+        get text () {
+          return <NudgedProjectUpdated { ...getPropsForNotification() } />;
+        },
+        icon: NudgedProjectUpdated.icon
+      },
+
+      new_reaction: {
+        get props () {
+          return {
+            note: related.find(r => r.kind === 'note').item._id,
+            reaction: related.find(r => r.kind === 'reaction').item.reaction
+          };
+        },
+        get text () {
+          return <NewReaction { ...getPropsForNotification() } />;
+        },
+        icon: NewReaction.icon
+      },
+
+      bookmarked_project_updated: {
+        get props () {
+          return {
+            project: related.find(r => r.kind === 'project').item
+          };
+        },
+        get text () {
+          return <BookmarkedProjectUpdated { ...getPropsForNotification() } />;
+        },
+        icon: BookmarkedProjectUpdated.icon
+      }
+    };
+
+    if (!notifications[type]) return null;
+
+    let notificationProps = { nav: this.nav, user: this.sender };
+    let related = this.related;
+
+    return {
+      text: notifications[type].text,
+      icon: notifications[type].icon
+    };
   }
 
   render () {
     const { notification } = this.props;
-    const { text, icon } = this.getText();
+    
+    if (!this.getNotificationForType(notification.type)) return null;
+
+    const { text, icon } = this.getNotificationForType(notification.type);
 
     return (
       <View style={[ Styles.flexRow, Styles.notification ]}>
