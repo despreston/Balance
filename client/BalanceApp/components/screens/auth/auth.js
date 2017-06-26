@@ -6,7 +6,8 @@ import {
   View,
   Image,
   PushNotificationIOS,
-  AppState
+  AppState,
+  Linking
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import actions from '../../../actions/';
@@ -32,13 +33,41 @@ class Auth extends Component {
     this.state = { showLogin: false };
     this.handleAuth();
     this.navigated = false;
+    this.deepLinkURL = '';
     this.appState = AppState.currentState;
+    this.handleOpenURL = this.handleOpenURL.bind(this);
 
+    Linking.addEventListener('url', e => this.handleOpenURL(e));
     AppState.addEventListener('change', this.onAppStateChange.bind(this));
   }
 
   componentWillUnmount () {
+    Linking.removeEventListener('url', this.handleOpenURL);
     AppState.removeEventListener('change', this.onAppStateChange.bind(this));
+  }
+
+  getInitialDeepLink () {
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) {
+          this.handleOpenURL(url);
+        }
+      })
+      .catch(() => {})
+  }
+
+  handleOpenURL ({ url }) {
+    const { navigate } = this.props.navigation;
+    const route = url.replace(/.*?:\/\//g, '');
+    const id = route.match(/\/([^]+)\/?$/)[1];
+    const routeName = route.split('/')[0];
+
+    switch (routeName) {
+      case 'project': return navigate('Project', { project: id });
+      case 'note'   : return navigate('Note', { id });
+      case 'user'   : return navigate('User', { userId: id });
+      default: return;
+    }
   }
 
   onAppStateChange (nextAppState) {
