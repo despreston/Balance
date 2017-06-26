@@ -333,6 +333,7 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8F64EE630AD14556BB7244CF /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		91D6F9306357487695BA8DFA /* libA0RNLock.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libA0RNLock.a; sourceTree = "<group>"; };
+		A00250D85A562E1A561F98D6 /* Pods-BalanceApp.dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BalanceApp.dev.xcconfig"; path = "Pods/Target Support Files/Pods-BalanceApp/Pods-BalanceApp.dev.xcconfig"; sourceTree = "<group>"; };
 		A1EB6AA10FD52A720BEBD65B /* libPods-BalanceApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BalanceApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC338C8D6D66400FA5C6C83E /* AutoGrowTextInput.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AutoGrowTextInput.xcodeproj; path = "../node_modules/react-native-autogrow-textinput/ios/AutoGrowTextInput.xcodeproj"; sourceTree = "<group>"; };
 		B43C995F399B478881BA931B /* CodePush.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
@@ -664,7 +665,7 @@
 			children = (
 				68BFF67097F19A0887D1EBDF /* Pods-BalanceApp.debug.xcconfig */,
 				2575DB7BB1DDC6F2349DF8D6 /* Pods-BalanceApp.release.xcconfig */,
-				CD525CDEC42117316E759EC1 /* Pods-BalanceApp.dev.xcconfig */,
+				A00250D85A562E1A561F98D6 /* Pods-BalanceApp.dev.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
