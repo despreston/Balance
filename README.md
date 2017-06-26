@@ -45,4 +45,9 @@ Balance sends notifications over websockets by POSTing notifications to a server
 Push notifications through APN require certificates. The location of these certifications can be set in config.json.
 
 ### Code-Push
-The Balance IOS app uses Code Push (https://microsoft.github.io/code-push/) to hot push updates. 
+The Balance IOS app uses Code Push (https://microsoft.github.io/code-push/) to hot push updates.
+
+If a new version if released on the app store, it MUST also be released on code-push. Otherwise, code-push will override the app store version.
+
+To release to production on code-push: 
+`code-push release-react -m -d Prod Balance ios`
