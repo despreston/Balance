@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { ActionSheetIOS, View } from 'react-native';
 import ProjectDetail from './project-detail';
-import Icon from '../../navigation/icon';
 import actions from '../../../actions/';
 import BookmarkButton from '../../bookmark-button/bookmark-button';
+import MoreOptions from './more-options/more-options';
 
 class ProjectDetailContainer extends Component {
 
@@ -35,11 +35,9 @@ class ProjectDetailContainer extends Component {
   }
 
   static navigationOptions = ({ navigation }) => {
-    const { state, navigate } = navigation;
-
-    return {
-      headerRight: headerRight(navigate, state.params.showEdit, state.params.project, state.params.showUpdateDeck)
-    };
+    const { state } = navigation;
+    const { ...params } = state.params;
+    return { headerRight: headerRight(params) };
   }
 
   constructor (props) {
@@ -58,6 +56,8 @@ class ProjectDetailContainer extends Component {
     this.goToNote = this.goToNote.bind(this);
     this.toggleUpdateDeck = this.toggleUpdateDeck.bind(this);
     this.onUpdateDeckPress = this.onUpdateDeckPress.bind(this);
+    this.showActionSheet = this.showActionSheet.bind(this);
+    this.shareProject = this.shareProject.bind(this);
     this.nav = this.props.navigation.navigate;
   }
 
@@ -65,10 +65,68 @@ class ProjectDetailContainer extends Component {
     this.load();
   }
 
+  actionSheetOptions () {
+    let options = [
+      {
+        label: 'View as Slideshow',
+        fn: this.toggleUpdateDeck
+      },
+      {
+        label: 'Share via...',
+        fn: this.shareProject
+      },
+      {
+        label: 'Cancel',
+        fn: () => null
+      }
+    ];
+
+    if (this.props.userIsOwner) {
+      const editProject = {
+        label: 'Edit Project',
+        fn: () => {
+          this.props.navigation.navigate('EditProject', {
+            project: this.props.project._id
+          });
+        }
+      };
+
+      options.splice(2, 0, editProject);
+    }
+
+    return options;
+  }
+
+  showActionSheet () {
+    const options = this.actionSheetOptions();
+
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: options.map(option => option.label),
+      cancelButtonIndex: options.length - 1
+    }, selectedButtonIndex => options[selectedButtonIndex].fn() );
+  }
+
+  shareProject () {
+    const message = this.props.userIsOwner
+      ? `I'm using Balance (getbalanceapp.com) to track my project, "${this.props.project.title}". Check it out!`
+      : `Check out "${this.props.project.title}" on Balance (getbalanceapp.com)`;
+
+    const options = {
+      url: `${CONFIG.widgetsUrl}large/${this.props.project._id}`,
+      message
+    };
+
+    ActionSheetIOS.showShareActionSheetWithOptions(
+      options,
+      () => null, // error
+      () => null // success
+    );
+  }
+
   componentWillMount () {
     this.props.navigation.setParams({
-      showEdit: !!this.props.userIsOwner,
-      showUpdateDeck: this.toggleUpdateDeck
+      userIsOwner: this.props.userIsOwner,
+      onPress: this.showActionSheet
     });
   }
 
@@ -143,28 +201,16 @@ class ProjectDetailContainer extends Component {
   }
 }
 
-const headerRight = (navigate, showEdit, project, showUpdateDeck) => {
-  // navigation is still loading. dont show anything
-  if (!showEdit && showEdit !== false) return null;
-
+const headerRight = ({ project, userIsOwner, onPress }) => {
+  if (userIsOwner === undefined) return null;
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       {
-        showEdit &&
-        <Icon
-          imagePath={ require('../../../assets/icons/settings.png') }
-          onPress={ () => navigate('EditProject', { project }) }
-        />
+        !userIsOwner && <BookmarkButton project={ project } />
       }
-      {
-        !showEdit && <BookmarkButton project={ project } />
-      }
-      <Icon
-        imagePath={ require('../../../assets/icons/photo-stack.png') }
-        onPress={ showUpdateDeck }
-      />
+      <MoreOptions onPress={ onPress }/>
     </View>
   );
-};
+}
 
 export default connect(ProjectDetailContainer.mapStateToProps)(ProjectDetailContainer);
