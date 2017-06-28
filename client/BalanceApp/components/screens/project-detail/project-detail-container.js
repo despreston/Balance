@@ -36,8 +36,7 @@ class ProjectDetailContainer extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { state } = navigation;
-    const { ...params } = state.params;
-    return { headerRight: headerRight(params) };
+    return { headerRight: headerRight({ ...state.params }) };
   }
 
   constructor (props) {
