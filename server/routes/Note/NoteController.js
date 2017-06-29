@@ -104,7 +104,7 @@ module.exports = ({ get, post, put, del }) => {
     try {
       const limit = parseInt(params.limit) || 30;
       const skip = parseInt(params.skip) || 0;
-      
+
       let loggedInUser = await User
         .findOne({ userId: user.sub })
         .select('userId friends');
@@ -228,7 +228,7 @@ module.exports = ({ get, post, put, del }) => {
       body.userId = user.sub;
       body.note = params._id;
 
-      if (!body.reaction) return res.send(400, 'Missing parameter: reaction');  
+      if (!body.reaction) return res.send(400, 'Missing parameter: reaction');
 
       let reaction = await Reaction.create(body);
 
@@ -363,7 +363,7 @@ module.exports = ({ get, post, put, del }) => {
       if (!note.picture) return res.send(404);
 
       await s3remove(note.picture);
-    
+
       // Remove the picture from the database
       note.picture = undefined;
 
@@ -380,7 +380,7 @@ module.exports = ({ get, post, put, del }) => {
       if (Array.isArray(note.author)) {
         note.author = note.author[0];
       }
-      
+
       return res.send(200, note);
     } catch(e) {
       log.error(e);
@@ -391,11 +391,15 @@ module.exports = ({ get, post, put, del }) => {
   del('notes/:_id', async ({ params, user }, res) => {
     try {
       let note = await Note.findOne(params);
-      
+
       if (note.user !== user.sub) return res.send(403);
 
       note.remove();
-      
+
+      if (note.picture) {
+        await s3remove(note.picture);
+      }
+
       return res.send(200, []);
     } catch (e) {
       log.error(e);

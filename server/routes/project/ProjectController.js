@@ -35,12 +35,12 @@ module.exports = ({ get, post, del, put }) => {
       if (!project) {
         return res.send(404);
       }
-      
+
       project = project.toObject({ virtuals: true });
       project = Project.futureAndPastNotes(project);
       project = Project.removeExcludedFields(project);
       const owner = project.owner[0].userId;
-      
+
       try {
         if (user) {
           await AccessControl.single(owner, user.sub, project.privacyLevel);
@@ -80,7 +80,7 @@ module.exports = ({ get, post, del, put }) => {
       return res.send(200, bookmarks);
     } catch (e) {
       log.error(e);
-      return res.send(500, e); 
+      return res.send(500, e);
     }
   });
 
@@ -91,7 +91,7 @@ module.exports = ({ get, post, del, put }) => {
 
     try {
       const privacyLevel = await AccessControl.many(params, user.sub);
-      
+
       const query = Object.assign({}, params,
         { privacyLevel: { $in: privacyLevel }
       });
@@ -197,8 +197,8 @@ module.exports = ({ get, post, del, put }) => {
       project = project.toObject({ virtuals: true });
       project = Project.futureAndPastNotes(project);
       project = Project.removeExcludedFields(project);
-     
-      return res.send(200, project); 
+
+      return res.send(200, project);
     } catch (e) {
       log.error(e);
       return res.send(500);
