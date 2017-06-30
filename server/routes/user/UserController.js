@@ -112,10 +112,16 @@ module.exports = ({ get, post, del, put }) => {
         .select('friends')
         .lean();
 
-      const friendIds = user.friends.map(f => f.userId);
+      let friendIDs = [];
+
+      if (params.status) {
+        friendIDs = user.friends.filter(f => f.status === params.status);
+      }
+
+      friendIDs = user.friends.map(f => f.userId);
 
       let friends = await User
-        .find({ userId: { $in: friendIds } })
+        .find({ userId: { $in: friendIDs } })
         .select('name userId picture friends username bio hideName')
         .lean();
 

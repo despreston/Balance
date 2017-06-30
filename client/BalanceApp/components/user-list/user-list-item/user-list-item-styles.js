@@ -26,14 +26,14 @@ export default StyleSheet.create  ({
   },
 
   text: {
-    color: Colors.blue,
+    color: Colors.gray.tundora,
     fontWeight: '600',
     fontSize: 14,
     marginBottom: 2
   },
 
   small: {
-    color: Colors.gray.tundora,
+    color: Colors.gray.silver,
     fontSize: 12
   }
 
