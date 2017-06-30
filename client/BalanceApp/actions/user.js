@@ -1,11 +1,11 @@
 /* eslint no-console: "off" */
-import { apiDispatch, api } from '../utils/api';
-import { arrayToObj } from '../utils/helpers';
-import Auth0Lock from 'react-native-lock';
+import { apiDispatch, api }                from '../utils/api';
+import { arrayToObj }                      from '../utils/helpers';
+import Auth0Lock                           from 'react-native-lock';
 import { saveAuthToken, saveRefreshToken } from '../utils/auth';
-import Colors from '../components/colors';
-import notificationActions from './notification';
-import sharedActions from './shared';
+import Colors                              from '../components/colors';
+import notificationActions                 from './notification';
+import sharedActions                       from './shared';
 
 const LOGGED_IN_USER = 'LOGGED_IN_USER';
 const RECEIVE_USERS = 'RECEIVE_USERS';
