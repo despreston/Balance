@@ -15,6 +15,29 @@ class ProfileInfo extends Component  {
     onBookmarksPress: PropTypes.func.isRequired
   }
 
+  constructor (props) {
+    super(props);
+    this.renderUsername = this.renderUsername.bind(this);
+  }
+
+  renderUsername () {
+    const { username } = this.props.user;
+
+    if (!username) return null;
+
+    return <Name style={ Styles.mainName } text={ username } />;
+  }
+
+  renderName () {
+    const { user } = this.props;
+
+    if (user.hideName) return null;
+
+    const style = user.username ? Styles.secondaryName : Styles.mainName;
+
+    return <Name style={ style } text={ user.name } />;
+  }
+
   render () {
     const { user, onBookmarksPress } = this.props;
 
@@ -23,16 +46,8 @@ class ProfileInfo extends Component  {
         <View style={ Styles.row }>
           <Image style={ Styles.image } source={{ uri: user.picture }} />
           <View style={ Styles.info }>
-            <Text
-              adjustsFontSizeToFit
-              minimumFontScale={ 0.8 }
-              style={ Styles.name }
-            >
-              { user.name }
-            </Text>
-            <Text style={ Styles.username }>
-              @{ user.username }
-            </Text>
+            { this.renderUsername() }
+            { this.renderName() }
           </View>
         </View>
         <Bookmarks count={ user.bookmark_count } onPress={ onBookmarksPress }/>
@@ -45,6 +60,18 @@ class ProfileInfo extends Component  {
   }
 
 }
+
+const Name = ({ style, text }) => {
+  return (
+    <Text
+      adjustsFontSizeToFit
+      minimumFontScale={ 0.8 }
+      style={ style }
+    >
+      { text }
+    </Text>
+  );
+};
 
 const Bio = ({ bio }) => {
   if (bio && bio.length > 0) {

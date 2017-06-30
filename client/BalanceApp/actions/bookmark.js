@@ -1,5 +1,5 @@
 import { apiDispatch, api } from '../utils/api';
-import { arrayToObj } from '../utils/helpers';
+import { arrayToObj }       from '../utils/helpers';
 
 const RECEIVE_BOOKMARKS = 'RECEIVE_BOOKMARKS';
 const REMOVE_BOOKMARK = 'REMOVE_BOOKMARK';

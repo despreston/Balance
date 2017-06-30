@@ -4,9 +4,12 @@ import Colors from '../../colors';
 export default StyleSheet.create ({
 
   container: {
-    flex: 1,
     backgroundColor: Colors.gray.porcelain,
     alignItems: 'center'
+  },
+
+  editAvatar: {
+    marginBottom: 20
   },
 
   avatar: {
@@ -15,6 +18,18 @@ export default StyleSheet.create ({
     width: 60,
     height: 60,
     borderRadius: 30
+  },
+
+  error: {
+    color: Colors.red
+  },
+
+  centerText: {
+    textAlign: 'center'
+  },
+
+  readOnlyText: {
+    color: Colors.gray.silver
   }
 
 });

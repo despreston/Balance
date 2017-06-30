@@ -18,7 +18,8 @@ export default StyleSheet.create  ({
 
   text: {
     color: Colors.gray.tundora,
-    fontSize: 15
+    fontSize: 15,
+    lineHeight: 20
   },
 
   rowInput: {
