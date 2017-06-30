@@ -29,19 +29,19 @@ export default StyleSheet.create  ({
     justifyContent: 'center'
   },
 
-  username: {
-    ...shared,
-    fontSize: 14,
-    fontWeight: 'normal',
-    textAlign: 'center',
-    paddingTop: 5
-  },
-
-  name: {
+  mainName: {
     ...shared,
     fontWeight: 'bold',
     fontSize: 20,
     textAlign: 'center'
+  },
+
+  secondaryName: {
+    ...shared,
+    fontSize: 18,
+    fontWeight: 'normal',
+    textAlign: 'center',
+    paddingTop: 5
   },
 
   bio: {

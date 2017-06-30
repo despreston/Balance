@@ -22,11 +22,18 @@ class UserSettingsContainer extends Component {
   static navigationOptions = ({ navigation }) => {
     const { state } = navigation;
     const title = 'Settings';
-    const headerRight = <NavBtn title='Save' onPress={ () => state.params.save() }/>;
+
+    const headerRight = (
+      <NavBtn
+        title='Save'
+        disabled={ state.params && state.params.disable }
+        onPress={ () => state.params.save() }
+      />
+    );
 
     return { headerRight, title };
   }
-  
+
   constructor (props) {
     super(props);
     this.state = { user: props.user, helpVisible: false };
@@ -57,11 +64,16 @@ class UserSettingsContainer extends Component {
 
   onEdit (property, value) {
     this.newPhoto = true;
-    this.setState({ 
+
+    this.setState({
       user: {
         ...this.state.user,
         [property]: value
       }
+    }, () => {
+      this.props.navigation.setParams({
+        disable: !this.valid()
+      });
     });
   }
 
@@ -85,6 +97,18 @@ class UserSettingsContainer extends Component {
 
   toggleHelp () {
     this.setState({ helpVisible: !this.state.helpVisible });
+  }
+
+  valid () {
+    const { user } = this.state;
+
+    const rules = {
+      hideNameRequiresUsername () {
+        return user.hideName ? (user.username && user.username !== '') : true;
+      }
+    };
+
+    return Object.keys(rules).every(rule => rules[rule]());
   }
 
   togglePhotoUploader () {

@@ -41,12 +41,17 @@ let User = new mongoose.Schema({
 
   createdAt: Date,
 
-  bio: String
+  bio: String,
+
+  hideName: {
+    type: Boolean,
+    default: false
+  }
 
 });
 
 /**
- * Returns true if the userA is a friend of userB and the friendship status is 
+ * Returns true if the userA is a friend of userB and the friendship status is
  * 'accepted'.
  *
  * @param {string} userA userId of first user
@@ -76,10 +81,10 @@ User.statics.areFriends = function (userA, userB) {
  *
  * If receiver does not exist in the requester's list of friends,
  * add the requester to the receiver's friends list w/ status 'requested',
- * and add the receiver to the requester's friends list w/ status 'pending'. 
+ * and add the receiver to the requester's friends list w/ status 'pending'.
  *
  * If receiver exists in friends list & status is 'pending', resolve.
- * 
+ *
  * If receiver exists in friends list & status is 'requested', change status in
  * both user's friends list to 'accepted'.
  *
@@ -125,12 +130,12 @@ User.statics.createFriendship = async function (requester, receiver) {
       return [];
     }
 
-    // requested user had already sent a request. So accept it! 
+    // requested user had already sent a request. So accept it!
     else if (user.friends[friendIdx].status === 'requested') {
 
       // update the requester's friend list
       user.friends.set(friendIdx, { userId: receiver, status: 'accepted' });
-      
+
       user.save();
 
       // update the receiver's friend list
@@ -146,7 +151,7 @@ User.statics.createFriendship = async function (requester, receiver) {
         userId: requester,
         status: 'accepted'
       });
-          
+
       const updatedRequestedUser = await requestedFriend.save();
 
       // create notification for receiver
@@ -193,11 +198,6 @@ User.statics.removeFriendship = async function (userA, userB) {
 };
 
 User.pre('save', function (next) {
-
-  if (!this.username) {
-    this.username = this.name;
-  }
-
   if (!this.createdAt) {
     this.createdAt = new Date();
   } else {
@@ -205,9 +205,8 @@ User.pre('save', function (next) {
   }
 
   this.lastUpdated = new Date();
-  
-  next();
 
+  next();
 });
 
 module.exports = mongoose.model("user", User);

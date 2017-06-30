@@ -7,11 +7,16 @@ class FormListItem extends Component {
   static propTypes = {
     style: PropTypes.object,
     label: PropTypes.string,
-    touchable: PropTypes.bool
+    touchable: PropTypes.bool,
+    error: PropTypes.bool
   }
 
   render () {
     const labelStyles = [ styles.text, styles.rowLabel ];
+
+    if (this.props.error) {
+      labelStyles.push(styles.error);
+    }
 
     return (
       <View style={[ styles.listItem, this.props.style ]}>

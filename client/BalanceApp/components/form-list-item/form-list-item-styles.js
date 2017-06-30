@@ -9,11 +9,11 @@ export default StyleSheet.create ({
     alignItems: 'center',
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray.porcelain
+    borderBottomColor: Colors.gray.porcelain,
+    marginHorizontal: 10
   },
 
   rowLabel: {
-    paddingLeft: 10,
     fontWeight: 'bold',
     flex: 1
   },
@@ -28,6 +28,10 @@ export default StyleSheet.create ({
     height: 17,
     position: 'absolute',
     right: 10
+  },
+
+  error: {
+    color: Colors.red
   }
 
 });

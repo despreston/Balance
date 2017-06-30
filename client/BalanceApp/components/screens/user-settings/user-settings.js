@@ -1,4 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, {
+  Component,
+  PropTypes
+}                         from 'react';
 import {
   ScrollView,
   View,
@@ -6,12 +9,13 @@ import {
   TextInput,
   TouchableOpacity,
   Image
-} from 'react-native';
-import Styles from '../edit-project/edit-project-style';
+}                         from 'react-native';
+import Styles             from '../edit-project/edit-project-style';
 import UserSettingsStyles from './user-settings-styles';
-import Help from '../../help/help';
-import Logout from '../../logout/logout';
-import FormListItem from '../../form-list-item/form-list-item';
+import Help               from '../../help/help';
+import Logout             from '../../logout/logout';
+import FormListItem       from '../../form-list-item/form-list-item';
+import HideNameSwitch     from './hide-name-switch/hide-name-switch';
 
 class UserSettings extends Component {
 
@@ -34,20 +38,34 @@ class UserSettings extends Component {
       togglePhotoUploader
     } = this.props;
 
+    const messageStyles = [Styles.text, UserSettingsStyles.centerText];
+    const userNameError = user.hideName && !user.username;
+
+    const hideNameMessage = `Other users can search for you by ` +
+      `${(!user.hideName ? 'name or ' : '')}username.`;
+
     return (
       <ScrollView contentContainerStyle={ UserSettingsStyles.container }>
         <Image style={ UserSettingsStyles.avatar } source={{ uri: user.picture }} />
-        <TouchableOpacity onPress={ togglePhotoUploader }>
+        <TouchableOpacity
+          style={ UserSettingsStyles.editAvatar }
+          onPress={ togglePhotoUploader }
+        >
           <Text>Edit</Text>
         </TouchableOpacity>
         <View style={ Styles.editProject }>
           <View style={ Styles.formContainer }>
-            <FormListItem label='Username'>
+            <FormListItem label='Name'>
+              <Text style={[ Styles.rowInput, UserSettingsStyles.readOnlyText ]}>
+                { user.name }
+              </Text>
+            </FormListItem>
+            <FormListItem error={ userNameError } label='Username'>
               <TextInput
                 clearButtonMode='while-editing'
                 value={ user.username }
-                style={ [Styles.text, Styles.rowInput] }
-                placeholder="@username"
+                style={[ Styles.text, Styles.rowInput ]}
+                placeholder="username"
                 autoCorrect={ false }
                 onChangeText={ value => onEdit('username', value) } />
             </FormListItem>
@@ -58,27 +76,43 @@ class UserSettings extends Component {
                 autoCapitalize='none'
                 autoCorrect={ false }
                 value={ user.email }
-                style={ [Styles.text, Styles.rowInput] }
-                placeholder="email address"
+                style={[ Styles.text, Styles.rowInput ]}
+                placeholder="john@website.com"
                 onChangeText={ value => onEdit('email', value) } />
             </FormListItem>
             <FormListItem label='Bio'>
               <TextInput
                 value={ user.bio }
-                style={ [Styles.text, Styles.rowInput] }
-                placeholder="A short bio"
+                style={[ Styles.text, Styles.rowInput ]}
+                placeholder="Loves to get things done."
                 onChangeText={ value => onEdit('bio', value) } />
             </FormListItem>
+            <FormListItem label='Hide name' style={{ borderBottomWidth: 0 }}>
+              <HideNameSwitch
+                value={ user.hideName }
+                onValueChange={ value => onEdit('hideName', value) }
+              />
+            </FormListItem>
+            {
+              userNameError &&
+              (
+                <FormListItem style={{ borderBottomWidth: 0 }}>
+                  <Text style={[ ...messageStyles, UserSettingsStyles.error ]}>
+                    Username is required if you want to hide your name.
+                  </Text>
+                </FormListItem>
+              )
+            }
             <FormListItem style={{ borderBottomWidth: 0 }}>
-              <Text style={[ Styles.text, { textAlign: 'center' } ]}>
-                Other users can search for you by name or username.
+              <Text style={ messageStyles }>
+                { hideNameMessage }
               </Text>
             </FormListItem>
             <Logout beforeLogoutHook={ beforeLogout }/>
             <FormListItem style={{ borderBottomWidth: 0 }}>
               <TouchableOpacity onPress={ toggleHelp }>
-                <Text style={ [Styles.text, Styles.help] }>
-                  What is this app?
+                <Text style={[ Styles.text, Styles.help ]}>
+                  Help
                 </Text>
               </TouchableOpacity>
             </FormListItem>

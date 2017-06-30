@@ -1,21 +1,20 @@
 import React, { PropTypes } from 'react';
-import { Button } from 'react-native';
+import { Button }           from 'react-native';
+import { styles }           from './navigation-styles';
 
-// styles
-import { styles } from './navigation-styles';
-
-function NavBtn ({ onPress, customStyle = {}, title, color = '#fff' }) {
+function NavBtn ({ disabled, onPress, customStyle = {}, title, color = '#fff' }) {
   return (
     <Button
-      color={color}
+      disabled={ disabled }
+      color={ color }
       style={[
         styles.button,
         styles.text,
         { fontWeight: 'normal' },
         ...customStyle
       ]}
-      title={title}
-      onPress={onPress}
+      title={ title }
+      onPress={ onPress }
     />
   );
 }

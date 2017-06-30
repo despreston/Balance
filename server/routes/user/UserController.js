@@ -182,7 +182,7 @@ module.exports = ({ get, post, del, put }) => {
       return res.send(500);
     }
   });
-  
+
   post("users", async ({ params, body, user }, res) => {
     try {
       body = JSON.parse(body);
@@ -218,9 +218,9 @@ module.exports = ({ get, post, del, put }) => {
     try {
       // trying to update another user
       if (params.userId !== user.sub) return res.send(403);
-      
+
       body = JSON.parse(body);
-      
+
       let userToUpdate = await User.findOne({ userId: params.userId });
 
       // user does not exist
@@ -236,7 +236,7 @@ module.exports = ({ get, post, del, put }) => {
 
       const project_count = await Project.projectCountForUser(params.userId, ['global', 'friends', 'private']);
       const bookmark_count = await Bookmark.count({ userId: user.sub });
-      
+
       const payload = Object.assign(userToUpdate.toObject(), {
         project_count,
         bookmark_count
