@@ -18,11 +18,25 @@ module.exports = ({ get, post, del, put }) => {
 
       let users = await User
         .find({ $or: [
-          { name: new RegExp(`\\b${params.q}`, 'i') },
+          {
+            $and: [
+              { name: new RegExp(`\\b${params.q}`, 'i') },
+              { hideName: false }
+            ]
+          },
           { username: new RegExp(`\\b${params.q}`, 'i') }
         ]})
-        .select('name userId picture friends username bio')
+        .select('name userId picture friends username bio hideName')
         .lean();
+
+      // remove names if the user opt'd to hide their name
+      users = users.map(user => {
+        if (user.hideName) {
+          delete user.name;
+        }
+        delete user.hideName;
+        return user;
+      });
 
       return res.send(200, users);
     } catch (e) {

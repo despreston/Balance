@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../colors';
 
 export default StyleSheet.create  ({
 
@@ -25,15 +26,15 @@ export default StyleSheet.create  ({
   },
 
   text: {
-    color: '#3D3F3E',
+    color: Colors.blue,
     fontWeight: '600',
     fontSize: 14,
     marginBottom: 2
   },
 
-  username: {
-    color: '#2E92E1',
+  small: {
+    color: Colors.gray.tundora,
     fontSize: 12
   }
-  
+
 });
