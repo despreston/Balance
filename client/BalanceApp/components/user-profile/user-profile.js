@@ -65,7 +65,7 @@ class UserProfile extends Component {
   }
 
   fetchFriendsList () {
-    return api(`users/${this.props.userId}/friends`)
+    return api(`users/${this.props.userId}/friends?status=accepted`)
       .then(friends => {
         this.setState({
           friends,
