@@ -29,14 +29,7 @@ module.exports = ({ get, post, del, put }) => {
         .select('name userId picture friends username bio hideName')
         .lean();
 
-      // remove names if the user opt'd to hide their name
-      users = users.map(user => {
-        if (user.hideName) {
-          delete user.name;
-        }
-        delete user.hideName;
-        return user;
-      });
+      users = users.map(User.handleHideName);
 
       return res.send(200, users);
     } catch (e) {
@@ -76,10 +69,12 @@ module.exports = ({ get, post, del, put }) => {
         .filter(f => f.status === 'requested')
         .map(f => f.userId);
 
-      const friends = await User
+      let friends = await User
         .find({ userId: { $in: friendIds } })
         .select('name userId picture friends username bio')
         .lean();
+
+      friends = friends.map(User.handleHideName);
 
       return res.send(200, friends);
     } catch (e) {
@@ -119,10 +114,12 @@ module.exports = ({ get, post, del, put }) => {
 
       const friendIds = user.friends.map(f => f.userId);
 
-      const friends = await User
+      let friends = await User
         .find({ userId: { $in: friendIds } })
         .select('name userId picture friends username bio')
         .lean();
+
+      friends = friends.map(User.handleHideName);
 
       return res.send(200, friends);
     } catch (e) {
