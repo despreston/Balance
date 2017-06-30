@@ -2,11 +2,15 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { api } from '../../../utils/api';
 import ProjectList from '../../project-list/project-list';
+import actions from '../../../actions';
 
 class UserBookmarksContainer extends Component {
 
   static mapStateToProps (state) {
-    return { loggedInUser: state.loggedInUser };
+
+    return {
+      loggedInUser: state.loggedInUser
+    };
   }
 
   static propTypes = {
@@ -25,6 +29,7 @@ class UserBookmarksContainer extends Component {
     const { user } = this.props.navigation.state.params;
 
     api(`users/${user}/bookmarks`).then(projects => {
+      this.props.dispatch(actions.receiveBookmarks(projects));
       this.setState({ projects });
     });
   }

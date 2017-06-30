@@ -18,11 +18,18 @@ module.exports = ({ get, post, del, put }) => {
 
       let users = await User
         .find({ $or: [
-          { name: new RegExp(`\\b${params.q}`, 'i') },
+          {
+            $and: [
+              { name: new RegExp(`\\b${params.q}`, 'i') },
+              { hideName: false }
+            ]
+          },
           { username: new RegExp(`\\b${params.q}`, 'i') }
         ]})
-        .select('name userId picture friends username bio')
+        .select('name userId picture friends username bio hideName')
         .lean();
+
+      users = users.map(User.handleHideNameForUser);
 
       return res.send(200, users);
     } catch (e) {
@@ -62,10 +69,12 @@ module.exports = ({ get, post, del, put }) => {
         .filter(f => f.status === 'requested')
         .map(f => f.userId);
 
-      const friends = await User
+      let friends = await User
         .find({ userId: { $in: friendIds } })
-        .select('name userId picture friends username bio')
+        .select('name userId picture friends username bio hideName')
         .lean();
+
+      friends = friends.map(User.handleHideNameForUser);
 
       return res.send(200, friends);
     } catch (e) {
@@ -74,7 +83,7 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  get("users/:userId/bookmarks", async ({ params, user }, res) => {
+  get("users/:userId/bookmarks", async ({ params }, res) => {
     try {
       const bookmarks = await Bookmark
         .find({ userId: params.userId })
@@ -96,19 +105,21 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  get("users/:userId/friends", async (req, res) => {
+  get("users/:userId/friends", async ({ params }, res) => {
     try {
       const user = await User
-        .findOne({ userId: req.params.userId })
+        .findOne({ userId: params.userId })
         .select('friends')
         .lean();
 
       const friendIds = user.friends.map(f => f.userId);
 
-      const friends = await User
+      let friends = await User
         .find({ userId: { $in: friendIds } })
-        .select('name userId picture friends username bio')
+        .select('name userId picture friends username bio hideName')
         .lean();
+
+      friends = friends.map(User.handleHideNameForUser);
 
       return res.send(200, friends);
     } catch (e) {

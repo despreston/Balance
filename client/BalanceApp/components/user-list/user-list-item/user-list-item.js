@@ -1,12 +1,7 @@
-// vendors
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
-
-// styles
-import Styles from './user-list-item-styles';
-
-// components
-import FriendButton from '../../friend-button/friend-button';
+import { View, Text, Image }           from 'react-native';
+import Styles                          from './user-list-item-styles';
+import FriendButton                    from '../../friend-button/friend-button';
 
 export default class UserListItem extends Component {
 
@@ -14,31 +9,37 @@ export default class UserListItem extends Component {
     user: PropTypes.object.isRequired
   };
 
-  constructor (props) {
-    super(props);
-  }
-
   renderUsername () {
     const { user } = this.props;
+
     if (!user.username) {
       return null;
     }
 
-    return (
-      <Text style={[ Styles.text, Styles.username ]} >
-        @{user.username}
-      </Text>
-    );
+    return <Text style={ Styles.text } >{user.username}</Text>;
+  }
+
+  renderName () {
+    const { user } = this.props;
+
+    if (!user.name) {
+      return null;
+    }
+
+    const styles = [ Styles.text, (user.username && Styles.small) ];
+
+    return <Text style={ styles } >{ user.name }</Text>;
   }
 
   render () {
     const { user } = this.props;
+
     return (
-      <View style={Styles.userListItem} >
-        <Image source={{ uri: user.picture }} style={Styles.picture} />
-        <View style={Styles.right} >
-          <Text style={Styles.text} >{user.name}</Text>
+      <View style={ Styles.userListItem }>
+        <Image source={{ uri: user.picture }} style={ Styles.picture } />
+        <View style={ Styles.right }>
           { this.renderUsername() }
+          { this.renderName() }
         </View>
         <FriendButton userId={ user.userId } />
       </View>

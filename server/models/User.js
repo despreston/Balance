@@ -197,7 +197,26 @@ User.statics.removeFriendship = async function (userA, userB) {
   }
 };
 
+/**
+ * remove names if the user opt'd to hide their name
+ * @param {Object} user - remove name and hideName from this user
+ * @return {Object}
+ */
+User.statics.handleHideNameForUser = function (user) {
+  if (user.hideName) {
+    delete user.name;
+  }
+
+  delete user.hideName;
+
+  return user;
+}
+
 User.pre('save', function (next) {
+  if (!this.username) {
+    this.username = this.name;
+  }
+
   if (!this.createdAt) {
     this.createdAt = new Date();
   } else {

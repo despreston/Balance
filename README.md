@@ -29,7 +29,7 @@ A platform for managing and sharing personal progress.
 ### Fresh Update
 Clears database and installs all dependencies. THIS WILL CLEAR YOUR DATA
 
-1. Run `./clean.sh` in root directory '/Balance'. 
+1. Run `./clean.sh` in root directory '/Balance'.
 
 Note: if you get an error about permission denied. Run `chmod +x clean.sh` then try step 1 again.
 
@@ -49,5 +49,5 @@ The Balance IOS app uses Code Push (https://microsoft.github.io/code-push/) to h
 
 If a new version if released on the app store, it MUST also be released on code-push. Otherwise, code-push will override the app store version.
 
-To release to production on code-push: 
-`code-push release-react -m -d Prod Balance ios`
+To release to production on code-push:
+`code-push release-react -m -d Production Balance ios`
