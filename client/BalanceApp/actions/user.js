@@ -11,7 +11,7 @@ const LOGGED_IN_USER = 'LOGGED_IN_USER';
 const RECEIVE_USERS = 'RECEIVE_USERS';
 
 export default {
-  
+
   /**
    * @param {object} user
    * @return {action}
@@ -70,7 +70,7 @@ export default {
   },
 
   /**
-   * Fetch user 
+   * Fetch user
    * @param {string} userId of user
    */
   requestUser (user, loggedIn) {
@@ -141,14 +141,6 @@ export default {
         });
       });
     }
-  },
-
-  /**
-   * fetch friends for userId
-   * @param {string} userId
-   */
-  fetchFriendsForUser (userId) {
-    return apiDispatch(`users/${userId}/friends`, this.receiveUsers);
   },
 
   /**

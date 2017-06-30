@@ -9,19 +9,19 @@ import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 import Refresh from '../refresh/refresh';
 import actions from '../../actions/';
 import Styles from './profile-styles';
+import { api } from '../../utils/api';
 
 class UserProfile extends Component {
-  
+
   static propTypes = {
     loggedInUser: PropTypes.string.isRequired,
     user: PropTypes.object,
     userId: PropTypes.string.isRequired,
-    friends: PropTypes.array,
     nav: PropTypes.func.isRequired
   }
 
   static mapStateToProps (state, ownProps) {
-    let userId, nav, friends;
+    let userId, nav;
 
     /**
      * if nav'ing directly thru react-navigator, the userId is passed as
@@ -37,24 +37,10 @@ class UserProfile extends Component {
 
     const user = state.users[userId];
 
-    if (user) {
-      friends = Object.keys(state.users)
-        .map(id => state.users[id])
-        .filter(userToFilter => {
-          return user.friends.some(friend => {
-            return friend.userId === userToFilter.userId &&
-              friend.status === 'accepted';
-          });
-        });
-    } else {
-      friends = [];
-    }
-
     return {
       userId,
       loggedInUser: state.loggedInUser,
       user,
-      friends,
       nav
     };
   }
@@ -65,7 +51,8 @@ class UserProfile extends Component {
     this.state = {
       context: 'latest',
       loadingContext: false,
-      refreshing: false
+      refreshing: false,
+      friends: []
     };
 
     this.loadUser();
@@ -78,8 +65,13 @@ class UserProfile extends Component {
   }
 
   fetchFriendsList () {
-    return this.props.dispatch(actions.fetchFriendsForUser(this.props.userId))
-      .then(() => this.setState({ loadingContext: false }));
+    return api(`users/${this.props.userId}/friends`)
+      .then(friends => {
+        this.setState({
+          friends,
+          loadingContext: false
+        });
+      });
   }
 
   onBookmarksPress () {
@@ -113,7 +105,7 @@ class UserProfile extends Component {
     return (
       <UserList
         emptyState={ <EmptyFriends addFriend={ addFriend }/> }
-        users={ this.props.friends }
+        users={ this.state.friends }
         onUserSelect={ userId => this.props.nav('UserProfile', { userId }) }
       />
     );

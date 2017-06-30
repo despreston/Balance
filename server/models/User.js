@@ -202,7 +202,7 @@ User.statics.removeFriendship = async function (userA, userB) {
  * @param {Object} user - remove name and hideName from this user
  * @return {Object}
  */
-User.statics.handleHideName = function (user) {
+User.statics.handleHideNameForUser = function (user) {
   if (user.hideName) {
     delete user.name;
   }

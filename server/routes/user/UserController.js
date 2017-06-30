@@ -29,7 +29,7 @@ module.exports = ({ get, post, del, put }) => {
         .select('name userId picture friends username bio hideName')
         .lean();
 
-      users = users.map(User.handleHideName);
+      users = users.map(User.handleHideNameForUser);
 
       return res.send(200, users);
     } catch (e) {
@@ -71,10 +71,10 @@ module.exports = ({ get, post, del, put }) => {
 
       let friends = await User
         .find({ userId: { $in: friendIds } })
-        .select('name userId picture friends username bio')
+        .select('name userId picture friends username bio hideName')
         .lean();
 
-      friends = friends.map(User.handleHideName);
+      friends = friends.map(User.handleHideNameForUser);
 
       return res.send(200, friends);
     } catch (e) {
@@ -83,7 +83,7 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  get("users/:userId/bookmarks", async ({ params, user }, res) => {
+  get("users/:userId/bookmarks", async ({ params }, res) => {
     try {
       const bookmarks = await Bookmark
         .find({ userId: params.userId })
@@ -105,10 +105,10 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  get("users/:userId/friends", async (req, res) => {
+  get("users/:userId/friends", async ({ params }, res) => {
     try {
       const user = await User
-        .findOne({ userId: req.params.userId })
+        .findOne({ userId: params.userId })
         .select('friends')
         .lean();
 
@@ -116,10 +116,10 @@ module.exports = ({ get, post, del, put }) => {
 
       let friends = await User
         .find({ userId: { $in: friendIds } })
-        .select('name userId picture friends username bio')
+        .select('name userId picture friends username bio hideName')
         .lean();
 
-      friends = friends.map(User.handleHideName);
+      friends = friends.map(User.handleHideNameForUser);
 
       return res.send(200, friends);
     } catch (e) {

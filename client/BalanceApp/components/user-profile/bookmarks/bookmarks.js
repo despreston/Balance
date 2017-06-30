@@ -5,7 +5,7 @@ import styles from './bookmarks-styles';
 class Bookmarks extends Component {
 
   static propTypes = {
-    count: PropTypes.number.isRequired,
+    count: PropTypes.number,
     onPress: PropTypes.func.isRequired
   }
 
