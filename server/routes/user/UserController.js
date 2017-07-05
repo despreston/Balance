@@ -112,13 +112,11 @@ module.exports = ({ get, post, del, put }) => {
         .select('friends')
         .lean();
 
-      let friendIDs = [];
-
       if (params.status) {
-        friendIDs = user.friends.filter(f => f.status === params.status);
+        user.friends = user.friends.filter(f => f.status === params.status);
       }
 
-      friendIDs = user.friends.map(f => f.userId);
+      let friendIDs = user.friends.map(f => f.userId);
 
       let friends = await User
         .find({ userId: { $in: friendIDs } })
