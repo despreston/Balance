@@ -6,7 +6,7 @@ const { NewComment, NewCommentReply } = Notification;
 
 module.exports = ({ post, del }) => {
 
-  post('comments', async ({ body, user }, res) => {
+  post('comments', async ({ body }, res) => {
     try {
       body = JSON.parse(body);
       let comment = await Comment.create(body);

@@ -11,7 +11,7 @@ const { NewReaction } = Notification;
 
 module.exports = ({ get, post, put, del }) => {
 
-  get('notes/:_id/reactions', async ({ params, user }, res) => {
+  get('notes/:_id/reactions', async ({ params }, res) => {
     try {
       let reactions = await Reaction
         .find({ note: params._id })

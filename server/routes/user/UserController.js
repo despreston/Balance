@@ -198,7 +198,7 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  post("users", async ({ params, body, user }, res) => {
+  post("users", async ({ body, user }, res) => {
     try {
       body = JSON.parse(body);
 

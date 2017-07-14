@@ -12,13 +12,11 @@ const auth = require('./auth');
 
 // mongoose promise library is deprecated. Use standard es6 lib instead
 mongoose.Promise = global.Promise;
-
-mongoose.connect(dbUrl);
+mongoose.connect(dbUrl, { useMongoClient: true });
 
 server.pre(restify.pre.sanitizePath());
-
-server.use(restify.queryParser());
-server.use(restify.bodyParser());
+server.use(restify.plugins.queryParser({ mapParams: true }));
+server.use(restify.plugins.bodyParser({ mapParams: true }));
 server.use(logging);
 server.use(auth);
 

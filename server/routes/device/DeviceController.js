@@ -3,7 +3,7 @@ const log = require('logbro');
 
 module.exports = ({ post, put, get }) => {
 
-  get('devices', async ({ params, user }, res) => {
+  get('devices', async ({ user }, res) => {
     try {
       const devices = await Device.find({ userId: user.sub });
       return res.send(200, devices);
@@ -13,7 +13,7 @@ module.exports = ({ post, put, get }) => {
     }
   });
 
-  put('devices/:_id', async ({ params, user }, res) => {
+  put('devices/:_id', async ({ params }, res) => {
     try {
       let device = await Device.findOne({ _id: params._id });
 
