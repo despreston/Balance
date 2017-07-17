@@ -24,6 +24,8 @@
     "react-native/no-color-literals": 2,
     "comma-dangle": [ 2, "never" ],
     "no-unused-vars": 2,
+    "react/no-deprecated": 0,
+    "react/no-unescaped-entities": 0
   },
   "globals": {
     "CONFIG": true,

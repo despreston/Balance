@@ -12,6 +12,7 @@ import Refresh from '../../refresh/refresh';
 import NoteTypeSwitch from './note-type-switch/note-type-switch';
 import UpdateDeckContainer from '../../update-deck/update-deck-container';
 import Header from './header/header';
+import Confetti from 'react-native-confetti';
 
 class ProjectDetail extends Component {
 
@@ -36,6 +37,15 @@ class ProjectDetail extends Component {
     updateDeckVisible: PropTypes.bool.isRequired,
     toggleUpdateDeck: PropTypes.func.isRequired,
     onUpdateDeckPress: PropTypes.func.isRequired
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (
+      nextProps.project.status === 'finished'
+      && this.props.project.status === 'active'
+    ) {
+      this._confettiView.startConfetti();
+    }
   }
 
   notesSelector (type) {
@@ -168,6 +178,9 @@ class ProjectDetail extends Component {
           visible={ updateDeckVisible }
           onHide={ toggleUpdateDeck }
         />
+        <Confetti
+          duration={ 3000 }
+          ref={ node  => this._confettiView = node }/>
       </ScrollView>
     );
   }

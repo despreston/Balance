@@ -59,7 +59,7 @@ export const Styles = StyleSheet.create  ({
 
   darker: {
     color: Colors.gray.tundora,
-    fontWeight: '600' 
+    fontWeight: '600'
   },
 
   blue: {
@@ -85,5 +85,5 @@ export const Styles = StyleSheet.create  ({
     borderTopWidth: 1,
     borderTopColor: Colors.gray.porcelain
   }
-  
+
 });

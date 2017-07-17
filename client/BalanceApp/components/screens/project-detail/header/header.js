@@ -31,7 +31,7 @@ class Header extends Component {
       return <View key={ i } style={ style } />
     });
   }
-  
+
   render () {
     const { project, userIsOwner, goToAuthor, toggleAddUpdateModal } = this.props;
 
@@ -70,14 +70,18 @@ class Header extends Component {
                 </Text>
               </Text>
             </View>
-            <View style={ styles.infoTextContainer }>
-              <Text
-                style={[ styles.whiteText, styles.description ]}
-                numberOfLines={ 2 }
-              >
-                { project.description }
-              </Text>
-            </View>
+            {
+              project.status === 'active' && (
+                <View style={ styles.infoTextContainer }>
+                  <Text
+                    style={[ styles.whiteText, styles.description ]}
+                    numberOfLines={ 2 }
+                  >
+                    { project.description }
+                  </Text>
+                </View>
+              )
+            }
           </View>
           <ScrollView contentContainerStyle={ styles.infoTextContainer }>
             <Text style={[ styles.smallText, styles.whiteText ]}>
@@ -102,7 +106,7 @@ class Header extends Component {
             { this.circles() }
           </View>
           {
-            userIsOwner && project.status !== 'finished' && 
+            userIsOwner && project.status !== 'finished' &&
             <UpdateButton press={ toggleAddUpdateModal } />
           }
         </View>
