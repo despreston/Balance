@@ -51,7 +51,7 @@ class UserSettings extends Component {
           style={ UserSettingsStyles.editAvatar }
           onPress={ togglePhotoUploader }
         >
-          <Text>Edit</Text>
+          <Text style={ Styles.help }>Change picture</Text>
         </TouchableOpacity>
         <View style={ Styles.editProject }>
           <View style={ Styles.formContainer }>
@@ -87,7 +87,7 @@ class UserSettings extends Component {
                 placeholder="Loves to get things done."
                 onChangeText={ value => onEdit('bio', value) } />
             </FormListItem>
-            <FormListItem label='Hide name' style={{ borderBottomWidth: 0 }}>
+            <FormListItem label='Show username only' style={{ borderBottomWidth: 0 }}>
               <HideNameSwitch
                 value={ user.hideName }
                 onValueChange={ value => onEdit('hideName', value) }

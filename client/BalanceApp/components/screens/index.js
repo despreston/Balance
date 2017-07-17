@@ -1,5 +1,5 @@
 /**
- * These are all the 'screens' for navigation. 
+ * These are all the 'screens' for navigation.
  */
 
 import MainScene from './main/main';
@@ -16,6 +16,7 @@ import Auth from './auth/auth';
 import FriendRequestList from './friend-request-list/friend-request-list';
 import UserBookmarksContainer from './user-bookmarks/user-bookmarks-container';
 import ProjectCategoryContainer from './project-category/project-category-container';
+import InfoWebView from './info-web-view/info-web-view';
 
 export {
   MainScene,
@@ -31,5 +32,6 @@ export {
   Auth,
   FriendRequestList,
   UserBookmarksContainer,
-  ProjectCategoryContainer
+  ProjectCategoryContainer,
+  InfoWebView
 };

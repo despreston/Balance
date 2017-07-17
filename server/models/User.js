@@ -97,7 +97,7 @@ User.statics.createFriendship = async function (requester, receiver) {
   try {
     let user = await this
       .findOne({ userId: requester })
-      .select('name userId picture friends username bio');
+      .select('name userId picture friends username bio hideName');
 
     let friendIdx = user.friends.findIndex(friend => {
       return friend.userId === receiver;
@@ -174,7 +174,7 @@ User.statics.removeFriendship = async function (userA, userB) {
   try {
     const users = await this
       .find({ userId: { $in: [ userA, userB ] } })
-      .select('name userId picture friends username bio');
+      .select('name userId picture friends username bio hideName');
 
     [userA, userB] = users;
     let userBIndex = userA.friends.findIndex(f => f.userId === userB.userId);

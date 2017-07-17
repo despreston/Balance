@@ -1,14 +1,7 @@
-// vendors
 import React, { PropTypes, Component } from 'react';
 import { Image, View, Text } from 'react-native';
-
-// styles
 import { Styles } from './note-list-item-style';
-
-// tools
 import prettyDate from '../../../utils/fancy-date';
-
-// components
 import CommentButton from './comment-button/comment-button';
 import ReactionsContainer from '../../reactions/reactions-container';
 
@@ -28,10 +21,6 @@ class NoteListItem extends Component {
     showTypeText: PropTypes.bool,
     showProjectName: PropTypes.bool,
     showUser: PropTypes.bool
-  }
-
-  constructor (props) {
-    super(props);
   }
 
   renderHeader () {
