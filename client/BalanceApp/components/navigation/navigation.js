@@ -17,7 +17,8 @@ import {
   Auth,
   FriendRequestList,
   UserBookmarksContainer,
-  ProjectCategoryContainer
+  ProjectCategoryContainer,
+  InfoWebView
 } from '../screens';
 
 const navigationOptions = {
@@ -32,7 +33,8 @@ const defaultScreens = {
   Project: { screen: ProjectDetailContainer },
   EditProject: { screen: EditProjectContainer },
   UserBookmarks: { screen: UserBookmarksContainer },
-  ProjectCategory: { screen: ProjectCategoryContainer }
+  ProjectCategory: { screen: ProjectCategoryContainer },
+  InfoWebView: { screen: InfoWebView }
 };
 
 function icon (path) {
@@ -92,7 +94,7 @@ const NotificationsStack = StackNavigator({
     tabBarIcon: ({ focused }) => {
       return <NotificationIcon focused={ focused } />
     }
-  }), 
+  }),
   initialRouteName: 'Notifications'
 });
 
@@ -108,8 +110,8 @@ const ProfileStack = StackNavigator({
       return focused
         ? icon(require('../../assets/icons/profile-tabbar-selected.png'))
         : icon(require('../../assets/icons/profile-tabbar.png'));
-    } 
-  }), 
+    }
+  }),
   initialRouteName: 'Profile'
 });
 

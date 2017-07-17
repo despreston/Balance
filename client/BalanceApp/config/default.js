@@ -4,5 +4,6 @@ export default {
   domain: "balanceapp.auth0.com",
   piperSocket: "https://api.getbalanceapp.com/",
   s3Bucket: "balanceapp",
-  widgetsUrl: "https://api.getbalanceapp.com/widgets/"
+  widgetsUrl: "https://api.getbalanceapp.com/widgets/",
+  infoWebViewUrl: "https://getbalanceapp.com"
 };
