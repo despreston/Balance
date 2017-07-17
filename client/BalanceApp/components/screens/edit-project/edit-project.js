@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   View,
+  ScrollView,
   TouchableOpacity,
   Text,
   TextInput
@@ -27,7 +28,7 @@ export default class EditProject extends Component {
     if (this.props.project._new) {
       return null;
     }
-    
+
     if (this.state.confirmDelete) {
       return (
         <FormListItem style={{ borderBottomWidth: 0 }}>
@@ -64,7 +65,7 @@ export default class EditProject extends Component {
     const inputStyles = [ Styles.text, Styles.rowInput ];
 
     return (
-      <View style={ Styles.editProject }>
+      <ScrollView contentContainerStyle={ Styles.editProject }>
         <View style={ Styles.formContainer }>
           <FormListItem label='Title'>
             <TextInput
@@ -100,7 +101,7 @@ export default class EditProject extends Component {
           <ProjectStatus project={ project } onEdit={ onEdit }/>
           { this.renderRemoveButton() }
         </View>
-      </View>
+      </ScrollView>
     );
   }
 

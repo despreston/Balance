@@ -33,11 +33,17 @@ class EditProjectContainer extends Component {
 
     const headerLeft = <NavBtn title='Cancel' onPress={ () => goBack() } />;
 
-    const headerRight = <NavBtn title='Save' onPress={ () => state.params.saveProject() } />;
+    const headerRight = (
+      <NavBtn
+        disabled={ !state.params || state.params && state.params.disable }
+        title='Save'
+        onPress={ () => state.params.saveProject() }
+      />
+    );
 
     return { title, headerLeft, headerRight };
   };
-  
+
   constructor (props) {
     super();
     this.state = { project: props.project };
@@ -47,16 +53,29 @@ class EditProjectContainer extends Component {
 
   componentWillMount () {
     this.props.navigation.setParams({
+      disable: true,
       saveProject: () => this.saveProject()
     });
   }
 
+  valid () {
+    const { project } = this.state;
+
+    const rules = {
+      titleRequired () { return project.title && project.title !== '' }
+    };
+
+    return Object.keys(rules).every(rule => rules[rule]());
+  }
+
   onProjectEdit (property, value) {
-    this.setState({ 
+    this.setState({
       project: {
         ...this.state.project,
-        [property]: value 
+        [property]: value
       }
+    }, () => {
+      this.props.navigation.setParams({ disable: !this.valid() })
     });
   }
 
