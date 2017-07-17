@@ -113,7 +113,7 @@ class ProjectListItem extends Component {
   toggleAddUpdateModal () {
     this.setState({ addUpdateVisible: !this.state.addUpdateVisible });
   }
-  
+
   render () {
     return (
       <View style={ Style.projectListItem }>
@@ -131,10 +131,10 @@ class ProjectListItem extends Component {
         { this.renderStatusIcon() }
         <AddUpdateContainer
           isNew
-          reloadProject={ true }    
-          project={ this.props.project }    
-          visible={ this.state.addUpdateVisible }   
-          hideFn={ () => this.toggleAddUpdateModal() }    
+          reloadProject={ true }
+          project={ this.props.project }
+          visible={ this.state.addUpdateVisible }
+          hideFn={ () => this.toggleAddUpdateModal() }
         />
       </View>
     );
@@ -151,7 +151,7 @@ const EmptyState = ({ addNote }) => {
         addNote &&
         <TouchableOpacity onPress={ addNote } style={ Style.addNoteMessage }>
           <Text style={[ Style.message, Style.bold ]}>
-            Add a note
+            Add an update
           </Text>
         </TouchableOpacity>
       }

@@ -51,7 +51,7 @@ class UserSettings extends Component {
           style={ UserSettingsStyles.editAvatar }
           onPress={ togglePhotoUploader }
         >
-          <Text>Edit</Text>
+          <Text style={ Styles.help }>Change picture</Text>
         </TouchableOpacity>
         <View style={ Styles.editProject }>
           <View style={ Styles.formContainer }>
