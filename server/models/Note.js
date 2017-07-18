@@ -1,4 +1,4 @@
-const mongoose     = require('mongoose');
+const mongoose = require('mongoose');
 
 let Note = new mongoose.Schema({
 
@@ -37,7 +37,7 @@ let Note = new mongoose.Schema({
   lastUpdated: Date,
 
   createdAt: Date
-  
+
 }, {
   toObject: { virtuals: true },
   toJSON: { virtuals: true }
