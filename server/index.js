@@ -29,6 +29,8 @@ recursive('./routes', (err, files) => {
     del: server.del.bind(server)
   };
 
+  files = files.filter(file => file.indexOf('.js') > 0);
+
   files.forEach(file => {
     require('./'+file)(methods);
   });

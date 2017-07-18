@@ -56,33 +56,6 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  get("users/:userId/friends/requests", async ({ params }, res) => {
-    try {
-      let user = await User
-        .findOne({ userId: params.userId })
-        .select('friends')
-        .lean();
-
-      if (!user) return res.send(200, []);
-
-      const friendIds = user.friends
-        .filter(f => f.status === 'requested')
-        .map(f => f.userId);
-
-      let friends = await User
-        .find({ userId: { $in: friendIds } })
-        .select('name userId picture friends username bio hideName')
-        .lean();
-
-      friends = friends.map(User.handleHideNameForUser);
-
-      return res.send(200, friends);
-    } catch (e) {
-      log.error(e);
-      return res.send(500);
-    }
-  });
-
   get("users/:userId/bookmarks", async ({ params }, res) => {
     try {
       const bookmarks = await Bookmark
@@ -120,7 +93,7 @@ module.exports = ({ get, post, del, put }) => {
 
       let friends = await User
         .find({ userId: { $in: friendIDs } })
-        .select('name userId picture friends username bio hideName')
+        .select('name userId picture username bio hideName')
         .lean();
 
       friends = friends.map(User.handleHideNameForUser);
@@ -191,7 +164,7 @@ module.exports = ({ get, post, del, put }) => {
       NewFriendRequest.remove(params.friend, loggedInUser._id);
       NewFriendRequest.remove(params.friend, otherUser._id);
 
-      return res.send(200, [ loggedInUser, otherUser ]);
+      return res.send(204, [ loggedInUser, otherUser ]);
     } catch (e) {
       log.error(e);
       return res.send(500);

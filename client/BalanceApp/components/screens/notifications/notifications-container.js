@@ -65,14 +65,14 @@ class NotificationsContainer extends Component {
   }
 
   fetchFriendRequests () {
-    return api(`users/${this.props.user.userId}/friends/requests`);
+    return api(`users/${this.props.user.userId}/friends?status=requested`);
   }
 
   refresh () {
     this.setState({ refreshing: true });
     this.fetchAll().then(() => this.setState({ refreshing: false }));
   }
-  
+
   render () {
     return (
       <Notifications

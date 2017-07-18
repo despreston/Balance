@@ -15,12 +15,15 @@ let jwtCheck = jwt({
 });
 
 module.exports = (req, res, next) => {
-
   if (req.headers.authorization) {
     return jwtCheck(req, res, next);
   }
 
   if (skippedUrls.indexOf(req.route.path) < 0) {
+    if (!req.headers.authorization) {
+      return res.send(401, 'Authorization required');
+    }
+
     return jwtCheck(req, res, next);
   }
 
