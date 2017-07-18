@@ -38,6 +38,8 @@ curl http://localhost:9000/users/search?q=test
 ]
 ```
 
+---
+
 ### GET /users/:userId
 Retrieves detailed user info for `userId`.
 
@@ -75,36 +77,7 @@ curl http://localhost:9000/users/auth0%7C58c6c7733d778f6e3000cd13
 }
 ```
 
-### GET /users/:userId/friends
-Retrieves friends for `userId`
-
-#### Requires Auth:
-yes
-
-#### Optional Parameters
-`status`
-
-The status of the friend request.
-
-#### Example Request
-```
-curl http://localhost:9000/users/auth0%7C58c6c7733d778f6e3000cd13/friends?status=requested
-```
-
-#### Example Response
-`HTTP 200`
-
-```json
-[
-  {
-    "_id": "596d2145f5f07e3d03fccb13",
-    "username": "despreston@gmail.com",
-    "userId": "auth0|59639a9bc08f0b3183ed3eec",
-    "picture": "https://s.gravatar.com/avatar/be00bb412cf3d75b08416ea69b58ae88?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fde.png",
-    "name": "despreston@gmail.com"
-  }
-]
-```
+---
 
 ### GET /users/:userId/friends
 Retrieves friends for `userId`
@@ -136,6 +109,41 @@ curl http://localhost:9000/users/auth0%7C58c6c7733d778f6e3000cd13/friends?status
   }
 ]
 ```
+
+---
+
+### GET /users/:userId/friends
+Retrieves friends for `userId`
+
+#### Requires Auth:
+yes
+
+#### Optional Parameters
+`status`
+
+The status of the friend request.
+
+#### Example Request
+```
+curl http://localhost:9000/users/auth0%7C58c6c7733d778f6e3000cd13/friends?status=requested
+```
+
+#### Example Response
+`HTTP 200`
+
+```json
+[
+  {
+    "_id": "596d2145f5f07e3d03fccb13",
+    "username": "despreston@gmail.com",
+    "userId": "auth0|59639a9bc08f0b3183ed3eec",
+    "picture": "https://s.gravatar.com/avatar/be00bb412cf3d75b08416ea69b58ae88?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fde.png",
+    "name": "despreston@gmail.com"
+  }
+]
+```
+
+---
 
 ### GET /users/:userId/bookmarks
 Retrieves bookmarked projects for `userId`
@@ -205,6 +213,8 @@ curl http://localhost:9000/users/auth0%7C58c6c7733d778f6e3000cd13/bookmarks
 ]
 ```
 
+---
+
 ### POST /users/:userId/friends/:friend
 Creates a new friend request or accepts an existing friend request between :userId and :friend. Responds with both updated users. If the users were already friends, it responds with a blank array.
 
@@ -261,6 +271,8 @@ curl -X POST http://localhost:9000/auth0%7C58c6c7733d778f6e3000cd13/friends/auth
 ]
 ```
 
+---
+
 ### DELETE /users/:userId/friends/:friend
 Removes any friendship regardless of status.
 
@@ -307,6 +319,8 @@ curl -X DELETE http://localhost:9000/auth0%7C58c6c7733d778f6e3000cd13/friends/au
   }
 ]
 ```
+
+---
 
 ### POST /users
 Upserts user
@@ -358,6 +372,8 @@ curl -X POST http://localhost:9000/auth0%7C58c6c7733d778f6e3000cd13 \
   "bookmark_count": 1
 }
 ```
+
+---
 
 ### PUT /users/:userId
 Updates user :userId
