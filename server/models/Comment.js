@@ -10,11 +10,12 @@ let Comment = new mongoose.Schema ({
 
   content: {
     type: String,
-    required: true
+    required: true,
+    maxlength: [ 250, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   note: {
-    type: mongoose.Schema.Types.ObjectId, 
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'note'
   },
 

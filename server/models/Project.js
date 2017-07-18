@@ -16,7 +16,8 @@ let Project = new mongoose.Schema({
   title: {
     required: true,
     type: String,
-    trim: true
+    trim: true,
+    maxlength: [ 25, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   user: String,
@@ -47,7 +48,8 @@ let Project = new mongoose.Schema({
 
   description: {
     type: String,
-    trim: true
+    trim: true,
+    maxlength: [ 100, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   category: {
@@ -56,7 +58,7 @@ let Project = new mongoose.Schema({
     default: 'Other',
     enum: ['Other', 'Technology', 'Household', 'Arts and Crafts', 'Education']
   }
-  
+
 });
 
 /**
@@ -128,7 +130,7 @@ Project.statics.projectCountForUser = function (userId, privacyLevels) {
     if (err) {
       return Promise.reject('Could not get projects for user, ', userId);
     }
-    
+
     return count;
   });
 };
@@ -141,7 +143,7 @@ Project.statics.projectCountForUser = function (userId, privacyLevels) {
  * @return {Object}
  */
 function augmentNotesWithProject (p) {
-    let fullObject = { 
+    let fullObject = {
       _id: p._id,
       title: p.title,
       privacyLevel: p.privacyLevel
@@ -191,7 +193,7 @@ function commentCountForNotes (project) {
 
 /**
  * commentCountForNotes and augmentNotesWithProject are mutually-exlusive as far
- * as things go now so this calls both of those. 
+ * as things go now so this calls both of those.
  * @param {Object} project
  * @return {Object}
  */
@@ -291,13 +293,13 @@ Project.statics.clearNudges = async function (id) {
     let projectOwner = await User
       .findOne({ userId: project.user })
       .select('_id');
-      
+
     nudges.forEach(user => {
       new NudgedProjectUpdated(user.userId, projectOwner._id, project._id).save();
     });
 
     let bookmarks = await Bookmark.find({ project: project._id });
-    
+
     bookmarks.forEach(bookmark => {
       new BookmarkedProjectUpdated(bookmark.userId, projectOwner._id, project._id).save();
     });
@@ -328,9 +330,9 @@ Project.pre('save', function (next) {
   // Keep user from changing these properties indirectly
   const excludedProperties = ['lastUpdated', 'user'];
   excludedProperties.forEach(prop => delete this[prop]);
-  
+
   this.lastUpdated = new Date();
-  
+
   next();
 });
 

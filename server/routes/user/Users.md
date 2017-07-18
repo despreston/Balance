@@ -392,7 +392,7 @@ Email address
 URL for user picture
 
 `bio`
-Small bio displayed in the user profile. Max length is 25 characters.
+Small bio displayed in the user profile. Max length is 50 characters.
 
 `hideName`
 Show or hide the name. If true, a username is required in lieue of a name.

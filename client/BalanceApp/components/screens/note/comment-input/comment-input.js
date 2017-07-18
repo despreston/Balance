@@ -55,6 +55,7 @@ export default class CommentInput extends Component {
             onBlur={ this.props.onBlur }
             onChange={ event => this.onChange(event.nativeEvent.text || '') }
             style={ Styles.input }
+            maxLength={ 250 }
           />
           <TouchableOpacity
             onPress={ () => this.send() }

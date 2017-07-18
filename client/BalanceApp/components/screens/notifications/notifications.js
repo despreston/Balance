@@ -14,12 +14,12 @@ class Notifications extends Component {
     refreshing: PropTypes.bool.isRequired,
     notifications: PropTypes.array.isRequired
   }
-  
+
   render () {
     const { friendRequests, nav, onRefresh, refreshing, notifications } = this.props;
-    
+
     return (
-      <ScrollView 
+      <ScrollView
         style={ Styles.notifications }
         refreshControl={ <Refresh onRefresh={ onRefresh } refreshing={ refreshing } /> }
       >

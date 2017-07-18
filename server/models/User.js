@@ -45,7 +45,7 @@ let User = new mongoose.Schema({
   bio: {
     type: String,
     trim: true,
-    maxlength: [ 25, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
+    maxlength: [ 50, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   hideName: {
