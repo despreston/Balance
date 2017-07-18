@@ -17,6 +17,10 @@ import MainNavigation from './components/navigation/navigation';
 
 const store = createStore(reducer, applyMiddleware(thunk, sockets));
 
+const codePushOpts = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME
+}
+
 class BalanceApp extends Component {
 
   navigate () {
@@ -40,7 +44,11 @@ class BalanceApp extends Component {
       </Provider>
     )
   }
-  
+
 }
 
-export default codePush(BalanceApp);
+const toExport = config.hotPushEnabled
+  ? codePush(codePushOpts)(BalanceApp)
+  : BalanceApp;
+
+export default toExport;

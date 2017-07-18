@@ -113,11 +113,13 @@ class UserProfile extends Component {
 
   renderProjects () {
     const { nav, userId } = this.props;
+    const addProject = () => this.props.nav('EditProject');
+    const onProjectTap = project => nav('Project', { project: project._id });
 
     return (
       <ProjectListContainer
-        emptyState={ <EmptyProjects addProject={ () => this.props.nav('EditProject') }/> }
-        onProjectTap={ project => nav('Project', { project: project._id }) }
+        emptyState={ <EmptyProjects addProject={ addProject }/> }
+        onProjectTap={ onProjectTap }
         user={ userId }
       />
     );
