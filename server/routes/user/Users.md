@@ -383,7 +383,7 @@ yes
 
 #### Optional Parameters
 `username`
-user name for user. Think of this as a display name.
+user name for user. Think of this as a display name. If no username is provided, `username` will be set to whatever `name` is. Must be at least 2 characters. Trailing and leading whitespace is automatically removed. Max length is 15 characters.
 
 `email`
 Email address
@@ -392,7 +392,7 @@ Email address
 URL for user picture
 
 `bio`
-Small bio displayed in the user profile
+Small bio displayed in the user profile. Max length is 25 characters.
 
 `hideName`
 Show or hide the name. If true, a username is required in lieue of a name.
