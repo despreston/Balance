@@ -10,14 +10,15 @@ let User = new mongoose.Schema({
     index: true,
     required: true,
     trim: true,
-    minLength: [ 2, 'The value of `{PATH}` (`{VALUE}`) does not meet the minimum length ({MINLENGTH}).']
+    minlength: [ 2, 'The value of `{PATH}` (`{VALUE}`) does not meet the minimum length ({MINLENGTH}).']
   },
 
   username: {
     type: String,
     index: true,
     trim: true,
-    minLength: [ 2, 'The value of `{PATH}` (`{VALUE}`) does not meet the minimum length ({MINLENGTH}).']
+    minlength: [ 2, 'The value of `{PATH}` (`{VALUE}`) does not meet the minimum length ({MINLENGTH}).'],
+    maxlength: [ 15, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   userId: {
@@ -41,7 +42,11 @@ let User = new mongoose.Schema({
 
   createdAt: Date,
 
-  bio: String,
+  bio: {
+    type: String,
+    trim: true,
+    maxlength: [ 50, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
+  },
 
   hideName: {
     type: Boolean,

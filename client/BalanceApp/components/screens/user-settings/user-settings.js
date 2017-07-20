@@ -67,7 +67,9 @@ class UserSettings extends Component {
                 style={[ Styles.text, Styles.rowInput ]}
                 placeholder="username"
                 autoCorrect={ false }
-                onChangeText={ value => onEdit('username', value) } />
+                onChangeText={ value => onEdit('username', value) }
+                maxLength={ 15 }
+              />
             </FormListItem>
             <FormListItem label='Email'>
               <TextInput
@@ -78,14 +80,17 @@ class UserSettings extends Component {
                 value={ user.email }
                 style={[ Styles.text, Styles.rowInput ]}
                 placeholder="john@website.com"
-                onChangeText={ value => onEdit('email', value) } />
+                onChangeText={ value => onEdit('email', value) }
+              />
             </FormListItem>
             <FormListItem label='Bio'>
               <TextInput
                 value={ user.bio }
                 style={[ Styles.text, Styles.rowInput ]}
                 placeholder="Loves to get things done."
-                onChangeText={ value => onEdit('bio', value) } />
+                onChangeText={ value => onEdit('bio', value) }
+                maxLength={ 50 }
+              />
             </FormListItem>
             <FormListItem label='Show username only' style={{ borderBottomWidth: 0 }}>
               <HideNameSwitch

@@ -16,7 +16,7 @@ class NoteList extends Component {
 
   constructor (props) {
     super(props);
-    
+
     this.dataSource = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.notes = props.notes.map(n => n).sort(this.sortNotes);
     this.state = { dataSource: this.dataSource.cloneWithRows(this.notes) };
@@ -85,7 +85,7 @@ class NoteList extends Component {
         dataSource={ this.state.dataSource }
         renderRow={ this.renderNote }
         onEndReached={ this.props.onEndReached }
-        onEndReachedThreshold={ 10 }
+        onEndReachedThreshold={ 0 }
         enableEmptySections
       />
     )

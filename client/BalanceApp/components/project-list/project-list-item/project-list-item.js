@@ -115,12 +115,17 @@ class ProjectListItem extends Component {
   }
 
   render () {
+    const footerStyle = [
+      Style.footer,
+      (this.props.project.status !== 'finished' ? Style.borderTop : null)
+    ];
+
     return (
       <View style={ Style.projectListItem }>
         <View style={ Style.content }>
           <Text style={ Style.title }>{ this.props.project.title }</Text>
           { this.renderNote() }
-          <View style={ Style.footer }>
+          <View style={ footerStyle }>
             <View style={ Style.footerIcons }>
               { this.renderNudgeBtn() }
               { this.renderUpdateButton() }

@@ -74,7 +74,9 @@ export default class EditProject extends Component {
               value={ project.title }
               style={ inputStyles }
               placeholder="Project Title (required)"
-              onChangeText={ value => onEdit('title', value) } />
+              onChangeText={ value => onEdit('title', value) }
+              maxLength={ 25 }
+            />
           </FormListItem>
           <FormListItem label='Category' touchable>
             <TouchableOpacity
@@ -90,7 +92,9 @@ export default class EditProject extends Component {
               value={ project.description }
               style={ inputStyles }
               placeholder="Description"
-              onChangeText={ value => onEdit('description', value) } />
+              onChangeText={ value => onEdit('description', value) }
+              maxLength={ 100 }
+            />
           </FormListItem>
           <FormListItem label='Share with'>
             <PrivacyPicker

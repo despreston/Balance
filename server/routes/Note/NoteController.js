@@ -1,12 +1,11 @@
-const Note = require('../../models/Note');
-const User = require('../../models/User');
-const Project = require('../../models/Project');
-const AccessControl = require('../../utils/access-control');
-const Reaction = require('../../models/Reaction');
-const log = require('logbro');
-const Notification = require('../../classes/notification/');
-const s3remove = require('../../utils/s3-remove');
-
+const Note            = require('../../models/Note');
+const User            = require('../../models/User');
+const Project         = require('../../models/Project');
+const AccessControl   = require('../../utils/access-control');
+const Reaction        = require('../../models/Reaction');
+const log             = require('logbro');
+const Notification    = require('../../classes/notification/');
+const s3remove        = require('../../utils/s3-remove');
 const { NewReaction } = Notification;
 
 module.exports = ({ get, post, put, del }) => {
@@ -271,8 +270,7 @@ module.exports = ({ get, post, put, del }) => {
   post('notes', async ({ body, user }, res) => {
     try {
       body = JSON.parse(body);
-
-      if (body.user && body.user !== user.sub) return res.send(403);
+      body.user = user.sub;
 
       let note = await Note.create(body);
 
@@ -293,6 +291,11 @@ module.exports = ({ get, post, put, del }) => {
   put('notes/:_id', async ({ body, params, user }, res) => {
     try {
       body = JSON.parse(body);
+
+      // Don't let user change the project
+      if (body.project) {
+        delete body.project;
+      }
 
       let note = await Note
         .findOne({_id: params._id})
@@ -381,7 +384,7 @@ module.exports = ({ get, post, put, del }) => {
         note.author = note.author[0];
       }
 
-      return res.send(200, note);
+      return res.send(204, note);
     } catch(e) {
       log.error(e);
       return res.send(500);
@@ -400,7 +403,7 @@ module.exports = ({ get, post, put, del }) => {
         await s3remove(note.picture);
       }
 
-      return res.send(200, []);
+      return res.send(204, []);
     } catch (e) {
       log.error(e);
       return res.send(500);

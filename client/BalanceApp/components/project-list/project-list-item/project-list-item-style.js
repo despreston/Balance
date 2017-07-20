@@ -54,9 +54,12 @@ export const Style = StyleSheet.create({
     opacity: 0.8
   },
 
-  footer: {
+  borderTop: {
     borderTopWidth: 1,
-    borderTopColor: Colors.gray.porcelain,
+    borderTopColor: Colors.gray.porcelain
+  },
+
+  footer: {
     paddingTop: 5,
     marginLeft: 5,
     flexDirection: 'row-reverse',
@@ -66,5 +69,5 @@ export const Style = StyleSheet.create({
   footerIcons: {
     flexDirection: 'row'
   }
-  
+
 });

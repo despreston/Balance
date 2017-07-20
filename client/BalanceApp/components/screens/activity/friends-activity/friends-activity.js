@@ -11,7 +11,6 @@ class FriendsActivity extends Component {
       .filter(f => f.status === 'accepted')
       .map(friend => friend.userId);
 
-    // Grab the latest 20 notes
     notes = Object.keys(notes)
       .map(id => notes[id])
       .filter(note => friends.indexOf(note.author.userId) > -1)
@@ -24,13 +23,14 @@ class FriendsActivity extends Component {
     notes: PropTypes.array,
     onSelect: PropTypes.func.isRequired
   }
-  
+
   constructor (props) {
     super(props);
     this.skip = 0;
     this.limit = 30;
     this.state = { loading: true };
     this.onEndReached = this.onEndReached.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
     this.fetchActivity();
   }
 
@@ -46,10 +46,15 @@ class FriendsActivity extends Component {
       .then(() => this.setState({ loading: false }));
   }
 
+  onRefresh () {
+    this.skip = 0;
+    this.fetchActivity();
+  }
+
   render () {
     const refreshProps = {
       refreshing: this.state.loading,
-      onRefresh: this.fetchActivity.bind(this)
+      onRefresh: this.onRefresh
     };
 
     return (

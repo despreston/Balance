@@ -7,7 +7,6 @@ import Refresh from '../../../refresh/refresh';
 class GlobalActivity extends Component {
 
   static mapStateToProps ({ notes }) {
-    // Grab the latest 20 notes
     notes = Object.keys(notes)
       .map(id => notes[id])
       .sort((a,b) => b.lastUpdated.getTime() - a.lastUpdated.getTime());
@@ -26,6 +25,7 @@ class GlobalActivity extends Component {
     this.limit = 30;
     this.skip = 0;
     this.onEndReached = this.onEndReached.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
     this.fetchActivity();
   }
 
@@ -40,11 +40,16 @@ class GlobalActivity extends Component {
     this.props.dispatch(actions.fetchGlobalActivity([{ skip: this.skip }]))
       .then(() => this.setState({ loading: false }));
   }
-  
+
+  onRefresh () {
+    this.skip = 0;
+    this.fetchActivity();
+  }
+
   render () {
     const refreshProps = {
       refreshing: this.state.loading,
-      onRefresh: this.fetchActivity.bind(this)
+      onRefresh: this.onRefresh
     };
 
     return (

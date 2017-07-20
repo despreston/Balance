@@ -50,7 +50,7 @@ class NotificationListItem extends Component {
             comment: related.find(r => r.kind === 'comment').item
           };
         },
-        get text () { 
+        get text () {
           return <NewComment { ...getPropsForNotification() } />;
         },
         icon: NewComment.icon
@@ -131,7 +131,7 @@ class NotificationListItem extends Component {
 
   render () {
     const { notification } = this.props;
-    
+
     if (!this.getNotificationForType(notification.type)) return null;
 
     const { text, icon } = this.getNotificationForType(notification.type);

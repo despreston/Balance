@@ -1,11 +1,6 @@
-// vendors
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-
-// components
 import NoteList from './note-list';
-
-// actions
 import actions from '../../actions/';
 
 class NoteListContainer extends Component {
@@ -35,7 +30,7 @@ class NoteListContainer extends Component {
     selector: PropTypes.func,
 
     // function to call when end of the list is reached
-    onEndReached: PropTypes.func, 
+    onEndReached: PropTypes.func,
 
     // component to use for pull-to-refresh
     refreshControl: PropTypes.object
@@ -43,7 +38,7 @@ class NoteListContainer extends Component {
 
   static mapStateToProps (state, ownProps) {
     /**
-     * Optionally, if no query is given, notes can manually be given to 
+     * Optionally, if no query is given, notes can manually be given to
      * NoteListContainer. If a query is given, notes will be requested from the
      * server.
      */
@@ -59,9 +54,9 @@ class NoteListContainer extends Component {
 
     this.limit = props.query && props.query.limit ? props.query.limit : 30;
     this.skip = props.query && props.query.skip ? props.query.skip : 0;
-    this.state = { loading: !!props.query };
+    this.state = { loading: false };
     this.onEndReached = this.onEndReached.bind(this);
-    
+
     if (props.query) {
       this.requestNotes(props.query);
     }
@@ -88,7 +83,9 @@ class NoteListContainer extends Component {
   }
 
   render () {
-    if (this.state.loading) { return null; }
+    if (this.state.loading) {
+      return null;
+    }
 
     const {
       onSelect,
