@@ -5,5 +5,6 @@ export default {
   piperSocket: "https://api.getbalanceapp.com/",
   s3Bucket: "balanceapp",
   widgetsUrl: "https://api.getbalanceapp.com/widgets/",
-  infoWebViewUrl: "https://getbalanceapp.com"
+  infoWebViewUrl: "https://getbalanceapp.com",
+  hotPushEnabled: true
 };
