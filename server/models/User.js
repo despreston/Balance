@@ -1,7 +1,11 @@
-const mongoose = require("mongoose");
-const friend = require("./shared/friend");
+const mongoose     = require("mongoose");
+const friend       = require("./shared/friend");
 const Notification = require('../classes/notification/');
-const { NewFriendRequest, AcceptedFriendRequest } = Notification;
+const {
+  NewFriendRequest,
+  AcceptedFriendRequest
+}                  = Notification;
+const log          = require('logbro');
 
 let User = new mongoose.Schema({
 
@@ -18,7 +22,7 @@ let User = new mongoose.Schema({
     index: true,
     trim: true,
     minlength: [ 2, 'The value of `{PATH}` (`{VALUE}`) does not meet the minimum length ({MINLENGTH}).'],
-    maxlength: [ 15, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
+    maxlength: [ 25, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   userId: {
@@ -45,7 +49,7 @@ let User = new mongoose.Schema({
   bio: {
     type: String,
     trim: true,
-    maxlength: [ 50, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
+    maxlength: [ 80, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   hideName: {
@@ -111,7 +115,12 @@ User.statics.createFriendship = async function (requester, receiver) {
     // users do not appear in each other's friends lists
     if (friendIdx < 0) {
       user.friends.push({ userId: receiver, status: 'pending' });
-      user.save();
+
+      user.save(err => {
+        if (err) {
+          log.warn(err);
+        }
+      });
 
       let requestedFriend = await this
         .findOne({ userId: receiver })
@@ -125,7 +134,11 @@ User.statics.createFriendship = async function (requester, receiver) {
       // create notification for receiver
       new NewFriendRequest(receiver, user._id).save();
 
-      const updatedRequestedUser = await requestedFriend.save();
+      const updatedRequestedUser = await requestedFriend.save(err => {
+        if (err) {
+          log.warn(err);
+        }
+      });
 
       return [user, updatedRequestedUser];
     }
@@ -165,7 +178,8 @@ User.statics.createFriendship = async function (requester, receiver) {
       return [user, updatedRequestedUser];
     }
   } catch (e) {
-    return e;
+    log.warn(e);
+    throw e;
   }
 };
 
@@ -182,6 +196,7 @@ User.statics.removeFriendship = async function (userA, userB) {
       .select('name userId picture friends username bio hideName');
 
     [userA, userB] = users;
+
     let userBIndex = userA.friends.findIndex(f => f.userId === userB.userId);
     let userAIndex = userB.friends.findIndex(f => f.userId === userA.userId);
 
@@ -190,15 +205,16 @@ User.statics.removeFriendship = async function (userA, userB) {
       throw 'Users are not friends';
     }
 
-    userA.friends.splice(userBIndex);
-    userB.friends.splice(userAIndex);
+    userA.friends.splice(userBIndex, 1);
+    userB.friends.splice(userAIndex, 1);
 
     await userA.save();
     await userB.save();
 
     return [ userA, userB ];
   } catch (e) {
-    return e;
+    log.warn(e);
+    throw e;
   }
 };
 

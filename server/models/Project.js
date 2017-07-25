@@ -17,7 +17,7 @@ let Project = new mongoose.Schema({
     required: true,
     type: String,
     trim: true,
-    maxlength: [ 25, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
+    maxlength: [ 35, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   user: String,
@@ -49,7 +49,7 @@ let Project = new mongoose.Schema({
   description: {
     type: String,
     trim: true,
-    maxlength: [ 100, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
+    maxlength: [ 200, 'The value of `{PATH}` (`{VALUE}`) exceeds the max length ({MAXLENGTH}).' ]
   },
 
   category: {
