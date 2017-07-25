@@ -44,8 +44,16 @@ module.exports = ({ get, post, del, put }) => {
 
       if (!result) return res.send(404);
 
-      const privacyLevel = await AccessControl.many({ user: params.userId }, user.sub);
-      const project_count = await Project.projectCountForUser(result.userId, privacyLevel);
+      const privacyLevel = await AccessControl.many(
+        { user: params.userId },
+        user.sub
+      );
+
+      const project_count = await Project.projectCountForUser(
+        result.userId,
+        privacyLevel
+      );
+
       const bookmark_count = await Bookmark.count({ userId: params.userId });
       const payload = Object.assign(result, { project_count, bookmark_count });
 
@@ -116,7 +124,10 @@ module.exports = ({ get, post, del, put }) => {
         return res.send(403);
       }
 
-      let updatedUsers = await User.createFriendship(params.userId, params.friend);
+      let updatedUsers = await User.createFriendship(
+        params.userId,
+        params.friend
+      );
 
       // If its blank, it means no users were updated (maybe users were already
       // friends?)
@@ -126,12 +137,24 @@ module.exports = ({ get, post, del, put }) => {
         otherUser = otherUser.toObject();
 
         // project counts for both users
-        loggedInUser.project_count = await Project.projectCountForUser(loggedInUser.userId, ['private', 'global', 'friends']);
-        otherUser.project_count = await Project.projectCountForUser(params.friend, ['global']);
+        loggedInUser.project_count = await Project.projectCountForUser(
+          loggedInUser.userId,
+          ['private', 'global', 'friends']
+        );
+
+        otherUser.project_count = await Project.projectCountForUser(
+          params.friend,
+          ['global']
+        );
 
         // bookmark count for both users
-        loggedInUser.bookmark_count = await Bookmark.count({ userId: loggedInUser.userId });
-        otherUser.bookmark_count = await Bookmark.count({ userId: otherUser.userId });
+        loggedInUser.bookmark_count = await Bookmark.count({
+          userId: loggedInUser.userId
+        });
+
+        otherUser.bookmark_count = await Bookmark.count({
+          userId: otherUser.userId
+        });
 
         updatedUsers = [ loggedInUser, otherUser ];
       }
@@ -147,24 +170,38 @@ module.exports = ({ get, post, del, put }) => {
     try {
       if (params.userId !== user.sub) return res.send(403);
 
-      let [ loggedInUser, otherUser ] = await User.removeFriendship(params.userId, params.friend);
+      let [ loggedInUser, otherUser ] = await User.removeFriendship(
+        params.userId, params.friend
+      );
 
       loggedInUser = loggedInUser.toObject();
       otherUser = otherUser.toObject();
 
       // project counts for both users
-      loggedInUser.project_count = await Project.projectCountForUser(user.sub, ['private', 'global', 'friends']);
-      otherUser.project_count = await Project.projectCountForUser(params.friend, ['global']);
+      loggedInUser.project_count = await Project.projectCountForUser(
+        user.sub,
+        ['private', 'global', 'friends']
+      );
+
+      otherUser.project_count = await Project.projectCountForUser(
+        params.friend,
+        ['global']
+      );
 
       // bookmark count for both users
-      loggedInUser.bookmark_count = await Bookmark.count({ userId: loggedInUser.userId });
-      otherUser.bookmark_count = await Bookmark.count({ userId: otherUser.userId });
+      loggedInUser.bookmark_count = await Bookmark.count({
+        userId: loggedInUser.userId
+      });
+
+      otherUser.bookmark_count = await Bookmark.count({
+        userId: otherUser.userId
+      });
 
       // remove any lingering notifications from friend request
       NewFriendRequest.remove(params.friend, loggedInUser._id);
       NewFriendRequest.remove(params.friend, otherUser._id);
 
-      return res.send(204, [ loggedInUser, otherUser ]);
+      return res.send(200, [ loggedInUser, otherUser ]);
     } catch (e) {
       log.error(e);
       return res.send(500);
@@ -191,8 +228,16 @@ module.exports = ({ get, post, del, put }) => {
       newUser.save();
       newUser = newUser.toObject();
 
-      const privacyLevels = await AccessControl.many({ user: body.userId }, user.sub);
-      newUser.project_count = await Project.projectCountForUser(user.sub, privacyLevels);
+      const privacyLevels = await AccessControl.many(
+        { user: body.userId },
+        user.sub
+      );
+
+      newUser.project_count = await Project.projectCountForUser(
+        user.sub,
+        privacyLevels
+      );
+
       newUser.bookmark_count = await Bookmark.count({ userId: newUser.userId });
 
       return res.send(201, newUser);
@@ -215,14 +260,22 @@ module.exports = ({ get, post, del, put }) => {
       if (!userToUpdate) return res.send(404);
 
       // need to update the picture
-      if (body.picture && userToUpdate.picture && body.picture !== userToUpdate.picture) {
+      if (
+        body.picture &&
+        userToUpdate.picture &&
+        body.picture !== userToUpdate.picture
+      ) {
         await s3remove(userToUpdate.picture);
       }
 
       userToUpdate = Object.assign(userToUpdate, body);
       userToUpdate.save();
 
-      const project_count = await Project.projectCountForUser(params.userId, ['global', 'friends', 'private']);
+      const project_count = await Project.projectCountForUser(
+        params.userId,
+        ['global', 'friends', 'private']
+      );
+
       const bookmark_count = await Bookmark.count({ userId: user.sub });
 
       const payload = Object.assign(userToUpdate.toObject(), {

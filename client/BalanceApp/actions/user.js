@@ -150,7 +150,6 @@ export default {
    */
   createFriendship (userId, friend) {
     const opts = { method: 'POST' };
-
     return apiDispatch(`users/${userId}/friends/${friend}`, this.receiveUsers, opts);
   },
 
@@ -161,7 +160,6 @@ export default {
    */
   removeFriendship (userId, friend) {
     const opts = { method: 'DELETE' };
-
     return apiDispatch(`users/${userId}/friends/${friend}`, this.receiveUsers, opts);
   }
 

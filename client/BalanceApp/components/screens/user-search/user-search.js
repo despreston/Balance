@@ -8,7 +8,6 @@ class UserSearch extends Component {
 
   constructor (props) {
     super(props);
-
     this.state = { query: '', users: [], searching: false };
   }
 
@@ -33,7 +32,7 @@ class UserSearch extends Component {
 
     this.submitTimeout = setTimeout(() => this.queryUsers(), 400);
   }
- 
+
   render () {
     return (
       <View style={ Styles.container }>
@@ -57,7 +56,7 @@ class UserSearch extends Component {
         />
       </View>
     )
-  } 
+  }
 }
 
 const List = ({ query, nav, searching, users, onTextChange }) => {
