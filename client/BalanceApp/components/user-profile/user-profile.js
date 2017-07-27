@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ProfileInfo from './profile-info/profile-info';
 import UserList from '../user-list/user-list';
 import ProjectListContainer from '../project-list/project-list-container';
-import NoteListContainer from '../note-list/note-list-container';
+import NoteList from '../note-list/note-list';
 import UserProfileSwitch from './user-profile-switch/user-profile-switch';
 import Refresh from '../refresh/refresh';
 import actions from '../../actions/';
@@ -17,11 +17,12 @@ class UserProfile extends Component {
     loggedInUser: PropTypes.string.isRequired,
     user: PropTypes.object,
     userId: PropTypes.string.isRequired,
-    nav: PropTypes.func.isRequired
+    nav: PropTypes.func.isRequired,
+    notes: PropTypes.array.isRequired
   }
 
   static mapStateToProps (state, ownProps) {
-    let userId, nav;
+    let userId, nav, user, notes;
 
     /**
      * if nav'ing directly thru react-navigator, the userId is passed as
@@ -35,13 +36,19 @@ class UserProfile extends Component {
       userId = ownProps.userId;
     }
 
-    const user = state.users[userId];
+    user = state.users[userId];
+
+    notes = Object.keys(state.notes)
+      .map(id => state.notes[id])
+      .filter(note => note.author.userId === userId)
+      .sort((a, b) => b.lastUpdated.getTime() - a.lastUpdated.getTime());
 
     return {
       userId,
       loggedInUser: state.loggedInUser,
       user,
-      nav
+      nav,
+      notes
     };
   }
 
@@ -55,23 +62,28 @@ class UserProfile extends Component {
       friends: []
     };
 
-    this.loadUser();
     this.onBookmarksPress = this.onBookmarksPress.bind(this);
     this.userIsLoggedInUser = props.userId === props.loggedInUser;
+
+    this.fetchNotes();
+    this.loadUser();
   }
 
   loadUser () {
     return this.props.dispatch(actions.requestUser(this.props.userId, false));
   }
 
-  fetchFriendsList () {
-    return api(`users/${this.props.userId}/friends?status=accepted`)
-      .then(friends => {
-        this.setState({
-          friends,
-          loadingContext: false
-        });
-      });
+  async fetchFriendsList () {
+    let friends = await api(`users/${this.props.userId}/friends?status=accepted`);
+
+    this.setState({
+      friends,
+      loadingContext: false
+    });
+  }
+
+  fetchNotes () {
+    return this.props.dispatch(actions.requestNotes([ { user: this.props.userId } ]));
   }
 
   onBookmarksPress () {
@@ -79,22 +91,19 @@ class UserProfile extends Component {
   }
 
   renderLatest () {
-    function selector (notes, user) {
-      return Object.keys(notes)
-        .map(id => notes[id])
-        .filter(note => note.author.userId === user);
+    if (this.props.notes.length < 1) {
+      return <EmptyLatest />;
     }
 
     return (
-      <NoteListContainer
-        emptyState={ <EmptyLatest /> }
-        onSelect={ id => this.props.nav('Note', { id }) }
+      <NoteList
+        onEndReached={ () => null }
         showProjectName
         showTypeText
-        query={[{ user: this.props.userId }]}
-        selector={ notes => selector(notes, this.props.userId) }
+        notes={ this.props.notes }
+        onSelect={ id => this.props.nav('Note', { id }) }
       />
-    );
+    )
   }
 
   renderFriends () {
@@ -141,9 +150,11 @@ class UserProfile extends Component {
     }
   }
 
-  refresh () {
+  async refresh () {
     this.setState({ refreshing: true });
-    this.loadUser().then(() => this.setState({ refreshing: false }));
+    await this.loadUser();
+    await this.fetchNotes();
+    this.setState({ refreshing: false });
   }
 
   render () {
@@ -157,7 +168,10 @@ class UserProfile extends Component {
     };
 
     return (
-      <ScrollView style={ Styles.profile } refreshControl={ <Refresh { ...refreshProps } /> }>
+      <ScrollView
+        style={ Styles.profile }
+        refreshControl={ <Refresh { ...refreshProps } /> }
+      >
         <View style={ Styles.profileInfo }>
           <ProfileInfo
             onBookmarksPress={ this.onBookmarksPress }
