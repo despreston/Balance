@@ -403,7 +403,7 @@ module.exports = ({ get, post, put, del }) => {
         await s3remove(note.picture);
       }
 
-      return res.send(204, []);
+      return res.send(204);
     } catch (e) {
       log.error(e);
       return res.send(500);

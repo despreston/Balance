@@ -2,10 +2,19 @@ export default {
 
   /**
    * add to `notes`
+   * sweeps and clears all notes marked with _temp = true flag.
    */
   RECEIVE_NOTES (state, { notes }) {
+    let notesCopy = Object.assign({}, state.notes);
+
+    Object.keys(notesCopy).forEach(id => {
+      if (notesCopy[id]._temp) {
+        delete notesCopy[id];
+      }
+    });
+
     return Object.assign({}, state, {
-      notes: { ...state.notes, ...notes }
+      notes: { ...notesCopy, ...notes }
     });
   },
 

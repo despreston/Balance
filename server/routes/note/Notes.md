@@ -478,7 +478,3 @@ curl -X DELETE http://localhost:9000/notes/596e604d096d37143f85d87a
 
 #### Example Response
 `HTTP 204`
-
-```json
-[]
-```

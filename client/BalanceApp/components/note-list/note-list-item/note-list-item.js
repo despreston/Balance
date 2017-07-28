@@ -57,8 +57,13 @@ class NoteListItem extends Component {
   render () {
     const { note } = this.props;
 
+    const containerStyles = [
+      Styles.container,
+      note._temp ? Styles.transparent : null
+    ];
+
     return (
-      <View style={ Styles.container }>
+      <View style={ containerStyles }>
         { this.renderHeader() }
         <View style={ Styles.body }>
           {

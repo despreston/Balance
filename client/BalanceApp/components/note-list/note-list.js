@@ -35,29 +35,6 @@ class NoteList extends Component {
     return b.lastUpdated.getTime() - a.lastUpdated.getTime();
   }
 
-  renderNotes () {
-    const {
-      notes,
-      showTypeText,
-      onSelect,
-      showProjectName,
-      showUser
-    } = this.props;
-
-    return notes.map(note => {
-      return (
-        <TouchableOpacity
-          key={ note._id }
-          style={ Styles.noteListItem }
-          onPress={ () => onSelect(note._id) }>
-          <NoteListItem
-            { ...{ note, showTypeText, showProjectName, showUser } }
-          />
-        </TouchableOpacity>
-      );
-    });
-  }
-
   renderNote (note) {
     const {
       showTypeText,
