@@ -8,40 +8,62 @@ import { getAuthToken } from './auth';
  * @param {object} properties Fetch properties. (Method, body, etc) Body should be regular JS object
  * @param {Bool} externalUrl True if the URL needs to point to something outside of Balance host
  */
-export function api (url, properties = {}, externalUrl = false) {
+export async function api (url, properties = {}, externalUrl = false) {
 
   if (properties.body) {
     try {
       properties.body = JSON.stringify(properties.body);
     } catch (e) {
-      console.log(e);
+      console.log('Error stringifying body of request: ', e);
     }
   }
-  
-  return getAuthToken()
-    .then(token => new Headers({ authorization: `Bearer ${token}` }))
-    .then(headers => {
-      properties.headers = headers;
 
-      if (!externalUrl) {
-        url = CONFIG.apiUrl + url;
-      }
-      
-      return fetch(url, properties)
-        .then(response => response.json())
-        .then(json => convertDates(json))
-        .catch(err => console.log("ERROR ", err));
-    });
+  try {
+    const token = await getAuthToken();
+    properties.headers = new Headers({ authorization: `Bearer ${token}` });
+
+    if (!externalUrl) {
+      url = CONFIG.apiUrl + url;
+    }
+
+    const response = await fetch(url, properties);
+
+    if (!response.ok) {
+      throw 'Response status ' + response.status;
+    }
+
+    if (response.status === 204) {
+      return;
+    }
+
+    const json = await response.json();
+
+    return convertDates(json);
+  } catch (e) {
+    console.warn(
+      `Error in api.js#api while requesting ${url} with properties:
+      ${JSON.stringify(properties, null, 2)}.
+      Error: ${e}`
+    );
+    throw e;
+  }
 }
 
 export function apiDispatch (url, action, properties = { method: 'GET' }) {
-  return dispatch => {
-    return api(url, properties)
-      .then(result => {
-        if (action) {
-          return dispatch(action(result));
-        }
-      })
-      .catch(err => console.log(err));
+  return async dispatch => {
+    try {
+      const result = await api(url, properties);
+
+      if (action) {
+        return dispatch(action(result));
+      }
+    } catch (e) {
+      console.warn(`
+        Error in api.js#apiDispatch while requesting ${url} with properties:
+        ${JSON.stringify(properties, null, 2)}.
+        Error ${e}
+      `);
+      throw e;
+    }
   };
 }

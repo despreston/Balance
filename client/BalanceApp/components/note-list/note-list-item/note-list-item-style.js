@@ -3,6 +3,10 @@ import Colors from '../../colors';
 
 export const Styles = StyleSheet.create  ({
 
+  transparent: {
+    opacity: 0.2
+  },
+
   container: {
     shadowColor: Colors.gray.tundora,
     shadowOffset: { width: 0.05, height: 0.05 },

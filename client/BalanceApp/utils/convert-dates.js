@@ -3,7 +3,7 @@ import { get, set } from 'lodash';
  * Converts all dateProps fields to date objects.
  * Handles nested objects as well
  * @param {Object} obj
- * @return {Object} 
+ * @return {Object}
  */
 export default function convertDates (json) {
   const dateProps = ['createdAt', 'lastUpdated'];
@@ -28,7 +28,7 @@ export default function convertDates (json) {
     } else {
       nestedObj = obj;
     }
-    
+
     if (!nestedObj) {
       return;
     }
@@ -37,7 +37,7 @@ export default function convertDates (json) {
       if (typeof nestedObj[prop] === 'object') {
         let oldPath = path;
         if (path !== '') {
-          path += `.${prop}`;  
+          path += `.${prop}`;
         } else {
           path = prop
         }
@@ -59,4 +59,3 @@ export default function convertDates (json) {
     });
   }
 }
-

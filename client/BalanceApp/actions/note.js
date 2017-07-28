@@ -1,10 +1,11 @@
 /* eslint no-console: "off" */
 import { apiDispatch, api } from '../utils/api';
-import { arrayToObj } from '../utils/helpers';
-import formatQueryParams from '../utils/query-params';
+import { arrayToObj }       from '../utils/helpers';
+import formatQueryParams    from '../utils/query-params';
+import ObjectId             from '../utils/object-id';
 
-const RECEIVE_NOTES = 'RECEIVE_NOTES';
-const REMOVE_NOTE = 'REMOVE_NOTE';
+const RECEIVE_NOTES    = 'RECEIVE_NOTES';
+const REMOVE_NOTE      = 'REMOVE_NOTE';
 
 export default {
 
@@ -43,19 +44,35 @@ export default {
    * @return {Promise}
    */
   saveNote (note) {
-    let method, url = 'notes';
+    let tempNote = Object.assign({}, { _temp: true });
+    let method = '';
+    let url = 'notes';
 
     if (note._new) {
       method = 'POST';
       delete note._new;
+
+      tempNote = Object.assign(tempNote, note, {
+        _id: ObjectId(),
+        author: { userId: note.user },
+        lastUpdated: new Date(),
+        project: { _id: note.project },
+        reactions: []
+      });
     } else {
+      tempNote = Object.assign(tempNote, note);
       method = 'PUT';
       url += `/${note._id}`;
     }
 
-    return dispatch => {
-      return api(url, { method, body: note })
-      .then(note => dispatch(this.receiveNotes(note)));
+    return async dispatch => {
+      try {
+        dispatch(this.receiveNotes(tempNote));
+        this.note = await api(url, { method, body: note });
+        return dispatch(this.receiveNotes(this.note));
+      } catch (e) {
+        dispatch(this.removeNote(tempNote._id));
+      }
     };
   },
 
@@ -109,12 +126,9 @@ export default {
   deleteNote (note) {
     const opts = { method: 'DELETE' };
 
-    return dispatch => {
-      return api(`notes/${note}`, opts)
-        .then(result => {
-          dispatch(this.removeNote(note));
-          return dispatch(this.receiveNotes(result));
-        });
+    return async dispatch => {
+      await api(`notes/${note}`, opts);
+      return dispatch(this.removeNote(note));
     };
   },
 

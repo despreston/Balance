@@ -107,7 +107,7 @@ class AddUpdateContainer extends Component {
 
     this.props.hideFn();
 
-    this.displayAd();
+    //this.displayAd();
 
     return new Promise((resolve) => {
       // New photo needs to be uploaded to S3
@@ -150,7 +150,7 @@ class AddUpdateContainer extends Component {
 
     this.props.nav.dispatch(backAction);
     this.props.hideFn();
-    this.displayAd();
+    //this.displayAd();
 
     setTimeout(() => {
       this.props.dispatch(actions.deleteNote(this.props.note._id));
