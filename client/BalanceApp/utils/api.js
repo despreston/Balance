@@ -9,16 +9,11 @@ import { getAuthToken } from './auth';
  * @param {Bool} externalUrl True if the URL needs to point to something outside of Balance host
  */
 export async function api (url, properties = {}, externalUrl = false) {
-
-  if (properties.body) {
-    try {
-      properties.body = JSON.stringify(properties.body);
-    } catch (e) {
-      console.log('Error stringifying body of request: ', e);
-    }
-  }
-
   try {
+    if (properties.body) {
+      properties.body = JSON.stringify(properties.body);
+    }
+
     const token = await getAuthToken();
     properties.headers = new Headers({ authorization: `Bearer ${token}` });
 

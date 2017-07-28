@@ -38,7 +38,7 @@ class NoteContainer extends Component {
 
     return { headerRight, title: 'Note' };
   };
-  
+
   constructor (props) {
     super(props);
     this.state = { editModalVisible: false, replyingTo: null };
@@ -81,8 +81,7 @@ class NoteContainer extends Component {
       comment.replyingTo = this.state.replyingTo.userId;
     }
 
-    this.props.dispatch(actions.createComment(comment))
-    .then(() => this.props.dispatch(actions.fetchNote(this.props.note._id)));
+    this.props.dispatch(actions.createComment(comment));
   }
 
   toggleEditModal () {
@@ -106,7 +105,7 @@ class NoteContainer extends Component {
 
   render () {
     if (!this.props.note) return null;
-    
+
     const author = this.props.note.author.userId;
     const showMarkAsComplete = author === this.props.loggedInUser &&
       this.props.note.type === 'Future';

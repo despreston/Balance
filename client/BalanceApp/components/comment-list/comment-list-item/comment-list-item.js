@@ -1,38 +1,57 @@
-// vendors
 import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
-
-// utils
 import fancyDate from '../../../utils/fancy-date';
-
-// styles
 import Styles from './comment-list-item-styles';
 
 export default class CommentListItem extends Component {
 
   static propTypes = {
-    comment: PropTypes.object.isRequired,
-    allowDelete: PropTypes.bool.isRequired,
+    comment: PropTypes.shape({
+      commenter: PropTypes.shape({
+        userId: PropTypes.string.isRequired,
+        picture: PropTypes.string,
+        username: PropTypes.string
+      }),
+      createdAt: PropTypes.instanceOf(Date),
+      replyingToUser: PropTypes.shape({
+        userId: PropTypes.string,
+        username: PropTypes.string
+      }),
+      content: PropTypes.string.isRequired,
+      _id: PropTypes.string.isRequired
+    }).isRequired,
+    loggedInUser: PropTypes.string.isRequired,
     onDelete: PropTypes.func.isRequired,
     onUserSelect: PropTypes.func.isRequired,
-    isNoteAuthor: PropTypes.bool,
+    noteAuthor: PropTypes.string.isRequired,
     onReply: PropTypes.func.isRequired
   };
 
   constructor (props) {
     super(props);
+    this.isNoteAuthor = props.noteAuthor === props.comment.commenter.userId;
+    this.allowDelete = props.loggedInUser === props.comment.commenter.userId;
   }
 
   render () {
-    const { onUserSelect, comment, isNoteAuthor, allowDelete, onDelete } = this.props;
+    const {
+      onUserSelect,
+      comment,
+      onDelete
+    } = this.props;
 
     const commenterStyles = [
       Styles.commenter,
-      (isNoteAuthor && Styles.authorComment)
+      (this.isNoteAuthor && Styles.authorComment)
+    ];
+
+    const containerStyles = [
+      Styles.container,
+      comment._temp ? Styles.transparent : null
     ];
 
     return (
-      <View style={ Styles.container }>
+      <View style={ containerStyles }>
         <Image source={{ uri: comment.commenter.picture }} style={ Styles.picture } />
         <View style={ Styles.right }>
           <View style={ Styles.top }>
@@ -46,7 +65,7 @@ export default class CommentListItem extends Component {
             <Text style={ Styles.subtext }>{ fancyDate(comment.createdAt) }</Text>
           </View>
           <View style={ Styles.contentContainer }>
-            { 
+            {
               comment.replyingToUser &&
               (
                 <TouchableOpacity
@@ -61,7 +80,7 @@ export default class CommentListItem extends Component {
             <Text style={ Styles.contentText }>{ comment.content }</Text>
           </View>
           {
-            allowDelete
+            this.allowDelete
             ? (
               <TouchableOpacity onPress={ () => onDelete(comment._id) }>
                 <Text style={[ Styles.subtext, Styles.bold ]}>delete</Text>

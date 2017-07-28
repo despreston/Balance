@@ -65,7 +65,7 @@ module.exports = ({ post, del }) => {
 
       comment.remove();
 
-      return res.send(200, []);
+      return res.send(204);
     } catch (e) {
       log.error(e);
       return res.send(500);
