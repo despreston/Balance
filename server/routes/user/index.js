@@ -38,7 +38,7 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  get("users/:userId", async ({ params, user}, res) => {
+  get("users/:userId", async ({ params, user }, res) => {
     try {
       let result = await User.findOne(params).lean();
 
@@ -64,7 +64,7 @@ module.exports = ({ get, post, del, put }) => {
     }
   });
 
-  get("users/:userId/bookmarks", async ({ params }, res) => {
+  get("users/:userId/bookmarks", async ({ params, user }, res) => {
     try {
       const bookmarks = await Bookmark
         .find({ userId: params.userId })
@@ -75,6 +75,26 @@ module.exports = ({ get, post, del, put }) => {
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
         .populate('nudgeUsers', 'userId picture');
+
+      // user has some bookmarks and the user is not the logged in user
+      if (projects.length > 0 && params.userId !== user.sub) {
+        const userIds = users => users.map(user => user.userId);
+        const filter = (arr, fn) => arr.filter(fn);
+        const isAccepted = friend => friend.status === 'accepted';
+        const isFriend = (friends, user) => friends.includes(user);
+
+        const hasPermission = friends => ({ user, privacyLevel }) => {
+          return isFriend(friends, user) || privacyLevel === 'global';
+        };
+
+        const friends = await User
+          .find({ userId: params.userId })
+          .select('friends')
+          .lean();
+
+        const acceptedFriendUserIds = userIds(filter(friends, isAccepted));
+        projects = filter(projects, hasPermission(acceptedFriendUserIds));
+      }
 
       projects = projects.map(p => p.toObject({ virtuals: true }));
       projects = projects.map(Project.futureAndPastNotes);

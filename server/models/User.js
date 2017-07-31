@@ -104,78 +104,50 @@ User.statics.areFriends = function (userA, userB) {
  */
 User.statics.createFriendship = async function (requester, receiver) {
   try {
-    let user = await this
-      .findOne({ userId: requester })
-      .select('name userId picture friends username bio hideName');
+    const setStatus = friends => (userId, status) => {
+      friends.push({ userId, status });
+    };
 
-    let friendIdx = user.friends.findIndex(friend => {
-      return friend.userId === receiver;
-    });
+    const fetchUser = async userId => {
+      return this.findOne({ userId })
+        .select('name userId picture friends username bio hideName');
+    };
 
-    // users do not appear in each other's friends lists
-    if (friendIdx < 0) {
-      user.friends.push({ userId: receiver, status: 'pending' });
+    const matchesUser = userIdToMatch => user => user.userId === userIdToMatch;
+    let user = await fetchUser(requester);
+    const friend = user.friends.find(matchesUser(receiver));
 
-      user.save(err => {
-        if (err) {
-          log.warn(err);
-        }
-      });
+    // friendship does not exist
+    if (!friend) {
+      let requestedFriend = await fetchUser(receiver);
 
-      let requestedFriend = await this
-        .findOne({ userId: receiver })
-        .select('name userId picture friends username bio');
-
-      requestedFriend.friends.push({
-        userId: requester,
-        status: 'requested'
-      });
-
-      // create notification for receiver
+      setStatus(user.friends)(receiver, 'pending');
+      setStatus(requestedFriend.friends)(requester, 'requested');
+      await user.save();
       new NewFriendRequest(receiver, user._id).save();
 
-      const updatedRequestedUser = await requestedFriend.save(err => {
-        if (err) {
-          log.warn(err);
-        }
-      });
-
-      return [user, updatedRequestedUser];
-    }
-
-    // Friend request has already been sent
-    else if (user.friends[friendIdx].status === 'pending') {
-      return [];
+      return [user, await requestedFriend.save()];
     }
 
     // requested user had already sent a request. So accept it!
-    else if (user.friends[friendIdx].status === 'requested') {
+    else if (friend.status === 'requested') {
+      const setAsAccepted = (friends, userId) => {
+        const index = friends.findIndex(matchesUser(userId));
+        friends.set(index, { userId, status: 'accepted' });
+      };
 
-      // update the requester's friend list
-      user.friends.set(friendIdx, { userId: receiver, status: 'accepted' });
+      let requestedFriend = await fetchUser(receiver);
 
-      user.save();
-
-      // update the receiver's friend list
-      let requestedFriend = await this
-        .findOne({ userId: receiver })
-        .select('name userId picture friends username bio');
-
-      friendIdx = requestedFriend.friends.findIndex(friend => {
-        return friend.userId === requester;
-      });
-
-      requestedFriend.friends.set(friendIdx, {
-        userId: requester,
-        status: 'accepted'
-      });
-
-      const updatedRequestedUser = await requestedFriend.save();
-
-      // create notification for receiver
+      setAsAccepted(user.friends, receiver);
+      setAsAccepted(requestedFriend.friends, requester);
+      await user.save();
       new AcceptedFriendRequest(receiver, user._id).save();
 
-      return [user, updatedRequestedUser];
+      return [user, await requestedFriend.save()];
+    }
+
+    else {
+      return [];
     }
   } catch (e) {
     log.warn(e);
@@ -189,24 +161,28 @@ User.statics.createFriendship = async function (requester, receiver) {
  * @param {String} userB userId of second user
  * @return {Promise} resolves with array of both users
  */
-User.statics.removeFriendship = async function (userA, userB) {
+User.statics.removeFriendship = async function (userAId, userBId) {
   try {
-    const users = await this
-      .find({ userId: { $in: [ userA, userB ] } })
+    const removeFromFriends = ({ friends }, index) => friends.splice(index, 1);
+
+    const indexInFriendsList = (user, { userId }) => {
+      return user.friends.findIndex(user => user.userId === userId);
+    };
+
+    let [userA, userB] = await this
+      .find({ userId: { $in: [ userAId, userBId ] } })
       .select('name userId picture friends username bio hideName');
 
-    [userA, userB] = users;
-
-    let userBIndex = userA.friends.findIndex(f => f.userId === userB.userId);
-    let userAIndex = userB.friends.findIndex(f => f.userId === userA.userId);
+    const userBIndex = indexInFriendsList(userA, userB);
+    const userAIndex = indexInFriendsList(userB, userA);
 
     // Users are not friends. Don't do anything
     if (userBIndex < 0 || userAIndex < 0) {
       throw 'Users are not friends';
     }
 
-    userA.friends.splice(userBIndex, 1);
-    userB.friends.splice(userAIndex, 1);
+    removeFromFriends(userA, userBIndex);
+    removeFromFriends(userB, userAIndex);
 
     await userA.save();
     await userB.save();
@@ -250,4 +226,3 @@ User.pre('save', function (next) {
 });
 
 module.exports = mongoose.model("user", User);
-
