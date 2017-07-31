@@ -3,6 +3,10 @@ import Colors from '../../colors';
 
 export default StyleSheet.create  ({
 
+  transparent: {
+    opacity: 0.2
+  },
+
   container: {
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray.porcelain,
@@ -60,5 +64,5 @@ export default StyleSheet.create  ({
   bold: {
     fontWeight: 'bold'
   }
-  
+
 });

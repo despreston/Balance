@@ -2,10 +2,19 @@ export default {
 
   /**
    * add to `comments`
+   * sweeps and clears all comments marked with _temp flag
    */
   RECEIVE_COMMENTS (state, { comments }) {
+    let commentsCopy = Object.assign({}, state.comments);
+
+    Object.keys(commentsCopy).forEach(id => {
+      if (commentsCopy[id]._temp) {
+        delete commentsCopy[id];
+      }
+    });
+
     return Object.assign({}, state, {
-      comments: { ...state.comments, ...comments }
+      comments: { ...commentsCopy, ...comments }
     });
   },
 

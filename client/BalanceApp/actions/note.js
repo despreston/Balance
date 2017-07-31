@@ -44,7 +44,7 @@ export default {
    * @return {Promise}
    */
   saveNote (note) {
-    let tempNote = Object.assign({}, { _temp: true });
+    let tempNote = { _temp: true };
     let method = '';
     let url = 'notes';
 
@@ -68,8 +68,8 @@ export default {
     return async dispatch => {
       try {
         dispatch(this.receiveNotes(tempNote));
-        this.note = await api(url, { method, body: note });
-        return dispatch(this.receiveNotes(this.note));
+        const result = await api(url, { method, body: note });
+        return dispatch(this.receiveNotes(result));
       } catch (e) {
         dispatch(this.removeNote(tempNote._id));
       }
