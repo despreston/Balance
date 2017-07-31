@@ -81,10 +81,13 @@ module.exports = ({ get, post, del, put }) => {
         const userIds = users => users.map(user => user.userId);
         const filter = (arr, fn) => arr.filter(fn);
         const isAccepted = friend => friend.status === 'accepted';
-        const isFriend = (friends, user) => friends.includes(user);
 
-        const hasPermission = friends => ({ user, privacyLevel }) => {
-          return isFriend(friends, user) || privacyLevel === 'global';
+        const hasPermission = friends => ({ user: owner, privacyLevel }) => {
+          return (
+            friends.includes(owner)   ||
+            privacyLevel === 'global' ||
+            owner === user.sub
+          );
         };
 
         const friends = await User
