@@ -48,31 +48,28 @@ export default {
     let method = '';
     let url = 'notes';
 
-    if (note._new) {
-      method = 'POST';
-      delete note._new;
+    return async (dispatch, getState) => {
+      if (note._new) {
+        method = 'POST';
+        delete note._new;
 
-      tempNote = Object.assign(tempNote, note, {
-        _id: ObjectId(),
-        author: { userId: note.user },
-        lastUpdated: new Date(),
-        project: { _id: note.project },
-        reactions: []
-      });
-    } else {
-      tempNote = Object.assign(tempNote, note);
-      method = 'PUT';
-      url += `/${note._id}`;
-    }
-
-    return async dispatch => {
-      try {
-        dispatch(this.receiveNotes(tempNote));
-        const result = await api(url, { method, body: note });
-        return dispatch(this.receiveNotes(result));
-      } catch (e) {
-        dispatch(this.removeNote(tempNote._id));
+        tempNote = Object.assign(tempNote, note, {
+          _id: ObjectId(),
+          author: { userId: getState().loggedInUser },
+          lastUpdated: new Date(),
+          project: { _id: note.project },
+          reactions: []
+        });
+      } else {
+        const fullNote = getState().notes[note._id];
+        tempNote = Object.assign(tempNote, fullNote);
+        method = 'PUT';
+        url += `/${note._id}`;
       }
+
+      dispatch(this.receiveNotes(tempNote));
+      const result = await api(url, { method, body: note });
+      return dispatch(this.receiveNotes(result));
     };
   },
 
