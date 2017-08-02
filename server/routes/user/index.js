@@ -6,6 +6,7 @@ const log              = require('logbro');
 const AccessControl    = require('../../utils/access-control');
 const s3remove         = require('../../utils/s3-remove');
 const Notification     = require('../../classes/notification/');
+const config           = require('../../config.json');
 const NewFriendRequest = Notification.NewFriendRequest;
 
 module.exports = ({ get, post, del, put }) => {
@@ -238,8 +239,11 @@ module.exports = ({ get, post, del, put }) => {
       let newUser = await User.findOne({ userId: body.userId });
 
       if (newUser) {
-        // user already has a picture. Don't override it
-        if (newUser.picture) {
+        const bucketUrl = `https://${config.s3.Bucket}`;
+        const isUserUploaded = pic => pic.includes(bucketUrl);
+
+        // user uploaded their own pic, dont overwrite it
+        if (newUser.picture && isUserUploaded(newUser.picture)) {
           delete body.picture;
         }
 
