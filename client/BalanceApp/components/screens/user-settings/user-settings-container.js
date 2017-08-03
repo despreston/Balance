@@ -13,10 +13,8 @@ class UserSettingsContainer extends Component {
     user: PropTypes.object.isRequired
   }
 
-  static mapStateToProps (state) {
-    return {
-      user: state.users[state.loggedInUser]
-    };
+  static mapStateToProps ({ users, loggedInUser }) {
+    return { user: users[loggedInUser] };
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -36,7 +34,15 @@ class UserSettingsContainer extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { user: props.user, helpVisible: false };
+
+    const mandatoryPropsToSave = [ '_id', 'userId', 'picture' ];
+
+    this.state = {
+      user: props.user,
+      helpVisible: false,
+      dirtyFields: mandatoryPropsToSave
+    };
+
     this.newPhoto = false;
     this.onEdit = this.onEdit.bind(this);
     this.beforeLogout = this.beforeLogout.bind(this);
@@ -66,10 +72,8 @@ class UserSettingsContainer extends Component {
     this.newPhoto = true;
 
     this.setState({
-      user: {
-        ...this.state.user,
-        [property]: value
-      }
+      user: { ...this.state.user, [property]: value },
+      dirtyFields: [ ...this.state.dirtyFields, property ]
     }, () => {
       this.props.navigation.setParams({
         disable: !this.valid()
@@ -90,8 +94,13 @@ class UserSettingsContainer extends Component {
       }
     })
     .then(() => {
+      const subset = (obj, props) => {
+        return props.reduce((a, e) => (a[e] = obj[e], a), {});
+      };
+
+      const userToSave = subset(this.state.user, this.state.dirtyFields);
       this.newPhoto = false;
-      this.props.dispatch(actions.saveUser(this.state.user));
+      this.props.dispatch(actions.saveUser(userToSave));
     });
   }
 
