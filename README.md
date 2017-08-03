@@ -5,7 +5,7 @@ A platform for managing and sharing personal progress.
 
 ### First Install
 #### Requires:
-- NodeJS v8.1.2
+- NodeJS v8.2.1
 - Xcode (latest)
 
 #### Db
