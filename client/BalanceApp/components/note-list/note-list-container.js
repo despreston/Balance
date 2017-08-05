@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import NoteList from './note-list';
-import actions from '../../actions/';
+import { connect }                     from 'react-redux';
+import NoteList                        from './note-list';
+import actions                         from '../../actions/';
 
 class NoteListContainer extends Component {
 
@@ -32,8 +32,10 @@ class NoteListContainer extends Component {
     // function to call when end of the list is reached
     onEndReached: PropTypes.func,
 
-    // component to use for pull-to-refresh
-    refreshControl: PropTypes.object
+    // function to use for pull-to-refresh
+    onRefresh: PropTypes.func,
+
+    refreshing: PropTypes.bool
   }
 
   static mapStateToProps (state, ownProps) {
@@ -87,7 +89,8 @@ class NoteListContainer extends Component {
       emptyState,
       showTypeText,
       showUser,
-      refreshControl
+      onRefresh,
+      refreshing
     } = this.props;
 
     if (emptyState && notes.length < 1) {
@@ -97,7 +100,15 @@ class NoteListContainer extends Component {
     return (
       <NoteList
         onEndReached={ this.onEndReached }
-        {...{ refreshControl, onSelect, showUser, showTypeText, showProjectName, notes } }
+        {...{
+          refreshing,
+          onRefresh,
+          onSelect,
+          showUser,
+          showTypeText,
+          showProjectName,
+          notes
+        } }
       />
     );
   }

@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import actions from '../../../../actions';
-import NoteListContainer from '../../../note-list/note-list-container';
-import Refresh from '../../../refresh/refresh';
+import { connect }                     from 'react-redux';
+import actions                         from '../../../../actions';
+import NoteListContainer               from '../../../note-list/note-list-container';
 
 class FriendsActivity extends Component {
 
@@ -13,7 +12,7 @@ class FriendsActivity extends Component {
 
     notes = Object.keys(notes)
       .map(id => notes[id])
-      .filter(note => friends.indexOf(note.author.userId) > -1)
+      .filter(note => friends.includes(note.author.userId))
       .sort((a,b) => b.lastUpdated.getTime() - a.lastUpdated.getTime());
 
     return { notes };
@@ -28,7 +27,7 @@ class FriendsActivity extends Component {
     super(props);
     this.skip = 0;
     this.limit = 30;
-    this.state = { loading: true };
+    this.state = { loading: false };
     this.onEndReached = this.onEndReached.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.fetchActivity();
@@ -52,15 +51,11 @@ class FriendsActivity extends Component {
   }
 
   render () {
-    const refreshProps = {
-      refreshing: this.state.loading,
-      onRefresh: this.onRefresh
-    };
-
     return (
       <NoteListContainer
         onEndReached={ this.onEndReached }
-        refreshControl={ <Refresh { ...refreshProps } /> }
+        refreshing={ this.state.loading }
+        onRefresh={ this.onRefresh }
         showTypeText
         showUser
         showProjectName

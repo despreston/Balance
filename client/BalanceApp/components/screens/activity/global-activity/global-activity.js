@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import actions from '../../../../actions';
-import NoteListContainer from '../../../note-list/note-list-container';
-import Refresh from '../../../refresh/refresh';
+import { connect }                     from 'react-redux';
+import actions                         from '../../../../actions';
+import NoteListContainer               from '../../../note-list/note-list-container';
 
 class GlobalActivity extends Component {
 
@@ -21,7 +20,7 @@ class GlobalActivity extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { loading: true };
+    this.state = { loading: false };
     this.limit = 30;
     this.skip = 0;
     this.onEndReached = this.onEndReached.bind(this);
@@ -47,14 +46,10 @@ class GlobalActivity extends Component {
   }
 
   render () {
-    const refreshProps = {
-      refreshing: this.state.loading,
-      onRefresh: this.onRefresh
-    };
-
     return (
       <NoteListContainer
-        refreshControl={ <Refresh { ...refreshProps } /> }
+        refreshing={ this.state.loading }
+        onRefresh={ this.onRefresh }
         onEndReached={ this.onEndReached }
         showTypeText
         showUser
