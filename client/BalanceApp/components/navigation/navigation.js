@@ -23,7 +23,7 @@ import {
 
 const navigationOptions = {
   headerTintColor: Colors.white,
-  headerStyle: { backgroundColor: Colors.purple }
+  headerStyle: { backgroundColor: Colors.purple, borderBottomWidth: 0 }
 };
 
 // screens included in all nav stacks

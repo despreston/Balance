@@ -41,19 +41,22 @@ export default class ActivityContainer extends Component {
   onNoteSelect (id) {
     this.props.navigation.navigate('Note', { id });
   }
-  
+
   render () {
     if (!this.state.screen) {
       return null;
     }
-    
+
     return (
       <View style={{flex: 1}}>
         <ActivitySegmentedControl
           onSelection={ this.onScreenChange.bind(this) }
           selected={ this.state.screen }
         />
-        <Activity onSelect={ this.onNoteSelect.bind(this) } screen={ this.state.screen }/>
+        <Activity
+          onSelect={ this.onNoteSelect.bind(this) }
+          screen={ this.state.screen }
+        />
       </View>
     );
   }

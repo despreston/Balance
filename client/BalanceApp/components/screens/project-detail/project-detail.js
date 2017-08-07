@@ -28,7 +28,6 @@ class ProjectDetail extends Component {
     userIsOwner: PropTypes.bool,
     refreshing: PropTypes.bool.isRequired,
     onRefresh: PropTypes.func.isRequired,
-    notesToShow: PropTypes.string.isRequired,
     addUpdateVisible: PropTypes.bool.isRequired,
     goToAuthor: PropTypes.func.isRequired,
     onNoteContextChange: PropTypes.func.isRequired,
@@ -36,7 +35,8 @@ class ProjectDetail extends Component {
     toggleAddUpdateModal: PropTypes.func.isRequired,
     updateDeckVisible: PropTypes.bool.isRequired,
     toggleUpdateDeck: PropTypes.func.isRequired,
-    onUpdateDeckPress: PropTypes.func.isRequired
+    onUpdateDeckPress: PropTypes.func.isRequired,
+    notes: PropTypes.array.isRequired
   }
 
   componentWillReceiveProps (nextProps) {
@@ -46,75 +46,6 @@ class ProjectDetail extends Component {
     ) {
       this._confettiView.startConfetti();
     }
-  }
-
-  notesSelector (type) {
-    return (notes, project) => {
-      return Object.keys(notes)
-        .map(id => notes[id])
-        .filter(note => {
-          return (
-            project._id === note.project._id &&
-            note.type === type
-          );
-        });
-    }
-  }
-
-  renderPastNotes () {
-    const {
-      status,
-      userIsOwner,
-      goToNote,
-      project
-    } = this.props;
-
-    const query = [
-      { user: project.owner[0].userId },
-      { project: project._id },
-      { type: 'Past' }
-    ];
-
-    // hide edit buttons if project is Finished OR user is not the owner
-    return (
-      <NoteListContainer
-        showTypeText
-        emptyState={ <EmptyCompletedNotes /> }
-        query={ query }
-        selector={ notes => this.notesSelector('Past')(notes, project) }
-        showEdit={ status !== 'finished' && userIsOwner }
-        onSelect={ goToNote }
-      />
-    );
-  }
-
-  renderFutureNotes () {
-    const {
-      status,
-      userIsOwner,
-      goToNote,
-      project
-    } = this.props;
-
-    const query = [
-      { user: project.owner[0].userId },
-      { project: project._id },
-      { type: 'Future' }
-    ];
-
-    // hide edit buttons if project is Finished OR user is not the owner
-    return (
-      <View style={ Styles.container }>
-        <NoteListContainer
-          showTypeText
-          emptyState={ <EmptyFutureNotes /> }
-          query={ query }
-          selector={ notes => this.notesSelector('Future')(notes, this.props.project) }
-          showEdit={ status !== 'finished' && userIsOwner }
-          onSelect={ goToNote }
-        />
-      </View>
-    );
   }
 
   renderNudgeStuff () {
@@ -135,9 +66,12 @@ class ProjectDetail extends Component {
       addUpdateVisible,
       toggleAddUpdateModal,
       onNoteContextChange,
-      notesToShow,
       updateDeckVisible,
-      toggleUpdateDeck
+      toggleUpdateDeck,
+      status,
+      userIsOwner,
+      notes,
+      goToNote
     } = this.props;
 
     const refreshProps = {
@@ -151,19 +85,19 @@ class ProjectDetail extends Component {
       <ScrollView
         style={ Styles.projectDetail }
         keyboardShouldPersistTaps='handled'
-        refreshControl={ <Refresh { ...refreshProps }/> }
+        refreshControl={ <Refresh { ...refreshProps } /> }
       >
         <View style={[ Styles.whiteBackground, Styles.main ]}>
           <Header { ...this.props } />
           { this.renderNudgeStuff() }
-          <View style={ Styles.container }>
-            <NoteTypeSwitch onPress={ onNoteContextChange }/>
-            {
-              notesToShow === 'Future'
-                ? this.renderFutureNotes()
-                : this.renderPastNotes()
-            }
-          </View>
+          <NoteTypeSwitch onPress={ onNoteContextChange } />
+          <NoteListContainer
+            showTypeText
+            emptyState={ <EmptyNotes /> }
+            notes={ notes }
+            showEdit={ status !== 'finished' && userIsOwner }
+            onSelect={ goToNote }
+          />
         </View>
         <AddUpdateContainer
           isNew
@@ -180,22 +114,19 @@ class ProjectDetail extends Component {
         />
         <Confetti
           duration={ 3000 }
-          ref={ node  => this._confettiView = node }/>
+          ref={ node  => this._confettiView = node }
+        />
       </ScrollView>
     );
   }
 }
 
-const EmptyCompletedNotes = () => {
-  return (
-    <Text style={ Styles.emptyText }>No work has been done for this project.</Text>
-  )
-};
+const EmptyNotes = type => {
+  const text = type === 'Future'
+    ? 'Nothing to do for this project.'
+    : 'No work has been done for this project.'
 
-const EmptyFutureNotes = () => {
-  return (
-    <Text style={ Styles.emptyText }>Nothing to do for this project.</Text>
-  )
+  return <Text style={ Styles.emptyText }>{ text }</Text>;
 };
 
 export default ProjectDetail;

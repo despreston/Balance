@@ -10,7 +10,7 @@ class NotificationsContainer extends Component {
   static mapStateToProps (state) {
     return {
       user: state.users[state.loggedInUser],
-      notifications: Object.keys(state.notifications).map(id => state.notifications[id])
+      notifications: Object.values(state.notifications)
     };
   }
 
@@ -40,37 +40,41 @@ class NotificationsContainer extends Component {
     this.fetchAll();
   }
 
-  componentWillReceiveProps (nextProps) {
-    const oldFriendCount = this.props.user.friends.filter(f => f.status === 'requested').length;
-    const newFriendCount = nextProps.user.friends.filter(f => f.status === 'requested').length;
+  async componentWillReceiveProps (nextProps) {
+    const requested = friends => friends.filter(friend => {
+      return friend.status === 'requested';
+    });
+
+    const oldFriendCount = requested(this.props.user.friends).length;
+    const newFriendCount = requested(nextProps.user.friends).length;
 
     if (newFriendCount !== oldFriendCount) {
-      this.fetchFriendRequests().then(friend_requests => {
-        this.setState({ friend_requests });
-      });
+      const friend_requests = await this.fetchFriendRequests();
+      this.setState({ friend_requests });
     }
   }
 
   componentWillMount () {
     this.props.navigation.setParams({
-      clear: this.props.dispatch.bind(this,actions.clearNotifications())
+      clear: this.props.dispatch.bind(actions.clearNotifications())
     });
   }
 
-  fetchAll () {
-    return this.props.dispatch(actions.markAsRead())
-    .then(() => this.props.dispatch(actions.fetchNotifications()))
-    .then(() => this.fetchFriendRequests())
-    .then(friend_requests => this.setState({ friend_requests }));
+  async fetchAll () {
+    await this.props.dispatch(actions.markAsRead());
+    await this.props.dispatch(actions.fetchNotifications());
+    const friend_requests = await this.fetchFriendRequests();
+    this.setState({ friend_requests });
   }
 
   fetchFriendRequests () {
     return api(`users/${this.props.user.userId}/friends?status=requested`);
   }
 
-  refresh () {
+  async refresh () {
     this.setState({ refreshing: true });
-    this.fetchAll().then(() => this.setState({ refreshing: false }));
+    await this.fetchAll();
+    this.setState({ refreshing: false });
   }
 
   render () {

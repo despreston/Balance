@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView, TouchableOpacity } from 'react-native';
-import NoteListItem from './note-list-item/note-list-item';
-import { Styles } from './note-list-style';
+import { FlatList, TouchableOpacity }  from 'react-native';
+import NoteListItem                    from './note-list-item/note-list-item';
+import { Styles }                      from './note-list-style';
 
 class NoteList extends Component {
 
@@ -11,28 +11,27 @@ class NoteList extends Component {
     onSelect: PropTypes.func.isRequired,
     showTypeText: PropTypes.bool,
     showUser: PropTypes.bool,
-    onEndReached: PropTypes.func.isRequired
+    onEndReached: PropTypes.func.isRequired,
+    onRefresh: PropTypes.func,
+    refreshing: PropTypes.bool
   }
 
   constructor (props) {
     super(props);
-
-    this.dataSource = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    this.notes = props.notes.map(n => n).sort(this.sortNotes);
-    this.state = { dataSource: this.dataSource.cloneWithRows(this.notes) };
+    this.state = { notes: this.notesForList(props.notes) };
     this.renderNote = this.renderNote.bind(this);
   }
 
-  componentWillReceiveProps (nextProps) {
-    nextProps.notes.sort(this.sortNotes);
-
-    this.setState({
-      dataSource: this.dataSource.cloneWithRows(nextProps.notes)
-    });
+  notesForList (notes) {
+    return Array.from(notes).sort(this.sortByLastUpdated);
   }
 
-  sortNotes (a, b) {
+  sortByLastUpdated (a, b) {
     return b.lastUpdated.getTime() - a.lastUpdated.getTime();
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({ notes: this.notesForList(nextProps.notes) });
   }
 
   renderNote (note) {
@@ -57,15 +56,16 @@ class NoteList extends Component {
 
   render () {
     return (
-      <ListView
-        refreshControl={ this.props.refreshControl }
-        dataSource={ this.state.dataSource }
-        renderRow={ this.renderNote }
+      <FlatList
+        refreshing={ this.props.refreshing }
+        keyExtractor={ note => note._id }
+        data={ this.state.notes }
+        renderItem={ ({ item }) => this.renderNote(item) }
         onEndReached={ this.props.onEndReached }
         onEndReachedThreshold={ 0 }
-        enableEmptySections
+        onRefresh={ this.props.onRefresh }
       />
-    )
+    );
   }
 
 }

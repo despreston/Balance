@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
-
 import Styles from './note-type-switch-styles';
 
 class NoteTypeSwitch extends Component {

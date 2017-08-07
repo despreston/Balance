@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import NoteList from './note-list';
-import actions from '../../actions/';
+import { connect }                     from 'react-redux';
+import NoteList                        from './note-list';
+import actions                         from '../../actions/';
 
 class NoteListContainer extends Component {
 
@@ -16,61 +16,34 @@ class NoteListContainer extends Component {
     showTypeText: PropTypes.bool,
 
     showUser: PropTypes.bool,
-
     notes: PropTypes.array.isRequired,
-
     emptyState: PropTypes.object,
-
-    // array of key/value query params to use with requestNotes
-    query: PropTypes.array,
-
-    // selector to use when getting notes from redux
-    // @param {object} notes from redux state
-    // @return {array}
-    selector: PropTypes.func,
-
-    // function to call when end of the list is reached
     onEndReached: PropTypes.func,
-
-    // component to use for pull-to-refresh
-    refreshControl: PropTypes.object
-  }
-
-  static mapStateToProps (state, ownProps) {
-    /**
-     * Optionally, if no query is given, notes can manually be given to
-     * NoteListContainer. If a query is given, notes will be requested from the
-     * server.
-     */
-    const notes = ownProps.query
-      ? ownProps.selector(state.notes)
-      : ownProps.notes;
-
-    return { notes };
+    onRefresh: PropTypes.func,
+    refreshing: PropTypes.bool
   }
 
   constructor (props) {
     super(props);
-
-    this.limit = props.query && props.query.limit ? props.query.limit : 30;
-    this.skip = props.query && props.query.skip ? props.query.skip : 0;
+    this.limit = 30;
+    this.skip = 0;
     this.onEndReached = this.onEndReached.bind(this);
-
-    if (props.query) {
-      this.requestNotes(props.query);
-    }
   }
 
   onEndReached () {
     // Haven't hit the scroll limit. no need to load more
-    if (this.props.notes.length < this.limit) return;
+    if (this.props.notes.length < this.limit) {
+      return;
+    }
 
-    if (this.props.onEndReached) return this.props.onEndReached();
+    if (this.props.onEndReached) {
+      return this.props.onEndReached();
+    }
 
-    let query = this.props.query ? Array.from(this.props.query) : [];
-
-    query.push({ limit: this.limit });
-    query.push({ skip: this.limit + this.skip });
+    const query = [
+      { limit: this.limit },
+      { skip: this.limit + this.skip }
+    ];
 
     this.requestNotes(query);
   }
@@ -87,7 +60,8 @@ class NoteListContainer extends Component {
       emptyState,
       showTypeText,
       showUser,
-      refreshControl
+      onRefresh,
+      refreshing
     } = this.props;
 
     if (emptyState && notes.length < 1) {
@@ -97,7 +71,15 @@ class NoteListContainer extends Component {
     return (
       <NoteList
         onEndReached={ this.onEndReached }
-        {...{ refreshControl, onSelect, showUser, showTypeText, showProjectName, notes } }
+        {...{
+          refreshing,
+          onRefresh,
+          onSelect,
+          showUser,
+          showTypeText,
+          showProjectName,
+          notes
+        } }
       />
     );
   }
