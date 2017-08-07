@@ -13,6 +13,8 @@ class ProjectDetailContainer extends Component {
       title: PropTypes.string.isRequired,
       status: PropTypes.string.isRequired
     }),
+    pastNotes: PropTypes.array,
+    futureNotes: PropTypes.array,
     notes: PropTypes.array,
     userIsOwner: PropTypes.bool
   }
@@ -20,18 +22,28 @@ class ProjectDetailContainer extends Component {
   static mapStateToProps (state, { navigation }) {
     let userIsOwner = false;
     const project = state.projects[navigation.state.params.project];
+    const isType = (type, note) => note.type === type;
+    const forProject = (project, note) => note.project._id === project;
 
     // notes for selected project
     const notes = Object.keys(state.notes)
       .map(id => state.notes[id])
       .filter(note => note.project._id === navigation.state.params.project);
 
+    const pastNotes = Object.values(state.notes).filter(note => {
+      return isType('Past', note) && forProject(project._id, note);
+    });
+
+    const futureNotes = Object.values(state.notes).filter(note => {
+      return isType('Future', note) && forProject(project._id, note);
+    });
+
     if (project) {
       // Logged-in user is the owner of the project
       userIsOwner = project.owner[0].userId === state.loggedInUser;
     }
 
-    return { userIsOwner, project, notes };
+    return { userIsOwner, project, notes, pastNotes, futureNotes };
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -46,7 +58,8 @@ class ProjectDetailContainer extends Component {
       refreshing: false,
       addUpdateVisible: false,
       notesToShow: 'Future',
-      updateDeckVisible: false
+      updateDeckVisible: false,
+      notes: Array.from(props.futureNotes)
     };
 
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
@@ -62,6 +75,16 @@ class ProjectDetailContainer extends Component {
 
   componentDidMount () {
     this.load();
+  }
+
+  fetchNotes (project, type) {
+    const query = [
+      { user: project.owner[0].userId },
+      { project: project._id },
+      { type }
+    ];
+
+    return this.props.dispatch(actions.requestNotes(query));
   }
 
   actionSheetOptions () {
@@ -129,9 +152,11 @@ class ProjectDetailContainer extends Component {
     });
   }
 
-  load () {
+  async load () {
     const { project } = this.props.navigation.state.params;
-    return this.props.dispatch(actions.fetchProject(project));
+
+    await this.props.dispatch(actions.fetchProject(project));
+    await this.fetchNotes(this.props.project, this.state.notesToShow);
   }
 
   refresh () {
@@ -162,14 +187,22 @@ class ProjectDetailContainer extends Component {
     this.nav('Note', { id });
   }
 
-  onNoteContextChange (type) {
-    this.setState({ notesToShow: type });
+  async onNoteContextChange (type) {
+    await this.fetchNotes(this.props.project, type);
+
+    const notes = Array.from(
+      type === 'Future' ? this.props.futureNotes : this.props.pastNotes
+    );
+
+    this.setState({
+      notesToShow: type,
+      notes
+    });
   }
 
   render () {
     const {
       project,
-      notes,
       userIsOwner
     } = this.props;
 
@@ -184,9 +217,8 @@ class ProjectDetailContainer extends Component {
         onRefresh={ () => this.refresh() }
         refreshing={ this.state.refreshing }
         project={ project }
-        notes={ notes }
+        notes={ this.state.notes }
         userIsOwner={ userIsOwner }
-        notesToShow={ this.state.notesToShow }
         addUpdateVisible={ this.state.addUpdateVisible }
         onNoteContextChange={ this.onNoteContextChange }
         goToAuthor={ this.goToAuthor }
