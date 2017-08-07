@@ -48,18 +48,6 @@ class ProjectDetail extends Component {
     }
   }
 
-  renderNotes () {
-    return (
-      <NoteListContainer
-        showTypeText
-        emptyState={ <EmptyNotes /> }
-        notes={ this.props.notes }
-        showEdit={ this.props.status !== 'finished' && this.props.userIsOwner }
-        onSelect={ this.props.goToNote }
-      />
-    );
-  }
-
   renderNudgeStuff () {
     const { project, userIsOwner } = this.props;
 
@@ -79,7 +67,11 @@ class ProjectDetail extends Component {
       toggleAddUpdateModal,
       onNoteContextChange,
       updateDeckVisible,
-      toggleUpdateDeck
+      toggleUpdateDeck,
+      status,
+      userIsOwner,
+      notes,
+      goToNote
     } = this.props;
 
     const refreshProps = {
@@ -93,15 +85,19 @@ class ProjectDetail extends Component {
       <ScrollView
         style={ Styles.projectDetail }
         keyboardShouldPersistTaps='handled'
-        refreshControl={ <Refresh { ...refreshProps }/> }
+        refreshControl={ <Refresh { ...refreshProps } /> }
       >
         <View style={[ Styles.whiteBackground, Styles.main ]}>
           <Header { ...this.props } />
           { this.renderNudgeStuff() }
-          <View style={ Styles.container }>
-            <NoteTypeSwitch onPress={ onNoteContextChange }/>
-            { this.renderNotes() }
-          </View>
+          <NoteTypeSwitch onPress={ onNoteContextChange } />
+          <NoteListContainer
+            showTypeText
+            emptyState={ <EmptyNotes /> }
+            notes={ notes }
+            showEdit={ status !== 'finished' && userIsOwner }
+            onSelect={ goToNote }
+          />
         </View>
         <AddUpdateContainer
           isNew

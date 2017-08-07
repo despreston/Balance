@@ -31,7 +31,6 @@ class ProjectDetailContainer extends Component {
     const futureNotes = byType('Future');
 
     if (project) {
-      // Logged-in user is the owner of the project
       userIsOwner = project.owner[0].userId === state.loggedInUser;
     }
 
@@ -193,24 +192,13 @@ class ProjectDetailContainer extends Component {
   }
 
   render () {
-    const {
-      project,
-      userIsOwner
-    } = this.props;
-
-    /**
-     * project could be null if project is deleted, b/c of the way the
-     * navigator works.
-     */
-    if (!project) { return null; }
-
     return (
       <ProjectDetail
         onRefresh={ () => this.refresh() }
         refreshing={ this.state.refreshing }
-        project={ project }
+        project={ this.props.project }
         notes={ this.state.notes }
-        userIsOwner={ userIsOwner }
+        userIsOwner={ this.props.userIsOwner }
         addUpdateVisible={ this.state.addUpdateVisible }
         onNoteContextChange={ this.onNoteContextChange }
         goToAuthor={ this.goToAuthor }
@@ -225,7 +213,10 @@ class ProjectDetailContainer extends Component {
 }
 
 const headerRight = ({ project, userIsOwner, onPress }) => {
-  if (userIsOwner === undefined) return null;
+  if (userIsOwner === undefined) {
+    return null;
+  }
+
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       {

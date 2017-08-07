@@ -17,14 +17,14 @@ export default StyleSheet.create  ({
   },
 
   image: {
-    borderRadius: 30,
-    height: 60,
-    width: 60
+    borderRadius: 40,
+    height: 80,
+    width: 80
   },
 
   info: {
     marginLeft: 25,
-    height: 60,
+    height: 80,
     marginBottom: 15,
     justifyContent: 'center'
   },
