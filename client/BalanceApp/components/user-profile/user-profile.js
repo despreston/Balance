@@ -38,8 +38,7 @@ class UserProfile extends Component {
 
     user = state.users[userId];
 
-    notes = Object.keys(state.notes)
-      .map(id => state.notes[id])
+    notes = Object.values(state.notes)
       .filter(note => note.author.userId === userId)
       .sort((a, b) => b.lastUpdated.getTime() - a.lastUpdated.getTime());
 
@@ -113,7 +112,7 @@ class UserProfile extends Component {
 
     return (
       <UserList
-        emptyState={ <EmptyFriends addFriend={ addFriend }/> }
+        emptyState={ <EmptyFriends addFriend={ addFriend } /> }
         users={ this.state.friends }
         onUserSelect={ userId => this.props.nav('UserProfile', { userId }) }
       />
@@ -127,7 +126,7 @@ class UserProfile extends Component {
 
     return (
       <ProjectListContainer
-        emptyState={ <EmptyProjects addProject={ addProject }/> }
+        emptyState={ <EmptyProjects addProject={ addProject } /> }
         onProjectTap={ onProjectTap }
         user={ userId }
       />
