@@ -6,11 +6,8 @@ import actions from '../../../actions';
 
 class UserBookmarksContainer extends Component {
 
-  static mapStateToProps (state) {
-
-    return {
-      loggedInUser: state.loggedInUser
-    };
+  static mapStateToProps ({ loggedInUser }) {
+    return { loggedInUser };
   }
 
   static propTypes = {
@@ -25,13 +22,12 @@ class UserBookmarksContainer extends Component {
     this.onProjectTap = this.onProjectTap.bind(this);
   }
 
-  load () {
+  async load () {
     const { user } = this.props.navigation.state.params;
+    const projects = await api(`users/${user}/bookmarks`);
 
-    api(`users/${user}/bookmarks`).then(projects => {
-      this.props.dispatch(actions.receiveBookmarks(projects));
-      this.setState({ projects });
-    });
+    this.props.dispatch(actions.receiveBookmarks(projects));
+    this.setState({ projects });
   }
 
   onProjectTap (project) {
