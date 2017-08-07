@@ -15,35 +15,27 @@ class ProjectDetailContainer extends Component {
     }),
     pastNotes: PropTypes.array,
     futureNotes: PropTypes.array,
-    notes: PropTypes.array,
     userIsOwner: PropTypes.bool
   }
 
   static mapStateToProps (state, { navigation }) {
     let userIsOwner = false;
-    const project = state.projects[navigation.state.params.project];
-    const isType = (type, note) => note.type === type;
-    const forProject = (project, note) => note.project._id === project;
+    const projectId = navigation.state.params.project;
+    const project = state.projects[projectId];
 
-    // notes for selected project
-    const notes = Object.keys(state.notes)
-      .map(id => state.notes[id])
-      .filter(note => note.project._id === navigation.state.params.project);
-
-    const pastNotes = Object.values(state.notes).filter(note => {
-      return isType('Past', note) && forProject(project._id, note);
+    const byType = type => Object.values(state.notes).filter(note => {
+      return note.type === type && note.project._id === projectId;
     });
 
-    const futureNotes = Object.values(state.notes).filter(note => {
-      return isType('Future', note) && forProject(project._id, note);
-    });
+    const pastNotes = byType('Past');
+    const futureNotes = byType('Future');
 
     if (project) {
       // Logged-in user is the owner of the project
       userIsOwner = project.owner[0].userId === state.loggedInUser;
     }
 
-    return { userIsOwner, project, notes, pastNotes, futureNotes };
+    return { userIsOwner, project, pastNotes, futureNotes };
   }
 
   static navigationOptions = ({ navigation }) => {
