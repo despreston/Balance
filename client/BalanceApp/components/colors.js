@@ -9,7 +9,7 @@ export default {
   gray: {
     silver: '#C0C0C0',
     porcelain: '#ECF0F1',
-    tundora: '#404040'
+    tundora: '#505050'
   },
 
   green: '#69BB51',

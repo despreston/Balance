@@ -192,6 +192,14 @@ class ProjectDetailContainer extends Component {
   }
 
   render () {
+    /**
+     * project could be null if project is deleted, b/c of the way the
+     * navigator works.
+    */
+    if (!this.props.project) {
+      return null;
+    }
+
     return (
       <ProjectDetail
         onRefresh={ () => this.refresh() }
