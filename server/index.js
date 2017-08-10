@@ -23,8 +23,8 @@ server.use(auth);
 
 
 // Error handlers
-Object.keys(errorHandlers).forEach(handler => {
-  server.on(handler, errorHandlers[handler]);
+Object.entries(errorHandlers).forEach(([ name, fn ]) => {
+  server.on(name, fn);
 });
 
 // load routes

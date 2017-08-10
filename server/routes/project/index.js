@@ -127,12 +127,13 @@ module.exports = ({ get, post, del, put }) => {
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote);
 
-      fns.push(async project => await project.addNudge(user.sub));
+      const projectWithNudge = await project.addNudge(user.sub);
+
       fns.push(toObject);
       fns.push(Project.futureAndPastNotes);
       fns.push(Project.removeExcludedFields);
 
-      const payload = compose(fns)(project);
+      const payload = compose(fns)(projectWithNudge);
       return res.send(201, payload);
     } catch (e) {
       return next(new err.InternalServerError(e));
