@@ -1,35 +1,35 @@
 const Device = require('../../models/Device');
-const log = require('logbro');
+const err    = require('restify-errors');
 
 module.exports = ({ post, put, get }) => {
 
-  get('devices', async ({ user }, res) => {
+  get('devices', async ({ user }, res, next) => {
     try {
       const devices = await Device.find({ userId: user.sub });
       return res.send(200, devices);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  put('devices/:_id', async ({ params }, res) => {
+  put('devices/:_id', async ({ params }, res, next) => {
     try {
       let device = await Device.findOne({ _id: params._id });
 
-      if (!device) return res.send(404);
+      if (!device) {
+        return next(new err.NotFoundError());
+      }
 
       device = Object.assign(device, params);
       device.save();
 
       return res.send(200, device);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post('devices', async ({ body, user }, res) => {
+  post('devices', async ({ body, user }, res, next) => {
     try {
       body = JSON.parse(body);
 
@@ -41,8 +41,7 @@ module.exports = ({ post, put, get }) => {
 
       return res.send(201, {});
     } catch (e) {
-      log.error(e);
-      return res.send(403);
+      return next(new err.InternalServerError(e));
     }
   });
 

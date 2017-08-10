@@ -1,35 +1,43 @@
-const Note            = require('../../models/Note');
-const User            = require('../../models/User');
-const Project         = require('../../models/Project');
-const AccessControl   = require('../../utils/access-control');
-const Reaction        = require('../../models/Reaction');
-const log             = require('logbro');
-const Notification    = require('../../classes/notification/');
-const s3remove        = require('../../utils/s3-remove');
+const Note          = require('../../models/Note');
+const User          = require('../../models/User');
+const Project       = require('../../models/Project');
+const AccessControl = require('../../utils/access-control');
+const Reaction      = require('../../models/Reaction');
+const Notification  = require('../../classes/notification/');
+const s3remove      = require('../../utils/s3-remove');
+const err           = require('restify-errors');
+const compose       = require('../../utils/compose');
+
 const { NewReaction } = Notification;
+const excludedFromPartial = [ 'comments', 'user' ];
+const toObject = arr => arr.map(item => item.toObject());
+
+const removeFields = fields => arr => arr.map(item => {
+  fields.forEach(field => delete item[field]);
+  return item;
+});
 
 module.exports = ({ get, post, put, del }) => {
 
-  get('notes/:_id/reactions', async ({ params }, res) => {
+  get('notes/:_id/reactions', async ({ params }, res, next) => {
     try {
-      let reactions = await Reaction
+      const reactions = await Reaction
         .find({ note: params._id })
         .populate('user', 'userId username picture')
         .lean();
 
-      reactions.forEach(r => delete r.userId);
-
-      return res.send(200, reactions);
+      const payload = reactions.map(reaction => delete reaction.userId);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get('notes/global_activity', async ({ params, user }, res) => {
+  get('notes/global_activity', async ({ params, user }, res, next) => {
     try {
       const limit = parseInt(params.limit) || 30;
       const skip = parseInt(params.skip) || 0;
+      const fns = [];
 
       let aggregation = [
         {
@@ -58,18 +66,20 @@ module.exports = ({ get, post, put, del }) => {
       ];
 
       if (user) {
-        let loggedInUser = await User
+        const loggedInUser = await User
           .findOne({ userId: user.sub })
           .select('userId friends');
 
-        const friends = loggedInUser.friends.filter(f => f.status === 'accepted');
-        const friendsAndMe = friends.map(f => f.userId).concat(loggedInUser.userId);
+        const users = loggedInUser.friends
+          .filter(friend => friend.status === 'accepted')
+          .map(friend => friend.userId)
+          .concat(loggedInUser.userId);
 
         aggregation[1]['$match'] = {
           $or: [
             {
               'project.privacyLevel': { $ne: 'private' },
-              'user': { $in: friendsAndMe }
+              'user': { $in: users }
             },
             {
               'project.privacyLevel': 'global'
@@ -80,38 +90,37 @@ module.exports = ({ get, post, put, del }) => {
 
       const notes = await Note.aggregate(aggregation);
 
-      let fullNotes = await Note
+      const fullNotes = await Note
         .find({ _id: { $in: notes.map(n => n._id) } })
         .populate('project', 'title privacyLevel')
         .populate('reactions', 'userId reaction');
 
-      fullNotes = fullNotes.map(n => {
-        n = n.toObject();
-        delete n.comments;
-        delete n.user;
-        return n;
-      });
+      fns.push(toObject);
+      fns.push(removeFields(excludedFromPartial));
 
-      return res.send(200, fullNotes);
+      const payload = compose(fns)(fullNotes);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get('notes/friend_activity', async ({ params, user }, res) => {
+  get('notes/friend_activity', async ({ params, user }, res, next) => {
     try {
       const limit = parseInt(params.limit) || 30;
       const skip = parseInt(params.skip) || 0;
+      const fns = [];
 
-      let loggedInUser = await User
+      const loggedInUser = await User
         .findOne({ userId: user.sub })
         .select('userId friends');
 
-      const friends = loggedInUser.friends.filter(f => f.status === 'accepted');
-      const friendsAndMe = friends.map(f => f.userId).concat(loggedInUser.userId);
+      const users = loggedInUser.friends
+        .filter(friend => friend.status === 'accepted')
+        .map(friend => friend.userId)
+        .concat(loggedInUser.userId);
 
-      let notes = await Note
+      const notes = await Note
         .aggregate([
           {
             $lookup: {
@@ -124,7 +133,7 @@ module.exports = ({ get, post, put, del }) => {
           {
             $match: {
               'project.privacyLevel': { $ne: 'private' },
-              'user': { $in: friendsAndMe }
+              'user': { $in: users }
             }
           },
           {
@@ -141,26 +150,22 @@ module.exports = ({ get, post, put, del }) => {
           }
         ]);
 
-      notes = await Note
+      const fullNotes = await Note
         .find({ _id: { $in: notes.map(n => n._id) } })
         .populate('project', 'title privacyLevel')
         .populate('reactions', 'userId reaction');
 
-      notes.map(n => {
-        n = n.toObject();
-        delete n.comments;
-        delete n.user;
-        return n;
-      });
+      fns.push(toObject);
+      fns.push(removeFields(excludedFromPartial));
 
-      return res.send(200, notes);
+      const payload = compose(fns)(fullNotes);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get('notes/:_id', async ({ params, user }, res) => {
+  get('notes/:_id', async ({ params, user }, res, next) => {
     try {
       let note = await Note
         .findOne(params)
@@ -184,52 +189,52 @@ module.exports = ({ get, post, put, del }) => {
 
       return res.send(200, note);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get('notes', async ({ params, user }, res) => {
+  get('notes', async ({ params, user }, res, next) => {
     try {
       // To get private notes, you MUST include a `user` in the params
       // This is because AccessControl compares that param to `user.sub`
       const privacyLevels = await AccessControl.many(params, user.sub);
+      const fns = [];
 
-      let notes = await Note
+      const notes = await Note
         .find(params)
         .sort({'createdAt': -1})
         .populate('project', 'title privacyLevel')
         .populate('reactions', 'userId reaction');
 
-      if (notes.length === 0) return res.send(200, notes);
+      if (notes.length === 0) {
+        return res.send(200, notes);
+      }
 
-      notes = notes.filter(note => {
-        return privacyLevels.indexOf(note.project.privacyLevel) > -1;
-      });
+      fns.push(notes => notes.filter(note => {
+        return privacyLevels.includes(note.project.privacyLevel);
+      }));
 
-      notes = notes.map(n => {
-        n = n.toObject();
-        delete n.comments;
-        delete n.user;
-        return n;
-      });
+      fns.push(toObject);
+      fns.push(removeFields(excludedFromPartial));
 
-      return res.send(200, notes);
+      const payload = compose(fns)(notes);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post('notes/:_id/reactions', async ({ params, body, user }, res) => {
+  post('notes/:_id/reactions', async ({ params, body, user }, res, next) => {
     try {
       body = JSON.parse(body);
       body.userId = user.sub;
       body.note = params._id;
 
-      if (!body.reaction) return res.send(400, 'Missing parameter: reaction');
+      if (!body.reaction) {
+        return next(new err.BadRequestError('Missing parameter: reaction'));
+      }
 
-      let reaction = await Reaction.create(body);
+      const reaction = await Reaction.create(body);
 
       let note = await Note
         .findByIdAndUpdate(
@@ -258,16 +263,15 @@ module.exports = ({ get, post, put, del }) => {
       note = note.toObject();
       delete note.user;
       delete note.comments;
-      note.reactions.forEach(r => delete r.user);
+      note.reactions = removeFields(['user'])(note.reactions);
 
       return res.send(200, note);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post('notes', async ({ body, user }, res) => {
+  post('notes', async ({ body, user }, res, next) => {
     try {
       body = JSON.parse(body);
       body.user = user.sub;
@@ -283,12 +287,11 @@ module.exports = ({ get, post, put, del }) => {
 
       return res.send(200, note);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  put('notes/:_id', async ({ body, params, user }, res) => {
+  put('notes/:_id', async ({ body, params, user }, res, next) => {
     try {
       body = JSON.parse(body);
 
@@ -310,7 +313,9 @@ module.exports = ({ get, post, put, del }) => {
           }
         });
 
-      if (note.user !== user.sub) return res.send(403);
+      if (note.user !== user.sub) {
+        return next(new err.ForbiddenError());
+      }
 
       // picture was replaced, so get rid of the old one
       if (body.picture && note.picture && body.picture !== note.picture) {
@@ -328,7 +333,7 @@ module.exports = ({ get, post, put, del }) => {
 
       if (note.comments) {
         // no need for user since we have commenter
-        note.comments.forEach(c => delete c.user);
+        note.comments = removeFields(['user'])(note.comments);
         note.commentCount = note.comments.length;
       }
 
@@ -339,12 +344,11 @@ module.exports = ({ get, post, put, del }) => {
 
       return res.send(200, note);
     } catch(e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  del('notes/:_id/picture', async ({ params, user }, res) => {
+  del('notes/:_id/picture', async ({ params, user }, res, next) => {
     try {
       let note = await Note
         .findOne({_id: params._id})
@@ -360,22 +364,25 @@ module.exports = ({ get, post, put, del }) => {
         });
 
       // trying to edit a note that does not belong to you
-      if (note.user !== user.sub) return res.send(403);
+      if (note.user !== user.sub) {
+        return next(new err.ForbiddenError());
+      }
 
       // Note has no picture
-      if (!note.picture) return res.send(404);
+      if (!note.picture) {
+        return next(new err.NotFoundError());
+      }
 
       await s3remove(note.picture);
 
       // Remove the picture from the database
       note.picture = undefined;
-
       note.save();
       note = note.toObject();
 
       if (note.comments) {
         // no need for user since we have commenter
-        note.comments.forEach(c => delete c.user);
+        note.comments = removeFields(['user'])(note.comments);
         note.commentCount = note.comments.length;
       }
 
@@ -386,16 +393,17 @@ module.exports = ({ get, post, put, del }) => {
 
       return res.send(204, note);
     } catch(e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  del('notes/:_id', async ({ params, user }, res) => {
+  del('notes/:_id', async ({ params, user }, res, next) => {
     try {
       let note = await Note.findOne(params);
 
-      if (note.user !== user.sub) return res.send(403);
+      if (note.user !== user.sub) {
+        return next(new err.ForbiddenError());
+      }
 
       note.remove();
 
@@ -405,8 +413,7 @@ module.exports = ({ get, post, put, del }) => {
 
       return res.send(204);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 

@@ -1,9 +1,9 @@
 const Notification = require('../../models/Notification');
-const log = require('logbro');
+const err          = require('restify-errors');
 
 module.exports = ({ get, post }) => {
 
-  get('notifications', async ({ user }, res) => {
+  get('notifications', async ({ user }, res, next) => {
     try {
       const notifications = await Notification
         .find({ userId: user.sub })
@@ -11,12 +11,11 @@ module.exports = ({ get, post }) => {
 
       return res.send(200, notifications);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post('notifications/read', async ({ user }, res) => {
+  post('notifications/read', async ({ user }, res, next) => {
     try {
       /**
        * Returns an empty array because mongo `update` returns a WriteResult--
@@ -31,21 +30,19 @@ module.exports = ({ get, post }) => {
 
       return res.send(200, []);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post('notifications/clear', async ({ user }, res) => {
+  post('notifications/clear', async ({ user }, res, next) => {
     try {
-      let notifications = await Notification.find({ userId: user.sub });
+      const notifications = await Notification.find({ userId: user.sub });
 
       notifications.forEach(n => n.remove());
 
       return res.send(200, []);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 

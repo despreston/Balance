@@ -2,19 +2,20 @@
 const User             = require('../../models/User');
 const Bookmark         = require('../../models/Bookmark');
 const Project          = require('../../models/Project');
-const log              = require('logbro');
 const AccessControl    = require('../../utils/access-control');
 const s3remove         = require('../../utils/s3-remove');
+const compose          = require('../../utils/compose');
 const Notification     = require('../../classes/notification/');
 const config           = require('../../config.json');
+const err              = require('restify-errors');
 const NewFriendRequest = Notification.NewFriendRequest;
 
 module.exports = ({ get, post, del, put }) => {
 
-  get("users/search", async ({ params }, res) => {
+  get("users/search", async ({ params }, res, next) => {
     try {
       if (!params.q) {
-        return res.send(400, 'Missing parameter q');
+        return next(new err.BadRequestError('Missing parameter q'));
       }
 
       let users = await User
@@ -34,16 +35,17 @@ module.exports = ({ get, post, del, put }) => {
 
       return res.send(200, users);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get("users/:userId", async ({ params, user }, res) => {
+  get("users/:userId", async ({ params, user }, res, next) => {
     try {
       let result = await User.findOne(params).lean();
 
-      if (!result) return res.send(404);
+      if (!result) {
+        return next(new err.NotFoundError())
+      }
 
       const privacyLevel = await AccessControl.many(
         { user: params.userId },
@@ -60,18 +62,18 @@ module.exports = ({ get, post, del, put }) => {
 
       return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get("users/:userId/bookmarks", async ({ params, user }, res) => {
+  get("users/:userId/bookmarks", async ({ params, user }, res, next) => {
     try {
+      const fns = [];
       const bookmarks = await Bookmark
         .find({ userId: params.userId })
         .select('project');
 
-      let projects = await Project
+      const projects = await Project
         .find({ _id: { $in: bookmarks.map(bookmark => bookmark.project) } })
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
@@ -80,7 +82,6 @@ module.exports = ({ get, post, del, put }) => {
       // user has some bookmarks and the user is not the logged in user
       if (projects.length > 0 && params.userId !== user.sub) {
         const userIds = users => users.map(user => user.userId);
-        const filter = (arr, fn) => arr.filter(fn);
         const isAccepted = friend => friend.status === 'accepted';
 
         const hasPermission = friends => ({ user: owner, privacyLevel }) => {
@@ -96,21 +97,24 @@ module.exports = ({ get, post, del, put }) => {
           .select('friends')
           .lean();
 
-        const acceptedFriendUserIds = userIds(filter(friends, isAccepted));
-        projects = filter(projects, hasPermission(acceptedFriendUserIds));
+        const acceptedFriendUserIds = userIds(friends.filter(isAccepted));
+
+        fns.push(projects => {
+          return projects.filter(hasPermission(acceptedFriendUserIds));
+        });
       }
 
-      projects = projects.map(p => p.toObject({ virtuals: true }));
-      projects = projects.map(Project.futureAndPastNotes);
+      fns.push(projects => projects.map(p => p.toObject({ virtuals: true })));
+      fns.push(projects => projects.map(Project.futureAndPastNotes));
 
-      return res.send(200, projects);
+      const payload = compose(fns)(projects);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get("users/:userId/friends", async ({ params }, res) => {
+  get("users/:userId/friends", async ({ params }, res, next) => {
     try {
       const user = await User
         .findOne({ userId: params.userId })
@@ -132,20 +136,19 @@ module.exports = ({ get, post, del, put }) => {
 
       return res.send(200, friends);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post("users/:userId/friends/:friend", async ({ params, user }, res) => {
+  post("users/:userId/friends/:friend", async ({ params, user }, res, next) => {
     try {
       if (params.userId !== user.sub) {
-        return res.send(403);
+        return next(new err.ForbiddenError());
       }
 
       // Cannot send a request to yourself
       if (params.friend === user.sub) {
-        return res.send(403);
+        return next(new err.ForbiddenError());
       }
 
       let updatedUsers = await User.createFriendship(
@@ -185,14 +188,15 @@ module.exports = ({ get, post, del, put }) => {
 
       return res.send(201, updatedUsers);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  del("users/:userId/friends/:friend", async ({ params, user }, res) => {
+  del("users/:userId/friends/:friend", async ({ params, user }, res, next) => {
     try {
-      if (params.userId !== user.sub) return res.send(403);
+      if (params.userId !== user.sub) {
+        return next(new err.ForbiddenError());
+      }
 
       let [ loggedInUser, otherUser ] = await User.removeFriendship(
         params.userId, params.friend
@@ -227,12 +231,11 @@ module.exports = ({ get, post, del, put }) => {
 
       return res.send(200, [ loggedInUser, otherUser ]);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post("users", async ({ body, user }, res) => {
+  post("users", async ({ body, user }, res, next) => {
     try {
       body = JSON.parse(body);
 
@@ -269,22 +272,25 @@ module.exports = ({ get, post, del, put }) => {
 
       return res.send(201, newUser);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  put('users/:userId', async ({ params, body, user }, res) => {
+  put('users/:userId', async ({ params, body, user }, res, next) => {
     try {
       // trying to update another user
-      if (params.userId !== user.sub) return res.send(403);
+      if (params.userId !== user.sub) {
+        return next(new err.ForbiddenError());
+      }
 
       body = JSON.parse(body);
 
       let userToUpdate = await User.findOne({ userId: params.userId });
 
       // user does not exist
-      if (!userToUpdate) return res.send(404);
+      if (!userToUpdate) {
+        return next(new err.NotFoundError());
+      }
 
       // need to update the picture
       if (
@@ -312,8 +318,7 @@ module.exports = ({ get, post, del, put }) => {
 
       return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
