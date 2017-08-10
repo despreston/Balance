@@ -1,12 +1,12 @@
-const Comment = require('../../models/Comment');
-const Note = require('../../models/Note');
-const log = require('logbro');
+const Comment      = require('../../models/Comment');
+const Note         = require('../../models/Note');
 const Notification = require('../../classes/notification/');
+const err          = require('restify-errors');
 const { NewComment, NewCommentReply } = Notification;
 
 module.exports = ({ post, del }) => {
 
-  post('comments', async ({ body }, res) => {
+  post('comments', async ({ body }, res, next) => {
     try {
       body = JSON.parse(body);
       let comment = await Comment.create(body);
@@ -50,25 +50,23 @@ module.exports = ({ post, del }) => {
 
       return res.send(201, comment);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  del('comments/:_id', async ({ params, user }, res) => {
+  del('comments/:_id', async ({ params, user }, res, next) => {
     try {
       const comment = await Comment.findOne(params);
 
       if (comment.user !== user.sub) {
-        return res.send(403);
+        return next(new err.ForbiddenError());
       }
 
       comment.remove();
 
       return res.send(204);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 

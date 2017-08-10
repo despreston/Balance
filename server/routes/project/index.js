@@ -2,11 +2,14 @@
 const Project       = require('../../models/Project');
 const Bookmark      = require('../../models/Bookmark');
 const AccessControl = require('../../utils/access-control');
-const log           = require('logbro');
+const compose       = require('../../utils/compose');
+const err           = require('restify-errors');
+
+const toObject = item => item.toObject({ virtuals: true });
 
 module.exports = ({ get, post, del, put }) => {
 
-  get('projects/:_id/bookmark', async ({ params, user }, res) => {
+  get('projects/:_id/bookmark', async ({ params, user }, res, next) => {
     try {
       const bookmark = await Bookmark
         .findOne({
@@ -15,17 +18,19 @@ module.exports = ({ get, post, del, put }) => {
         })
         .populate('bookmarker', 'userId username picture');
 
-      if (bookmark) return res.send(200, bookmark.toObject({ virtuals: true }));
+      if (bookmark) {
+        return res.send(200, toObject(bookmark));
+      }
 
       return res.send(200, []);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get('projects/:_id', async ({ params, user }, res) => {
+  get('projects/:_id', async ({ params, user }, res, next) => {
     try {
+      const fns = [];
       let project = await Project
         .findOne(params)
         .populate(Project.latestPastNote)
@@ -33,12 +38,13 @@ module.exports = ({ get, post, del, put }) => {
         .populate('nudgeUsers', 'userId picture');
 
       if (!project) {
-        return res.send(404);
+        return next(new err.NotFoundError());
       }
 
-      project = project.toObject({ virtuals: true });
-      project = Project.futureAndPastNotes(project);
-      project = Project.removeExcludedFields(project);
+      fns.push(toObject);
+      fns.push(Project.futureAndPastNotes);
+      fns.push(Project.removeExcludedFields);
+
       const owner = project.owner[0].userId;
 
       try {
@@ -48,48 +54,48 @@ module.exports = ({ get, post, del, put }) => {
           throw 'Access denied';
         }
       } catch (e) {
-        return res.send(403);
+        return next(new err.ForbiddenError());
       }
 
-      project.bookmark_count = await Bookmark.count({ project: params._id });
+      const bookmark_count = await Bookmark.count({ project: params._id });
 
-      return res.send(200, project);
+      fns.push(project => Object.assign({}, project, { bookmark_count }));
+
+      const payload = compose(fns)(project);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500, e);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get('projects/:_id/bookmarks', async ({ params, user }, res) => {
+  get('projects/:_id/bookmarks', async ({ params, user }, res, next) => {
     try {
-      let project = await Project.findOne({ _id: params._id });
-      project = project.toObject({ virtuals: true });
+      const project = toObject(await Project.findOne({ _id: params._id }));
       const owner = project.owner[0].userId;
 
       try {
         await AccessControl.single(owner, user.sub, project.privacyLevel);
       } catch (e) {
-        return res.send(401);
+        return next(new err.ForbiddenError());
       }
 
-      let bookmarks = await Bookmark.find({ project: params._id })
+      const bookmarks = await Bookmark.find({ project: project._id })
         .populate('bookmarker', 'userId username picture');
 
-      bookmarks = bookmarks.toObject({ virtuals: true });
-
-      return res.send(200, bookmarks);
+      const payload = toObject(bookmarks);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500, e);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  get('projects', async ({ params, user }, res) => {
+  get('projects', async ({ params, user }, res, next) => {
     if (!params.user) {
-      return res.send(400, 'Missing user parameter');
+      return next(new err.BadRequestError());
     }
 
     try {
+      const fns = [];
       const privacyLevel = await AccessControl.many(params, user.sub);
 
       const query = Object.assign({}, params,
@@ -102,119 +108,128 @@ module.exports = ({ get, post, del, put }) => {
         .populate(Project.latestFutureNote)
         .populate('nudgeUsers', 'userId picture');
 
-      projects = projects.map(p => p.toObject({ virtuals: true }));
-      projects = projects.map(Project.futureAndPastNotes);
+      fns.push(projects => projects.map(toObject));
+      fns.push(projects => projects.map(Project.futureAndPastNotes));
 
-      return res.send(200, projects);
+      const payload = compose(fns)(projects);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post('projects/:_id/nudges', async ({ params, user }, res) => {
+  post('projects/:_id/nudges', async ({ params, user }, res, next) => {
     try {
-      let project = await Project
+      const fns = [];
+
+      const project = await Project
         .findOne(params)
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote);
 
-      project = await project.addNudge(user.sub);
-      project = project.toObject({ virtuals: true });
-      project = Project.futureAndPastNotes(project);
-      project = Project.removeExcludedFields(project);
+      const projectWithNudge = await project.addNudge(user.sub);
 
-      return res.send(201, project);
+      fns.push(toObject);
+      fns.push(Project.futureAndPastNotes);
+      fns.push(Project.removeExcludedFields);
+
+      const payload = compose(fns)(projectWithNudge);
+      return res.send(201, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  del('projects/:project/nudges/:user', async ({ params, user }, res) => {
+  del('projects/:project/nudges/:user', async ({ params, user }, res, next) => {
     if (params.user !== user.sub) {
       return res.send(403);
     }
 
     try {
-      let project = await Project
+      const fns = [];
+
+      const project = await Project
         .findOne({ '_id': params.project })
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
         .populate('nudgeUsers', 'userId picture');
 
-      project = await project.removeNudge(user.sub);
-      project = project.toObject({ virtuals: true });
-      project = Project.futureAndPastNotes(project);
-      project = Project.removeExcludedFields(project);
+      const projectMinusNudge = await project.removeNudge(user.sub);
 
-      return res.send(200, project);
+      fns.push(toObject);
+      fns.push(Project.futureAndPastNotes);
+      fns.push(Project.removeExcludedFields);
+
+      const payload = compose(fns)(projectMinusNudge);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  post('projects', async ({ body, user }, res) => {
+  post('projects', async ({ body, user }, res, next) => {
     try {
       body = JSON.parse(body);
 
       if (body.user && body.user !== user.sub) {
-        return res.send(403);
+        return next(new err.ForbiddenError());
       }
 
-      let project = await Project.create(body);
+      const fns = [];
+      const project = await Project.create(body);
 
-      project = await Project.findOne({ _id: project._id })
+      const fullProject = await Project.findOne({ _id: project._id })
         .populate('nudgeUsers', 'userId picture');
 
-      project = project.toObject({ virtuals: true });
-      project.Past = null;
-      project.Future = null;
-      project = Project.removeExcludedFields(project);
+      fns.push(toObject);
+      fns.push(project => Object.assign({}, project, { Past: null }));
+      fns.push(project => Object.assign({}, project, { Future: null }));
+      fns.push(Project.removeExcludedFields);
 
-      return res.send(201, project);
+      const payload = compose(fns)(fullProject);
+      return res.send(201, payload);
     } catch (e) {
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  put('projects/:_id', async ({ params, body, user }, res) => {
+  put('projects/:_id', async ({ params, body, user }, res, next) => {
     try {
       body = JSON.parse(body);
-      let project = await Project
+      const fns = [];
+
+      const project = await Project
         .findOne({_id: params._id})
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
         .populate('nudgeUsers', 'userId picture');
 
       if (project.user !== user.sub) {
-        return res.send(403);
+        return next(new err.ForbiddenError());
       }
 
-      project = Object.assign(project, body);
-      project.save();
-      project = project.toObject({ virtuals: true });
-      project = Project.futureAndPastNotes(project);
-      project = Project.removeExcludedFields(project);
+      const savedProject = await Object.assign(project, body).save();
 
-      return res.send(200, project);
+      fns.push(toObject);
+      fns.push(Project.futureAndPastNotes);
+      fns.push(Project.removeExcludedFields);
+
+      const payload = compose(fns)(savedProject);
+      return res.send(200, payload);
     } catch (e) {
-      log.error(e);
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
-  del('projects/:_id', async (req, res) => {
+  del('projects/:_id', async ({ params }, res, next) => {
     try {
-      let project = await Project
-        .findOne({ _id: req.params._id });
+      const project = await Project.findOne({ _id: params._id });
 
       project.remove();
 
-      return res.send(200, [])
+      return res.send(200, []);
     } catch (e) {
-      return res.send(500);
+      return next(new err.InternalServerError(e));
     }
   });
 
