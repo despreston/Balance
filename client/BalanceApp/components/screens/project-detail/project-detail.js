@@ -36,7 +36,8 @@ class ProjectDetail extends Component {
     updateDeckVisible: PropTypes.bool.isRequired,
     toggleUpdateDeck: PropTypes.func.isRequired,
     onUpdateDeckPress: PropTypes.func.isRequired,
-    notes: PropTypes.array.isRequired
+    notes: PropTypes.array.isRequired,
+    noteType: PropTypes.string.isRequired
   }
 
   componentWillReceiveProps (nextProps) {
@@ -71,7 +72,8 @@ class ProjectDetail extends Component {
       status,
       userIsOwner,
       notes,
-      goToNote
+      goToNote,
+      noteType
     } = this.props;
 
     const refreshProps = {
@@ -93,7 +95,7 @@ class ProjectDetail extends Component {
           <NoteTypeSwitch onPress={ onNoteContextChange } />
           <NoteListContainer
             showTypeText
-            emptyState={ <EmptyNotes /> }
+            emptyState={ EmptyNotes(noteType) }
             notes={ notes }
             showEdit={ status !== 'finished' && userIsOwner }
             onSelect={ goToNote }

@@ -31,7 +31,7 @@ module.exports = ({ get, post, del, put }) => {
   get('projects/:_id', async ({ params, user }, res, next) => {
     try {
       const fns = [];
-      let project = await Project
+      const project = await Project
         .findOne(params)
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
@@ -102,7 +102,7 @@ module.exports = ({ get, post, del, put }) => {
         { privacyLevel: { $in: privacyLevel }
       });
 
-      let projects = await Project
+      const projects = await Project
         .find(query)
         .populate(Project.latestPastNote)
         .populate(Project.latestFutureNote)
@@ -182,8 +182,12 @@ module.exports = ({ get, post, del, put }) => {
         .populate('nudgeUsers', 'userId picture');
 
       fns.push(toObject);
-      fns.push(project => Object.assign({}, project, { Past: null }));
-      fns.push(project => Object.assign({}, project, { Future: null }));
+
+      fns.push(project => Object.assign({}, project, {
+        Past: null,
+        Future: null
+      }));
+
       fns.push(Project.removeExcludedFields);
 
       const payload = compose(fns)(fullProject);

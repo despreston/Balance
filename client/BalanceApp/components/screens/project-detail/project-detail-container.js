@@ -215,6 +215,7 @@ class ProjectDetailContainer extends Component {
         updateDeckVisible={ this.state.updateDeckVisible }
         toggleUpdateDeck={ this.toggleUpdateDeck }
         onUpdateDeckPress={ this.onUpdateDeckPress }
+        noteType={ this.state.notesToShow }
       />
     );
   }
