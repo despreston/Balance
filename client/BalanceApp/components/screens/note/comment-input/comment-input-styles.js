@@ -24,10 +24,10 @@ export default StyleSheet.create ({
 
   input: {
     flex: 1,
+    paddingVertical: 5,
     fontSize: 15,
     color: Colors.gray.tundora,
     paddingHorizontal: 10,
-    marginVertical: 10,
     borderRadius: 8,
     backgroundColor: Colors.white
   },

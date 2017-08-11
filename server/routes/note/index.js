@@ -26,7 +26,11 @@ module.exports = ({ get, post, put, del }) => {
         .populate('user', 'userId username picture')
         .lean();
 
-      const payload = reactions.map(reaction => delete reaction.userId);
+      const payload = reactions.map(reaction => {
+        delete reaction.userId;
+        return reaction;
+      });
+
       return res.send(200, payload);
     } catch (e) {
       return next(new err.InternalServerError(e));
