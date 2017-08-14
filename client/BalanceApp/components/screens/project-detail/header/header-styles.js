@@ -34,7 +34,7 @@ export default StyleSheet.create ({
     borderColor: Colors.white,
     borderRadius: 10,
     paddingVertical: 3,
-    marginVertical: 10,
+    marginVertical: 5,
     width: 100
   },
 

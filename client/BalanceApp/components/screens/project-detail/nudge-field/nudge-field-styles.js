@@ -22,12 +22,9 @@ export default StyleSheet.create ({
 
   emptyText: {
     textAlign: 'center',
-    color: Colors.gray.tundora,
+    color: Colors.purple,
+    fontWeight: '600',
     fontSize: 13
-  },
-
-  button: {
-    alignItems: 'center'
   }
 
 });

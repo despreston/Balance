@@ -6,7 +6,8 @@ class Bookmarks extends Component {
 
   static propTypes = {
     count: PropTypes.number,
-    onPress: PropTypes.func.isRequired
+    onPress: PropTypes.func.isRequired,
+    textStyle: PropTypes.number
   }
 
   render () {
@@ -20,10 +21,10 @@ class Bookmarks extends Component {
           style={[ styles.center, styles.container ]}
         >
           <Image
-            source={require('../../../assets/icons/star-filled.png')}
-            style={{width: 15, height: 15}}
+            source={require('../../assets/icons/star-filled.png')}
+            style={{ width: 15, height: 15 }}
           />
-          <Text style={ styles.text }>
+          <Text style={[ styles.text, this.props.textStyle ]}>
             {` ${count} ${text}`}
           </Text>
         </TouchableOpacity>

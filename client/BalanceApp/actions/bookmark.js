@@ -61,15 +61,6 @@ export default {
   },
 
   /**
-   * If project is bookmarked, get the bookmark, otherwise get nothing
-   * @param {String} project The _id of the project
-   * @return {Promise}
-   */
-  bookmarkForProject (project) {
-    return apiDispatch(`projects/${project}/bookmark`, this.receiveBookmarks);
-  },
-
-  /**
    * Request bookmarks for project
    * @param {String} id The _id of the project
    * @return {Promise}

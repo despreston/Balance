@@ -15,11 +15,10 @@ class ProjectDetailContainer extends Component {
     }),
     pastNotes: PropTypes.array,
     futureNotes: PropTypes.array,
-    userIsOwner: PropTypes.bool
+    bookmarks: PropTypes.array.isRequired
   }
 
   static mapStateToProps (state, { navigation }) {
-    let userIsOwner = false;
     const projectId = navigation.state.params.project;
     const project = state.projects[projectId];
 
@@ -30,11 +29,16 @@ class ProjectDetailContainer extends Component {
     const pastNotes = byType('Past');
     const futureNotes = byType('Future');
 
-    if (project) {
-      userIsOwner = project.owner[0].userId === state.loggedInUser;
-    }
+    const bookmarks = Object.values(state.bookmarks)
+      .filter(bookmark => bookmark.project === projectId);
 
-    return { userIsOwner, project, pastNotes, futureNotes };
+    return {
+      project,
+      pastNotes,
+      futureNotes,
+      bookmarks,
+      loggedInUser: state.loggedInUser
+    };
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -53,6 +57,8 @@ class ProjectDetailContainer extends Component {
       notes: Array.from(props.futureNotes)
     };
 
+    this.userIsOwner = this.isOwner();
+
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
     this.goToAuthor = this.goToAuthor.bind(this);
     this.onNoteContextChange = this.onNoteContextChange.bind(this);
@@ -68,6 +74,15 @@ class ProjectDetailContainer extends Component {
     this.load();
   }
 
+  componentWillReceiveProps () {
+    this.userIsOwner = this.isOwner();
+  }
+
+  isOwner () {
+    return !!this.props.project &&
+      this.props.project.owner[0].userId === this.props.loggedInUser;
+  }
+
   fetchNotes (project, type) {
     const query = [
       { user: project.owner[0].userId },
@@ -76,6 +91,10 @@ class ProjectDetailContainer extends Component {
     ];
 
     return this.props.dispatch(actions.requestNotes(query));
+  }
+
+  fetchBookmarks (id) {
+    return this.props.dispatch(actions.bookmarksForProject(id));
   }
 
   actionSheetOptions () {
@@ -94,7 +113,7 @@ class ProjectDetailContainer extends Component {
       }
     ];
 
-    if (this.props.userIsOwner) {
+    if (this.userIsOwner) {
       const editProject = {
         label: 'Edit Project',
         fn: () => {
@@ -120,7 +139,7 @@ class ProjectDetailContainer extends Component {
   }
 
   shareProject () {
-    const message = this.props.userIsOwner
+    const message = this.userIsOwner
       ? `I'm using Balance (getbalanceapp.com) to track my project, "${this.props.project.title}". Check it out!`
       : `Check out "${this.props.project.title}" on Balance (getbalanceapp.com)`;
 
@@ -138,7 +157,7 @@ class ProjectDetailContainer extends Component {
 
   componentWillMount () {
     this.props.navigation.setParams({
-      userIsOwner: this.props.userIsOwner,
+      userIsOwner: this.userIsOwner,
       onPress: this.showActionSheet
     });
   }
@@ -148,6 +167,7 @@ class ProjectDetailContainer extends Component {
 
     await this.props.dispatch(actions.fetchProject(project));
     await this.fetchNotes(this.props.project, this.state.notesToShow);
+    await this.fetchBookmarks(this.props.project._id);
   }
 
   refresh () {
@@ -204,9 +224,10 @@ class ProjectDetailContainer extends Component {
       <ProjectDetail
         onRefresh={ () => this.refresh() }
         refreshing={ this.state.refreshing }
+        bookmarkCount={ this.props.bookmarks.length }
         project={ this.props.project }
         notes={ this.state.notes }
-        userIsOwner={ this.props.userIsOwner }
+        userIsOwner={ this.userIsOwner }
         addUpdateVisible={ this.state.addUpdateVisible }
         onNoteContextChange={ this.onNoteContextChange }
         goToAuthor={ this.goToAuthor }
@@ -229,7 +250,9 @@ const headerRight = ({ project, userIsOwner, onPress }) => {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       {
-        !userIsOwner && <BookmarkButton project={ project } />
+        !userIsOwner && (
+          <BookmarkButton project={ project } />
+        )
       }
       <MoreOptions onPress={ onPress }/>
     </View>

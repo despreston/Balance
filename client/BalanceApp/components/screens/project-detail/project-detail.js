@@ -37,7 +37,8 @@ class ProjectDetail extends Component {
     toggleUpdateDeck: PropTypes.func.isRequired,
     onUpdateDeckPress: PropTypes.func.isRequired,
     notes: PropTypes.array.isRequired,
-    noteType: PropTypes.string.isRequired
+    noteType: PropTypes.string.isRequired,
+    bookmarkCount: PropTypes.number.isRequired
   }
 
   componentWillReceiveProps (nextProps) {

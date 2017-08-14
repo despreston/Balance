@@ -3,6 +3,7 @@ import { ScrollView, View, Text, Dimensions } from 'react-native';
 import styles from './header-styles';
 import UpdateButton from '../update-button/update-button';
 import Carousel from 'react-native-snap-carousel';
+import Bookmarks from '../../../bookmarks/bookmarks.js';
 
 class Header extends Component {
 
@@ -87,6 +88,11 @@ class Header extends Component {
             <Text style={[ styles.smallText, styles.whiteText ]}>
               { this.privacyLevelText() }
             </Text>
+            <Bookmarks
+              count={ this.props.bookmarkCount }
+              onPress={ () => null }
+              textStyle={ styles.whiteText }
+            />
             <View style={ styles.categoryContainer }>
               <Text style={[ styles.smallText, styles.whiteText, styles.category ]}>
                 { project.category }

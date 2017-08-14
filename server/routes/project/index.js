@@ -9,25 +9,6 @@ const toObject = item => item.toObject({ virtuals: true });
 
 module.exports = ({ get, post, del, put }) => {
 
-  get('projects/:_id/bookmark', async ({ params, user }, res, next) => {
-    try {
-      const bookmark = await Bookmark
-        .findOne({
-          userId: user.sub,
-          project: params._id
-        })
-        .populate('bookmarker', 'userId username picture');
-
-      if (bookmark) {
-        return res.send(200, toObject(bookmark));
-      }
-
-      return res.send(200, []);
-    } catch (e) {
-      return next(new err.InternalServerError(e));
-    }
-  });
-
   get('projects/:_id', async ({ params, user }, res, next) => {
     try {
       const fns = [];
@@ -82,7 +63,7 @@ module.exports = ({ get, post, del, put }) => {
       const bookmarks = await Bookmark.find({ project: project._id })
         .populate('bookmarker', 'userId username picture');
 
-      const payload = toObject(bookmarks);
+      const payload = bookmarks.map(toObject);
       return res.send(200, payload);
     } catch (e) {
       return next(new err.InternalServerError(e));
