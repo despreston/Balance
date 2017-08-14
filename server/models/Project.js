@@ -284,24 +284,38 @@ Project.statics.removeExcludedFields = function (project) {
  */
 Project.statics.clearNudges = async function (id) {
   try {
-    let project = await this
+    const project = await this
       .findOne({ _id: id })
       .select('title nudges user');
 
-    let { nudges } = project;
+    const { nudges } = project;
 
-    let projectOwner = await User
+    const projectOwner = await User
       .findOne({ userId: project.user })
       .select('_id');
 
     nudges.forEach(user => {
-      new NudgedProjectUpdated(user.userId, projectOwner._id, project._id).save();
+      new NudgedProjectUpdated(
+        user.userId,
+        projectOwner._id,
+        project._id
+      ).save();
     });
 
-    let bookmarks = await Bookmark.find({ project: project._id });
+    const bookmarks = await Bookmark.find({ project: project._id });
 
     bookmarks.forEach(bookmark => {
-      new BookmarkedProjectUpdated(bookmark.userId, projectOwner._id, project._id).save();
+      /**
+       * If we already sent a NudgedProjectUpdated notification to this user,
+       * don't send a BookmarkedProjectUpdated notification
+       */
+      if (!nudges.find(user => user.userId === bookmark.userId)) {
+        new BookmarkedProjectUpdated(
+          bookmark.userId,
+          projectOwner._id,
+          project._id
+        ).save();
+      }
     });
 
     // reset nudges
