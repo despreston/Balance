@@ -14,6 +14,8 @@ class UserBookmarksContainer extends Component {
     loggedInUser: PropTypes.string.isRequired
   }
 
+  static navigationOptions = () => ({ title: 'Bookmarks' })
+
   constructor (props) {
     super(props);
     this.state = { projects: [], refreshing: false };
