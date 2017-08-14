@@ -10,6 +10,7 @@ export default StyleSheet.create  ({
   },
 
   selectedContainer: {
+    borderWidth: 1.5,
     borderColor: 'rgba(67, 43, 82, 0.5)'
   },
 

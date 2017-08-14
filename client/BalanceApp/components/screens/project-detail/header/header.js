@@ -40,7 +40,7 @@ class Header extends Component {
         <Carousel
           inactiveSlideScale={ 1 }
           inactiveSlideOpacity={ 1 }
-          slideStyle={[ styles.header, { width: this.width, height: 130 } ]}
+          slideStyle={[ styles.header, { width: this.width, height: 150 } ]}
           sliderWidth={ this.width }
           itemWidth={ this.width }
           onSnapToItem={ slideIndex => this.setState({ slideIndex }) }

@@ -4,6 +4,7 @@ import Colors from '../../../colors';
 export default StyleSheet.create ({
 
   header: {
+    paddingTop: 5,
     backgroundColor: Colors.purple,
     alignItems: 'center',
     justifyContent: 'space-between'
@@ -21,10 +22,6 @@ export default StyleSheet.create ({
   smallText: {
     fontSize: 12,
     textAlign: 'center'
-  },
-
-  shit: {
-    fontSize: 12
   },
 
   categoryContainer: {
@@ -74,5 +71,5 @@ export default StyleSheet.create ({
   whiteBackground: {
     backgroundColor: Colors.white
   }
-  
+
 });
