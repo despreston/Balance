@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import Colors from '../../colors';
+import Colors from '../colors';
 
 export default StyleSheet.create  ({
 
@@ -15,7 +15,7 @@ export default StyleSheet.create  ({
   },
 
   container: {
-    paddingBottom: 10
+    paddingVertical: 10
   }
 
 });

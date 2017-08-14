@@ -6,16 +6,8 @@ import {
   Image
 } from 'react-native';
 import { connect } from 'react-redux';
-
-// actions
 import actions from '../../../actions/';
-
-// styles
 import Style from './nudge-button-style';
-
-function mapStateToProps ({ loggedInUser }) {
-  return { user: loggedInUser };
-}
 
 class NudgeBtn extends Component {
 
@@ -23,6 +15,10 @@ class NudgeBtn extends Component {
     project: PropTypes.object.isRequired,
     useWhite: PropTypes.bool
   };
+
+  static mapStateToProps ({ loggedInUser: user }) {
+    return { user };
+  }
 
   constructor (props) {
     super(props);
@@ -92,4 +88,4 @@ class NudgeBtn extends Component {
 
 }
 
-export default connect(mapStateToProps)(NudgeBtn);
+export default connect(NudgeBtn.mapStateToProps)(NudgeBtn);

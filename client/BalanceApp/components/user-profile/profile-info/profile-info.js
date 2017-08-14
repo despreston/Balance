@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import FriendButton from '../../friend-button/friend-button';
 import Styles from './profile-info-styles';
-import Bookmarks from '../bookmarks/bookmarks';
+import Bookmarks from '../../bookmarks/bookmarks';
 
 class ProfileInfo extends Component  {
 

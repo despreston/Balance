@@ -21,7 +21,7 @@ export default class NudgeField extends Component {
     if (!nudgeUsers || nudgeUsers.length === 0) {
       return (
         <Text style={ Styles.emptyText }>
-          Send a nudge to let { owner[0].username } know you want an update.
+          Nudge to let { owner[0].username } know you want an update.
         </Text>
       );
     }
@@ -41,7 +41,7 @@ export default class NudgeField extends Component {
         <View style={ Styles.content }>
           {
             !this.props.hideButton &&
-            (<View style={ Styles.button }>
+            (<View style={ Styles.center }>
               <NudgeBtn project={ this.props.project } />
             </View>)
           }

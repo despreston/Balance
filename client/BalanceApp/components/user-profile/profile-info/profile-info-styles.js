@@ -46,15 +46,15 @@ export default StyleSheet.create  ({
 
   bio: {
     ...shared,
-    paddingTop: 10,
-    paddingBottom: 20,
+    paddingVertical: 10,
     paddingHorizontal: 30,
     textAlign: 'center'
   },
 
   friendButton: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 10
   },
 
   contextOption: {

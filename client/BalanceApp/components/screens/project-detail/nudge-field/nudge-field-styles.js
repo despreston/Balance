@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import Colors from '../../../colors';
 
 export default StyleSheet.create ({
-  
+
   container: {
     padding: 10,
     borderBottomWidth: 1.5,
@@ -21,12 +21,10 @@ export default StyleSheet.create ({
   },
 
   emptyText: {
-    color: Colors.gray.tundora,
+    textAlign: 'center',
+    color: Colors.purple,
+    fontWeight: '600',
     fontSize: 13
-  },
-
-  button: {
-    alignItems: 'center'
   }
 
 });

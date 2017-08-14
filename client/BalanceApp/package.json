@@ -15,7 +15,7 @@
     "react-native-code-push": "^5.0.0-beta",
     "react-native-confetti": "0.0.6",
     "react-native-emoji-picker": "git+https://git@github.com/despreston/react-native-emoji-picker.git",
-    "react-native-image-picker": "^0.26.3",
+    "react-native-image-picker": "^0.26.4",
     "react-native-image-resizer": "^0.1.1",
     "react-native-lock": "0.5.0",
     "react-native-snap-carousel": "^2.3.1",
@@ -29,7 +29,7 @@
     "babel-eslint": "^7.2.3",
     "babel-preset-react-native": "2.1.0",
     "eslint": "4.4.1",
-    "eslint-plugin-react": "^7.1.0",
+    "eslint-plugin-react": "^7.2.1",
     "eslint-plugin-react-native": "^3.0.1",
     "prop-types": "^15.5.10"
   },
