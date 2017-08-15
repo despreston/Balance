@@ -60,13 +60,13 @@ class ProjectDetailContainer extends Component {
     this.userIsOwner = this.isOwner();
 
     this.toggleAddUpdateModal = this.toggleAddUpdateModal.bind(this);
-    this.goToAuthor = this.goToAuthor.bind(this);
     this.onNoteContextChange = this.onNoteContextChange.bind(this);
     this.goToNote = this.goToNote.bind(this);
     this.toggleUpdateDeck = this.toggleUpdateDeck.bind(this);
     this.onUpdateDeckPress = this.onUpdateDeckPress.bind(this);
     this.showActionSheet = this.showActionSheet.bind(this);
     this.shareProject = this.shareProject.bind(this);
+    this.goToBookmarks = this.goToBookmarks.bind(this);
     this.nav = this.props.navigation.navigate;
   }
 
@@ -188,9 +188,14 @@ class ProjectDetailContainer extends Component {
     this.setState({ updateDeckVisible: !this.state.updateDeckVisible });
   }
 
-  goToAuthor () {
-    this.nav('UserProfile', {
-      userId: this.props.project.owner[0].userId
+  goToUser (userId) {
+    this.nav('UserProfile', { userId });
+  }
+
+  goToBookmarks () {
+    this.nav('ProjectBookmarks', {
+      bookmarks: this.props.bookmarks,
+      onUserSelect: userId => this.goToUser(userId)
     });
   }
 
@@ -222,6 +227,7 @@ class ProjectDetailContainer extends Component {
 
     return (
       <ProjectDetail
+        onBookmarksTap={ this.goToBookmarks }
         onRefresh={ () => this.refresh() }
         refreshing={ this.state.refreshing }
         bookmarkCount={ this.props.bookmarks.length }
@@ -230,7 +236,7 @@ class ProjectDetailContainer extends Component {
         userIsOwner={ this.userIsOwner }
         addUpdateVisible={ this.state.addUpdateVisible }
         onNoteContextChange={ this.onNoteContextChange }
-        goToAuthor={ this.goToAuthor }
+        goToAuthor={ () => this.goToUser(this.props.project.owner[0].userId) }
         goToNote={ this.goToNote }
         toggleAddUpdateModal={ this.toggleAddUpdateModal }
         updateDeckVisible={ this.state.updateDeckVisible }

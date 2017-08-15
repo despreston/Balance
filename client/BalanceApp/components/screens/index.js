@@ -17,6 +17,7 @@ import FriendRequestList from './friend-request-list/friend-request-list';
 import UserBookmarksContainer from './user-bookmarks/user-bookmarks-container';
 import ProjectCategoryContainer from './project-category/project-category-container';
 import InfoWebView from './info-web-view/info-web-view';
+import ProjectBookmarks from './project-bookmarks/project-bookmarks';
 
 export {
   MainScene,
@@ -33,5 +34,6 @@ export {
   FriendRequestList,
   UserBookmarksContainer,
   ProjectCategoryContainer,
-  InfoWebView
+  InfoWebView,
+  ProjectBookmarks
 };

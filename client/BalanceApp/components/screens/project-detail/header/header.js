@@ -90,7 +90,7 @@ class Header extends Component {
             </Text>
             <Bookmarks
               count={ this.props.bookmarkCount }
-              onPress={ () => null }
+              onPress={ this.props.onBookmarksTap }
               textStyle={ styles.whiteText }
             />
             <View style={ styles.categoryContainer }>

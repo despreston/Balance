@@ -18,7 +18,8 @@ import {
   FriendRequestList,
   UserBookmarksContainer,
   ProjectCategoryContainer,
-  InfoWebView
+  InfoWebView,
+  ProjectBookmarks
 } from '../screens';
 
 const navigationOptions = {
@@ -32,9 +33,8 @@ const defaultScreens = {
   Note: { screen: NoteContainer },
   Project: { screen: ProjectDetailContainer },
   EditProject: { screen: EditProjectContainer },
-  UserBookmarks: { screen: UserBookmarksContainer },
-  ProjectCategory: { screen: ProjectCategoryContainer },
-  InfoWebView: { screen: InfoWebView }
+  ProjectBookmarks: { screen: ProjectBookmarks },
+  ProjectCategory: { screen: ProjectCategoryContainer }
 };
 
 function icon (path) {
@@ -56,7 +56,8 @@ const NotificationIcon = ({ focused }) => {
 
 const ProjectsStack = StackNavigator({
   ...defaultScreens,
-  Home: { screen: MainScene }
+  Home: { screen: MainScene },
+  InfoWebView: { screen: InfoWebView }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Projects',
@@ -102,7 +103,8 @@ const ProfileStack = StackNavigator({
   ...defaultScreens,
   Profile: { screen: Profile },
   UserSettingsContainer: { screen: UserSettingsContainer },
-  UserSearch: { screen: UserSearch }
+  UserSearch: { screen: UserSearch },
+  UserBookmarks: { screen: UserBookmarksContainer }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Profile',
