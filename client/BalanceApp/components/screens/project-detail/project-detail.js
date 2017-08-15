@@ -38,7 +38,8 @@ class ProjectDetail extends Component {
     onUpdateDeckPress: PropTypes.func.isRequired,
     notes: PropTypes.array.isRequired,
     noteType: PropTypes.string.isRequired,
-    bookmarkCount: PropTypes.number.isRequired
+    bookmarkCount: PropTypes.number.isRequired,
+    onBookmarksTap: PropTypes.func.isRequired
   }
 
   componentWillReceiveProps (nextProps) {
