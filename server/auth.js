@@ -1,15 +1,19 @@
-let jwt = require('restify-jwt');
-let config = require('./config.json');
+const jwt = require('restify-jwt');
+const config = require('./config.json');
 
 const skippedUrls = [
   '/',
   '_health',
   'users/search',
   'notes/global_activity',
-  'projects/:_id'
+  'projects/:_id',
+  'explore/popular',
+  'explore/updated',
+  'explore/new',
+  'explore/summary'
 ];
 
-let jwtCheck = jwt({
+const jwtCheck = jwt({
   secret: config.auth.secret,
   audience: config.auth.id
 });
@@ -19,7 +23,7 @@ module.exports = (req, res, next) => {
     return jwtCheck(req, res, next);
   }
 
-  if (skippedUrls.indexOf(req.route.path) < 0) {
+  if (!skippedUrls.includes(req.route.path)) {
     if (!req.headers.authorization) {
       return res.send(401, 'Authorization required');
     }
