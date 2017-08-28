@@ -17,9 +17,10 @@ export default StyleSheet.create  ({
 
   title: {
     color: Colors.gray.tundora,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    paddingBottom: 5
+    paddingBottom: 5,
+    marginRight: 5
   },
 
   content: {
@@ -31,7 +32,8 @@ export default StyleSheet.create  ({
 
   top: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexWrap: 'wrap'
+    // justifyContent: 'space-between'
   },
 
   categoryContainer: {

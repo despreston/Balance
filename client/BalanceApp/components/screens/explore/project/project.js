@@ -26,9 +26,11 @@ class Project extends Component {
       <View style={[ Styles.popular, { width: this.props.itemWidth } ]}>
         <View style={ Styles.content }>
           <View style={ Styles.top }>
-            <Text style={[ Styles.text, Styles.title ]}>
-              { this.props.project.title }
-            </Text>
+            <View style={{flex: 1}}>
+              <Text numberOfLines={ 2 } style={[ Styles.text, Styles.title ]}>
+                { this.props.project.title }
+              </Text>
+            </View>
             <View style={ Styles.categoryContainer }>
               <Text style={ Styles.category }>
                 { this.props.project.category }
@@ -37,8 +39,6 @@ class Project extends Component {
           </View>
           { this.renderDescription() }
           <View>
-            <View style={ Styles.footerIcons }>
-            </View>
           </View>
         </View>
       </View>
