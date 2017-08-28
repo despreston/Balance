@@ -18,6 +18,7 @@ import UserBookmarksContainer from './user-bookmarks/user-bookmarks-container';
 import ProjectCategoryContainer from './project-category/project-category-container';
 import InfoWebView from './info-web-view/info-web-view';
 import ProjectBookmarks from './project-bookmarks/project-bookmarks';
+import ExploreContainer from './explore/explore-container';
 
 export {
   MainScene,
@@ -35,5 +36,6 @@ export {
   UserBookmarksContainer,
   ProjectCategoryContainer,
   InfoWebView,
-  ProjectBookmarks
+  ProjectBookmarks,
+  ExploreContainer
 };

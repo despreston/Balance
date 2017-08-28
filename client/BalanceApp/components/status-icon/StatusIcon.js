@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
-
 import Styles from './status-icon-style';
 import Colors from '../colors';
 

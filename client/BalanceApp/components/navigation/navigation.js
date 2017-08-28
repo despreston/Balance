@@ -19,7 +19,8 @@ import {
   UserBookmarksContainer,
   ProjectCategoryContainer,
   InfoWebView,
-  ProjectBookmarks
+  ProjectBookmarks,
+  ExploreContainer
 } from '../screens';
 
 const navigationOptions = {
@@ -85,6 +86,21 @@ const ActivityStack = StackNavigator({
   initialRouteName: 'Activity'
 });
 
+const ExploreStack = StackNavigator({
+  ...defaultScreens,
+  Explore: { screen: ExploreContainer }
+}, {
+  navigationOptions: Object.assign({}, navigationOptions, {
+    tabBarLabel: 'Explore',
+    tabBarIcon: ({ focused }) => {
+      return focused
+        ? icon(require('../../assets/icons/explore-tabbar-selected.png'))
+        : icon(require('../../assets/icons/explore-tabbar.png'));
+    }
+  }),
+  initialRouteName: 'Explore'
+});
+
 const NotificationsStack = StackNavigator({
   ...defaultScreens,
   Notifications: { screen: NotificationsContainer },
@@ -120,6 +136,7 @@ const ProfileStack = StackNavigator({
 const routes = {
   Projects: { screen: ProjectsStack },
   Activity: { screen: ActivityStack },
+  Explore: { screen: ExploreStack },
   Notifications: { screen: NotificationsStack },
   Profile: { screen: ProfileStack }
 };
