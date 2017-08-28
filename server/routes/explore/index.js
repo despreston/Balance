@@ -20,12 +20,16 @@ async function popularProjects () {
         $match: { 'bookmarks.0': { $exists: true } }
       },
       {
+        $limit: 10
+      },
+      {
         $project: {
           title: 1,
           user: 1,
           category: 1,
           nudges: 1,
           lastUpdated: 1,
+          description: 1,
           bookmarks: { $size: '$bookmarks' }
         }
       }
@@ -35,7 +39,7 @@ async function popularProjects () {
 async function recentlyUpdated () {
   return await Project
     .find({ privacyLevel: 'global', status: 'active' })
-    .select('title user category nudges lastUpdated')
+    .select('title user category nudges lastUpdated description')
     .sort({ lastUpdated: -1 })
     .limit(10);
 }
@@ -43,7 +47,7 @@ async function recentlyUpdated () {
 async function newProjects () {
   return await Project
     .find({ privacyLevel: 'global', status: 'active' })
-    .select('title user category nudges lastUpdated')
+    .select('title user category nudges lastUpdated description')
     .sort({ createdAt: -1 })
     .limit(10);
 }
@@ -61,7 +65,6 @@ module.exports = ({ get }) => {
     } catch (e) {
       return next(new err.InternalServerError(e));
     }
-
   }),
 
   get('explore/new', async (req, res, next) => {
