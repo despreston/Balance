@@ -5,7 +5,7 @@ export default StyleSheet.create  ({
 
   popular: {
     borderRadius: 6,
-    height: 170,
+    height: 150,
     backgroundColor: Colors.white,
     marginBottom: 16,
     flexDirection: 'row'
@@ -17,20 +17,16 @@ export default StyleSheet.create  ({
 
   title: {
     color: Colors.gray.tundora,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    paddingBottom: 5
+    paddingBottom: 5,
+    marginRight: 5
   },
 
   content: {
     flex: 1,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    justifyContent: 'space-between'
-  },
-
-  top: {
-    flexDirection: 'row',
     justifyContent: 'space-between'
   },
 
@@ -52,6 +48,16 @@ export default StyleSheet.create  ({
   empty: {
     color: Colors.gray.silver,
     textAlign: 'center'
+  },
+
+  row: {
+    flexDirection: 'row'
+  },
+
+  bookmarkCount: {
+    color: Colors.gray.silver,
+    alignSelf: 'center',
+    paddingLeft: 8
   }
 
 });

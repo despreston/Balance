@@ -80,7 +80,7 @@ class ProjectListItem extends Component {
     const { nudgeUsers } = this.props.project;
 
     if (nudgeUsers && nudgeUsers.length > 0) {
-      return <Nudges nudgeUsers={ nudgeUsers } linkToUpdate={ true }/>
+      return <Nudges nudgeUsers={ nudgeUsers } />
     }
 
     return null;
@@ -91,7 +91,7 @@ class ProjectListItem extends Component {
       return null;
     }
 
-    return <NudgeBtn style={ Style.nudgeBtn } project={ this.props.project } />;
+    return <NudgeBtn project={ this.props.project } />;
   }
 
   renderStatusIcon () {
