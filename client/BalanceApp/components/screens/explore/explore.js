@@ -7,6 +7,7 @@ import {
 import Styles from './explore-styles';
 import ProjectList from './project-list/project-list';
 import Project from './project/project';
+import Refresh from '../../refresh/refresh';
 
 class Explore extends Component {
 
@@ -16,15 +17,24 @@ class Explore extends Component {
       recentlyUpdated: PropTypes.array.isRequired,
       popular: PropTypes.array.isRequired
     }).isRequired,
-    onProjectSelect: PropTypes.func.isRequired
+    onProjectSelect: PropTypes.func.isRequired,
+    refresh: PropTypes.func.isRequired
   }
 
   render () {
     const sliderWidth = Dimensions.get('window').width - 16;
     const itemWidth = (85 * sliderWidth) / 100;
 
+    const refreshProps = {
+      refreshing: false,
+      onRefresh: this.props.refresh
+    };
+
     return (
-      <ScrollView style={ Styles.explore }>
+      <ScrollView
+        style={ Styles.explore }
+        refreshControl={ <Refresh { ...refreshProps } /> }
+      >
         <Text style={ Styles.heading }>Popular</Text>
         <ProjectList
           projects={ this.props.summary.popular }

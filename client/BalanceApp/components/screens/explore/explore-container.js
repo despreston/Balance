@@ -6,12 +6,20 @@ import { api } from '../../../utils/api';
 class ExploreContainer extends Component {
 
   static navigationOptions = {
-    title: 'Explore'
+    headerStyle: {
+      height: 20,
+      backgroundColor: '#432B52'
+    }
   }
 
   constructor (props) {
     super(props);
-    this.state = { loading: true, summary: {} };
+
+    this.state = {
+      loading: true,
+      summary: {}
+    };
+
     this.onProjectSelect = this.onProjectSelect.bind(this);
     this.init();
   }
@@ -34,6 +42,7 @@ class ExploreContainer extends Component {
       <Explore
         onProjectSelect={ this.onProjectSelect }
         summary={ this.state.summary }
+        refresh={ this.init.bind(this) }
       />
     );
   }

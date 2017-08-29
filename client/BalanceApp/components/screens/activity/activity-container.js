@@ -6,7 +6,10 @@ import ActivitySegmentedControl from './activity-segmented-control/activity-segm
 export default class ActivityContainer extends Component {
 
   static navigationOptions = {
-    title: 'Activity'
+    headerStyle: {
+      height: 20,
+      backgroundColor: '#432B52'
+    }
   }
 
   static propTypes = {

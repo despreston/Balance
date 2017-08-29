@@ -5,7 +5,7 @@ export default StyleSheet.create  ({
 
   popular: {
     borderRadius: 6,
-    height: 170,
+    height: 150,
     backgroundColor: Colors.white,
     marginBottom: 16,
     flexDirection: 'row'
@@ -30,12 +30,6 @@ export default StyleSheet.create  ({
     justifyContent: 'space-between'
   },
 
-  top: {
-    flexDirection: 'row',
-    flexWrap: 'wrap'
-    // justifyContent: 'space-between'
-  },
-
   categoryContainer: {
     alignItems: 'center'
   },
@@ -54,6 +48,16 @@ export default StyleSheet.create  ({
   empty: {
     color: Colors.gray.silver,
     textAlign: 'center'
+  },
+
+  row: {
+    flexDirection: 'row'
+  },
+
+  bookmarkCount: {
+    color: Colors.gray.silver,
+    alignSelf: 'center',
+    paddingLeft: 8
   }
 
 });

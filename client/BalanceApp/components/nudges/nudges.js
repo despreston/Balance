@@ -10,7 +10,6 @@ export default class Nudges extends Component {
 
   static propTypes = {
     nudgeUsers: PropTypes.array.isRequired,
-    linkToUpdate: PropTypes.bool,
     imageSize: PropTypes.number,
     textStyle: PropTypes.number
   };
@@ -22,8 +21,6 @@ export default class Nudges extends Component {
       numOfNudgers: props.nudgeUsers.length,
       textPos: this.calcTextPos(props.nudgeUsers.length)
     };
-
-    this.linkToUpdate = props.linkToUpdate;
   }
 
   componentWillReceiveProps (nextProps) {

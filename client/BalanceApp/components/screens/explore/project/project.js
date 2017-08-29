@@ -1,6 +1,12 @@
 import React, { PropTypes, Component } from 'react';
-import { View, Text } from 'react-native';
+import {
+  View,
+  Text,
+  Image
+} from 'react-native';
 import Styles from './project-styles';
+import StatusIcon from '../../../status-icon/StatusIcon';
+import Nudges from '../../../nudges/nudges';
 
 class Project extends Component {
 
@@ -8,7 +14,8 @@ class Project extends Component {
     project: PropTypes.shape({
       title: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
-      lastUpdated: PropTypes.instanceOf(Date).isRequired
+      lastUpdated: PropTypes.instanceOf(Date),
+      bookmark_count: PropTypes.number
     }).isRequired,
     itemWidth: PropTypes.number.isRequired
   }
@@ -21,12 +28,40 @@ class Project extends Component {
     return <Text style={ styles }>{ description || emptyMsg }</Text>;
   }
 
+  renderNudgeUsers () {
+    const { nudgeUsers } = this.props.project;
+
+    if (nudgeUsers && nudgeUsers.length > 0) {
+      return <Nudges nudgeUsers={ nudgeUsers } />
+    }
+
+    return null;
+  }
+
+  renderBookmarkCount () {
+    const { bookmark_count } = this.props.project;
+
+    if (bookmark_count) {
+      return (
+        <View style={ Styles.row }>
+          <Image
+            source={ require('../../../../assets/icons/star-filled.png') }
+            style={{ height: 20, width: 20 }}
+          />
+          <Text style={ Styles.bookmarkCount }>
+            { `bookmarked ${bookmark_count}x` }
+          </Text>
+        </View>
+      );
+    }
+  }
+
   render () {
     return (
       <View style={[ Styles.popular, { width: this.props.itemWidth } ]}>
         <View style={ Styles.content }>
-          <View style={ Styles.top }>
-            <View style={{flex: 1}}>
+          <View style={ Styles.row }>
+            <View style={{ flex: 1 }}>
               <Text numberOfLines={ 2 } style={[ Styles.text, Styles.title ]}>
                 { this.props.project.title }
               </Text>
@@ -39,8 +74,13 @@ class Project extends Component {
           </View>
           { this.renderDescription() }
           <View>
+            { this.renderNudgeUsers() }
+            { this.renderBookmarkCount() }
           </View>
         </View>
+        <StatusIcon
+          lastUpdated={ new Date(this.props.project.lastUpdated) }
+        />
       </View>
     )
   }
