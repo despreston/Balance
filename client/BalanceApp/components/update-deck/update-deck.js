@@ -19,23 +19,26 @@ class UpdateDeck extends Component {
     onNoteTap: PropTypes.func.isRequired
   }
 
-  notes (itemWidth) {
-    return this.props.notes.map((note, idx) => {
-      return (
-        <CarouselItem
-          key={ idx }
-          itemWidth={ itemWidth }
-          note={ note }
-          onPress={ this.props.onNoteTap }
-        />
-      );
-    });
-  }
-  
-  render () {
-    const sliderWidth = Dimensions.get('window').width;
-    const itemWidth = (75 * sliderWidth) / 100;
+  constructor (props) {
+    super(props);
 
+    this.sliderWidth = Dimensions.get('window').width;
+    this.itemWidth = (75 * this.sliderWidth) / 100;
+    this.renderNote = this.renderNote.bind(this);
+  }
+
+  renderNote ({ item, index }) {
+    return (
+      <CarouselItem
+        key={ index }
+        itemWidth={ this.itemWidth }
+        note={ item }
+        onPress={ this.props.onNoteTap }
+      />
+    );
+  }
+
+  render () {
     return (
       <Modal transparent animationType='fade' visible={ this.props.visible } >
         <View style={[ Styles.absolute, Styles.flex, Styles.center ]}>
@@ -50,12 +53,12 @@ class UpdateDeck extends Component {
             this.props.notes.length > 0 &&
             <View style={ Styles.content }>
               <Carousel
-                ref={(carousel) => { this._carousel = carousel; }}
-                sliderWidth={ sliderWidth }
-                itemWidth={ itemWidth }
-              >
-                { this.notes(itemWidth) }
-              </Carousel>
+                data={ this.props.notes }
+                renderItem={ this.renderNote }
+                ref={ carousel => { this._carousel = carousel; }}
+                sliderWidth={ this.sliderWidth }
+                itemWidth={ this.itemWidth }
+              />
             </View>
           }
           {
