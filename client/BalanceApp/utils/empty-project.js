@@ -4,6 +4,7 @@ export default function emptyProject (userId) {
     title: '',
     user: userId,
     privacyLevel: 'global',
+    category: 'Other',
     status: 'active'
   };
 }
