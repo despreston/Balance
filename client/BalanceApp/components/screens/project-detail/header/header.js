@@ -9,9 +9,15 @@ class Header extends Component {
 
   constructor (props) {
     super(props);
+
     this.state = { slideIndex: 0 };
     this.width = Dimensions.get('window').width;
     this.circles = this.circles.bind(this);
+
+    this.slides = [
+      this.summarySlide(),
+      this.detailSlide()
+    ];
   }
 
   privacyLevelText () {
@@ -33,80 +39,95 @@ class Header extends Component {
     });
   }
 
+  detailSlide () {
+    const { project } = this.props;
+
+    return (
+      <ScrollView contentContainerStyle={ styles.infoTextContainer }>
+        <Text style={[ styles.smallText, styles.whiteText ]}>
+          { this.privacyLevelText() }
+        </Text>
+        <Bookmarks
+          count={ this.props.bookmarkCount }
+          onPress={ this.props.onBookmarksTap }
+          textStyle={ styles.whiteText }
+        />
+        <View style={ styles.categoryContainer }>
+          <Text style={[ styles.smallText, styles.whiteText, styles.category ]}>
+            { project.category }
+          </Text>
+        </View>
+        <View>
+          <Text
+            style={[ styles.whiteText, styles.description ]}
+          >
+            { project.description }
+          </Text>
+        </View>
+      </ScrollView>
+    );
+  }
+
+  summarySlide () {
+    const { project, goToAuthor } = this.props;
+
+    return (
+      <View>
+        <View>
+          {
+            project.status === 'finished' &&
+            (
+              <View>
+                <Text style={[ styles.description, styles.bold, styles.whiteText ]}>
+                  This project has been finished!  🎉
+                </Text>
+              </View>
+            )
+          }
+          <Text style={ [styles.title, styles.whiteText] }>
+            { project.title }
+          </Text>
+          <Text style={ [styles.smallText, styles.whiteText] }>
+            Started by
+            <Text
+              onPress={ goToAuthor }
+              style={[ styles.bold, { flex: 1 } ]}
+            >
+              { ` ${project.owner[0].username}` }
+            </Text>
+          </Text>
+        </View>
+        {
+          project.status === 'active' && (
+            <View style={ styles.infoTextContainer }>
+              <Text
+                style={[ styles.whiteText, styles.description ]}
+                numberOfLines={ 2 }
+              >
+                { project.description }
+              </Text>
+            </View>
+          )
+        }
+      </View>
+    );
+  }
+
   render () {
-    const { project, userIsOwner, goToAuthor, toggleAddUpdateModal } = this.props;
+    const { project, userIsOwner, toggleAddUpdateModal } = this.props;
 
     return (
       <View style={ styles.header }>
         <Carousel
+          data={ this.slides }
+          renderItem={ ({ item }) => item }
           inactiveSlideScale={ 1 }
           inactiveSlideOpacity={ 1 }
           slideStyle={[ styles.header, { width: this.width, height: 150 } ]}
           sliderWidth={ this.width }
           itemWidth={ this.width }
           onSnapToItem={ slideIndex => this.setState({ slideIndex }) }
-        >
-          <View>
-            <View>
-              {
-                project.status === 'finished' &&
-                (
-                  <View>
-                    <Text style={[ styles.description, styles.bold, styles.whiteText ]}>
-                      This project has been finished!  🎉
-                    </Text>
-                  </View>
-                )
-              }
-              <Text style={ [styles.title, styles.whiteText] }>
-                { project.title }
-              </Text>
-              <Text style={ [styles.smallText, styles.whiteText] }>
-                Started by
-                <Text
-                  onPress={ goToAuthor }
-                  style={[ styles.bold, { flex: 1 } ]}
-                >
-                  { ` ${project.owner[0].username}` }
-                </Text>
-              </Text>
-            </View>
-            {
-              project.status === 'active' && (
-                <View style={ styles.infoTextContainer }>
-                  <Text
-                    style={[ styles.whiteText, styles.description ]}
-                    numberOfLines={ 2 }
-                  >
-                    { project.description }
-                  </Text>
-                </View>
-              )
-            }
-          </View>
-          <ScrollView contentContainerStyle={ styles.infoTextContainer }>
-            <Text style={[ styles.smallText, styles.whiteText ]}>
-              { this.privacyLevelText() }
-            </Text>
-            <Bookmarks
-              count={ this.props.bookmarkCount }
-              onPress={ this.props.onBookmarksTap }
-              textStyle={ styles.whiteText }
-            />
-            <View style={ styles.categoryContainer }>
-              <Text style={[ styles.smallText, styles.whiteText, styles.category ]}>
-                { project.category }
-              </Text>
-            </View>
-            <View>
-              <Text
-                style={[ styles.whiteText, styles.description ]}
-              >
-                { project.description }
-              </Text>
-            </View>
-          </ScrollView>
-        </Carousel>
+        />
         <View style={ styles.header }>
           <View style={ styles.circles }>
             { this.circles() }

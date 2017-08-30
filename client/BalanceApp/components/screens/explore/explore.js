@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import Styles from './explore-styles';
 import ProjectList from './project-list/project-list';
-import Project from './project/project';
 import Refresh from '../../refresh/refresh';
 
 class Explore extends Component {
@@ -38,14 +37,12 @@ class Explore extends Component {
         <Text style={ Styles.heading }>Popular</Text>
         <ProjectList
           projects={ this.props.summary.popular }
-          component={ Project }
           onProjectSelect={ this.props.onProjectSelect }
           itemWidth={ itemWidth }
         />
         <Text style={ Styles.heading }>Recently Updated</Text>
         <ProjectList
           projects={ this.props.summary.recentlyUpdated }
-          component={ Project }
           onProjectSelect={ this.props.onProjectSelect }
           itemWidth={ itemWidth }
         />
@@ -57,7 +54,6 @@ class Explore extends Component {
         </Text>
         <ProjectList
           projects={ this.props.summary.newProjects }
-          component={ Project }
           onProjectSelect={ this.props.onProjectSelect }
           itemWidth={ itemWidth }
         />
