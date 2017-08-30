@@ -335,12 +335,6 @@ Project.pre('findOne', function () {
 });
 
 Project.pre('save', function (next) {
-  if (!this.createdAt) {
-    this.createdAt = new Date();
-  } else {
-    delete this.createdAt;
-  }
-
   // Keep user from changing these properties indirectly
   const excludedProperties = ['lastUpdated', 'user'];
   excludedProperties.forEach(prop => delete this[prop]);

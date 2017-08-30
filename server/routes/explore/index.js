@@ -38,7 +38,11 @@ async function popularProjects () {
       }
     ]);
 
-  return await augmentWithLastUpdated(results);
+  const projects = await augmentWithLastUpdated(results);
+
+  projects.sort((a, b) => b.bookmark_count - a.bookmark_count);
+
+  return projects;
 }
 
 /**
