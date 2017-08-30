@@ -156,6 +156,8 @@ module.exports = ({ get, post, del, put }) => {
         return next(new err.ForbiddenError());
       }
 
+      body.createdAt = new Date();
+
       const fns = [];
       const project = await Project.create(body);
 
@@ -172,6 +174,7 @@ module.exports = ({ get, post, del, put }) => {
       fns.push(Project.removeExcludedFields);
 
       const payload = compose(fns)(fullProject);
+
       return res.send(201, payload);
     } catch (e) {
       return next(new err.InternalServerError(e));
