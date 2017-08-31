@@ -12,11 +12,19 @@ export default StyleSheet.create  ({
     fontSize: 22,
     fontWeight: '500',
     paddingBottom: 16,
-    paddingHorizontal: 8
+    paddingHorizontal: 16
   },
 
   subHeading: {
     fontSize: 14
+  },
+
+  separator: {
+    backgroundColor: Colors.gray.silver,
+    opacity: 0.5,
+    height: 1,
+    marginHorizontal: 16,
+    marginVertical: 8
   }
 
 });

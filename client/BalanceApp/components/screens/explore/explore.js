@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   ScrollView,
+  View,
   Text,
   Dimensions
 } from 'react-native';
@@ -40,12 +41,14 @@ class Explore extends Component {
           onProjectSelect={ this.props.onProjectSelect }
           itemWidth={ itemWidth }
         />
+        <View style={ Styles.separator} />
         <Text style={ Styles.heading }>Recently Updated</Text>
         <ProjectList
           projects={ this.props.summary.recentlyUpdated }
           onProjectSelect={ this.props.onProjectSelect }
           itemWidth={ itemWidth }
         />
+        <View style={ Styles.separator} />
         <Text style={ Styles.heading }>
           New
           <Text style={ Styles.subHeading }>

@@ -57,7 +57,8 @@ export default StyleSheet.create  ({
   bookmarkCount: {
     color: Colors.gray.silver,
     alignSelf: 'center',
-    paddingLeft: 8
+    paddingLeft: 8,
+    fontSize: 12
   }
 
 });
