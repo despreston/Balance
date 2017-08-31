@@ -49,7 +49,7 @@ class Project extends Component {
             style={{ height: 20, width: 20 }}
           />
           <Text style={ Styles.bookmarkCount }>
-            { `bookmarked ${bookmark_count}x` }
+            { `${bookmark_count}x` }
           </Text>
         </View>
       );
