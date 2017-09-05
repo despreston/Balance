@@ -51,3 +51,21 @@ If a new version if released on the app store, it MUST also be released on code-
 
 To release to production on code-push:
 `code-push release-react -m -d Production Balance ios`
+
+### DB Backup
+
+Create backup of database on remote machine.
+```
+cd /var/backups/Balance/
+mongodump --db balance --out <OUTPUT_PATH>
+```
+
+Compress
+```
+tar -czf ./<OUTPUT_PATH>.tgz ./<OUTPUT_PATH>
+
+Download backup
+```
+scp <HOST>:/var/backups/Balance/<OUTPUT_PATH>.tgz
+
+Eventually this needs to be cleaned up and automated. The backup should be deleted from the production machine.
