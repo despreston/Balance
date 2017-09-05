@@ -9,34 +9,47 @@ A platform for managing and sharing personal progress.
 - Xcode (latest)
 
 #### Db
-1. `brew install mongodb`
-2. `sudo mkdir -p /data/db`
-3. `mongod`
+Install Mongo
+```
+brew install mongodb
+```
+
+Create directory for database data
+```
+sudo mkdir -p /data/db
+```
+
+Start mongo service
+```
+mongod
+```
 
 #### Server
-1. `cd /server/`
-1. `npm i`
-2. `node` OR to run with logging enabled, `NODE_DEBUG=<log level(s)> node` e.g `NODE_DEBUG=info node`
+```
+cd /server/
+npm i
+node index.js
+```
 
 #### iOS App
-1. `cd /client/BalanceApp/`
-2. `npm i`
-3. `npm i -g react-native`
-4. `npm i -g react-native-cli`
-5. `react-native run-ios`
-6. Optionally (to see console output): `react-native log-ios`
+```
+cd /client/BalanceApp/
+npm i
+npm i -g react-native
+npm i -g react-native-cli
+react-native run-ios
+```
 
-### Fresh Update
+### Clear and Reinstall all packages
 Clears database and installs all dependencies. THIS WILL CLEAR YOUR DATA
 
-1. Run `./clean.sh` in root directory '/Balance'.
+Run from /Balance
+
+```
+./clean.sh
+```
 
 Note: if you get an error about permission denied. Run `chmod +x clean.sh` then try step 1 again.
-
-### Run
-
-1. run `node index` in /server. This starts the server. Leave this open.
-2. Separately, run `react-native run-ios` in /client/BalanceApp. This starts the xcode simulator and the iOS app.
 
 ### Communication with Piper-Socket
 Balance sends notifications over websockets by POSTing notifications to a server called Piper-Socket. More info about Piper-Socket is available in the readme for that repo. Piper-Socket config info is available to change in config.json. Piper-Socket (and websocket notifications) are optional when running Balance.
@@ -49,8 +62,10 @@ The Balance IOS app uses Code Push (https://microsoft.github.io/code-push/) to h
 
 If a new version if released on the app store, it MUST also be released on code-push. Otherwise, code-push will override the app store version.
 
-To release to production on code-push:
-`code-push release-react -m -d Production Balance ios`
+To release to production on code-push
+```
+code-push release-react -m -d Production Balance ios
+```
 
 ### DB Backup
 
