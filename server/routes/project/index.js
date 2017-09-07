@@ -64,6 +64,7 @@ module.exports = ({ get, post, del, put }) => {
         .populate('bookmarker', 'userId username picture');
 
       const payload = bookmarks.map(toObject);
+
       return res.send(200, payload);
     } catch (e) {
       return next(new err.InternalServerError(e));

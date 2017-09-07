@@ -15,8 +15,8 @@ class Header extends Component {
     this.circles = this.circles.bind(this);
 
     this.slides = [
-      this.summarySlide(),
-      this.detailSlide()
+      this.summarySlide.bind(this),
+      this.detailSlide.bind(this)
     ];
   }
 
@@ -40,7 +40,7 @@ class Header extends Component {
   }
 
   detailSlide () {
-    const { project } = this.props;
+    const { project, bookmarkCount, onBookmarksTap } = this.props;
 
     return (
       <ScrollView contentContainerStyle={ styles.infoTextContainer }>
@@ -48,8 +48,8 @@ class Header extends Component {
           { this.privacyLevelText() }
         </Text>
         <Bookmarks
-          count={ this.props.bookmarkCount }
-          onPress={ this.props.onBookmarksTap }
+          count={ bookmarkCount }
+          onPress={ onBookmarksTap }
           textStyle={ styles.whiteText }
         />
         <View style={ styles.categoryContainer }>
@@ -120,7 +120,7 @@ class Header extends Component {
       <View style={ styles.header }>
         <Carousel
           data={ this.slides }
-          renderItem={ ({ item }) => item }
+          renderItem={ ({ item }) => item() }
           inactiveSlideScale={ 1 }
           inactiveSlideOpacity={ 1 }
           slideStyle={[ styles.header, { width: this.width, height: 150 } ]}
