@@ -56,7 +56,7 @@ class NotificationsContainer extends Component {
 
   componentWillMount () {
     this.props.navigation.setParams({
-      clear: this.props.dispatch.bind(actions.clearNotifications())
+      clear: () => this.props.dispatch(actions.clearNotifications())
     });
   }
 
