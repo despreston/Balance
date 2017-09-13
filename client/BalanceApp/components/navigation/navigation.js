@@ -18,7 +18,6 @@ import {
   FriendRequestList,
   UserBookmarksContainer,
   ProjectCategoryContainer,
-  InfoWebView,
   ProjectBookmarks,
   ExploreContainer
 } from '../screens';
@@ -57,8 +56,7 @@ const NotificationIcon = ({ focused }) => {
 
 const ProjectsStack = StackNavigator({
   ...defaultScreens,
-  Home: { screen: MainScene },
-  InfoWebView: { screen: InfoWebView }
+  Home: { screen: MainScene }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Projects',

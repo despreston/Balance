@@ -13,8 +13,7 @@ class ProjectDetailContainer extends Component {
       title: PropTypes.string.isRequired,
       status: PropTypes.string.isRequired
     }),
-    pastNotes: PropTypes.array,
-    futureNotes: PropTypes.array,
+    notes: PropTypes.array,
     bookmarks: PropTypes.array.isRequired
   }
 
@@ -22,21 +21,17 @@ class ProjectDetailContainer extends Component {
     const projectId = navigation.state.params.project;
     const project = state.projects[projectId];
 
-    const byType = type => Object.values(state.notes).filter(note => {
-      return note.type === type && note.project._id === projectId;
+    const notes = Object.values(state.notes).filter(note => {
+      return note.project._id === projectId;
     });
-
-    const pastNotes = byType('Past');
-    const futureNotes = byType('Future');
 
     const bookmarks = Object.values(state.bookmarks)
       .filter(bookmark => bookmark.project === projectId);
 
     return {
       project,
-      pastNotes,
-      futureNotes,
       bookmarks,
+      notes,
       loggedInUser: state.loggedInUser
     };
   }
@@ -53,8 +48,7 @@ class ProjectDetailContainer extends Component {
       refreshing: false,
       addUpdateVisible: false,
       notesToShow: 'Future',
-      updateDeckVisible: false,
-      notes: Array.from(props.futureNotes)
+      updateDeckVisible: false
     };
 
     this.userIsOwner = this.isOwner();
@@ -206,14 +200,7 @@ class ProjectDetailContainer extends Component {
   async onNoteContextChange (type) {
     await this.fetchNotes(this.props.project, type);
 
-    const notes = Array.from(
-      type === 'Future' ? this.props.futureNotes : this.props.pastNotes
-    );
-
-    this.setState({
-      notesToShow: type,
-      notes
-    });
+    this.setState({ notesToShow: type });
   }
 
   render () {
@@ -225,6 +212,10 @@ class ProjectDetailContainer extends Component {
       return null;
     }
 
+    const notes = this.props.notes.filter(note => {
+      return note.type === this.state.notesToShow;
+    });
+
     return (
       <ProjectDetail
         onBookmarksTap={ this.goToBookmarks }
@@ -232,7 +223,7 @@ class ProjectDetailContainer extends Component {
         refreshing={ this.state.refreshing }
         bookmarkCount={ this.props.bookmarks.length }
         project={ this.props.project }
-        notes={ this.state.notes }
+        notes={ notes }
         userIsOwner={ this.userIsOwner }
         addUpdateVisible={ this.state.addUpdateVisible }
         onNoteContextChange={ this.onNoteContextChange }
