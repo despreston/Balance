@@ -82,7 +82,7 @@ tar -czf ./<OUTPUT_PATH>.tgz ./<OUTPUT_PATH>
 
 Download backup
 ```
-scp <HOST>:/var/backups/Balance/<OUTPUT_PATH>.tgz
+scp <HOST>:/var/backups/Balance/<OUTPUT_PATH>.tgz <OUTPUT_PATH>.tgz
 ```
 
 Eventually this needs to be cleaned up and automated. The backup should be deleted from the production machine.
