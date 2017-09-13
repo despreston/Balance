@@ -4,7 +4,6 @@ import { connect }                      from 'react-redux';
 import ProjectListContainer             from '../../project-list/project-list-container';
 import NavBtn                           from '../../navigation/nav-btn';
 import MainStyle                        from './main-styles';
-import Icon                             from '../../navigation/icon';
 
 class MainScene extends Component {
 
@@ -20,12 +19,6 @@ class MainScene extends Component {
     return {
       headerBackTitle: null,
       title: 'Projects',
-      headerLeft: (
-        <Icon
-          onPress={() => navigation.navigate('InfoWebView')}
-          imagePath={ require('../../../assets/icons/info.png') }
-        />
-      ),
       headerRight: (
         <NavBtn
           onPress={() => navigation.navigate('EditProject')}
