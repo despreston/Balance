@@ -21,7 +21,7 @@ export default class NudgeField extends Component {
     if (!nudgeUsers || nudgeUsers.length === 0) {
       return (
         <Text style={ Styles.emptyText }>
-          Nudge to let { owner[0].username } know you want an update.
+          Tell { owner[0].username } you want an update
         </Text>
       );
     }
