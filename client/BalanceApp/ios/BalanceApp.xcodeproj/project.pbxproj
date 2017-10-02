@@ -613,6 +613,12 @@
 			isa = PBXGroup;
 			children = (
 				CD525CDEC42117316E759EC1 /* Pods-BalanceApp.dev.xcconfig */,
+				91D6F9306357487695BA8DFA /* libA0RNLock.a */,
+				2A32A8DD03154AAB8AE729CA /* libAutoGrowTextInput.a */,
+				268D546FB36444CEB798E207 /* libRCTImageResizer.a */,
+				2AAE3B83EEF247BEB08E74E0 /* libRNImagePicker.a */,
+				4279B69BE88A4FCEA63B7B05 /* libCodePush.a */,
+				12DBE6DD0A254FB8BEEFB952 /* libRNAdMobManager.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";

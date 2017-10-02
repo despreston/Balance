@@ -2,6 +2,7 @@
 const User             = require('../../models/User');
 const Bookmark         = require('../../models/Bookmark');
 const Project          = require('../../models/Project');
+const Note             = require('../../models/Note');
 const AccessControl    = require('../../utils/access-control');
 const s3remove         = require('../../utils/s3-remove');
 const compose          = require('../../utils/compose');
@@ -61,6 +62,145 @@ module.exports = ({ get, post, del, put }) => {
       const payload = Object.assign(result, { project_count, bookmark_count });
 
       return res.send(200, payload);
+    } catch (e) {
+      return next(new err.InternalServerError(e));
+    }
+  });
+
+  get("users/:userId/stats", async ({ params, user }, res, next) => {
+    try {
+      const now = new Date().getTime();
+      const twoDays = 1.728e8;
+
+      const stats = {
+        mostUpdatedProject: null,
+        mostPopularProject: null,
+        finishedProjects: 0,
+        streak: 0,
+        avgTimeBetweenUpdates: 0
+      };
+
+      const fullUser = await User.findOne({ userId: params.userId });
+
+      const isFriend = !!fullUser.friends.find(friend => {
+        return friend.userId === user.sub && friend.status === 'accepted';
+      });
+
+      const projects = await Project.find({ user: params.userId });
+
+      const notes = await Note
+        .find({ user: params.userId })
+        .sort('lastUpdated');
+
+      const censorPrivateProject = project => {
+        const { privacyLevel, user: owner } = project;
+        const belongsToLoggedInUser = user.sub === owner;
+
+        if (
+          (privacyLevel === 'private' && !belongsToLoggedInUser) ||
+          (privacyLevel === 'friends' && !(belongsToLoggedInUser || isFriend))
+        ) {
+          return 'Private';
+        }
+
+        return project;
+      }
+
+      // Streak
+      for (let i = notes.length - 1; i >= 0; i--) {
+        const lastUpdated = notes[i].lastUpdated.getTime();
+
+        // 1st note
+        if (i === notes.length - 1) {
+          if (now - lastUpdated < twoDays) {
+            stats.streak = stats.streak + 1;
+          } else {
+            break;
+          }
+        } else {
+          const prev = notes[i + 1].lastUpdated.getTime();
+
+          if (prev - lastUpdated < twoDays) {
+            stats.streak = stats.streak + 1;
+          } else {
+            break;
+          }
+        }
+      }
+
+      // Average Time Between Update
+      stats.avgTimeBetweenUpdates = notes.reduceRight((avg, note, i) => {
+        const lastUpdated = new Date(note.lastUpdated).getTime();
+
+        if (i === notes.length - 1) {
+          return parseInt(now - lastUpdated);
+        }
+
+        const previous = new Date(notes[i + 1].lastUpdated).getTime();
+
+        return parseInt(avg + (previous - lastUpdated) / (notes.length - i));
+      }, 0);
+
+      const bookmarks = await Bookmark.find({
+        project: projects.map(project => project._id)
+      });
+
+      const fullProject = _id => projects.find(project => {
+        return project._id.toString() === _id;
+      });
+
+      const bookmarksByProject = bookmarks.reduce((obj, bookmark) => {
+        if (obj[bookmark.project]) {
+          obj[bookmark.project] = obj[bookmark.project] + 1;
+        } else {
+          obj[bookmark.project] = 1;
+        }
+
+        return obj;
+      }, {});
+
+      // Most Popular Project
+      const mostPopularProject = Object.entries(bookmarksByProject)
+        .sort(([, val1], [, val2]) => val1 > val2)
+        .pop();
+
+      if (mostPopularProject) {
+        stats.mostPopularProject = {
+          project: censorPrivateProject(fullProject(mostPopularProject[0])),
+          bookmarkCount: mostPopularProject[1]
+        }
+      }
+
+      // Most Updated project
+      const updatesByProject = notes.reduce((obj, note) => {
+        const project = note.project.toString();
+
+        if (obj[project]) {
+          obj[project].push( note );
+        } else {
+          obj[project] = [note];
+        }
+
+        return obj;
+      }, {});
+
+      const mostUpdatedProject = Object.entries(updatesByProject)
+        .sort(([, val1], [, val2]) => val1.length > val2.length)
+        .pop();
+
+      if (mostUpdatedProject) {
+        stats.mostUpdatedProject = Object.assign({}, {
+          project: censorPrivateProject(fullProject(mostUpdatedProject[0])),
+          updates: mostUpdatedProject[1].length
+        });
+      }
+
+      // Finished projects
+      stats.finishedProjects = projects.filter(({ status }) => {
+        return status === 'finished';
+      }).length;
+
+      return res.send(200, stats);
     } catch (e) {
       return next(new err.InternalServerError(e));
     }

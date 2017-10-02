@@ -13,6 +13,7 @@ export default StyleSheet.create ({
   content: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     marginHorizontal: 10
   },
 

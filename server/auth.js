@@ -5,6 +5,7 @@ const skippedUrls = [
   '/',
   '_health',
   'users/search',
+  'users/:userId/stats',
   'notes/global_activity',
   'projects/:_id',
   'explore/popular',
