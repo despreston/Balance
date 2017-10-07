@@ -108,11 +108,15 @@ class ProjectDetail extends Component {
         <View style={[ Styles.whiteBackground, Styles.main ]}>
           <Header { ...this.props } />
           { this.renderNudgeStuff() }
-          <NoteTypeSwitch onPress={ onNoteContextChange } />
+          <NoteTypeSwitch
+            onPress={ onNoteContextChange }
+            futureNotesCount={ this.futureNotesCount }
+            pastNotesCount={ this.pastNotesCount }
+          />
           <NoteListContainer
             showTypeText
             emptyState={ EmptyNotes(noteType) }
-            notes={ notes }
+            notes={ notes.filter(note => note.type === noteType) }
             showEdit={ status !== 'finished' && userIsOwner }
             onSelect={ goToNote }
           />
