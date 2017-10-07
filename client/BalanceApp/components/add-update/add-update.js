@@ -65,7 +65,7 @@ export default class AddUpdate extends Component {
         textStyle={ disabled ? Styles.disabledGreenText : null }
         buttonStyle={ disabled ? Styles.disabledGreen : Styles.green }
       />
-    );   
+    );
   }
 
   privacy () {
@@ -110,7 +110,7 @@ export default class AddUpdate extends Component {
                 { this.renderCancelButton() }
                 <View>
                   <Text style={ Styles.text }>
-                    { this.props.isNew ? 'New Note' : 'Edit Note' }
+                    { this.props.isNew ? 'New Task' : 'Edit Task' }
                   </Text>
                   <Text style={ Styles.subText }>{ project.title }</Text>
                 </View>

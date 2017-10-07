@@ -13,7 +13,7 @@ export default StyleSheet.create ({
   title: {
     textAlign: 'center',
     fontSize: 26,
-    fontWeight: '300',
+    fontWeight: '500',
     paddingHorizontal: 10,
     letterSpacing: 0.8,
     paddingBottom: 10
