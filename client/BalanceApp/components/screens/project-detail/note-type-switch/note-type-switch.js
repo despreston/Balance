@@ -5,7 +5,9 @@ import Styles from './note-type-switch-styles';
 class NoteTypeSwitch extends Component {
 
   static propTypes = {
-    onPress: PropTypes.func.isRequired
+    onPress: PropTypes.func.isRequired,
+    futureNotesCount: PropTypes.number,
+    pastNotesCount: PropTypes.number
   }
 
   constructor (props) {
@@ -44,8 +46,8 @@ class NoteTypeSwitch extends Component {
   render () {
     return (
       <View style={ Styles.noteContext }>
-        { this.option('TO DO', 'Future') }
-        { this.option('COMPLETED', 'Past') }
+        { this.option(`TO DO (${this.props.futureNotesCount})`, 'Future') }
+        { this.option(`COMPLETED (${this.props.pastNotesCount})`, 'Past') }
       </View>
     );
   }

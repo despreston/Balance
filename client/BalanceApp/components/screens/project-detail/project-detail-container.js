@@ -212,10 +212,6 @@ class ProjectDetailContainer extends Component {
       return null;
     }
 
-    const notes = this.props.notes.filter(note => {
-      return note.type === this.state.notesToShow;
-    });
-
     return (
       <ProjectDetail
         onBookmarksTap={ this.goToBookmarks }
@@ -223,7 +219,7 @@ class ProjectDetailContainer extends Component {
         refreshing={ this.state.refreshing }
         bookmarkCount={ this.props.bookmarks.length }
         project={ this.props.project }
-        notes={ notes }
+        notes={ this.props.notes }
         userIsOwner={ this.userIsOwner }
         addUpdateVisible={ this.state.addUpdateVisible }
         onNoteContextChange={ this.onNoteContextChange }
