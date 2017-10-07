@@ -42,6 +42,17 @@ class ProjectDetail extends Component {
     onBookmarksTap: PropTypes.func.isRequired
   }
 
+  constructor (props) {
+    super(props);
+
+    this.futureNotesCount = this.noteCountForType('Future', props.notes);
+    this.pastNotesCount = this.noteCountForType('Past', props.notes);
+  }
+
+  noteCountForType (type, notes) {
+    return notes.filter(note => note.type === type).length;
+  }
+
   componentWillReceiveProps (nextProps) {
     if (
       nextProps.project.status === 'finished'
@@ -49,6 +60,9 @@ class ProjectDetail extends Component {
     ) {
       this._confettiView.startConfetti();
     }
+
+    this.futureNotesCount = this.noteCountForType('Future', nextProps.notes);
+    this.pastNotesCount = this.noteCountForType('Past', nextProps.notes);
   }
 
   renderNudgeStuff () {
