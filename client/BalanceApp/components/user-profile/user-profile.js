@@ -63,6 +63,7 @@ class UserProfile extends Component {
     };
 
     this.onBookmarksPress = this.onBookmarksPress.bind(this);
+    this.onStatsPress = this.onStatsPress.bind(this);
     this.userIsLoggedInUser = props.userId === props.loggedInUser;
 
     this.fetchNotes();
@@ -88,6 +89,10 @@ class UserProfile extends Component {
 
   onBookmarksPress () {
     this.props.nav('UserBookmarks', { user: this.props.userId });
+  }
+
+  onStatsPress () {
+    this.props.nav('UserStats', { user: this.props.userId });
   }
 
   renderLatest () {
@@ -174,6 +179,7 @@ class UserProfile extends Component {
       >
         <View style={ Styles.profileInfo }>
           <ProfileInfo
+            onStatsPress={ this.onStatsPress }
             onBookmarksPress={ this.onBookmarksPress }
             user={ this.props.user }
           />

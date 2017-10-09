@@ -13,6 +13,7 @@ export default StyleSheet.create  ({
 
   row: {
     justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'row'
   },
 
@@ -20,6 +21,16 @@ export default StyleSheet.create  ({
     borderRadius: 40,
     height: 80,
     width: 80
+  },
+
+  statsRow: {
+    marginLeft: 30
+  },
+
+  statsText: {
+    fontWeight: 'bold',
+    color: Colors.purple,
+    paddingLeft: 5
   },
 
   info: {

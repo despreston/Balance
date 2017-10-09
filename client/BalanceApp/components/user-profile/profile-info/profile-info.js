@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import FriendButton from '../../friend-button/friend-button';
 import Styles from './profile-info-styles';
@@ -13,7 +14,8 @@ class ProfileInfo extends Component  {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    onBookmarksPress: PropTypes.func.isRequired
+    onBookmarksPress: PropTypes.func.isRequired,
+    onStatsPress: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -24,7 +26,9 @@ class ProfileInfo extends Component  {
   renderUsername () {
     const { username } = this.props.user;
 
-    if (!username) return null;
+    if (!username) {
+      return null;
+    }
 
     return <Name style={ Styles.mainName } text={ username } />;
   }
@@ -32,7 +36,9 @@ class ProfileInfo extends Component  {
   renderName () {
     const { user } = this.props;
 
-    if (user.hideName) return null;
+    if (user.hideName) {
+      return null;
+    }
 
     const style = user.username ? Styles.secondaryName : Styles.mainName;
 
@@ -40,7 +46,7 @@ class ProfileInfo extends Component  {
   }
 
   render () {
-    const { user, onBookmarksPress } = this.props;
+    const { user, onBookmarksPress, onStatsPress } = this.props;
 
     return (
       <View style={ Styles.ProfileInfo }>
@@ -51,7 +57,22 @@ class ProfileInfo extends Component  {
             { this.renderName() }
           </View>
         </View>
-        <Bookmarks count={ user.bookmark_count } onPress={ onBookmarksPress }/>
+        <View style={[ Styles.row, Styles.icons ]}>
+          <Bookmarks
+            count={ user.bookmark_count }
+            onPress={ onBookmarksPress }
+          />
+          <TouchableOpacity
+            style={[ Styles.row, Styles.statsRow ]}
+            onPress={ onStatsPress }
+          >
+            <Image
+              style={{ width: 20, height: 20 }}
+              source={ require('../../../assets/icons/stats.png') }
+            />
+            <Text style={ Styles.statsText }>Stats</Text>
+          </TouchableOpacity>
+        </View>
         <Bio bio={ user.bio } />
         <View style={ Styles.friendButton }>
           <FriendButton userId={ user.userId } hideIfLoggedInUser />

@@ -19,7 +19,8 @@ import {
   UserBookmarksContainer,
   ProjectCategoryContainer,
   ProjectBookmarks,
-  ExploreContainer
+  ExploreContainer,
+  UserStatsContainer
 } from '../screens';
 
 const navigationOptions = {
@@ -118,7 +119,8 @@ const ProfileStack = StackNavigator({
   Profile: { screen: Profile },
   UserSettingsContainer: { screen: UserSettingsContainer },
   UserSearch: { screen: UserSearch },
-  UserBookmarks: { screen: UserBookmarksContainer }
+  UserBookmarks: { screen: UserBookmarksContainer },
+  UserStats: { screen: UserStatsContainer }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Profile',

@@ -46,12 +46,12 @@ class ProjectDetail extends Component {
   constructor (props) {
     super(props);
 
-    const noteCount = type => {
-      return props.notes.filter(note => note.type === type).length;
-    };
+    this.futureNotesCount = this.noteCountForType('Future', props.notes);
+    this.pastNotesCount = this.noteCountForType('Past', props.notes);
+  }
 
-    this.futureNotesCount = noteCount('Future');
-    this.pastNotesCount = noteCount('Past');
+  noteCountForType (type, notes) {
+    return notes.filter(note => note.type === type).length;
   }
 
   componentWillReceiveProps (nextProps) {
@@ -61,6 +61,9 @@ class ProjectDetail extends Component {
     ) {
       this._confettiView.startConfetti();
     }
+
+    this.futureNotesCount = this.noteCountForType('Future', nextProps.notes);
+    this.pastNotesCount = this.noteCountForType('Past', nextProps.notes);
   }
 
   renderNudgeStuff () {

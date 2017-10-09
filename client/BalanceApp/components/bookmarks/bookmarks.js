@@ -23,7 +23,7 @@ class Bookmarks extends Component {
         >
           <Image
             source={require('../../assets/icons/star-filled.png')}
-            style={{ width: 15, height: 15 }}
+            style={{ width: 20, height: 20 }}
           />
           <Text style={[ styles.text, this.props.textStyle ]}>
             {` ${count} ${text}`}
