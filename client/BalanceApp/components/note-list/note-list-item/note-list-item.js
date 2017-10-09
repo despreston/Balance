@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { Image, View, Text } from 'react-native';
 import { Styles } from './note-list-item-style';
 import prettyDate from '../../../utils/fancy-date';

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { SegmentedControlIOS, View } from 'react-native';
 import Colors from '../../../colors';
 import Styles from './activity-segmented-control-styles';

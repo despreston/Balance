@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {
   View,
   ScrollView,
@@ -32,7 +33,7 @@ export default class EditProject extends Component {
     if (this.state.confirmDelete) {
       return (
         <FormListItem style={{ borderBottomWidth: 0 }}>
-          <Text style={ Styles.rowLabel, { padding: 10 } }>Are you sure?</Text>
+          <Text style={ (Styles.rowLabel, { padding: 10 }) }>Are you sure?</Text>
           <TouchableOpacity
             style={ Styles.removeButton }
             onPress={ this.props.onRemove }>

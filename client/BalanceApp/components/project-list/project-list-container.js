@@ -1,5 +1,7 @@
 // Vendors
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { AsyncStorage, View } from 'react-native';
 

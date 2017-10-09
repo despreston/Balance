@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { Modal } from 'react-native';
 import { EmojiOverlay } from 'react-native-emoji-picker';
 import Styles from './reaction-selector-styles';

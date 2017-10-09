@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View, AsyncStorage } from 'react-native';
 import Activity from './activity';
 import ActivitySegmentedControl from './activity-segmented-control/activity-segmented-control';

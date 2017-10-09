@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View, SegmentedControlIOS } from 'react-native';
 
 import Styles from './project-filter-styles';

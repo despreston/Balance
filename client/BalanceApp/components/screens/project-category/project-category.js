@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import FormListItem from '../../form-list-item/form-list-item';
 import styles from './project-category-styles';

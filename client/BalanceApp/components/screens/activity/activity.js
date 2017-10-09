@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View } from 'react-native';
 import GlobalActivity from './global-activity/global-activity';
 import FriendsActivity from './friends-activity/friends-activity';
