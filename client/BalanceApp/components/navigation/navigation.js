@@ -35,7 +35,9 @@ const defaultScreens = {
   Project: { screen: ProjectDetailContainer },
   EditProject: { screen: EditProjectContainer },
   ProjectBookmarks: { screen: ProjectBookmarks },
-  ProjectCategory: { screen: ProjectCategoryContainer }
+  ProjectCategory: { screen: ProjectCategoryContainer },
+  UserBookmarks: { screen: UserBookmarksContainer },
+  UserStats: { screen: UserStatsContainer }
 };
 
 function icon (path) {
@@ -118,9 +120,7 @@ const ProfileStack = StackNavigator({
   ...defaultScreens,
   Profile: { screen: Profile },
   UserSettingsContainer: { screen: UserSettingsContainer },
-  UserSearch: { screen: UserSearch },
-  UserBookmarks: { screen: UserBookmarksContainer },
-  UserStats: { screen: UserStatsContainer }
+  UserSearch: { screen: UserSearch }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Profile',

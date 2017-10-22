@@ -16,6 +16,8 @@ class UserStatsContainer extends Component {
     })
   }
 
+  static navigationOptions = () => ({ title: 'User stats' })
+
   constructor (props) {
     super(props);
 
