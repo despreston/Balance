@@ -23,53 +23,57 @@ class UserStats extends Component {
       {
         description: 'Most updated project',
         color: Colors.blue,
-        icon: require('../../../assets/icons/star-filled.png'),
-        text: this.mostUpdated(props.stats)
+        text: () => this.mostUpdated(this.props.stats)
       },
       {
         description: 'Longest streak',
         color: Colors.green,
-        icon: require('../../../assets/icons/star-filled.png'),
-        text: this.userStreak(props.stats)
+        text: () => this.userStreak(this.props.stats)
       },
       {
         description: 'Most popular project',
         color: Colors.orange,
-        icon: require('../../../assets/icons/star-filled.png'),
-        text: this.mostPopular(props.stats)
+        text: () => this.mostPopular(this.props.stats)
       },
       {
         description: 'Avg time between updates',
         color: Colors.yellow,
-        icon: require('../../../assets/icons/star-filled.png'),
-        text: this.averageTime(props.stats)
+        text: () => this.averageTime(this.props.stats)
       }
     ];
   }
 
   mostUpdated ({ mostUpdatedProject }) {
-    return (
-      <Text style={ Styles.text }>
-        { `${mostUpdatedProject.project.title} (${mostUpdatedProject.updates} updates)`}
-      </Text>
-    );
+    const updatedText = `(${mostUpdatedProject.updates} updates)`;
+
+    if (mostUpdatedProject.project === 'Private') {
+      return `Private project ${updatedText}`;
+    }
+
+    return `${mostUpdatedProject.project.title} ${updatedText}`;
   }
 
   userStreak ({ streak }) {
-    return <Text>{ `${streak} updates` }</Text>;
+    return `${streak} updates`;
   }
 
-  mostPopular({ mostPopularProject }) {
-    if (mostPopularProject.project) {
-      return <Text>{ `${mostPopularProject.project.title} (Bookmarked ${mostPopularProject.bookmarkCount}x)` }</Text>;
+  mostPopular ({ mostPopularProject }) {
+    if (mostPopularProject) {
+      const bookmarked = `(Bookmarked ${mostPopularProject.bookmarkCount}x)`;
+
+      if (mostPopularProject.project === 'Private') {
+        return `Private project ${bookmarked}`;
+      }
+
+      return `${mostPopularProject.project.title} ${bookmarked}`;
     }
 
-    return <Text>No projects yet</Text>
+    return 'No bookmarked projects';
   }
 
-  averageTime({ avgTimeBetweenUpdates }) {
+  averageTime ({ avgTimeBetweenUpdates }) {
     const daysInMs = 8.64e7;
-    return <Text>{ `${Math.floor(avgTimeBetweenUpdates / daysInMs)} days` }</Text>
+    return `${Math.floor(avgTimeBetweenUpdates / daysInMs)} days`;
   }
 
   render () {
@@ -84,10 +88,9 @@ class UserStats extends Component {
               return (
                 <View key={ idx } style={ Styles.stat }>
                   <Stat
-                    icon={ stat.icon }
                     description={ stat.description }
                     color={ stat.color }
-                    text={ stat.text }
+                    text={ <Text style={ Styles.text }>{ stat.text() }</Text> }
                   />
                 </View>
               );

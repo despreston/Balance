@@ -10,26 +10,34 @@ class UserStatsContainer extends Component {
     navigation: PropTypes.shape({
       state: PropTypes.shape({
         params: PropTypes.shape({
-          user: PropTypes.string.isRequired
+          user: PropTypes.shape({
+            userId: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired
+          })
         })
       })
     })
   }
 
-  static navigationOptions = () => ({ title: 'User stats' })
+  static navigationOptions = ({ navigation: { state } }) => {
+    return { title: state.params.name };
+  }
 
   constructor (props) {
     super(props);
-
     this.state = { stats: null };
-
     this.fetchStats();
   }
 
-  async fetchStats() {
-    const { user } = this.props.navigation.state.params;
-    const stats = await api(`users/${user}/stats`);
+  componentWillMount () {
+    this.props.navigation.setParams({
+      name: this.props.navigation.state.params.user.username
+    });
+  }
 
+  async fetchStats() {
+    const { userId } = this.props.navigation.state.params.user;
+    const stats = await api(`users/${userId}/stats`);
     this.setState({ stats });
   }
 
