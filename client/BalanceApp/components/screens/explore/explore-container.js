@@ -5,12 +5,7 @@ import { api } from '../../../utils/api';
 
 class ExploreContainer extends Component {
 
-  static navigationOptions = {
-    headerStyle: {
-      height: 20,
-      backgroundColor: '#432B52'
-    }
-  }
+  static navigationOptions = { title: 'Explore' }
 
   constructor (props) {
     super(props);

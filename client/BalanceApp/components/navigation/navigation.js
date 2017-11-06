@@ -24,8 +24,8 @@ import {
 } from '../screens';
 
 const navigationOptions = {
-  headerTintColor: Colors.white,
-  headerStyle: { backgroundColor: Colors.purple, borderBottomWidth: 0 }
+  headerTintColor: Colors.purple,
+  headerStyle: { backgroundColor: Colors.white, borderBottomWidth: 0 }
 };
 
 // screens included in all nav stacks
@@ -107,6 +107,8 @@ const NotificationsStack = StackNavigator({
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Notifications',
+    headerStyle: { backgroundColor: Colors.white, borderBottomWidth: 0 },
+    headerTintColor: Colors.purple,
     tabBarIcon: ({ focused }) => {
       return <NotificationIcon focused={ focused } />
     }

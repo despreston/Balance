@@ -7,7 +7,7 @@ export const Style = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 10,
-    backgroundColor: Colors.gray.porcelain
+    backgroundColor: Colors.white
   },
 
   project: {

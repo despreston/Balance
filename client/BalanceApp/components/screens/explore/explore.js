@@ -36,26 +36,21 @@ class Explore extends Component {
         style={ Styles.explore }
         refreshControl={ <Refresh { ...refreshProps } /> }
       >
-        <Text style={ Styles.heading }>Popular</Text>
+        <Text style={ Styles.heading }>🌟 Popular</Text>
         <ProjectList
           projects={ this.props.summary.popular }
           onProjectSelect={ this.props.onProjectSelect }
           itemWidth={ itemWidth }
         />
         <View style={ Styles.separator} />
-        <Text style={ Styles.heading }>Recently Updated</Text>
+        <Text style={ Styles.heading }>💥 Recently Updated</Text>
         <ProjectList
           projects={ this.props.summary.recentlyUpdated }
           onProjectSelect={ this.props.onProjectSelect }
           itemWidth={ itemWidth }
         />
         <View style={ Styles.separator} />
-        <Text style={ Styles.heading }>
-          New
-          <Text style={ Styles.subHeading }>
-            { ` (show them some ❤️)` }
-          </Text>
-        </Text>
+        <Text style={ Styles.heading }>🕺 New</Text>
         <ProjectList
           projects={ this.props.summary.newProjects }
           onProjectSelect={ this.props.onProjectSelect }

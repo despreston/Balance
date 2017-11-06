@@ -3,7 +3,7 @@ import React from 'react';
 import { Button }           from 'react-native';
 import { styles }           from './navigation-styles';
 
-function NavBtn ({ disabled, onPress, customStyle = {}, title, color = '#fff' }) {
+function NavBtn ({ disabled, onPress, customStyle = {}, title, color = '#432B52' }) {
   return (
     <Button
       disabled={ disabled }
