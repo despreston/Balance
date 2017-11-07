@@ -5,10 +5,15 @@ export default StyleSheet.create  ({
 
   popular: {
     borderRadius: 6,
-    height: 150,
+    height: 120,
+    marginTop: 10,
     backgroundColor: Colors.white,
     marginBottom: 16,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    shadowColor: Colors.gray.tundora,
+    shadowOffset: { width: 0.05, height: 0.05 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6
   },
 
   text: {

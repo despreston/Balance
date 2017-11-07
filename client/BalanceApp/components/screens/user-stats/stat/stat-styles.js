@@ -7,16 +7,14 @@ export default StyleSheet.create ({
     justifyContent: 'center',
     height: 80,
     paddingHorizontal: 16,
-    borderWidth: 3,
-    borderRadius: 8,
-    borderColor: Colors.blue
+    borderRadius: 8
   },
 
   description: {
-    fontSize: 16,
+    fontSize: 12,
     marginBottom: 10,
-    fontWeight: '700',
-    color: Colors.gray.tundora
+    color: Colors.white,
+    fontWeight: '700'
   }
 
 });

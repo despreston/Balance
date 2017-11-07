@@ -1,8 +1,5 @@
-// vendors
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-// components
 import UserProfile from '../../user-profile/user-profile';
 import Icon from '../../navigation/icon';
 
@@ -14,7 +11,6 @@ class Profile extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { navigate: nav } = navigation;
-    const title = 'Profile';
     const headerBackTitle = null;
 
     const headerLeft = (
@@ -31,7 +27,7 @@ class Profile extends Component {
        />
     );
 
-    return { title, headerLeft, headerRight, headerBackTitle };
+    return { headerLeft, headerRight, headerBackTitle };
   };
 
   render () {

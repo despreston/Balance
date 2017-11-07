@@ -39,7 +39,15 @@ class ProjectDetailContainer extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { state } = navigation;
-    return { headerRight: headerRight({ ...state.params }) };
+
+    return {
+      headerRight: headerRight({ ...state.params }),
+      headerStyle: {
+        backgroundColor: '#432B52',
+        borderBottomWidth: 0
+      },
+      headerTintColor: '#ffffff'
+    };
   }
 
   constructor (props) {

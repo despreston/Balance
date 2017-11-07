@@ -4,7 +4,8 @@ import Colors from '../../colors';
 export default StyleSheet.create  ({
 
   explore: {
-    paddingVertical: 8
+    paddingVertical: 8,
+    backgroundColor: Colors.white
   },
 
   heading: {
@@ -13,10 +14,6 @@ export default StyleSheet.create  ({
     fontWeight: '500',
     paddingBottom: 16,
     paddingHorizontal: 16
-  },
-
-  subHeading: {
-    fontSize: 14
   },
 
   separator: {

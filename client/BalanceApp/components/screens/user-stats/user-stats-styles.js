@@ -19,9 +19,9 @@ export default StyleSheet.create ({
   },
 
   text: {
-    color: Colors.gray.tundora,
-    fontSize: 14,
-    fontWeight: '500'
+    color: Colors.white,
+    fontSize: 18,
+    fontWeight: '300'
   }
 
 });

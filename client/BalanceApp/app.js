@@ -6,7 +6,7 @@ global.CONFIG = config;
 
 import codePush from "react-native-code-push";
 import React, { Component } from 'react';
-import { View, StatusBar } from 'react-native';
+import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -34,7 +34,6 @@ class BalanceApp extends Component {
     return (
       <Provider store={ store }>
         <View style={{flex: 1}}>
-          <StatusBar barStyle="light-content" />
           <MainNavigation
             onNavigationStateChange={null}
             ref={ nav => { this.navigator = nav; } }

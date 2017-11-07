@@ -37,7 +37,7 @@ class UserStats extends Component {
       },
       {
         description: 'Avg time between updates',
-        color: Colors.yellow,
+        color: Colors.purple,
         text: () => this.averageTime(this.props.stats)
       }
     ];

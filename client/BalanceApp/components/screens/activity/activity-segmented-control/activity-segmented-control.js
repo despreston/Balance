@@ -5,7 +5,7 @@ import Colors from '../../../colors';
 import Styles from './activity-segmented-control-styles';
 
 export default class ActivitySegmentedControl extends Component {
-  
+
   static propTypes = {
     onSelection: PropTypes.func.isRequired,
     selected: PropTypes.string.isRequired
@@ -23,7 +23,7 @@ export default class ActivitySegmentedControl extends Component {
           selectedIndex={ this.values.findIndex(v => v === this.props.selected) }
           onValueChange={ val => this.props.onSelection(val) }
           values={ this.values }
-          tintColor={ Colors.white }
+          tintColor={ Colors.purple }
         />
       </View>
     );

@@ -157,7 +157,7 @@ const EmptyState = ({ addNote }) => {
         addNote &&
         <TouchableOpacity onPress={ addNote } style={ Style.addNoteMessage }>
           <Text style={[ Style.message, Style.bold ]}>
-            Add an update
+            Add new task
           </Text>
         </TouchableOpacity>
       }

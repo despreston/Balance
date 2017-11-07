@@ -9,7 +9,7 @@ export default StyleSheet.create ({
   },
 
   profileInfo: {
-    paddingTop: 25,
+    paddingTop: 20,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray.porcelain
   },

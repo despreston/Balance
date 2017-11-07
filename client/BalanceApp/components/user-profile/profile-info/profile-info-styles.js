@@ -15,11 +15,16 @@ export default StyleSheet.create  ({
 
   top: {
     marginHorizontal: 40,
-    justifyContent: 'space-around'
+    alignItems: 'center'
   },
 
   icons: {
-    justifyContent: 'space-around',
+    flexDirection: 'row',
+    borderBottomWidth: 6,
+    borderBottomColor: Colors.gray.porcelain,
+    borderTopColor: Colors.gray.porcelain,
+    borderTopWidth: 6,
+    marginTop: 20,
     height: 70
   },
 
@@ -30,8 +35,9 @@ export default StyleSheet.create  ({
     marginHorizontal: 8
   },
 
-  iconRow: {
-    padding: 5,
+  icon: {
+    justifyContent: 'center',
+    flex: 1,
     alignItems: 'center',
     flexDirection: 'row'
   },
@@ -48,6 +54,7 @@ export default StyleSheet.create  ({
   },
 
   info: {
+    marginVertical: 16,
     height: 50,
     justifyContent: 'center'
   },

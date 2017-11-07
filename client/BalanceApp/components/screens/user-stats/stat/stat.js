@@ -13,10 +13,10 @@ class Stat extends Component {
 
   render () {
     return (
-      <View style={[ Styles.stat, { borderColor: this.props.color } ]}>
+      <View style={[ Styles.stat, { backgroundColor: this.props.color } ]}>
         <View>
           <Text style={ Styles.description }>
-            { this.props.description }
+            { this.props.description.toUpperCase() }
           </Text>
           { this.props.text }
         </View>
