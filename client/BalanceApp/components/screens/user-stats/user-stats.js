@@ -39,6 +39,10 @@ class UserStats extends Component {
   }
 
   mostUpdated ({ mostUpdatedProject }) {
+    if (!mostUpdatedProject) {
+      return 'No projects';
+    }
+
     const updatedText = `(${mostUpdatedProject.updates} updates)`;
 
     if (mostUpdatedProject.project === 'Private') {

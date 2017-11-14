@@ -45,12 +45,12 @@ function icon (path) {
 }
 
 const NotificationIcon = ({ focused }) => {
-  let rightIcon = focused
+  const rightIcon = focused
     ? icon(require('../../assets/icons/notifications-tabbar-selected.png'))
     : icon(require('../../assets/icons/notifications-tabbar.png'));
 
   return (
-    <View>
+    <View style={{ height: 26 }}>
       { rightIcon }
       <UnreadNotifications />
     </View>
@@ -109,7 +109,6 @@ const NotificationsStack = StackNavigator({
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Notifications',
-    headerStyle: { backgroundColor: Colors.white, borderBottomWidth: 0 },
     headerTintColor: Colors.purple,
     tabBarIcon: ({ focused }) => {
       return <NotificationIcon focused={ focused } />
