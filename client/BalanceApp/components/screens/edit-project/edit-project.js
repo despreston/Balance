@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
   View,
+  KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
   Text,
@@ -67,7 +68,11 @@ export default class EditProject extends Component {
 
     return (
       <ScrollView contentContainerStyle={ Styles.editProject }>
-        <View style={ Styles.formContainer }>
+        <KeyboardAvoidingView
+          behavior='position'
+          keyboardVerticalOffset={63}
+          style={ Styles.formContainer }
+        >
           <FormListItem label='Title'>
             <TextInput
               clearButtonMode='while-editing'
@@ -105,7 +110,7 @@ export default class EditProject extends Component {
           </FormListItem>
           <ProjectStatus project={ project } onEdit={ onEdit }/>
           { this.renderRemoveButton() }
-        </View>
+        </KeyboardAvoidingView>
       </ScrollView>
     );
   }
