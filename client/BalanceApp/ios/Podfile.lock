@@ -25,6 +25,8 @@ PODS:
     - Masonry (~> 0.6)
   - Lock/Email (1.29.2):
     - Lock/UI
+  - Lock/Safari (1.29.2):
+    - Lock/CoreUI
   - Lock/SMS (1.29.2):
     - Lock/UI
   - Lock/TouchID (1.29.2):
@@ -41,8 +43,9 @@ PODS:
     - SimpleKeychain (~> 0.3)
 
 DEPENDENCIES:
-  - Lock (~> 1.26)
+  - Lock (~> 1.29)
   - Lock/Email
+  - Lock/Safari
   - Lock/SMS
   - Lock/TouchID
 
@@ -53,6 +56,6 @@ SPEC CHECKSUMS:
   SimpleKeychain: 84c748463eec601dfee5e7990f55cc82edc5488d
   TouchIDAuth: 0cf861f58a2cacfc1c12cb02de4850729d943c81
 
-PODFILE CHECKSUM: 986240a34dcc3bb2b2a45a007e9cfa90ee7d3db5
+PODFILE CHECKSUM: e016ee7791d39ea0286979c8aeef6ff0998f6568
 
 COCOAPODS: 1.3.1
