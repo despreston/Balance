@@ -16,7 +16,7 @@
     "react-native-emoji-picker": "git+https://git@github.com/despreston/react-native-emoji-picker.git",
     "react-native-image-picker": "0.26.7",
     "react-native-image-resizer": "1.0.0",
-    "react-native-lock": "0.5.0",
+    "react-native-lock": "0.6.1",
     "react-native-snap-carousel": "3.4.0",
     "react-native-svg": "git+https://github.com/react-native-community/react-native-svg.git#6.0.0",
     "react-navigation": "git+https://git@github.com/react-community/react-navigation.git#v1.0.0-beta.19",
