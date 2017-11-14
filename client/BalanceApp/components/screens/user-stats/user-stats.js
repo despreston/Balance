@@ -1,11 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { ScrollView, View, Text } from 'react-native';
-// import {
-//   VictoryZoomContainer,
-//   VictoryChart,
-//   VictoryArea
-// } from 'victory-native';
 import Stat from './stat/stat';
 import Styles from './user-stats-styles';
 import Colors from '../../colors';
@@ -103,42 +98,3 @@ class UserStats extends Component {
 }
 
 export default UserStats;
-
-
-// <VictoryChart
-        //   containerComponent={
-        //     <VictoryZoomContainer
-        //       zoomDomain={{ x: [8, 12] }}
-        //       allowZoom={ false }
-        //     />
-        //   }
-        // >
-        //   <VictoryArea
-        //     interpolation="natural"
-        //     style={{
-        //       data: {
-        //         fill: "#432B52",
-        //         fillOpacity: 0.1,
-        //         strokeWidth: 3
-        //       }
-        //     }}
-        //     domain={{ y: [0, 10] }}
-        //     categories={{
-        //       x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        //     }}
-        //     data={[
-        //       { x: 1, y: 2, y0: 0 },
-        //       { x: 2, y: 3, y0: 0 },
-        //       { x: 3, y: 5, y0: 0 },
-        //       { x: 4, y: 3, y0: 0 },
-        //       { x: 5, y: 5, y0: 0 },
-        //       { x: 6, y: 2, y0: 0 },
-        //       { x: 7, y: 3, y0: 0 },
-        //       { x: 8, y: 5, y0: 0 },
-        //       { x: 9, y: 3, y0: 0 },
-        //       { x: 10, y: 5, y0: 0 },
-        //       { x: 11, y: 3, y0: 0 },
-        //       { x: 12, y: 5, y0: 0 }
-        //     ]}
-        //   />
-        // </VictoryChart>
