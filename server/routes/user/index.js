@@ -59,7 +59,12 @@ module.exports = ({ get, post, del, put }) => {
       );
 
       const bookmark_count = await Bookmark.count({ userId: params.userId });
-      const payload = Object.assign(result, { project_count, bookmark_count });
+
+      const payload = {
+        ...result,
+        project_count,
+        bookmark_count
+      };
 
       return res.send(200, payload);
     } catch (e) {
@@ -69,7 +74,7 @@ module.exports = ({ get, post, del, put }) => {
 
   get("users/:userId/stats", async ({ params, user }, res, next) => {
     try {
-      const now = new Date().getTime();
+      const now = Date.now();
       const twoDays = 1.728e8;
 
       const stats = {
@@ -189,10 +194,10 @@ module.exports = ({ get, post, del, put }) => {
         .pop();
 
       if (mostUpdatedProject) {
-        stats.mostUpdatedProject = Object.assign({}, {
+        stats.mostUpdatedProject = {
           project: censorPrivateProject(fullProject(mostUpdatedProject[0])),
           updates: mostUpdatedProject[1].length
-        });
+        };
       }
 
       // Finished projects
@@ -441,7 +446,7 @@ module.exports = ({ get, post, del, put }) => {
         await s3remove(userToUpdate.picture);
       }
 
-      userToUpdate = Object.assign(userToUpdate, body);
+      userToUpdate = { ...userToUpdate, body };
       userToUpdate.save();
 
       const project_count = await Project.projectCountForUser(
@@ -451,10 +456,11 @@ module.exports = ({ get, post, del, put }) => {
 
       const bookmark_count = await Bookmark.count({ userId: user.sub });
 
-      const payload = Object.assign(userToUpdate.toObject(), {
+      const payload = {
+        ...userToUpdate.toObject(),
         project_count,
         bookmark_count
-      });
+      };
 
       return res.send(200, payload);
     } catch (e) {

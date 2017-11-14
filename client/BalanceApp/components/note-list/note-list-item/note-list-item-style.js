@@ -71,6 +71,14 @@ export const Styles = StyleSheet.create  ({
     fontWeight: '600'
   },
 
+  green: {
+    color: Colors.green
+  },
+
+  orange: {
+    color: Colors.orange
+  },
+
   picture: {
     backgroundColor: Colors.gray.porcelain,
     height: 100,

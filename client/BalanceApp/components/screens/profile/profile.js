@@ -11,7 +11,7 @@ class Profile extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { navigate: nav } = navigation;
-    const title = 'Profile';
+    const headerBackTitle = null;
 
     const headerLeft = (
       <Icon
@@ -27,7 +27,7 @@ class Profile extends Component {
        />
     );
 
-    return { title, headerLeft, headerRight };
+    return { headerLeft, headerRight, headerBackTitle };
   };
 
   render () {

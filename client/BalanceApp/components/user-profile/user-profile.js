@@ -92,7 +92,7 @@ class UserProfile extends Component {
   }
 
   onStatsPress () {
-    this.props.nav('UserStats', { user: this.props.userId });
+    this.props.nav('UserStats', { user: this.props.user });
   }
 
   renderLatest () {
