@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { TouchableOpacity, Text, Image, View } from 'react-native';
 import Styles from './mark-complete-styles';
 

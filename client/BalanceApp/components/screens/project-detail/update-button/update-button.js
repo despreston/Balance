@@ -10,7 +10,7 @@ export default function UpdateButton ({ press }) {
         style={ Styles.updateButton }>
         <Text
           style={ [Styles.updateButtonText, Styles.bold, Styles.whiteText] }>
-          Add an update
+          New task
         </Text>
       </TouchableOpacity>
     </View>

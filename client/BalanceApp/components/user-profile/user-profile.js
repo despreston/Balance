@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import ProfileInfo from './profile-info/profile-info';
@@ -62,6 +63,7 @@ class UserProfile extends Component {
     };
 
     this.onBookmarksPress = this.onBookmarksPress.bind(this);
+    this.onStatsPress = this.onStatsPress.bind(this);
     this.userIsLoggedInUser = props.userId === props.loggedInUser;
 
     this.fetchNotes();
@@ -87,6 +89,10 @@ class UserProfile extends Component {
 
   onBookmarksPress () {
     this.props.nav('UserBookmarks', { user: this.props.userId });
+  }
+
+  onStatsPress () {
+    this.props.nav('UserStats', { user: this.props.user });
   }
 
   renderLatest () {
@@ -173,6 +179,7 @@ class UserProfile extends Component {
       >
         <View style={ Styles.profileInfo }>
           <ProfileInfo
+            onStatsPress={ this.onStatsPress }
             onBookmarksPress={ this.onBookmarksPress }
             user={ this.props.user }
           />

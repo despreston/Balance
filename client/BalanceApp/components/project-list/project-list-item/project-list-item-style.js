@@ -4,6 +4,10 @@ import Colors from '../../colors';
 export const Style = StyleSheet.create({
 
   projectListItem: {
+    shadowColor: Colors.gray.tundora,
+    shadowOffset: { width: 0.05, height: 0.05 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
     borderRadius: 6,
     height: 170,
     borderColor: Colors.white,

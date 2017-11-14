@@ -30,13 +30,13 @@ class NoteContainer extends Component {
     if (state.params.showEdit) {
       headerRight = (
         <Icon
-          imagePath={ require('../../../assets/icons/edit-white.png') }
+          imagePath={ require('../../../assets/icons/edit.png') }
           onPress={ () => state.params.onEdit() }
         />
       );
     }
 
-    return { headerRight, title: 'Note' };
+    return { headerRight, title: 'Task' };
   };
 
   constructor (props) {

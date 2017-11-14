@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import actions from '../../actions/';
@@ -6,7 +7,6 @@ import s3upload from '../../utils/s3-upload';
 import AddUpdate from './add-update';
 import ImagePicker from 'react-native-image-picker';
 import emptyNote from '../../utils/empty-note';
-import { AdMobInterstitial } from 'react-native-admob';
 
 class AddUpdateContainer extends Component {
 
@@ -88,16 +88,6 @@ class AddUpdateContainer extends Component {
     return note;
   }
 
-  displayAd () {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3615842422399037/8971998517');
-
-    AdMobInterstitial.requestAd(error => {
-      if (!error) {
-        AdMobInterstitial.showAd(() => {});
-      }
-    });
-  }
-
   /**
    * Save the notes as long as the content is not blank
    * @return {Promise}
@@ -106,8 +96,6 @@ class AddUpdateContainer extends Component {
     let note = this.constructNoteObject(note);
 
     this.props.hideFn();
-
-    //this.displayAd();
 
     return new Promise((resolve) => {
       // New photo needs to be uploaded to S3
@@ -150,7 +138,6 @@ class AddUpdateContainer extends Component {
 
     this.props.nav.dispatch(backAction);
     this.props.hideFn();
-    //this.displayAd();
 
     setTimeout(() => {
       this.props.dispatch(actions.deleteNote(this.props.note._id));

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View, AsyncStorage } from 'react-native';
 import Activity from './activity';
 import ActivitySegmentedControl from './activity-segmented-control/activity-segmented-control';
@@ -6,10 +7,7 @@ import ActivitySegmentedControl from './activity-segmented-control/activity-segm
 export default class ActivityContainer extends Component {
 
   static navigationOptions = {
-    headerStyle: {
-      height: 20,
-      backgroundColor: '#432B52'
-    }
+    title: 'Activity'
   }
 
   static propTypes = {

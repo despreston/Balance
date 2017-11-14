@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { api } from '../../../utils/api';
 import actions from '../../../actions/';
@@ -21,15 +22,18 @@ class NotificationsContainer extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { state } = navigation;
+    const options = {};
 
-    let headerRight = (
+    options.title = 'Notifications';
+
+    options.headerRight = (
       <NavBtn
         title='Clear'
         onPress={ () => state.params.clear() }
       />
     );
 
-    return { headerRight, title: 'Notifications' };
+    return options;
   }
 
   constructor (props) {

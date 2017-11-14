@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import Styles from './nudge-field-styles';
 import NudgeBtn from '../../../nudges/nudge-button/nudge-button';

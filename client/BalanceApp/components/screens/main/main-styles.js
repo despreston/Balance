@@ -7,7 +7,8 @@ export default StyleSheet.create  ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    backgroundColor: Colors.white
   },
 
   start: {

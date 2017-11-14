@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 
 import Styles from './nav-button-styles';

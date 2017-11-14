@@ -1,8 +1,5 @@
-// vendors
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-// components
 import UserProfile from '../../user-profile/user-profile';
 import Icon from '../../navigation/icon';
 
@@ -14,7 +11,7 @@ class Profile extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { navigate: nav } = navigation;
-    const title = 'Profile';
+    const headerBackTitle = null;
 
     const headerLeft = (
       <Icon
@@ -22,7 +19,7 @@ class Profile extends Component {
         onPress={ () => nav('UserSearch') }
        />
     );
-      
+
     const headerRight = (
       <Icon
         imagePath={ require('../../../assets/icons/settings.png') }
@@ -30,9 +27,9 @@ class Profile extends Component {
        />
     );
 
-    return { title, headerLeft, headerRight };
+    return { headerLeft, headerRight, headerBackTitle };
   };
-  
+
   render () {
     const { navigate } = this.props.navigation;
 

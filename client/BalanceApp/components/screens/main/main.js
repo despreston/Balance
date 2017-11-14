@@ -1,4 +1,5 @@
-import React, { Component, PropTypes }  from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import { connect }                      from 'react-redux';
 import ProjectListContainer             from '../../project-list/project-list-container';
@@ -22,7 +23,7 @@ class MainScene extends Component {
       headerRight: (
         <NavBtn
           onPress={() => navigation.navigate('EditProject')}
-          title="✚"
+          title='New'
         />
       )
     };

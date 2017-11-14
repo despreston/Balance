@@ -14,7 +14,7 @@ export default StyleSheet.create ({
   },
 
   rowLabel: {
-    fontWeight: 'bold',
+    fontWeight: '800',
     flex: 1
   },
 

@@ -4,7 +4,7 @@ import Colors from '../../colors';
 export default StyleSheet.create  ({
 
   editProject: {
-    backgroundColor: Colors.gray.porcelain,
+    backgroundColor: Colors.white,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -12,7 +12,6 @@ export default StyleSheet.create  ({
   },
 
   formContainer: {
-    backgroundColor: Colors.white,
     flex: 1
   },
 

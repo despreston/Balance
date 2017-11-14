@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { Image, View, Text } from 'react-native';
 import { Styles } from './note-list-item-style';
 import prettyDate from '../../../utils/fancy-date';
@@ -25,7 +26,12 @@ class NoteListItem extends Component {
 
   renderHeader () {
     const { note, showProjectName, showTypeText, showUser } = this.props;
-    let typeText = `${note.type === 'Future' ? 'To do' : 'Did work'}`;
+    const typeText = `${note.type === 'Future' ? 'To do' : 'Did work'}`;
+    let typeTextColor;
+
+    if (showProjectName) {
+      typeTextColor = note.type === 'Past' ? Styles.green : Styles.orange;
+    }
 
     return (
       <View style={[ Styles.flexRow, Styles.top ]}>
@@ -38,7 +44,11 @@ class NoteListItem extends Component {
             }
             {
               showTypeText &&
-              <Text style={ Styles.darker }>{ typeText }</Text>
+              (
+                <Text style={[ Styles.darker, typeTextColor ]}>
+                  { typeText }
+                </Text>
+              )
             }
             {
               showProjectName &&

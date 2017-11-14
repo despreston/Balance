@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { ScrollView, Modal, View, Text, TouchableOpacity } from 'react-native';
 import Styles from './full-reactions-styles';
 import { api } from '../../../utils/api';

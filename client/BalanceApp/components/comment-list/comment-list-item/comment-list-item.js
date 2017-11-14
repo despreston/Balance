@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
 import fancyDate from '../../../utils/fancy-date';
 import Styles from './comment-list-item-styles';

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View, SegmentedControlIOS } from 'react-native';
 
 import Styles from './project-filter-styles';
@@ -10,7 +11,7 @@ export default class ProjectFilter extends Component {
     onChange: PropTypes.func.isRequired,
     filter: PropTypes.string.isRequired
   }
-  
+
   constructor (props) {
     super(props);
 
@@ -24,10 +25,10 @@ export default class ProjectFilter extends Component {
           selectedIndex={ this.values.findIndex(v => v === this.props.filter) }
           onValueChange={ val => this.props.onChange(val) }
           values={ this.values }
-          tintColor={ Colors.white }
+          tintColor={ Colors.purple }
         />
       </View>
     )
   }
-  
+
 }

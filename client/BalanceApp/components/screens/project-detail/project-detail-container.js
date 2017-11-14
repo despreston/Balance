@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ActionSheetIOS, View } from 'react-native';
 import ProjectDetail from './project-detail';
@@ -38,7 +39,15 @@ class ProjectDetailContainer extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { state } = navigation;
-    return { headerRight: headerRight({ ...state.params }) };
+
+    return {
+      headerRight: headerRight({ ...state.params }),
+      headerStyle: {
+        backgroundColor: '#432B52',
+        borderBottomWidth: 0
+      },
+      headerTintColor: '#ffffff'
+    };
   }
 
   constructor (props) {

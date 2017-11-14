@@ -1,8 +1,11 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { api } from '../../../utils/api';
 import ProjectList from '../../project-list/project-list';
 import actions from '../../../actions';
+import Colors from '../../colors';
 
 class UserBookmarksContainer extends Component {
 
@@ -37,7 +40,10 @@ class UserBookmarksContainer extends Component {
   }
 
   render () {
-    if (this.state.projects.length < 1) return null;
+    if (this.state.projects.length < 1) {
+      return <View style={{ flex: 1, backgroundColor: Colors.white }} />;
+    }
+
     return (
       <ProjectList
         onProjectTap={ this.onProjectTap }

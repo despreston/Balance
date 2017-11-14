@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { FlatList, TouchableOpacity }  from 'react-native';
 import NoteListItem                    from './note-list-item/note-list-item';
 import { Styles }                      from './note-list-style';

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View, Text, Image }           from 'react-native';
 import Styles                          from './user-list-item-styles';
 import FriendButton                    from '../../friend-button/friend-button';

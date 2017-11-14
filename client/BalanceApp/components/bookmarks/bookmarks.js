@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { View, Image, TouchableOpacity, Text } from 'react-native';
 import styles from './bookmarks-styles';
 
@@ -22,7 +23,7 @@ class Bookmarks extends Component {
         >
           <Image
             source={require('../../assets/icons/star-filled.png')}
-            style={{ width: 15, height: 15 }}
+            style={{ width: 20, height: 20 }}
           />
           <Text style={[ styles.text, this.props.textStyle ]}>
             {` ${count} ${text}`}

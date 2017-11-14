@@ -19,12 +19,13 @@ import {
   UserBookmarksContainer,
   ProjectCategoryContainer,
   ProjectBookmarks,
-  ExploreContainer
+  ExploreContainer,
+  UserStatsContainer
 } from '../screens';
 
 const navigationOptions = {
-  headerTintColor: Colors.white,
-  headerStyle: { backgroundColor: Colors.purple, borderBottomWidth: 0 }
+  headerTintColor: Colors.purple,
+  headerStyle: { backgroundColor: Colors.white, borderBottomWidth: 0 }
 };
 
 // screens included in all nav stacks
@@ -34,7 +35,9 @@ const defaultScreens = {
   Project: { screen: ProjectDetailContainer },
   EditProject: { screen: EditProjectContainer },
   ProjectBookmarks: { screen: ProjectBookmarks },
-  ProjectCategory: { screen: ProjectCategoryContainer }
+  ProjectCategory: { screen: ProjectCategoryContainer },
+  UserBookmarks: { screen: UserBookmarksContainer },
+  UserStats: { screen: UserStatsContainer }
 };
 
 function icon (path) {
@@ -42,12 +45,12 @@ function icon (path) {
 }
 
 const NotificationIcon = ({ focused }) => {
-  let rightIcon = focused
+  const rightIcon = focused
     ? icon(require('../../assets/icons/notifications-tabbar-selected.png'))
     : icon(require('../../assets/icons/notifications-tabbar.png'));
 
   return (
-    <View>
+    <View style={{ height: 26 }}>
       { rightIcon }
       <UnreadNotifications />
     </View>
@@ -106,6 +109,7 @@ const NotificationsStack = StackNavigator({
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Notifications',
+    headerTintColor: Colors.purple,
     tabBarIcon: ({ focused }) => {
       return <NotificationIcon focused={ focused } />
     }
@@ -117,8 +121,7 @@ const ProfileStack = StackNavigator({
   ...defaultScreens,
   Profile: { screen: Profile },
   UserSettingsContainer: { screen: UserSettingsContainer },
-  UserSearch: { screen: UserSearch },
-  UserBookmarks: { screen: UserBookmarksContainer }
+  UserSearch: { screen: UserSearch }
 }, {
   navigationOptions: Object.assign({}, navigationOptions, {
     tabBarLabel: 'Profile',
