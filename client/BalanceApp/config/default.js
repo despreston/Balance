@@ -6,5 +6,5 @@ export default {
   s3Bucket: "balanceapp",
   widgetsUrl: "https://api.getbalanceapp.com/widgets/",
   infoWebViewUrl: "https://getbalanceapp.com/help.html?v=1",
-  hotPushEnabled: true
+  hotPushEnabled: false
 };
