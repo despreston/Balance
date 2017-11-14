@@ -20,11 +20,7 @@ export default StyleSheet.create  ({
 
   icons: {
     flexDirection: 'row',
-    borderBottomWidth: 6,
-    borderBottomColor: Colors.gray.porcelain,
-    borderTopColor: Colors.gray.porcelain,
-    borderTopWidth: 6,
-    marginTop: 20,
+    marginTop: 10,
     height: 70
   },
 
