@@ -384,7 +384,7 @@ module.exports = ({ get, post, del, put }) => {
     try {
       body = JSON.parse(body);
 
-      let newUser = await User.findOne({ userId: body.userId });
+      let newUser = await User.findOne({ userId: body.user_id });
 
       if (newUser) {
         const bucketUrl = `https://${config.s3.Bucket}`;
@@ -404,7 +404,7 @@ module.exports = ({ get, post, del, put }) => {
       newUser = newUser.toObject();
 
       const privacyLevels = await AccessControl.many(
-        { user: body.userId },
+        { user: body.user_id },
         user.sub
       );
 
@@ -413,7 +413,7 @@ module.exports = ({ get, post, del, put }) => {
         privacyLevels
       );
 
-      newUser.bookmark_count = await Bookmark.count({ userId: newUser.userId });
+      newUser.bookmark_count = await Bookmark.count({ userId: newUser.user_id });
 
       return res.send(201, newUser);
     } catch (e) {

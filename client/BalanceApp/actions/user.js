@@ -1,11 +1,6 @@
 /* eslint no-console: "off" */
-import { apiDispatch, api }                from '../utils/api';
-import { arrayToObj }                      from '../utils/helpers';
-import Auth0Lock                           from 'react-native-lock';
-import { saveAuthToken, saveRefreshToken } from '../utils/auth';
-import Colors                              from '../components/colors';
-import notificationActions                 from './notification';
-import sharedActions                       from './shared';
+import { apiDispatch, api } from '../utils/api';
+import { arrayToObj }       from '../utils/helpers';
 
 const LOGGED_IN_USER = 'LOGGED_IN_USER';
 const RECEIVE_USERS = 'RECEIVE_USERS';
@@ -78,69 +73,6 @@ export default {
       `users/${user}`,
       loggedIn ? this.setLoggedInUser : this.receiveUsers
     );
-  },
-
-  /**
-   * prompt for log-in and send new user to server
-   */
-  login () {
-    const { clientId, domain } = CONFIG;
-
-    const style = {
-      ios: {
-        screenBackgroundColor: Colors.purple,
-        closeButtonTintColor: Colors.white,
-        primaryButtonNormalColor: Colors.green,
-        textFieldTextColor: Colors.gray.tundora,
-        textFieldIconColor: Colors.purple,
-        titleTextColor: Colors.white,
-        credentialBoxBorderColor: Colors.purple,
-        credentialBoxSeparatorColor: Colors.purple,
-        credentialBoxBackgroundColor: Colors.white,
-        secondaryButtonTextColor: Colors.white,
-        descriptionTextColor: Colors.white,
-        separatorTextColor: Colors.white
-      }
-    };
-
-    const lock = new Auth0Lock({ clientId, domain, style });
-    const authParams = { scope: 'openid offline_access', device: 'my-device' };
-
-    // show lock screen to prompt for login details
-    return dispatch => {
-      lock.show({ closable: true, authParams }, (err, profile, tokens) => {
-        if (!tokens) {
-          return;
-        }
-
-        if (err) {
-          console.log('something went wrong ' + err);
-        }
-
-        // save tokens to local storage
-        return saveRefreshToken(tokens.refreshToken)
-        .then(() => saveAuthToken(tokens.idToken))
-        .then(() => {
-
-          if (profile.extraInfo && profile.extraInfo.picture_large) {
-            profile.picture = profile.extraInfo.picture_large;
-          }
-
-          delete profile.extraInfo;
-
-          // send the user to the server
-          return api(`users`, { method: 'POST', body: profile })
-            .then(user => {
-              dispatch(sharedActions.connectToPiper(user.userId));
-              dispatch(notificationActions.fetchNotifications());
-              dispatch(this.setLoggedInUser(user));
-            });
-        })
-        .catch( err => {
-          console.log('could not save new user ', err);
-        });
-      });
-    }
   },
 
   /**
