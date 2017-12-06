@@ -14,10 +14,9 @@ export async function api (url, properties = {}, externalUrl = false) {
       properties.body = JSON.stringify(properties.body);
     }
 
-    const token = await getAuthToken();
-    properties.headers = new Headers({ authorization: `Bearer ${token}` });
-
     if (!externalUrl) {
+      const token = await getAuthToken();
+      properties.headers = new Headers({ authorization: `Bearer ${token}` });
       url = CONFIG.apiUrl + url;
     }
 

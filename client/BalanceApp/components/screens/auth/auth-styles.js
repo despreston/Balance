@@ -19,34 +19,41 @@ export default StyleSheet.create ({
   title: {
     textAlign: 'center',
     marginTop: 20,
-    marginBottom: 100,
+    marginBottom: 30,
     fontSize: 42,
     color: Colors.white,
     letterSpacing: 1.7
   },
 
   subtitle: {
-    fontSize: 18,
-    marginBottom: 30
+    fontSize: 16,
+    marginBottom: 25,
+    marginTop: 5
+  },
+
+  text: {
+    fontSize: 16,
+    color: Colors.white,
+    textAlign: 'center'
   },
 
   bold: {
     fontStyle: 'normal',
-    fontWeight: 'bold'
+    fontWeight: '700'
   },
 
   button: {
-    borderRadius: 5,
+    marginTop: 60,
+    borderRadius: 25,
     justifyContent: 'center',
     backgroundColor: Colors.blue,
+    paddingHorizontal: 5,
     width: 200,
     height: 50
   },
 
-  white: {
-    fontSize: 16,
-    color: Colors.white,
-    textAlign: 'center'
+  buttonText: {
+    fontSize: 18
   }
-  
+
 });

@@ -3,6 +3,7 @@ package com.balanceapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.auth0.react.A0Auth0Package;
 import com.horcrux.svg.SvgPackage;
 import com.sbugert.rnadmob.RNAdMobPackage;
 import com.microsoft.codepush.react.CodePush;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new A0Auth0Package(),
             new SvgPackage(),
             new RNAdMobPackage(),
             new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
