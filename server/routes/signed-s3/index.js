@@ -1,7 +1,7 @@
 const log = require('logbro');
 const aws = require('aws-sdk');
 const uuidV4 = require('uuid/v4');
-const config = require('../../config.json');
+const config = require('../../config');
 
 module.exports = ({ get }) => {
 

@@ -7,7 +7,7 @@ const AccessControl    = require('../../utils/access-control');
 const s3remove         = require('../../utils/s3-remove');
 const compose          = require('../../utils/compose');
 const Notification     = require('../../classes/notification/');
-const config           = require('../../config.json');
+const config           = require('../../config');
 const err              = require('restify-errors');
 const NewFriendRequest = Notification.NewFriendRequest;
 
