@@ -67,7 +67,8 @@ export default StyleSheet.create ({
 
   text: {
     ...defaults.text,
-    lineHeight: 20
+    lineHeight: 20,
+    fontWeight: '600'
   },
 
   comments: {

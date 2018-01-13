@@ -13,8 +13,7 @@ import Style from './nudge-button-style';
 class NudgeBtn extends Component {
 
   static propTypes = {
-    project: PropTypes.object.isRequired,
-    useWhite: PropTypes.bool
+    project: PropTypes.object.isRequired
   };
 
   static mapStateToProps ({ loggedInUser: user }) {
@@ -44,9 +43,7 @@ class NudgeBtn extends Component {
     if (this.state.isSelected) {
       image = require('../../../assets/icons/nudge-filled.png');
     } else {
-      image = this.props.useWhite
-        ? require('../../../assets/icons/nudge-white.png')
-        : require('../../../assets/icons/nudge.png');
+      image = require('../../../assets/icons/nudge.png');
     }
 
     return <Image source={ image } style={ Style.image } />;

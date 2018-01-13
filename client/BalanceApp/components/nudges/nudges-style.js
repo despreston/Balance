@@ -11,7 +11,7 @@ export default StyleSheet.create({
 
   text: {
     color: Colors.gray.silver,
-    fontSize: 12
+    fontSize: 13
   }
 
 });

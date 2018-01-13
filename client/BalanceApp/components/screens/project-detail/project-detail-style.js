@@ -4,7 +4,7 @@ import Colors from '../../colors';
 export default StyleSheet.create ({
 
   projectDetail: {
-    backgroundColor: Colors.purple,
+    backgroundColor: Colors.white,
     flex: 1
   },
 
@@ -31,10 +31,11 @@ export default StyleSheet.create ({
 
   updateButton: {
     backgroundColor: Colors.blue,
-    borderRadius: 5,
+    borderRadius: 20,
     flex: 1,
     justifyContent: 'center',
     height: 40,
+    marginTop: 15,
     marginHorizontal: 25
   },
 
@@ -58,5 +59,5 @@ export default StyleSheet.create ({
   whiteBackground: {
     backgroundColor: Colors.white
   }
-  
+
 });

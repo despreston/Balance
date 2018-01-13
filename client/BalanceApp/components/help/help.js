@@ -43,7 +43,7 @@ export default class Help extends Component {
 
   goToTop () {
     this.scrollView.scrollTo({ y: 0 });
-    this.setState({ showHideBtn: false }); 
+    this.setState({ showHideBtn: false });
   }
 
   render () {
@@ -65,8 +65,8 @@ export default class Help extends Component {
           <View style={ Styles.answer }>
             <Text style={ Styles.topic }>Purpose of this app</Text>
             <Text style={ Styles.text }>
-              Balance was created for those that are juggling multiple activities, 
-              hobbies, or projects. The idea is to get you back 
+              Balance was created for those that are juggling multiple activities,
+              hobbies, or projects. The idea is to get you back
               into the flow of things no matter how long of a break you take.
             </Text>
             <Text style={ Styles.text }>
@@ -77,14 +77,9 @@ export default class Help extends Component {
           <View style={ Styles.answer }>
             <Text style={ Styles.topic }>Nudges</Text>
             <Text style={ Styles.text }>
-              If you're eager for an update on a project, you can send the owner 
-              of the project a nudge.
-            </Text>
-            <Text style={ Styles.text }>
-              To nudge someone, look for the { }
-              <Image source={ require('../../assets/icons/nudge-white.png') } style={{ width: 20, height: 20}}/>
-              { } icon on the project page. The author of that project will receive
-              a notification telling them you want them to update their project.
+              If you're eager for an update on a project, you can send the owner
+              of the project a nudge. They'll receive a notification to let
+              them know you want an update.
             </Text>
             <Text style={ Styles.text }>
               Nudges are reset when a new update is added to the project.
@@ -96,8 +91,8 @@ export default class Help extends Component {
               <Image source={ require('../../assets/project-status-color.png') } style={{ borderRadius: 4, width: 281, height: 155}}/>
             </Text>
             <Text style={ Styles.text }>
-              The color on the right in the list of projects 
-              corresponds to how long its been since the last update for that 
+              The color on the right in the list of projects
+              corresponds to how long its been since the last update for that
               project. Green: 2 days, Yellow: 8 days, Orange: 15 days, Red: Long time!
             </Text>
           </View>
@@ -114,7 +109,7 @@ export default class Help extends Component {
           </View>
         </ScrollView>
 
-        { 
+        {
           this.state.showHideBtn &&
           <TouchableOpacity onPress={ () => this.goToTop() } >
             <Image

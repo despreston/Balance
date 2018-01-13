@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ActionSheetIOS, View } from 'react-native';
+import { ActionSheetIOS } from 'react-native';
 import ProjectDetail from './project-detail';
 import actions from '../../../actions/';
-import BookmarkButton from '../../bookmark-button/bookmark-button';
 import MoreOptions from './more-options/more-options';
 
 class ProjectDetailContainer extends Component {
@@ -41,12 +40,7 @@ class ProjectDetailContainer extends Component {
     const { state } = navigation;
 
     return {
-      headerRight: headerRight({ ...state.params }),
-      headerStyle: {
-        backgroundColor: '#432B52',
-        borderBottomWidth: 0
-      },
-      headerTintColor: '#ffffff'
+      headerRight: headerRight({ ...state.params })
     };
   }
 
@@ -244,21 +238,12 @@ class ProjectDetailContainer extends Component {
   }
 }
 
-const headerRight = ({ project, userIsOwner, onPress }) => {
+const headerRight = ({ userIsOwner, onPress }) => {
   if (userIsOwner === undefined) {
     return null;
   }
 
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      {
-        !userIsOwner && (
-          <BookmarkButton project={ project } />
-        )
-      }
-      <MoreOptions onPress={ onPress }/>
-    </View>
-  );
+  return <MoreOptions onPress={ onPress }/>;
 }
 
 export default connect(ProjectDetailContainer.mapStateToProps)(ProjectDetailContainer);

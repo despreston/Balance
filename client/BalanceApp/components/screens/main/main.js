@@ -23,7 +23,7 @@ class MainScene extends Component {
       headerRight: (
         <NavBtn
           onPress={() => navigation.navigate('EditProject')}
-          title='New'
+          title='Create'
         />
       )
     };

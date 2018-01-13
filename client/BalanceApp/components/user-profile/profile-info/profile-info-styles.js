@@ -7,15 +7,18 @@ const shared = {
 
 export default StyleSheet.create  ({
 
+  profileInfo: {
+    marginTop: 10,
+    marginHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 6,
+    borderColor: Colors.gray.porcelain
+  },
+
   row: {
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row'
-  },
-
-  top: {
-    marginHorizontal: 40,
-    alignItems: 'center'
   },
 
   icons: {
@@ -25,6 +28,7 @@ export default StyleSheet.create  ({
   },
 
   image: {
+    alignSelf: 'center',
     borderRadius: 60,
     height: 120,
     width: 120,
@@ -51,7 +55,6 @@ export default StyleSheet.create  ({
 
   info: {
     marginVertical: 16,
-    height: 50,
     justifyContent: 'center'
   },
 
@@ -67,6 +70,7 @@ export default StyleSheet.create  ({
     fontSize: 18,
     fontWeight: 'normal',
     textAlign: 'center',
+    color: Colors.gray.silver,
     paddingTop: 5
   },
 

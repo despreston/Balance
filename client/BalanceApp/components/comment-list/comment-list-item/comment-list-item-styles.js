@@ -37,7 +37,8 @@ export default StyleSheet.create  ({
   contentText: {
     color: Colors.gray.tundora,
     lineHeight: 20,
-    fontSize: 14
+    fontSize: 14,
+    fontWeight: '600'
   },
 
   top: {

@@ -11,8 +11,7 @@ export default class Nudges extends Component {
 
   static propTypes = {
     nudgeUsers: PropTypes.array.isRequired,
-    imageSize: PropTypes.number,
-    textStyle: PropTypes.number
+    imageSize: PropTypes.number
   };
 
   constructor (props) {
@@ -47,7 +46,7 @@ export default class Nudges extends Component {
   }
 
   render () {
-    const { textStyle, imageSize } = this.props;
+    const { imageSize } = this.props;
 
     return (
       <View style={ Style.nudges }>
@@ -55,7 +54,7 @@ export default class Nudges extends Component {
           images={ this.props.nudgeUsers.map(n => n.picture) }
           imageSize={ imageSize }
         />
-        <Text style={ [Style.text, { left: this.state.textPos }, textStyle] }>
+        <Text style={[ Style.text, { left: this.state.textPos } ]}>
           { `${this.renderText()} update` }
         </Text>
       </View>

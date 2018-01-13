@@ -8,7 +8,6 @@ import {
 import Styles from './project-detail-style';
 import NoteListContainer from '../../note-list/note-list-container';
 import AddUpdateContainer from '../../add-update/add-update-container';
-import NudgeField from './nudge-field/nudge-field';
 import Refresh from '../../refresh/refresh';
 import NoteTypeSwitch from './note-type-switch/note-type-switch';
 import UpdateDeckContainer from '../../update-deck/update-deck-container';
@@ -66,16 +65,6 @@ class ProjectDetail extends Component {
     this.pastNotesCount = this.noteCountForType('Past', nextProps.notes);
   }
 
-  renderNudgeStuff () {
-    const { project, userIsOwner } = this.props;
-
-    if (project.status !== 'active' || (userIsOwner && !project.nudgeUsers)) {
-      return null;
-    }
-
-    return <NudgeField hideButton={ userIsOwner } project={ project } />;
-  }
-
   render () {
     const {
       project,
@@ -96,8 +85,7 @@ class ProjectDetail extends Component {
     const refreshProps = {
       refreshing,
       onRefresh: () => this.props.onRefresh(),
-      tintColor: 'white',
-      styles: Styles.purpleBackground
+      tintColor: '#432B52'
     };
 
     return (
@@ -108,7 +96,6 @@ class ProjectDetail extends Component {
       >
         <View style={[ Styles.whiteBackground, Styles.main ]}>
           <Header { ...this.props } />
-          { this.renderNudgeStuff() }
           <NoteTypeSwitch
             onPress={ onNoteContextChange }
             futureNotesCount={ this.futureNotesCount }

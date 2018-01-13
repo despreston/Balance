@@ -49,40 +49,40 @@ class ProfileInfo extends Component  {
 
     return (
       <View>
-        <View style={ Styles.top }>
-          <Image style={ Styles.image } source={{ uri: user.picture }} />
-        </View>
-        <View style={ Styles.info }>
-          { this.renderUsername() }
-          { this.renderName() }
-        </View>
-        <Bio bio={ user.bio } />
-        <View style={ Styles.friendButton }>
-          <FriendButton userId={ user.userId } hideIfLoggedInUser />
-        </View>
-        <View style={ Styles.icons }>
-          <TouchableOpacity
-            onPress={ onBookmarksPress }
-            style={ Styles.icon }
-          >
-            <Image
-              source={require('../../../assets/icons/star-filled.png')}
-              style={ Styles.iconImage }
-            />
-            <Text style={ Styles.iconText }>
-              Bookmarks
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={ Styles.icon }
-            onPress={ onStatsPress }
-          >
-            <Image
-              style={ Styles.iconImage }
-              source={ require('../../../assets/icons/stats.png') }
-            />
-            <Text style={ Styles.iconText }>Statistics</Text>
-          </TouchableOpacity>
+        <Image style={ Styles.image } source={{ uri: user.picture }} />
+        <View style={ Styles.profileInfo }>
+          <View style={ Styles.info }>
+            { this.renderUsername() }
+            { this.renderName() }
+          </View>
+          <Bio bio={ user.bio } />
+          <View style={ Styles.friendButton }>
+            <FriendButton userId={ user.userId } hideIfLoggedInUser />
+          </View>
+          <View style={ Styles.icons }>
+            <TouchableOpacity
+              onPress={ onBookmarksPress }
+              style={ Styles.icon }
+            >
+              <Image
+                source={require('../../../assets/icons/star-filled.png')}
+                style={ Styles.iconImage }
+              />
+              <Text style={ Styles.iconText }>
+                Bookmarks
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={ Styles.icon }
+              onPress={ onStatsPress }
+            >
+              <Image
+                style={ Styles.iconImage }
+                source={ require('../../../assets/icons/stats.png') }
+              />
+              <Text style={ Styles.iconText }>Statistics</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );

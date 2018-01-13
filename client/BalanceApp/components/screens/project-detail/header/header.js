@@ -1,137 +1,133 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, Dimensions } from 'react-native';
+import {
+  Image,
+  Animated,
+  View,
+  Text,
+  TouchableOpacity
+} from 'react-native';
 import styles from './header-styles';
 import UpdateButton from '../update-button/update-button';
-import Carousel from 'react-native-snap-carousel';
-import Bookmarks from '../../../bookmarks/bookmarks.js';
+import Nudges from '../../../nudges/nudges';
+import CollapsiblePanel from '../../../collapsible-panel/collapsible-panel';
 
 class Header extends Component {
 
   constructor (props) {
     super(props);
 
-    this.state = { slideIndex: 0 };
-    this.width = Dimensions.get('window').width;
-    this.circles = this.circles.bind(this);
-
-    this.slides = [
-      this.summarySlide.bind(this),
-      this.detailSlide.bind(this)
-    ];
+    this.state = {
+      headerExpanded: false,
+      toggleHeaderIcon: new Animated.Value()
+    };
   }
 
-  privacyLevelText () {
-    switch (this.props.project.privacyLevel) {
-      case 'global': return 'Anyone can view this project.';
-      case 'friends': return 'Only friends can view this project.';
-      case 'private': return 'Only you can view this project.';
-    }
+  toggleHeader () {
+    const initialValue = this.state.headerExpanded ? 180 : 0;
+    const finalValue   = this.state.headerExpanded ? 0 : 180;
+
+    this.state.toggleHeaderIcon.setValue(initialValue);
+
+    Animated.spring(
+      this.state.toggleHeaderIcon,
+      { toValue: finalValue }
+    ).start();
+
+    this.setState({ headerExpanded: !this.state.headerExpanded });
   }
 
-  circles () {
-    return [0,0].map((circle, i) => {
-      const style = [
-        styles.circle,
-        (i === this.state.slideIndex ? styles.whiteBackground : null)
-      ];
+  render () {
+    const {
+      project,
+      userIsOwner,
+      goToAuthor,
+      toggleAddUpdateModal
+    } = this.props;
 
-      return <View key={ i } style={ style } />
+    const headerIconRotation = this.state.toggleHeaderIcon.interpolate({
+      inputRange: [ 0, 360 ],
+      outputRange: [ '0deg', '360deg' ]
     });
-  }
-
-  detailSlide () {
-    const { project, bookmarkCount, onBookmarksTap } = this.props;
 
     return (
-      <ScrollView contentContainerStyle={ styles.infoTextContainer }>
-        <Text style={[ styles.smallText, styles.whiteText ]}>
-          { this.privacyLevelText() }
-        </Text>
-        <Bookmarks
-          count={ bookmarkCount }
-          onPress={ onBookmarksTap }
-          textStyle={ styles.whiteText }
-        />
-        <View style={ styles.categoryContainer }>
-          <Text style={[ styles.smallText, styles.whiteText, styles.category ]}>
-            { project.category }
-          </Text>
-        </View>
-        <View>
-          <Text
-            style={[ styles.whiteText, styles.description ]}
-          >
-            { project.description }
-          </Text>
-        </View>
-      </ScrollView>
-    );
-  }
-
-  summarySlide () {
-    const { project, goToAuthor } = this.props;
-
-    return (
-      <View>
-        <View>
-          {
-            project.status === 'finished' &&
-            (
-              <View>
-                <Text style={[ styles.description, styles.bold, styles.whiteText ]}>
-                  This project has been finished!  🎉
-                </Text>
-              </View>
-            )
-          }
-          <Text style={ [styles.title, styles.whiteText] }>
-            { project.title }
-          </Text>
-          <Text style={ [styles.smallText, styles.whiteText] }>
-            Started by
-            <Text
-              onPress={ goToAuthor }
-              style={[ styles.bold, { flex: 1 } ]}
-            >
-              { ` ${project.owner[0].username}` }
-            </Text>
-          </Text>
-        </View>
+      <View style={ styles.header }>
         {
-          project.status === 'active' && (
-            <View style={ styles.infoTextContainer }>
-              <Text
-                style={[ styles.whiteText, styles.description ]}
-                numberOfLines={ 2 }
-              >
-                { project.description }
+          project.status === 'finished' &&
+          (
+            <View>
+              <Text style={[ styles.description, styles.bold ]}>
+                This project has been finished!  🎉
               </Text>
             </View>
           )
         }
-      </View>
-    );
-  }
+        <View style={ styles.top }>
+          <Text style={[ styles.title, styles.bold ]}>
+            { project.title }
+          </Text>
+          <TouchableOpacity
+            onPress={ () => this.toggleHeader() }
+          >
+            <Animated.Image
+              source={ require('../../../../assets/icons/chevron.png') }
+              style={{
+                height: 20,
+                width: 20,
+                transform: [{ rotate: headerIconRotation }]
+              }}
+            />
+          </TouchableOpacity>
+        </View>
 
-  render () {
-    const { project, userIsOwner, toggleAddUpdateModal } = this.props;
-
-    return (
-      <View style={ styles.header }>
-        <Carousel
-          data={ this.slides }
-          renderItem={ ({ item }) => item() }
-          inactiveSlideScale={ 1 }
-          inactiveSlideOpacity={ 1 }
-          slideStyle={[ styles.header, { width: this.width, height: 150 } ]}
-          sliderWidth={ this.width }
-          itemWidth={ this.width }
-          onSnapToItem={ slideIndex => this.setState({ slideIndex }) }
-        />
-        <View style={ styles.header }>
-          <View style={ styles.circles }>
-            { this.circles() }
+        <CollapsiblePanel
+          height={ 80 }
+          expanded={ this.state.headerExpanded }
+        >
+          <View style={ styles.panel }>
+            <Text style={[ styles.smallText, styles.bold ]}>
+              Author:
+              <Text onPress={ goToAuthor } style={ styles.author }>
+                { ` ${project.owner[0].username}` }
+              </Text>
+            </Text>
+            <Text style={[ styles.smallText ]}>
+              <Text style={ styles.bold }>Category:</Text> { project.category }
+            </Text>
           </View>
+        </CollapsiblePanel>
+
+        <View style={ styles.testButtons }>
+          <View style={ styles.testButtonWrapper }>
+            <Image
+              style={ styles.testButtonImage }
+              source={ require('../../../../assets/icons/star.png') }
+            />
+          </View>
+          <View style={ styles.testButtonWrapper }>
+            <Image
+              style={ styles.testButtonImage }
+              source={ require('../../../../assets/icons/nudge.png') }
+            />
+          </View>
+        </View>
+
+        {
+          project.nudgeUsers && (
+            <View style={ styles.nudges }>
+              <Nudges
+                nudgeUsers={ project.nudgeUsers }
+                imageSize={ 30 }
+              />
+            </View>
+          )
+        }
+
+        <View style={ styles.descriptionWrapper }>
+          <Text style={[ styles.description ]}>
+            { project.description }
+          </Text>
+        </View>
+        <View style={ styles.header }>
           {
             userIsOwner && project.status !== 'finished' &&
             <UpdateButton press={ toggleAddUpdateModal } />
