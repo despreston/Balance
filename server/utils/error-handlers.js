@@ -1,5 +1,4 @@
 const log   = require('logbro');
-// const https = require('https');
 const slack = require('./slack');
 
 module.exports = {
