@@ -67,6 +67,12 @@ module.exports = ({ get, post, del, put }) => {
         bookmark_count
       };
 
+      slack({
+        pretext: ':facepunch: *User logged in*',
+        text: `${result.name} logged in just now`,
+      });
+
+
       return res.send(200, payload);
     } catch (e) {
       return next(new err.InternalServerError(e));
@@ -399,6 +405,11 @@ module.exports = ({ get, post, del, put }) => {
         newUser = Object.assign(newUser, body);
       } else {
         newUser = new User(body);
+
+        slack({
+          pretext: ':confetti_ball: *New User*',
+          text: `_${newUser.name}_ created an account`
+        });
       }
 
       newUser.save();
@@ -415,11 +426,6 @@ module.exports = ({ get, post, del, put }) => {
       );
 
       newUser.bookmark_count = await Bookmark.count({ userId: newUser.user_id });
-
-      slack({
-        pretext: '*New User*',
-        text: `_${user.name}_ created an account`
-      });
 
       return res.send(201, newUser);
     } catch (e) {

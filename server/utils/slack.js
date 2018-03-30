@@ -7,6 +7,8 @@ const opts = {
 };
 
 module.exports = async attachment => {
+  const ts = (new Date()).getTime();
+  attachment = Object.assign(attachment, { ts });
   const message = { attachments: [ attachment ] };
   const request = await https.request(opts);
   request.write(JSON.stringify(message));
