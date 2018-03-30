@@ -38,11 +38,11 @@ const config = {
       "secret": "6voFOFAP0UX010pEB4-eSYGKlC_BQieC6Ujhm-5A4chwrK_KBMYr9GtBwLncUqkM"
     },
     "s3": {
-      "Bucket": "balanceappdev"
+      "Bucket": "balanceapp"
     },
     "apn": {
-      "certLocation": "/var/balance/cert.pem",
-      "keyLocation": "/var/balance/key.pem"
+      "certLocation": "/var/Balance/cert.pem",
+      "keyLocation": "/var/Balance/key.pem"
     }
   }
 };
