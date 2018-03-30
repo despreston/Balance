@@ -50,4 +50,7 @@ recursive('./models', (err, files) => {
   });
 });
 
-server.listen(conf.port);
+server.listen(conf.port, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Started server at port ${conf.port}`);
+});
