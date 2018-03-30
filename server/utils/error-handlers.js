@@ -1,9 +1,20 @@
-const log = require('logbro');
+const log   = require('logbro');
+// const https = require('https');
+const slack = require('./slack');
 
 module.exports = {
 
-  restifyError (req, res, err) {
+  async restifyError (req, res, err) {
+    const message = {
+      color: '#ff0000',
+      username: 'Jesus Christ',
+      pretext: '*Shit broke!*',
+      title: 'Balance API Server Error',
+      text: `${err}\n\`\`\`\n${err.stack}\n\`\`\``
+    };
+
     log.error(err);
+    await slack(message);
   }
 
 };

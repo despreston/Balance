@@ -33,6 +33,7 @@
     "restify": "6.3.4",
     "restify-errors": "5.0.0",
     "restify-jwt": "0.4.0",
+    "slack": "^11.0.0",
     "uuid": "3.1.0"
   },
   "devDependencies": {

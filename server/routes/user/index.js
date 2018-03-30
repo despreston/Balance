@@ -9,6 +9,7 @@ const compose          = require('../../utils/compose');
 const Notification     = require('../../classes/notification/');
 const config           = require('../../config');
 const err              = require('restify-errors');
+const slack            = require('../../utils/slack');
 const NewFriendRequest = Notification.NewFriendRequest;
 
 module.exports = ({ get, post, del, put }) => {
@@ -414,6 +415,11 @@ module.exports = ({ get, post, del, put }) => {
       );
 
       newUser.bookmark_count = await Bookmark.count({ userId: newUser.user_id });
+
+      slack({
+        pretext: '*New User*',
+        text: `_${user.name}_ created an account`
+      });
 
       return res.send(201, newUser);
     } catch (e) {
