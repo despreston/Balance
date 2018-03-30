@@ -3,7 +3,7 @@
  */
 
 const aws = require('aws-sdk');
-const config = require('../config.json');
+const config = require('../config');
 
 aws.config.loadFromPath('./aws-config.json');
 
