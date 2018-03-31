@@ -391,7 +391,11 @@ module.exports = ({ get, post, del, put }) => {
     try {
       body = JSON.parse(body);
 
-      let newUser = await User.findOne({ userId: body.user_id });
+      // backwards compatiblity with old auth0 stuff
+      body.userId = body.user_id;
+      delete body.user_id;
+
+      let newUser = await User.findOne({ userId: body.userId });
 
       if (newUser) {
         const bucketUrl = `https://${config.s3.Bucket}`;
@@ -416,7 +420,7 @@ module.exports = ({ get, post, del, put }) => {
       newUser = newUser.toObject();
 
       const privacyLevels = await AccessControl.many(
-        { user: body.user_id },
+        { user: body.userId },
         user.sub
       );
 
@@ -425,8 +429,7 @@ module.exports = ({ get, post, del, put }) => {
         privacyLevels
       );
 
-      newUser.bookmark_count = await Bookmark.count({ userId: newUser.user_id });
-
+      newUser.bookmark_count = await Bookmark.count({ userId: newUser.userId });
       return res.send(201, newUser);
     } catch (e) {
       return next(new err.InternalServerError(e));
