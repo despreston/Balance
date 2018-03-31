@@ -21,22 +21,23 @@
   "homepage": "https://github.com/despreston/Balance#readme",
   "dependencies": {
     "apn": "2.1.5",
-    "aws-sdk": "2.149.0",
+    "aws-sdk": "2.166.0",
     "connect-ensure-login": "0.1.1",
     "logbro": "1.2.0",
     "mongo": "0.1.0",
     "mongodb": "2.2.33",
-    "mongoose": "4.13.2",
+    "mongoose": "4.13.6",
     "passport": "0.4.0",
     "passport-auth0": "0.6.0",
     "recursive-readdir": "2.2.1",
-    "restify": "6.3.2",
+    "restify": "6.3.4",
     "restify-errors": "5.0.0",
     "restify-jwt": "0.4.0",
+    "slack": "^11.0.0",
     "uuid": "3.1.0"
   },
   "devDependencies": {
-    "eslint": "4.11.0",
+    "eslint": "4.12.1",
     "eslint-config-google": "0.9.1",
     "precommit-hook-eslint": "3.0.0"
   },

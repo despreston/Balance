@@ -1,6 +1,6 @@
-const http = require('http');
-const log = require('logbro');
-const config = require('../../config.json');
+const http   = require('http');
+const log    = require('logbro');
+const config = require('../../config');
 
 /**
  * Construct a PiperEvent message to be sent to the Piper-socket server
